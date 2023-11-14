@@ -1,0 +1,24 @@
+
+require("dotenv").config();
+const { PORT } = process.env;
+const server = require("./app.js");
+const { conn } = require("./Database/db.js");
+
+
+// Syncing all the models at once.
+// force:true - ELIMINA TODAS LAS TABLAS DE LA BDD, Y LAS VUELVE A CREAR EN BASE A LOS MODELOS
+// alter:true - ACTUALIZA LAS TABLAS DE BDD EN BASE A LOS MODELOS
+try {
+  // conn.sync({ force: true }).then(() => {
+  conn.sync({ alter: true }).then(() => {
+    // conn.authenticate().then(() => console.log("Database connected"));    
+    server.listen(PORT, () => {
+      console.log("Server raised int port: " +PORT); // eslint-disable-line no-console
+    });
+  });
+  
+} catch (error) {
+  console.log(
+    "An error occurred during the server startup: " + error.message
+  );
+}
