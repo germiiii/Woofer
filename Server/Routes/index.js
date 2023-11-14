@@ -1,4 +1,5 @@
 const express = require('express');
+const postUser = require('../controllers/postRegister');
 
 
 // Importar todos los routers;
@@ -8,6 +9,7 @@ const router = express.Router();
 
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
+router.post('/register', postUser);
 
 
 

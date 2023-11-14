@@ -7,6 +7,10 @@ module.exports = (sequelize) => {
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
+        location: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         isWalker: {
             FOREGEINKEY: true
         },
