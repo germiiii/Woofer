@@ -8,7 +8,8 @@ module.exports = (sequelize) => {
             primaryKey: true,
         },
         isWalker: {
-            FOREGEINKEY: true
+            FOREGEINKEY: true, 
+            type: DataTypes.BOOLEAN,
         },
         username: {
             type: DataTypes.STRING
