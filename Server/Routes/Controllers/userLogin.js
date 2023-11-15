@@ -2,11 +2,10 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { User } = require("../../Database/db");
 
-const userLogin = async (eMail, password) => {
-  const user = await User.findOne({ where: { eMail } });
-
+const userLogin = async (email, password) => {
+  const user = await User.findOne({ where: { email } });
   if (!user) {
-    throw new Error("Invalid email");
+    throw new Error("User not found");
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);

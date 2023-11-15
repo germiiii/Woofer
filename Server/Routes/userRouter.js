@@ -6,7 +6,7 @@ const userRegister = require("./Controllers/userRegister");
 const userRouter = Router();
 
 //usuarios
-userRouter.post("/login", userHandlerLogin);
+userRouter.post("/login", validateUserLogin, userHandlerLogin);
 userRouter.post("/register", userRegister);
 
 
