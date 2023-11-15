@@ -2,9 +2,6 @@ const { User } = require("../../Database/db");
 const bcrypt = require('bcrypt');
 
 const userRegister = async (req, res) => {
-  
-    console.log('Entrando en userRegister');
-    console.log(User); 
 
     const { name, surname, email, password, username, adress, isWalker } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
