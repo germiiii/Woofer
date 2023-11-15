@@ -6,8 +6,9 @@ const { userHandlerRegister }= require('./Handlers/userHandlerRegister')
 const userRouter = Router();
 
 //usuarios
-userRouter.post("/login", userHandlerLogin);
-userRouter.post("/register", userHandlerRegister);
+
+userRouter.post("/login", validateUserLogin, userHandlerLogin);
+userRouter.post("/register", userRegister);
 
 
 module.exports = userRouter;
