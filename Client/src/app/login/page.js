@@ -12,7 +12,7 @@ export default function LoginPage() {
     
   return (
     <>
-    <form>
+    <form className={styles.LoginForm}>
       <h1>Sign In</h1>
     <LoginForm>
         <div className='my-[10px] flex flex-col gap-4'>
