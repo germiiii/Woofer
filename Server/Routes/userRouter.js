@@ -1,13 +1,13 @@
 const { Router } = require("express");
 const { userHandlerLogin } = require("../Routes/Handlers/");
 const { validateUser, validateUserLogin } = require("./Middlewares");
-const userRegister = require("./Controllers/userRegister");
+const { userHandlerRegister }= require('./Handlers/userHandlerRegister')
 
 const userRouter = Router();
 
 //usuarios
 userRouter.post("/login", userHandlerLogin);
-userRouter.post("/register", userRegister);
+userRouter.post("/register", userHandlerRegister);
 
 
 module.exports = userRouter;
