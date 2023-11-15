@@ -14,5 +14,9 @@ module.exports = (sequelize) => {
         username: {
             type: DataTypes.STRING
         },
+        location: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
     });
 }
