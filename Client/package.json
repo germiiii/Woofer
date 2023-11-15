@@ -11,11 +11,13 @@
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@heroicons/react": "^2.0.18",
+    "axios": "^1.6.2",
     "next": "14.0.2",
     "react": "^18",
     "react-dom": "^18",
     "react-fontawesome": "^1.7.1",
-    "react-type-animation": "^3.2.0"
+    "react-type-animation": "^3.2.0",
+    "sass": "^1.69.5"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",
