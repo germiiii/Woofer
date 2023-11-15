@@ -5,23 +5,21 @@ import NavLink from "./NavLink";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import MenuOverlay from "./MenuOverlay";
 
-import { faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 
 const navLinks = [
   {
     title: "Sign In",
-    path: "#form",
+    path: "login",
   },
   {
     title: "Sign Up",
-    path: "#form",
+    path: "register",
   },
-
 ];
 
 const Navbar = () => {
   const [navbarOpen, setNavbarOpen] = useState(false);
-
 
   return (
     <nav className="fixed mx-auto border border-[#33353F] top-0 left-0 right-0 z-10 bg-[#363535] bg-opacity-100">
@@ -48,9 +46,6 @@ const Navbar = () => {
               {/* <XMarkIcon className="h-5 w-5" /> */}
             </button>
           )}
-
-      
-
         </div>
         <div className="menu hidden md:block md:w-auto" id="navbar">
           <ul className="flex p-4 md:p-0 md:flex-row md:space-x-8 mt-0">
@@ -61,8 +56,8 @@ const Navbar = () => {
             ))}
           </ul>
         </div>
-  
-      {/* <button >
+
+        {/* <button >
       <FontAwesomeIcon icon={faGlobe} style={{ color: 'white', fontSize: '2em', marginRight: '20px'}} />
       <span className="text-white ">En</span>
       </button> */}
