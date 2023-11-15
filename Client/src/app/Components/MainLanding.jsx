@@ -1,7 +1,6 @@
 "use client"
 import React from 'react';
 import { TypeAnimation } from 'react-type-animation';
-import Link from 'next/link'
 import Image from 'next/image';
 
 const MainLanding = () => {
@@ -48,7 +47,6 @@ const MainLanding = () => {
               height={50}
               className="position-fixed" />
             </button>
-         
         </div>
       </div>
     </section>
