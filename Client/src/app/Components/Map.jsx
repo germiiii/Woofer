@@ -4,8 +4,31 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 
-export default function Map() {
+// ... (importaciones y código anterior)
+
+export default function Map(props) {
   const [userLocation, setUserLocation] = useState(null);
+
+  useEffect(() => {
+    const handleGetLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setUserLocation({ latitude, longitude });
+          },
+          (error) => {
+            console.error("Error al obtener la ubicación:", error.message);
+          }
+        );
+      } else {
+        console.error("Geolocalización no es compatible en este navegador");
+      }
+    };
+
+    // Llama a handleGetLocation automáticamente al montar el componente
+    handleGetLocation();
+  }, []); // El array vacío asegura que useEffect solo se ejecute una vez al montar el componente
 
   useEffect(() => {
     if (userLocation) {
@@ -23,7 +46,6 @@ export default function Map() {
         userLocation.longitude,
       ]).addTo(map);
       map.panTo([userLocation.latitude, userLocation.longitude]);
-      marker.bindPopup("My location").openPopup();
 
       var circle = L.circle([userLocation.latitude, userLocation.longitude], {
         color: "red",
@@ -33,22 +55,6 @@ export default function Map() {
       }).addTo(map);
     }
   }, [userLocation]);
-
-  const handleGetLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setUserLocation({ latitude, longitude });
-        },
-        (error) => {
-          console.error("Error al obtener la ubicación:", error.message);
-        }
-      );
-    } else {
-      console.error("Geolocalización no es compatible en este navegador");
-    }
-  };
 
   return (
     <div>
@@ -66,7 +72,7 @@ export default function Map() {
             ></div>
           </div>
         ) : (
-          <button onClick={handleGetLocation}>Obtener Ubicación</button>
+          <p>Obteniendo ubicación...</p>
         )}
       </div>
     </div>

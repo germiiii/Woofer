@@ -34,6 +34,7 @@ export default function RegisterForm() {
       const { token } = response.data;
       localStorage.setItem("accessToken", token);
       localStorage.setItem("username", userData.username);
+      localStorage.setItem("isWalker", userData.isWalker);
       router.push("/home");
     } catch (e) {
       console.log("register sin exito");

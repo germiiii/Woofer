@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavBarHome from "../Components/NavBarHome";
 import OwnerForm from "../Components/OwnerForm";
 import Map from "../Components/Map";
@@ -21,10 +21,10 @@ const Home = () => {
       {formCompleted && (
         <>
           <NavBarHome />
-          <Map />
           <div>
             <button onClick={handleAddMoreDogs}>Add more dogs</button>
           </div>
+          <Map />
         </>
       )}
     </div>
