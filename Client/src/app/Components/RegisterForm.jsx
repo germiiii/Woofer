@@ -31,8 +31,9 @@ export default function RegisterForm() {
         "http://localhost:3001/register",
         userData
       );
-      console.log("register con exito");
-      console.log("Token:", response.data.token);
+      const { token } = response.data;
+      localStorage.setItem("accessToken", token);
+      localStorage.setItem("username", userData.username);
       router.push("/home");
     } catch (e) {
       console.log("register sin exito");
