@@ -9,6 +9,6 @@ const router = express.Router();
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
 
-router.use('/user', userRouter);
+router.use('/', userRouter);
 
 module.exports = router;

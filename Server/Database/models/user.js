@@ -33,14 +33,6 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        location: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        score: {
-            type: DataTypes.DECIMAL(10, 2), // 10 digitos, 2 decimales
-            allowNull: false,
-        },
         isWalker: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
