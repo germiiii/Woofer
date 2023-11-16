@@ -10,6 +10,8 @@ const WalkerRegister = () => {
     days_available: [],
   });
 
+  const [error, setError] = useState('');
+
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     setFormData({
@@ -24,6 +26,8 @@ const WalkerRegister = () => {
       ...formData,
       [name]: value,
     });
+
+    validateDateAndTime();
   };
 
   const handleDaysChange = (e) => {
@@ -44,14 +48,38 @@ const WalkerRegister = () => {
       ...formData,
       [name]: value,
     });
+
+    validateDateAndTime();
+  };
+
+  const validateDateAndTime = () => {
+    if (!isStartDateBeforeEndDate()) {
+      setError('La fecha de inicio y hora no puede ser posterior a la fecha de finalización y hora.');
+    } else {
+      setError('');
+    }
+  };
+
+  const isStartDateBeforeEndDate = () => {
+    const startDate = new Date(formData.start_date + 'T' + formData.start_time);
+    const endDate = new Date(formData.end_date + 'T' + formData.end_time);
+    return startDate < endDate;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!isStartDateBeforeEndDate()) {
+      setError('La fecha de inicio y hora no puede ser posterior a la fecha de finalización y hora.');
+      return;
+    }
+
+    // reset error state
+    setError('');
+
     // ready to send to the backend
     console.log(formData);
   };
-
   return (
     <div className="container mx-auto my-10 max-w-lg">
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
@@ -117,12 +145,15 @@ const WalkerRegister = () => {
           </div>
         </div>
 
+        {/* Display error message if validation fails */}
+        {error && <p className="text-red-500 text-xs italic mb-4">{error}</p>}
+
         <div className="flex items-center justify-between">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
-            comienza a pasear
+            Registrarse
           </button>
         </div>
       </form>
