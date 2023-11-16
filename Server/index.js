@@ -9,7 +9,7 @@ const bcrypt = require("bcrypt");
 // alter:true - ACTUALIZA LAS TABLAS DE BDD EN BASE A LOS MODELOS
 try {
   conn
-    .sync({ force: false })
+    .sync({ force: true })
     .then(() => {
       server.listen(PORT, () => {
         console.log("Server raised int port: " + PORT); // eslint-disable-line no-console
