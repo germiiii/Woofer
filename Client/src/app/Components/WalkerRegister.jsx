@@ -2,26 +2,53 @@ import React, { useState } from 'react';
 
 const WalkerRegister = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    lastName: '',
-    address: '',
-    username: '',
-    email: '',
-    password: '',
-    isWalker: false,
+    dog_capacity: 0,
+    start_time: '',
+    end_time: '',
+    start_date: '',
+    end_date: '',
+    days_available: [],
   });
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
     setFormData({
-        ...formData,
-        [name]: type === 'checkbox' ? checked : value,
+      ...formData,
+      [name]: type === 'number' ? parseInt(value) : value,
     });
-};
+  };
+
+  const handleTimeChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleDaysChange = (e) => {
+    const { options } = e.target;
+    const selectedDays = Array.from(options)
+      .filter((option) => option.selected)
+      .map((option) => option.value);
+
+    setFormData({
+      ...formData,
+      days_available: selectedDays,
+    });
+  };
+
+  const handleDateChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // listo para enviar al back
+    // ready to send to the backend
     console.log(formData);
   };
 
@@ -29,100 +56,64 @@ const WalkerRegister = () => {
     <div className="container mx-auto my-10 max-w-lg">
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-            Username
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="dog_capacity">
+            Capacidad de perros (¿Cuántos perros puedes pasear a la vez?)
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="username"
-            type="text"
-            name="username"
-            value={formData.username}
+            id="dog_capacity"
+            type="number"
+            name="dog_capacity"
+            value={formData.dog_capacity}
             onChange={handleChange}
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-            password
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="hours_range">
+            Horario disponible (¿A qué horas estás disponible para pasear perros?)
           </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="password"
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-            Nombre
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="name"
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="lastName">
-            Apellido
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="lastName"
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-            Email
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="email"
-            type="text"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="addess">
-            Address
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="address"
-            type="text"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="isWalker">
-            ¿Eres paseador?
-          </label>
-          <div className="flex items-center">
+          <div className="flex">
             <input
-              id="isWalker"
-              type="checkbox"
-              name="isWalker"
-              checked={formData.isWalker}
-              onChange={handleChange}
-              className="mr-2 leading-tight"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="start_time"
+              type="time"
+              name="start_time"
+              value={formData.start_time}
+              onChange={handleTimeChange}
             />
-            <label htmlFor="isWalker" className="text-sm">
-              Soy paseador
-            </label>
+            <span className="mx-2">to</span>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="end_time"
+              type="time"
+              name="end_time"
+              value={formData.end_time}
+              onChange={handleTimeChange}
+            />
+          </div>
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="date_range">
+            Rango de fechas disponible (¿Qué días estás disponible para pasear perros?)
+          </label>
+          <div className="flex">
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="start_date"
+              type="date"
+              name="start_date"
+              value={formData.start_date}
+              onChange={handleDateChange}
+            />
+            <span className="mx-2">to</span>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="end_date"
+              type="date"
+              name="end_date"
+              value={formData.end_date}
+              onChange={handleDateChange}
+            />
           </div>
         </div>
 
@@ -131,7 +122,7 @@ const WalkerRegister = () => {
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
-            Registrarse
+            comienza a pasear
           </button>
         </div>
       </form>

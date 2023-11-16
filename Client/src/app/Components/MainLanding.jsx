@@ -2,6 +2,7 @@
 import React from 'react';
 import { TypeAnimation } from 'react-type-animation';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const MainLanding = () => {
   return (
@@ -38,7 +39,7 @@ const MainLanding = () => {
               height={50}
               className=" position-fixed" />
             </button>
-         
+            <Link href='walkerform'>
             <button className='px-12 y-5 rounded-full w-full sm:w-fit bg-gradient-to-r from-blue-400 via-blue-600 to-blue-900 hover:bg-slate-800 text-white border mt-3 lg:mt-0'>
             <Image 
               src="/walker.png" 
@@ -47,6 +48,7 @@ const MainLanding = () => {
               height={50}
               className="position-fixed" />
             </button>
+            </Link>
         </div>
       </div>
     </section>
