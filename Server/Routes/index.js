@@ -1,5 +1,6 @@
 const express = require('express');
 const userRouter = require('./userRouter');
+const ownerRouter = require('./ownerRouter');
 
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
@@ -10,5 +11,8 @@ const router = express.Router();
 // Ejemplo: router.use('/auth', authRouter);
 
 router.use('/', userRouter);
+router.use('/owner', ownerRouter);
+// router.use('/walker', walkerRouter);
+
 
 module.exports = router;
