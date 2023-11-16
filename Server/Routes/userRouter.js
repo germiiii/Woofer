@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { userHandlerLogin } = require("../Routes/Handlers/");
-const { validateUser, validateUserLogin } = require("./Middlewares");
+const { validateUserLogin } = require("./Middlewares");
 const { userHandlerRegister }= require('./Handlers/userHandlerRegister')
 const { userHandlerChangePassword } = require('./Handlers/userHandlerChangePassword')
 const { userGetAllHandler } = require ('./Handlers/userGetHandler')
