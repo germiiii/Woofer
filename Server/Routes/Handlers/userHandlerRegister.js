@@ -1,7 +1,7 @@
 const userRegister = require('../Controllers/userRegister');
 
 const successHandler = (res, newUser) => {
-    res.status(200).json({ message: 'Registro exitoso', user: newUser });
+    res.status(201).json({ message: 'Registro exitoso', user: newUser });
 };
 
 const failureHandler = (res, error) => {
