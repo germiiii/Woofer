@@ -56,12 +56,56 @@ export default function OwnerForm(props) {
     </div>
   ));
 
+  const formContainerStyle = {
+    textAlign: "center",
+    margin: "20px",
+  };
+
+  const formStyle = {
+    display: "inline-block",
+    textAlign: "left",
+    padding: "20px",
+    border: "1px solid #ccc",
+    borderRadius: "8px",
+  };
+
+  const labelStyle = {
+    marginBottom: "8px",
+    display: "block",
+  };
+
+  const inputStyle = {
+    width: "100%",
+    padding: "8px",
+    marginBottom: "16px",
+    borderRadius: "4px",
+    border: "1px solid #ccc",
+  };
+
+  const selectStyle = {
+    width: "100%",
+    padding: "8px",
+    marginBottom: "16px",
+    borderRadius: "4px",
+    border: "1px solid #ccc",
+  };
+
+  const buttonStyle = {
+    padding: "8px 16px",
+    borderRadius: "4px",
+    border: "none",
+    background: "black",
+    color: "#fff",
+    cursor: "pointer",
+    marginRight: "8px",
+  };
+
   return (
-    <div>
-      <div>
+    <div style={formContainerStyle}>
+      <div style={formStyle}>
         <form onSubmit={handleSubmit}>
           <h1>Add your dogs!</h1>
-          <label>
+          <label style={labelStyle}>
             Name of your dog{" "}
             <input
               type="text"
@@ -71,7 +115,7 @@ export default function OwnerForm(props) {
             />
           </label>
           <br />
-          <label>
+          <label style={labelStyle}>
             Age of your dog{" "}
             <input
               type="text"
@@ -81,7 +125,7 @@ export default function OwnerForm(props) {
             />
           </label>
           <br />
-          <label>
+          <label style={labelStyle}>
             Breed of your dog{" "}
             <input
               type="text"
@@ -91,7 +135,7 @@ export default function OwnerForm(props) {
             />
           </label>
           <br />
-          <label>
+          <label style={labelStyle}>
             Size of your dog
             <select name="size" onChange={handleChange} value={dogData.size}>
               <option value="Small">Small</option>
@@ -100,7 +144,7 @@ export default function OwnerForm(props) {
             </select>
           </label>
           <br />
-          <label>
+          <label style={labelStyle}>
             Image of your dog
             <input
               type="file"
@@ -111,11 +155,15 @@ export default function OwnerForm(props) {
             />
           </label>
           <br />
-          <button onClick={handleAddDog}>Add more dogs</button>
-          <button type="submit">Confirm</button>
+          <button onClick={handleAddDog} style={buttonStyle}>
+            Add more dogs
+          </button>
+          <button type="submit" style={buttonStyle}>
+            Confirm
+          </button>
+          <div>{renderDogs}</div>
         </form>
       </div>
-      <div>{renderDogs}</div>
     </div>
   );
 }
