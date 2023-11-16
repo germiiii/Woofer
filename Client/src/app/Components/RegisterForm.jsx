@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
   const router = useRouter();
+
   const [userData, setUserData] = useState({
     name: "",
     lastName: "",
@@ -24,17 +25,17 @@ export default function RegisterForm() {
       return updatedUserData;
     });
   };
+
   const handleRegister = async (e) => {
     e.preventDefault();
+
     try {
       const response = await axios.post(
         "http://localhost:3001/register",
         userData
       );
+      console.log("register con exito");
       const { token } = response.data;
-      localStorage.setItem("accessToken", token);
-      localStorage.setItem("username", userData.username);
-      localStorage.setItem("isWalker", userData.isWalker);
       router.push("/home");
     } catch (e) {
       console.log("register sin exito");

@@ -4,8 +4,6 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 
-// ... (importaciones y código anterior)
-
 export default function Map(props) {
   const [userLocation, setUserLocation] = useState(null);
 
@@ -26,12 +24,9 @@ export default function Map(props) {
       }
     };
 
-    // Llama a handleGetLocation automáticamente al montar el componente
-    handleGetLocation();
-  }, []); // El array vacío asegura que useEffect solo se ejecute una vez al montar el componente
-
-  useEffect(() => {
-    if (userLocation) {
+    if (!userLocation) {
+      handleGetLocation();
+    } else {
       const map = L.map("map").setView(
         [userLocation.latitude, userLocation.longitude],
         16.3
@@ -58,6 +53,7 @@ export default function Map(props) {
 
   return (
     <div>
+      <h1>Your location</h1>
       <div>
         {userLocation ? (
           <div>
@@ -65,8 +61,8 @@ export default function Map(props) {
               id="map"
               style={{
                 width: "1000px",
-                height: "700px",
-                borderRadius: "5%",
+                height: "300px",
+                borderRadius: "8px",
                 overflow: "hidden",
               }}
             ></div>
