@@ -8,7 +8,7 @@ const userRouter = Router();
 //usuarios
 
 userRouter.post("/login", validateUserLogin, userHandlerLogin);
-userRouter.post("/register", userRegister);
+userRouter.post("/register", userHandlerRegister);
 
 
 module.exports = userRouter;
