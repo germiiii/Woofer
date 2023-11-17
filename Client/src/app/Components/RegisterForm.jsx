@@ -2,9 +2,10 @@
 import "tailwindcss/tailwind.css";
 import axios from "axios";
 import React from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 export default function RegisterForm() {
+  const fileInputRef = useRef(null);
   const [userData, setUserData] = useState({
     name: "",
     lastName: "",
@@ -13,14 +14,28 @@ export default function RegisterForm() {
     email: "",
     password: "",
     isWalker: false,
+    image: null,
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUserData((prevUserData) => {
-      const updatedUserData = { ...prevUserData, [name]: value };
-      return updatedUserData;
-    });
+    console.log(userData);
+    const { name, value, type } = e.target;
+    if (type === "file") {
+      const imageFile = e.target.files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          [name]: reader.result,
+        }));
+      };
+      reader.readAsDataURL(imageFile);
+    } else {
+      setUserData((prevUserData) => {
+        const updatedUserData = { ...prevUserData, [name]: value };
+        return updatedUserData;
+      });
+    }
   };
 
   const handleRegister = async (e) => {
@@ -69,6 +84,18 @@ export default function RegisterForm() {
         <label>
           Your password
           <input type="password" name="password" onChange={handleChange} />
+        </label>
+        <br />
+        <label>
+          Profile Picture
+          <img src={userData.image} alt="" height="100px" width="100px" />
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={handleChange}
+            ref={fileInputRef}
+          />
         </label>
         <br />
         <label>
