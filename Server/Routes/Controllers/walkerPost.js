@@ -1,6 +1,6 @@
 const { User, Walker } = require("../../Database/db");
 
-const walkerPost = async (id, dog_capacity) => {
+const walkerPost = async (id, dog_capacity, is_available) => {
   const user = await User.findOne({ where: { id, is_active: true } });
   if (!user) {
     throw new Error("User not found");
@@ -9,6 +9,7 @@ const walkerPost = async (id, dog_capacity) => {
    await Walker.create({
     userId: id,
     dog_capacity: dog_capacity,
+    is_available: is_available
   });
 
   await User.update({ isWalker: true }, {
