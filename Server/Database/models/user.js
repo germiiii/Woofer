@@ -1,4 +1,5 @@
 const { DataTypes } = require("sequelize");
+const path = require('path');
 
 module.exports = (sequelize) => {
   // defino el modelo
@@ -34,6 +35,11 @@ module.exports = (sequelize) => {
       adress: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: path.join(__dirname, '..', 'images', 'perfilSinFoto.jpg')
       },
       location: {
         type: DataTypes.STRING,
