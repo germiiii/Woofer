@@ -10,21 +10,15 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      id_user: {
-        FOREIGNKEY: true,
-        type: DataTypes.UUID,
-      },
-      surname: {
-        type: DataTypes.STRING,
-      },
-      email: {
-        type: DataTypes.STRING,
+      dog_capacity: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        unique: true,
+        defaultValue: 1,
       },
-      location: {
-        type: DataTypes.STRING,
+      is_available: {
+        type: DataTypes.BOOLEAN,
         allowNull: false,
+        defaultValue: false,
       },
       is_active: {
         type: DataTypes.BOOLEAN,
