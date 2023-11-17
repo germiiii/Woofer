@@ -32,13 +32,20 @@ const basename = path.basename(__filename);
 sequelize
   .authenticate()
   .then(() => {
-    console.log('Database connection has been established successfully.'+`${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`);
+    console.log(
+      "Database connection has been established successfully." +
+        `${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`
+    );
   })
   .catch((error) => {
-    console.error('Unable to connect to the database:'+`${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`, error);
+    console.error(
+      "Unable to connect to the database:" +
+        `${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
+      error
+    );
   });
 
-const modelDefiners = []; 
+const modelDefiners = [];
 
 // Leemos todos los archivos de la carpeta Models, los requerimos y agregamos al arreglo modelDefiners
 fs.readdirSync(path.join(__dirname, "/Models"))
@@ -63,13 +70,21 @@ sequelize.models = Object.fromEntries(capsEntries);
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
 
-
-/*** */
+const { User, Owner, Dog, Walker } = sequelize.models;
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
 
-/**** */
+User.hasOne(Owner);
+Owner.belongsTo(User);
+
+User.hasOne(Walker);
+Walker.belongsTo(User);
+
+Owner.hasMany(Dog);
+Dog.belongsTo(Owner);
+
+Walker;
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

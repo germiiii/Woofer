@@ -7,6 +7,7 @@ export default function WalkerCard(props) {
     textAlign: "left",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     width: "900px",
+    height: "150px",
   };
 
   const nameStyle = {
