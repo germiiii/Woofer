@@ -9,11 +9,6 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-    //   id_user: {
-    //     type: DataTypes.UUID,
-    //     allowNull: false,
-    //     foreignKey: true,
-    //   },
       dog_count: {
         type: DataTypes.INTEGER,
         allowNull: false,

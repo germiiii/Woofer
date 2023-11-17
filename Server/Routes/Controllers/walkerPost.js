@@ -11,6 +11,10 @@ const walkerPost = async (id, dog_capacity) => {
     dog_capacity: dog_capacity,
   });
 
+  await User.update({ isWalker: true }, {
+    where: { id, is_active: true },
+  });
+
   const userData = await User.findOne({
     where: { id: id },
     attributes: [

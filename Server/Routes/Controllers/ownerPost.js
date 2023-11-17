@@ -23,6 +23,10 @@ const ownerPost = async (id, dogs) => {
 
   await newOwner.addDogs(createdDogs);
 
+  await User.update({ isOwner: true }, {
+    where: { id, is_active: true },
+  });
+
   const userData = await User.findOne({
     where: { id: id },
     attributes: [
