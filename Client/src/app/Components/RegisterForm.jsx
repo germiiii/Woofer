@@ -3,11 +3,8 @@ import "tailwindcss/tailwind.css";
 import axios from "axios";
 import React from "react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
-  const router = useRouter();
-
   const [userData, setUserData] = useState({
     name: "",
     lastName: "",
@@ -35,17 +32,15 @@ export default function RegisterForm() {
         userData
       );
       console.log("register con exito");
-      const { token } = response.data;
-      router.push("/home");
     } catch (e) {
       console.log("register sin exito");
     }
   };
 
   return (
-    <div>
+    <div className="bg-white text-black p-6 max-w-md mx-auto mt-10 rounded-md shadow-md">
       <form onSubmit={handleRegister} method="post">
-        <h1>REGISTER</h1>
+        <h1 className="text-2xl mb-4">REGISTER</h1>
         <label>
           Your name
           <input type="text" name="name" onChange={handleChange} />
@@ -88,7 +83,12 @@ export default function RegisterForm() {
           </select>
         </label>
         <br />
-        <button type="submit">Sign Up</button>
+        <button
+          type="submit"
+          className="bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800"
+        >
+          Sign Up
+        </button>
       </form>
     </div>
   );
