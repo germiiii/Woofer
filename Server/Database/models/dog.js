@@ -1,8 +1,8 @@
-const { DataTypes } = require("sequelize");
-module.exports = (sequelize) => {
+const { DataTypes } = require('sequelize');
+module.exports = sequelize => {
   // defino el modelo
   sequelize.define(
-    "dog",
+    'dog',
     {
       id: {
         type: DataTypes.UUID,
@@ -10,11 +10,6 @@ module.exports = (sequelize) => {
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
       },
-      // id_owner: {
-      //   type: DataTypes.STRING,
-      //   allowNull: false,
-      //   foreignKey: true,
-      // },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -32,7 +27,7 @@ module.exports = (sequelize) => {
         allowNull: true,
       },
       size: {
-        type: DataTypes.ENUM("small", "medium", "large"),
+        type: DataTypes.ENUM('small', 'medium', 'large'),
         allowNull: false,
       },
       is_active: {

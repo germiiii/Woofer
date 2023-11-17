@@ -1,19 +1,14 @@
-const { DataTypes } = require("sequelize");
-module.exports = (sequelize) => {
+const { DataTypes } = require('sequelize');
+module.exports = sequelize => {
   // defino el modelo
   sequelize.define(
-    "owner",
+    'owner',
     {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-    //   id_user: {
-    //     type: DataTypes.UUID,
-    //     allowNull: false,
-    //     foreignKey: true,
-    //   },
       dog_count: {
         type: DataTypes.INTEGER,
         allowNull: false,
