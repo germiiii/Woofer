@@ -1,9 +1,9 @@
-const { ownerPost } = require("../controllers");
+const { ownerPost } = require("../Controllers");
 
 const ownerHandlerPost = async (req, res) => {
   try {
-    const { id, dogs } = req.body;
-    const newOwner = await ownerPost(id, dogs);
+    const { username, dogs } = req.body;
+    const newOwner = await ownerPost(username, dogs);
     res.json({ newOwner });
   } catch (error) {
     return res.status(500).json({ error: error.message });
