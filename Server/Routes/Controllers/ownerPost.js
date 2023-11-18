@@ -23,7 +23,7 @@ const ownerPost = async (username, dogs) => {
   // asociate the dogs with the owner
   await newOwner.addDogs(createdDogs);
 
-  await User.addOwner(newOwner); //* ta bien?
+  await user.setOwner(newOwner);
 
   await User.update(
     { isOwner: true },
