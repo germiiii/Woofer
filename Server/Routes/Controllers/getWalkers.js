@@ -1,14 +1,18 @@
 const { Walker } = require("../../Database/db");
 
-const getWalkers = async () => {
+const getAvailableWalkers = async () => {
   try {
-    const walkers = await Walker.findAll();
-    return walkers;
+    const availableWalkers = await Walker.findAll({
+      where: {
+        is_available: true,
+      },
+    });
+    return availableWalkers;
   } catch (error) {
     throw error;
   }
 };
 
 module.exports = {
-  getWalkers,
+  getAvailableWalkers,
 };
