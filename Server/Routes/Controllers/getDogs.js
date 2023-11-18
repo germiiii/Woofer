@@ -2,7 +2,7 @@ const { Dog, Owner, User } = require("../../Database/db");
 
 const getDogs = async username => {
   const user = await User.findOne({
-    where: { username },
+    where: { username, is_active: true },
     include: {
       model: Owner,
       include: Dog,
