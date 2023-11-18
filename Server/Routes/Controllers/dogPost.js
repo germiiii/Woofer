@@ -9,16 +9,22 @@ const dogPost = async (username, dogs) => {
     throw new Error("Dogs are required");
   }
 
-  const user = await User.findOne({ where: { username, is_active: true } });
+  // find the user and owner
+  const user = await User.findOne({
+    where: { username, is_active: true },
+    include: {
+      model: Owner,
+    },
+  });
   if (!user) {
     throw new Error("User not found");
-  } //TODO : deberia buscar la instancia de Owner y no de user
+  }
 
   // create the dog
-  const newDog = await Dog.bulkCreate(dogs);
+  const createdDogs = await Dog.bulkCreate(dogs);
 
   // asociate the dogs with the owner
-  await User.addDogs(createdDogs); // ! mal, no es User, es Owner
+  await user.Owner.addDogs(createdDogs); //? ok?
 
   if (newDog) {
     return newDog;
