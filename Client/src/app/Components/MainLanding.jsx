@@ -32,6 +32,7 @@ const MainLanding = () => {
         </div>
 
         <div className='flex flex-col lg:flex-row mt-20'>
+
             <button className='px-12 py-5 rounded-full w-full sm:w-fit mr-40 ml-10 bg-gradient-to-r from-blue-400 via-blue-600 to-blue-900  hover:bg-slate-800 text-white border mt-3 lg:mt-0 '>
             <Image 
               src="/dog.png" 
