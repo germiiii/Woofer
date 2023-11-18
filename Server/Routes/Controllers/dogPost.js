@@ -1,12 +1,12 @@
-const { Dog, User } = require("../../Database/db.js");
+const { Dog, User, Owner } = require("../../Database/db.js");
 
 const dogPost = async (username, dogs) => {
   // validations
   if (!username) {
-    return res.status(400).json({ message: "Username is required" });
+    throw new Error("Username is required");
   }
   if (!listOfDogs) {
-    return res.status(400).json({ message: "List of dogs is required" });
+    throw new Error("Dogs are required");
   }
 
   const user = await User.findOne({ where: { username, is_active: true } });
