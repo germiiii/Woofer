@@ -1,8 +1,19 @@
-const { Dog, Owner } = require("../../Database/db");
+const { Dog, Owner, User } = require("../../Database/db");
 
 const getDogs = async username => {
-  const dogs = await Dog.findAll(username); //TODO : traer solo los perros del owner correspondiente, este ta mal
-  return dogs;
+  const user = await User.findOne({
+    where: { username },
+    include: {
+      model: Owner,
+      include: Dog,
+    },
+  });
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const dogs = user.Owner.Dogs; //? plural?
+  return dogs; //* array de objetos con propiedades del modelo
 };
 
 module.exports = {
