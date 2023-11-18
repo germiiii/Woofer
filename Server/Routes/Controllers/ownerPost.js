@@ -33,7 +33,7 @@ const ownerPost = async (username, dogs) => {
   );
 
   const userData = await User.findOne({
-    where: { username: username },
+    where: { username: username, is_active: true },
     attributes: [
       "id",
       "name",
