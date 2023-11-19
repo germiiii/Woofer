@@ -15,6 +15,8 @@ export default function RegisterForm() {
     isWalker: false,
   });
 
+  const [registrationStatus, setRegistrationStatus] = useState(null);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserData((prevUserData) => {
@@ -31,9 +33,19 @@ export default function RegisterForm() {
         "http://localhost:3001/register",
         userData
       );
+
+      setRegistrationStatus({
+        success: true,
+        message: "Registration successful",
+      });
+
       console.log("register con exito");
-    } catch (e) {
-      console.log("register sin exito");
+      console.log(response.data);
+    } catch (error) {
+      setRegistrationStatus({
+        success: false,
+        message: "Registration failed",
+      });
     }
   };
 
@@ -90,6 +102,11 @@ export default function RegisterForm() {
           Sign Up
         </button>
       </form>
+      {registrationStatus && (
+        <div className={registrationStatus.success ? "text-green-500" : "text-red-500"}>
+          {registrationStatus.message}
+        </div>
+      )}
     </div>
   );
 }

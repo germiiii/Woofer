@@ -6,7 +6,6 @@ const { userHandlerChangePassword } = require ('./Handlers/userHandlerChangePass
 const { userGetAllHandler } = require ('./Handlers/userGetHandler')
 
 //const { userHandlerChangePassword } = require ('./Handlers/passwordHandlerChange')
-const { userGetAllHandler } = require ('./Handlers/userGetHandler')
 
 const userRouter = Router();
 
