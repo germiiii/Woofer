@@ -5,6 +5,7 @@ const { dogPost } = require("./dogPost");
 const { walkerPost } = require("./walkerPost");
 const { userGetbyId } = require("./userGetbyId");
 const { getDogs } = require("./getDogs");
+const { ownerGetAll } = require("./ownerGetAll");
 
 module.exports = {
   userLogin,
@@ -14,4 +15,5 @@ module.exports = {
   userGetbyId,
   dogPost,
   getDogs,
+  ownerGetAll,
 };
