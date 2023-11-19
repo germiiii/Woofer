@@ -8,6 +8,9 @@ export default function WalkerCard(props) {
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     width: "900px",
     height: "150px",
+    display: "flex",
+    justifyContent: "start",
+    alignItems: "center",
   };
 
   const nameStyle = {
@@ -21,10 +24,50 @@ export default function WalkerCard(props) {
     color: "#555",
   };
 
+  const dogCapacityStyle = {
+    fontSize: "1.0em",
+    color: "darkblue",
+  };
+
+  const walkDurationStyle = {
+    fontSize: "1.0em",
+    color: "darkblue",
+  };
+
+  const imageStyle = {
+    height: "100px",
+    width: "100px",
+    borderRadius: "8px",
+  };
+
+  const textStyle = {
+    display: "flex",
+    flexDirection: "column",
+    marginLeft: "30px",
+    width: "700px",
+  };
+
+  const checkoutStyle = {
+    marginRight: "50px",
+    width: "40px",
+    height: "40px",
+  };
+
   return (
     <div style={cardStyle}>
-      <h2 style={nameStyle}>{props.name + " " + props.lastName}</h2>
-      <h4 style={addressStyle}>{props.address}</h4>
+      <img src={props.image} style={imageStyle} />
+      <div style={textStyle}>
+        <h2 style={nameStyle}>{props.name + " " + props.lastName}</h2>
+        <h4 style={addressStyle}>{props.address}</h4>
+        <h4 style={dogCapacityStyle}>
+          Ready to walk {props.dogCapacity} {props.dogSize} dogs for{" "}
+          {props.walkDuration} minutes
+        </h4>
+      </div>
+      <img
+        style={checkoutStyle}
+        src="https://cdn-icons-png.flaticon.com/512/5952/5952829.png"
+      />
     </div>
   );
 }
