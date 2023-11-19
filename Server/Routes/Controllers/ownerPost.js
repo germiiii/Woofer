@@ -1,34 +1,42 @@
 const { User, Owner, Dog } = require("../../Database/db");
 
-const ownerPost = async (id, dogs) => {
-  const user = await User.findOne({ where: { id, is_active: true } });
+const ownerPost = async (username, dogs) => {
+  // validations
+  if (!username) {
+    throw new Error("Username is required");
+  }
+  if (!dogs) {
+    throw new Error("Dogs are required");
+  }
+  const user = await User.findOne({ where: { username, is_active: true } });
   if (!user) {
     throw new Error("User not found");
   }
+  if (user.isOwner) {
+    throw new Error("Owner already exists");
+  }
 
   const newOwner = await Owner.create({
-    userId: id,
+    // userId: user.id,
     dog_count: dogs.length,
   });
 
-  const createdDogs = await Promise.all(
-    dogs.map(async (dog) => {
-      const createdDog = await Dog.create({
-        ...dog,
-        ownerId: newOwner.id,
-      });
-      return createdDog;
-    })
-  );
+  const createdDogs = await Dog.bulkCreate(dogs);
 
+  // asociate the dogs with the owner
   await newOwner.addDogs(createdDogs);
 
-  await User.update({ isOwner: true }, {
-    where: { id, is_active: true },
-  });
+  await user.setOwner(newOwner);
+
+  await User.update(
+    { isOwner: true },
+    {
+      where: { username, is_active: true },
+    }
+  );
 
   const userData = await User.findOne({
-    where: { id: id },
+    where: { username: username, is_active: true },
     attributes: [
       "id",
       "name",
@@ -46,7 +54,7 @@ const ownerPost = async (id, dogs) => {
         include: [
           {
             model: Dog,
-            attributes: ['name','breed', 'size', 'age', 'img'],
+            attributes: ["name", "breed", "size", "age", "img"],
             where: { is_active: true },
           },
         ],
