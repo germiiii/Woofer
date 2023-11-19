@@ -5,6 +5,7 @@ const { walkerHandlerPost } = require("./walkerHandlerPost");
 const { userGetByIdHandler } = require("./userGetByIdHandler");
 const { dogHandlerPost } = require("./dogHandlerPost");
 const { dogHandlerGet } = require("./dogHandlerGet");
+const { ownerHandlerGetAll } = require("./ownerHandlerGetAll");
 
 module.exports = {
   userHandlerLogin,
@@ -14,4 +15,5 @@ module.exports = {
   userGetByIdHandler,
   dogHandlerPost,
   dogHandlerGet,
+  ownerHandlerGetAll,
 };

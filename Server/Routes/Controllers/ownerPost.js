@@ -12,6 +12,9 @@ const ownerPost = async (username, dogs) => {
   if (!user) {
     throw new Error("User not found");
   }
+  if (user.isOwner) {
+    throw new Error("Owner already exists");
+  }
 
   const newOwner = await Owner.create({
     // userId: user.id,
