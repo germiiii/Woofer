@@ -77,11 +77,15 @@ export default function LoginForm() {
         <br />
         <button type='submit'>Sign In</button>
       </form>
+     
       <div>
-        <Link href="/register">
-          <p>Register if you don't have an account.</p>
-        </Link>
+          <p>Don't have an account yet? Register <a href='/register' style={{ display: 'inline' }}>here.</a></p>
+        </div>
+        <div>
+          <p>Don't remember your password? Recover your password <a href='/forget-password' style={{ display: 'inline' }}>here.</a></p>
+        </div>
+
       </div>
-    </div>
+
   );
 }
