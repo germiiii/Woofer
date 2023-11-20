@@ -17,16 +17,29 @@ export default function RegisterForm() {
     email: "",
     password: "",
     isWalker: false,
+    image: null,
   });
 
   const [registrationStatus, setRegistrationStatus] = useState(null);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUserData((prevUserData) => {
-      const updatedUserData = { ...prevUserData, [name]: value };
-      return updatedUserData;
-    });
+    const { name, value, type } = e.target;
+    if (type === "file") {
+      const imageFile = e.target.files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          [name]: reader.result,
+        }));
+      };
+      reader.readAsDataURL(imageFile);
+    } else {
+      setUserData((prevUserData) => {
+        const updatedUserData = { ...prevUserData, [name]: value };
+        return updatedUserData;
+      });
+    }
   };
 
   const handleRegister = async (e) => {

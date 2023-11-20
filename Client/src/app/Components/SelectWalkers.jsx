@@ -1,30 +1,13 @@
 import WalkerCard from "./WalkerCard";
 import { useState } from "react";
+import "tailwindcss/tailwind.css";
+import walkersMock from "../home/walkersMock.js";
 
 export default function SelectWalkers() {
-  const walkersMock = [
-    { id: 1, name: "Lucas", lastName: "Zibaitis", address: "Sarachaga 4632" },
-    { id: 2, name: "German", lastName: "Torres", address: "Aranguren 1020" },
-    {
-      id: 3,
-      name: "Victoria",
-      lastName: "Correas",
-      address: "Juan B. Justo 302",
-    },
-    { id: 4, name: "Alice", lastName: "Johnson", address: "Maple Street 123" },
-    { id: 5, name: "John", lastName: "Smith", address: "Oak Avenue 456" },
-    { id: 6, name: "Emma", lastName: "Williams", address: "Pine Road 789" },
-    { id: 7, name: "Daniel", lastName: "Miller", address: "Cedar Lane 567" },
-    { id: 8, name: "Olivia", lastName: "Brown", address: "Birch Court 890" },
-    { id: 9, name: "Michael", lastName: "Davis", address: "Elm Place 234" },
-    {
-      id: 10,
-      name: "Sophia",
-      lastName: "Jackson",
-      address: "Spruce Drive 567",
-    },
-  ];
   const [currentPage, setCurrentPage] = useState(1);
+  const [dogCapacityFilter, setDogCapacityFilter] = useState("");
+  const [walkDurationFilter, setWalkDurationFilter] = useState("");
+  const [dogSizeFilter, setDogSizeFilter] = useState("");
   const cardsPerPage = 5;
   const startIndex = (currentPage - 1) * cardsPerPage;
   const endIndex = currentPage * cardsPerPage;
@@ -42,7 +25,49 @@ export default function SelectWalkers() {
     }
   };
 
-  const renderList = walkersMock
+  const handleDogCapacityFilterChange = (event) => {
+    setDogCapacityFilter(event.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleWalkDurationFilterChange = (event) => {
+    setWalkDurationFilter(event.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleDogSizeFilterChange = (event) => {
+    setDogSizeFilter(event.target.value);
+    setCurrentPage(1);
+  };
+
+  const filteredWalkers = walkersMock.filter((walker) => {
+    const dogCapacityFilterCondition =
+      !dogCapacityFilter ||
+      (dogCapacityFilter === "1" && walker.dogCapacity === 1) ||
+      (dogCapacityFilter === "<3" && walker.dogCapacity < 3) ||
+      (dogCapacityFilter === "<5" && walker.dogCapacity < 5) ||
+      (dogCapacityFilter === ">5" && walker.dogCapacity > 5);
+
+    const walkDurationFilterCondition =
+      !walkDurationFilter ||
+      (walkDurationFilter === "15" && walker.walkDuration === 15) ||
+      (walkDurationFilter === "30" && walker.walkDuration === 30) ||
+      (walkDurationFilter === "60" && walker.walkDuration === 60);
+
+    const dogSizeFilterCondition =
+      !dogSizeFilter ||
+      (dogSizeFilter === "small" && walker.dogSize === "small") ||
+      (dogSizeFilter === "medium" && walker.dogSize === "medium") ||
+      (dogSizeFilter === "large" && walker.dogSize === "large");
+
+    return (
+      dogCapacityFilterCondition &&
+      walkDurationFilterCondition &&
+      dogSizeFilterCondition
+    );
+  });
+
+  const renderList = filteredWalkers
     .slice(startIndex, endIndex)
     .map((walker) => (
       <WalkerCard
@@ -50,6 +75,10 @@ export default function SelectWalkers() {
         name={walker.name}
         lastName={walker.lastName}
         address={walker.address}
+        image={walker.image}
+        dogCapacity={walker.dogCapacity}
+        walkDuration={walker.walkDuration}
+        dogSize={walker.dogSize}
       />
     ));
 
@@ -63,25 +92,82 @@ export default function SelectWalkers() {
     marginBottom: "16px",
   };
 
+  const paginationStyle = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "20px",
+  };
+
+  const paginationButtonStyle = {
+    backgroundColor: "black",
+    color: "white",
+    padding: "10px 15px",
+    margin: "0 5px",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+  };
+
+  const pageIndicatorStyle = {
+    fontSize: "1.2em",
+    margin: "0 10px",
+  };
+
+  const noWalkersMessageStyle = {
+    fontSize: "1.5em",
+    marginTop: "20px",
+  };
+
   return (
     <div style={containerStyle}>
       <h1 style={titleStyle}>Select a Walker</h1>
-      <div>
-        <select>
-          <option>filter by dog capacity</option>
+      <div className="mb-8">
+        <select
+          className="border p-2 rounded mr-2"
+          value={dogCapacityFilter}
+          onChange={handleDogCapacityFilterChange}
+        >
+          <option value="">filter by dog capacity</option>
+          <option value="1">one dog</option>
+          <option value="<3">less than three dogs</option>
+          <option value="<5">less than five dogs</option>
+          <option value=">5">more than five dogs</option>
         </select>
-        <select>
-          <option>filter by walk time </option>
+        <select
+          className="border p-2 rounded mr-2"
+          value={walkDurationFilter}
+          onChange={handleWalkDurationFilterChange}
+        >
+          <option value="">filter by walk duration </option>
+          <option value="15">15 minutes</option>
+          <option value="30">30 minutes</option>
+          <option value="60">60 minutes</option>
         </select>
-        <select>
-          <option>filter by service type</option>
+        <select
+          className="border p-2 rounded mr-2"
+          value={dogSizeFilter}
+          onChange={handleDogSizeFilterChange}
+        >
+          <option value="">filter by dog size</option>
+          <option value="small">small dogs</option>
+          <option value="medium">medium dogs</option>
+          <option value="large">large dogs</option>
         </select>
       </div>
-      {renderList}
-      <div>
-        <button onClick={handlePreviousPage}>Previous</button>
-        <span>{`Page ${currentPage}`}</span>
-        <button onClick={handleNextPage}>Next</button>
+      {renderList.length > 0 ? (
+        renderList
+      ) : (
+        <p style={noWalkersMessageStyle}>No walkers found.</p>
+      )}
+      <div className="mb-8" style={paginationStyle}>
+        <button onClick={handlePreviousPage} style={paginationButtonStyle}>
+          ←
+        </button>
+        <span style={pageIndicatorStyle}>{`${currentPage}`}</span>
+        <button onClick={handleNextPage} style={paginationButtonStyle}>
+          →
+        </button>
       </div>
     </div>
   );
