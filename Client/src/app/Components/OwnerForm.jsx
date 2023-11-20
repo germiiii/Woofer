@@ -1,6 +1,5 @@
 import axios from "axios";
-import React from "react";
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 
 export default function OwnerForm(props) {
   const fileInputRef = useRef(null);
@@ -35,20 +34,44 @@ export default function OwnerForm(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.onSubmit();
+
+    // Convert the data to the required format
+    const postData = {
+      username: "your_username", // Replace with actual username
+      dogs: listOfDogs.map((dog) => ({
+        name: dog.name,
+        age: dog.age,
+        breed: dog.breed,
+        size: dog.size,
+        img: dog.image,
+      })),
+    };
+
+    console.log("Posting the following data:", postData);
+
+    // Post the formatted data to localhost/ownerform
+    axios.post("http://localhost:3001/ownerform", postData)
+      .then(response => {
+        console.log("Dogs posted successfully:", response.data);
+      })
+      .catch(error => {
+        console.error("Error posting dogs:", error);
+      });
   };
 
   const handleAddDog = (e) => {
     e.preventDefault();
+    const updatedListOfDogs = [...listOfDogs, dogData];
+    setListOfDogs(updatedListOfDogs);
     setDogData({ name: "", age: "", breed: "", size: "", image: null });
-    setListOfDogs((prevListOfDogs) => [...prevListOfDogs, dogData]);
+
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
 
   const renderDogs = listOfDogs.map((dog) => (
-    <div>
+    <div key={dog.name}>
       <h2>{dog.name}</h2>
       {dog.image && (
         <img src={dog.image} alt="Dog Preview" height="100px" width="100px" />

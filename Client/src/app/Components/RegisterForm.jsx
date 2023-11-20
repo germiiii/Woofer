@@ -3,8 +3,12 @@ import "tailwindcss/tailwind.css";
 import axios from "axios";
 import React from "react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";	
 
 export default function RegisterForm() {
+
+  const router = useRouter();
+
   const [userData, setUserData] = useState({
     name: "",
     lastName: "",
@@ -40,7 +44,14 @@ export default function RegisterForm() {
       });
 
       console.log("register con exito");
-      console.log(response.data);
+
+      // Check the value of isWalker before redirecting
+    if (userData.isWalker) {
+      router.push("/walkerform");
+    } else {
+      router.push("/ownerform");
+    }
+
     } catch (error) {
       setRegistrationStatus({
         success: false,
