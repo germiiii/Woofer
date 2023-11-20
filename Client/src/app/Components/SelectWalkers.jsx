@@ -92,6 +92,33 @@ export default function SelectWalkers() {
     marginBottom: "16px",
   };
 
+  const paginationStyle = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "20px",
+  };
+
+  const paginationButtonStyle = {
+    backgroundColor: "black",
+    color: "white",
+    padding: "10px 15px",
+    margin: "0 5px",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+  };
+
+  const pageIndicatorStyle = {
+    fontSize: "1.2em",
+    margin: "0 10px",
+  };
+
+  const noWalkersMessageStyle = {
+    fontSize: "1.5em",
+    marginTop: "20px",
+  };
+
   return (
     <div style={containerStyle}>
       <h1 style={titleStyle}>Select a Walker</h1>
@@ -128,11 +155,19 @@ export default function SelectWalkers() {
           <option value="large">large dogs</option>
         </select>
       </div>
-      {renderList}
-      <div>
-        <button onClick={handlePreviousPage}>Previous</button>
-        <span>{`Page ${currentPage}`}</span>
-        <button onClick={handleNextPage}>Next</button>
+      {renderList.length > 0 ? (
+        renderList
+      ) : (
+        <p style={noWalkersMessageStyle}>No walkers found.</p>
+      )}
+      <div className="mb-8" style={paginationStyle}>
+        <button onClick={handlePreviousPage} style={paginationButtonStyle}>
+          ←
+        </button>
+        <span style={pageIndicatorStyle}>{`${currentPage}`}</span>
+        <button onClick={handleNextPage} style={paginationButtonStyle}>
+          →
+        </button>
       </div>
     </div>
   );
