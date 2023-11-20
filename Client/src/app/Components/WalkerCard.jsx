@@ -16,7 +16,6 @@ export default function WalkerCard(props) {
   const nameStyle = {
     fontSize: "1.5em",
     fontWeight: "bold",
-    marginBottom: "8px",
   };
 
   const addressStyle = {
@@ -58,7 +57,7 @@ export default function WalkerCard(props) {
       <img src={props.image} style={imageStyle} />
       <div style={textStyle}>
         <h2 style={nameStyle}>{props.name + " " + props.lastName}</h2>
-        <h4 style={addressStyle}>{props.address}</h4>
+        <h3 style={addressStyle}>{props.address}</h3>
         <h4 style={dogCapacityStyle}>
           Ready to walk {props.dogCapacity} {props.dogSize} dogs for{" "}
           {props.walkDuration} minutes
