@@ -1,9 +1,10 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { User } = require("../../Database/db");
+const { userGetbyId } = require("./userGetbyId");
 
 const userLogin = async (email, password) => {
-  const user = await User.findOne({ where: { email } });
+  const user = await User.findOne({ where: { email, is_active: true } });
   if (!user) {
     throw new Error("User not found");
   }
@@ -13,8 +14,14 @@ const userLogin = async (email, password) => {
     throw new Error("Invalid password");
   }
 
+  const loggedUser = await userGetbyId(user.id);
+
   const token = jwt.sign({ userId: user.id }, "secret", { expiresIn: "1h" });
-  return token;
+  userData = {
+    token,
+    loggedUser,
+  };
+  return userData;
 };
 
 module.exports = { userLogin };

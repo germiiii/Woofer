@@ -4,11 +4,29 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 
-export default function Map() {
+export default function Map(props) {
   const [userLocation, setUserLocation] = useState(null);
 
   useEffect(() => {
-    if (userLocation) {
+    const handleGetLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setUserLocation({ latitude, longitude });
+          },
+          (error) => {
+            console.error("Error al obtener la ubicación:", error.message);
+          }
+        );
+      } else {
+        console.error("Geolocalización no es compatible en este navegador");
+      }
+    };
+
+    if (!userLocation) {
+      handleGetLocation();
+    } else {
       const map = L.map("map").setView(
         [userLocation.latitude, userLocation.longitude],
         16.3
@@ -23,7 +41,6 @@ export default function Map() {
         userLocation.longitude,
       ]).addTo(map);
       map.panTo([userLocation.latitude, userLocation.longitude]);
-      marker.bindPopup("My location").openPopup();
 
       var circle = L.circle([userLocation.latitude, userLocation.longitude], {
         color: "red",
@@ -34,24 +51,9 @@ export default function Map() {
     }
   }, [userLocation]);
 
-  const handleGetLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setUserLocation({ latitude, longitude });
-        },
-        (error) => {
-          console.error("Error al obtener la ubicación:", error.message);
-        }
-      );
-    } else {
-      console.error("Geolocalización no es compatible en este navegador");
-    }
-  };
-
   return (
     <div>
+      <h1>Your location</h1>
       <div>
         {userLocation ? (
           <div>
@@ -59,14 +61,14 @@ export default function Map() {
               id="map"
               style={{
                 width: "1000px",
-                height: "700px",
-                borderRadius: "5%",
+                height: "300px",
+                borderRadius: "8px",
                 overflow: "hidden",
               }}
             ></div>
           </div>
         ) : (
-          <button onClick={handleGetLocation}>Obtener Ubicación</button>
+          <p>Obteniendo ubicación...</p>
         )}
       </div>
     </div>
