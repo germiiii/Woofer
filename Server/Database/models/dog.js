@@ -1,8 +1,8 @@
-const { DataTypes } = require("sequelize");
-module.exports = (sequelize) => {
+const { DataTypes } = require('sequelize');
+module.exports = sequelize => {
   // defino el modelo
   sequelize.define(
-    "dog",
+    'dog',
     {
       id: {
         type: DataTypes.UUID,
@@ -27,7 +27,7 @@ module.exports = (sequelize) => {
         allowNull: true,
       },
       size: {
-        type: DataTypes.ENUM("small", "medium", "large"),
+        type: DataTypes.ENUM('small', 'medium', 'large'),
         allowNull: false,
       },
       is_active: {
