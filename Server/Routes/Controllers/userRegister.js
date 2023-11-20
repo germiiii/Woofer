@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 const userRegister = async (req, res) => {
   try {
-    const { name, lastName, email, password, username, adress, isWalker, image } = req.body;
+    const { name, lastName, email, password, username, adress, isWalker, image, isOwner } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({
@@ -15,6 +15,7 @@ const userRegister = async (req, res) => {
       username,
       adress,
       isWalker,
+      isOwner,
     });
 
     return newUser;
