@@ -103,7 +103,7 @@ body {
   font-size: large;
   box-shadow: var(--box-shadow);
   border-radius: 0 0 5px 5px;
-  color: white;
+  color: #29235c;
   transform: scaleY(0);
   transition: transform var(--time-animation);
   transform-origin: top;

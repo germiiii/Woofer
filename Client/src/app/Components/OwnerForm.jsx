@@ -101,13 +101,14 @@ export default function OwnerForm(props) {
   };
 
   return (
-    <div style={formContainerStyle}>
-      <div style={formStyle}>
+    <div className="bg-indigo-200 text-black p-6 max-w-md mx-auto mt-10 rounded-md shadow-md">
+      <div className="bg-white rounded-md p-6">
         <form onSubmit={handleSubmit}>
-          <h1>Add your dogs!</h1>
-          <label style={labelStyle}>
+          <h1 className="text-2xl font-bold mb-4">Add your dogs!</h1>
+          <label className="block mb-2">
             Name of your dog{" "}
             <input
+              className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
               type="text"
               name="name"
               onChange={handleChange}
@@ -115,9 +116,10 @@ export default function OwnerForm(props) {
             />
           </label>
           <br />
-          <label style={labelStyle}>
+          <label className="block mb-2">
             Age of your dog{" "}
             <input
+              className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
               type="text"
               name="age"
               onChange={handleChange}
@@ -125,9 +127,10 @@ export default function OwnerForm(props) {
             />
           </label>
           <br />
-          <label style={labelStyle}>
+          <label className="block mb-2">
             Breed of your dog{" "}
             <input
+              className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
               type="text"
               name="breed"
               onChange={handleChange}
@@ -135,18 +138,24 @@ export default function OwnerForm(props) {
             />
           </label>
           <br />
-          <label style={labelStyle}>
+          <label className="block mb-2">
             Size of your dog
-            <select name="size" onChange={handleChange} value={dogData.size}>
+            <select
+              className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
+              name="size"
+              onChange={handleChange}
+              value={dogData.size}
+            >
               <option value="Small">Small</option>
               <option value="Medium">Medium</option>
               <option value="Large">Large</option>
             </select>
           </label>
           <br />
-          <label style={labelStyle}>
+          <label className="block mb-2">
             Image of your dog
             <input
+              className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
               type="file"
               name="image"
               accept="image/*"
@@ -155,10 +164,16 @@ export default function OwnerForm(props) {
             />
           </label>
           <br />
-          <button onClick={handleAddDog} style={buttonStyle}>
+          <button
+            onClick={handleAddDog}
+            className="bg-indigo-900 text-white py-2 px-4 rounded-md hover:bg-gray-800 mr-2"
+          >
             Add more dogs
           </button>
-          <button type="submit" style={buttonStyle}>
+          <button
+            type="submit"
+            className="bg-indigo-900 text-white py-2 px-4 rounded-md hover:bg-gray-800"
+          >
             Confirm
           </button>
           <div>{renderDogs}</div>
@@ -166,4 +181,5 @@ export default function OwnerForm(props) {
       </div>
     </div>
   );
+  
 }

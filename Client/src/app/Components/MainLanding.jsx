@@ -14,8 +14,8 @@ const MainLanding = () => {
           <Image
             src='/ISOWoofer.png'
             alt="logo"
-            width={900}
-            height={600}
+            width={700}
+            height={500}
           />
           </div>
         </h1>
@@ -35,35 +35,23 @@ const MainLanding = () => {
           />
         </div>
 
-        <div className="flex flex-col lg:flex-row mt-20">
+        <div className="flex flex-col lg:flex-row mt-20 ml-90">
           <button
-            className="px-12 py-5 rounded-full w-full sm:w-fit mr-40 ml-10 bg-gradient-to-r  from-violet-200 via-violet-600 to-blue-900  hover:bg-slate-800 text-white border mt-3 lg:mt-0 "
+            className="px-12 py-5  rounded-full w-full sm:w-fit mr-40 ml-90 bg-gradient-to-r  from-violet-200 via-blue-600 to-[#29235c]  hover:bg-slate-800 text-white border mt-3 lg:mt-0 "
             onClick={() => {
-              router.push("/login");
+              router.push("/ownerform");
             }}
           >
-            <Image
-              src="/dog.png"
-              alt="Dog"
-              width={50}
-              height={50}
-              className=" position-fixed"
-            />
+            SIGN IN
           </button>
 
           <button
-            className="px-12 y-5 rounded-full  ml-90 sm:w-fit bg-gradient-to-r from-violet-200 via-violet-600 to-blue-900 hover:bg-slate-800 text-white border mt-3 lg:mt-0"
+            className="px-12 y-5 rounded-full  ml-90 sm:w-fit bg-gradient-to-r from-violet-200 via-blue-600 to-[#29235c] hover:bg-slate-800 text-white border mt-3 lg:mt-0"
             onClick={() => {
               router.push("/login");
             }}
           >
-            <Image
-              src="/walker.png"
-              alt="Dog"
-              width={50}
-              height={50}
-              className="position-fixed"
-            />
+            SIGN UP
           </button>
         </div>
       </div>

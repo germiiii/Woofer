@@ -30,18 +30,29 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div>
-      <h2>Recover account</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          E-mail addres:
-          <input type="email" value={email} onChange={handleEmailChange} />
+    <div className="bg-indigo-200  p-6 max-w-md mx-auto mt-10 rounded-md shadow-md">
+      <h2 className="text-2xl f text-indigo-900 font-extrabold mb-4">Recover account</h2>
+      <form onSubmit={handleSubmit} className="mb-4">
+        <label className="block mb-2">
+          E-mail address:
+          <input
+            className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
+            type="email"
+            value={email}
+            onChange={handleEmailChange}
+          />
         </label>
-        <button type="submit">Send Form</button>
+        <button
+          type="submit"
+          className="bg-indigo-900 text-white py-2 px-4 rounded-md hover:bg-gray-800"
+        >
+          Send 
+        </button>
       </form>
       {message && <p>{message}</p>}
     </div>
   );
+  
 };
 
 export default ForgotPassword;

@@ -8,11 +8,11 @@ import MainLanding from './Components/MainLanding'
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col">
-      <Navbar />
-      <div className="container mt-24 mx-auto px-12 py-4  bg-white">
+  
+      <div className="container mt-24 mx-auto px-12 py-4  bg-white ">
         <MainLanding />
       </div>
-      <div className=" bg-indigo-900">
+      <div className="container mx-auto px-12 py-4 bg-indigo-900">
         <AboutDog />
       </div>
       <div className="container mx-auto px-12 py-4 bg-white">
