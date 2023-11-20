@@ -9,20 +9,20 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      id_dog: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        FOREGEINKEY: true,
-      },
-      id_walker: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        FOREGEINKEY: true,
-      },
-      is_owner: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+      // id_dog: {
+      //   type: DataTypes.UUID,
+      //   allowNull: false,
+      //   FOREGEINKEY: true,
+      // },
+      // id_walker: {
+      //   type: DataTypes.UUID,
+      //   allowNull: false,
+      //   FOREGEINKEY: true,
+      // },
+      // is_owner: {
+      //   type: DataTypes.STRING,
+      //   allowNull: false,
+      // },
       date: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -31,14 +31,19 @@ module.exports = (sequelize) => {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
       },
-      total_price: {
+      totalPrice: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      dog_number: {
+      dogNumber: {
         type: DataTypes.INTEGER,
         allowNull: false,
         minvalue: 1,
+      },
+      state: {
+        type: DataTypes.ENUM("toDo", "inProgress", "done"),
+        defaultValue: "toDo",
+        allowNull: false,
       },
     },
     { timestamps: false }
