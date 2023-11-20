@@ -9,16 +9,16 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col">
       <Navbar />
-      <div className="container mt-24 mx-auto px-12 py-4 bg-[#121212]">
+      <div className="container mt-24 mx-auto px-12 py-4  bg-white">
         <MainLanding />
       </div>
-      <div className="container mx-auto px-12 py-4 bg-white">
+      <div className=" bg-indigo-900">
         <AboutDog />
       </div>
-      <div className="container mx-auto px-12 py-4 bg-[#121212]">
+      <div className="container mx-auto px-12 py-4 bg-white">
         <AboutWalker />
       </div>
-      <div className="container mx-auto px-12 py-4 bg-[#121212]">
+      <div className=" bg-indigo-300">
         <Footer />
       </div>
     </main>

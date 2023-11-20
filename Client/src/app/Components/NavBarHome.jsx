@@ -4,6 +4,9 @@ import "../Styles/StyledNavHome.css";
 export default function Nav({ onLogout }) {
   return (
     <nav className="nav-main">
+      <div className="logo-container">
+        <img src='/LOGOWoofer.png' alt="Logo" className="logo-image" />
+      </div>
       <input
         type="checkbox"
         className="nav-main__btn-collapse"
