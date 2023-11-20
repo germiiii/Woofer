@@ -6,18 +6,17 @@ const walkerPost = async (id, dog_capacity, is_available) => {
     throw new Error("User not found");
   }
 
-   await Walker.create({
-    userId: id,
-    dog_capacity: dog_capacity,
-    is_available: is_available
+  const newWalker = await Walker.create({
+    dog_capacity,
+    is_available,
   });
 
-  await User.update({ isWalker: true }, {
-    where: { id, is_active: true },
-  });
+  await user.setWalker(newWalker);
+
+  await User.update({ isWalker: true }, { where: { id, is_active: true } });
 
   const userData = await User.findOne({
-    where: { id: id },
+    where: { id },
     attributes: [
       "id",
       "name",
@@ -31,7 +30,7 @@ const walkerPost = async (id, dog_capacity, is_available) => {
     include: [
       {
         model: Walker,
-        attributes: ["dog_capacity", "is_available"]        
+        attributes: ["dog_capacity", "is_available"],
       },
     ],
   });
