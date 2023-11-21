@@ -1,7 +1,9 @@
 import { Inter, Montserrat } from "next/font/google";
 import ProvidersWrapper from "./ProvidersWrapper"
 import Providers from "../redux/provider"
+
 import './globals.css'
+
 
 const inter = Inter({ subsets: ["latin"] });
 const monstserrat = Montserrat({ subsets: ["latin"] });

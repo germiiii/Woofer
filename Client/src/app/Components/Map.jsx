@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import "leaflet/dist/leaflet.css";
-import "leaflet-defaulticon-compatibility";
-import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
+//import "leaflet/dist/leaflet.css";
+//import "leaflet-defaulticon-compatibility";
+//import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 
 export default function Map(props) {
   const [userLocation, setUserLocation] = useState(null);

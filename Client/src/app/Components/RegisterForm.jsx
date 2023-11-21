@@ -2,13 +2,16 @@
 import "tailwindcss/tailwind.css";
 import axios from "axios";
 import React from "react";
+
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
+
 export default function RegisterForm() {
+
   const router = useRouter();
-  const fileInputRef = useRef(null);
+
   const [userData, setUserData] = useState({
     name: "",
     lastName: "",
@@ -19,7 +22,8 @@ export default function RegisterForm() {
     isWalker: false,
     image: null,
   });
-  const [formSent, setFormSent] = useState(false);
+
+  const [registrationStatus, setRegistrationStatus] = useState(null);
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -43,19 +47,35 @@ export default function RegisterForm() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const response = await axios.post(
-        "http://localhost:3001/register",
-        userData
-      );
-      setFormSent(true);
-    } catch (e) {
-      console.log("register sin exito");
+      const response = await axios.post("http://localhost:3001/register", userData );
+  
+      setRegistrationStatus({
+        success: true,
+        message: "Registration successful",
+      });
+      // Check the value of isWalker before redirecting
+      console.log("isWalker:", userData.isWalker);
+  
+      if (userData.isWalker) {
+        console.log("Redirecting to walkerform");
+        router.push("/walkerform");
+      } else {
+        console.log("Redirecting to ownerform", router);
+        alert("An e-mail was sent to your direction")
+      }
+    } catch (error) {
+      setRegistrationStatus({
+        success: false,
+        message: "Registration failed",
+      });
     }
   };
+  
 
   return (
+
     <div className="bg-indigo-200 text-black p-6 max-w-md mx-auto mt-10 rounded-md shadow-md">
        <div className="flex justify-center">
         <Image
@@ -75,10 +95,25 @@ export default function RegisterForm() {
             onClick={() => {
               router.push("/login");
             }}
+
           >
-            LogIn
-          </button>
+            <option value="false">Owner</option>
+            <option value="true">Walker</option>
+          </select>
+        </label>
+        <br />
+        <button
+          type="submit"
+          className="bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800"
+        >
+          Sign Up
+        </button>
+      </form>
+      {registrationStatus && (
+        <div className={registrationStatus.success ? "text-green-500" : "text-red-500"}>
+          {registrationStatus.message}
         </div>
+
       ) : (
         <form onSubmit={handleRegister} method="post">
           <h1 className="text-2xl text-indigo-900 font-extrabold mb-4">REGISTER</h1>
@@ -174,6 +209,7 @@ export default function RegisterForm() {
             Sign Up
           </button>
         </form>
+
       )}
     </div>
   );
