@@ -1,5 +1,6 @@
 "use client";
 import { useState } from 'react';
+import Image from 'next/image';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -31,8 +32,18 @@ const ForgotPassword = () => {
 
   return (
     <div className="bg-indigo-200  p-6 max-w-md mx-auto mt-10 rounded-md shadow-md">
-      <h2 className="text-2xl f text-indigo-900 font-extrabold mb-4">Recover account</h2>
+       <div className="flex justify-center">
+        <Image
+          src="/ISOWoofer.png"
+          alt="logo"
+          width={200}
+          height={90}
+          className="mx-auto"
+        />
+      </div>
+      
       <form onSubmit={handleSubmit} className="mb-4">
+      <h2 className="text-2xl f text-indigo-900 font-extrabold mb-4">RECOVER ACCOUNT</h2>
         <label className="block mb-2">
           E-mail address:
           <input

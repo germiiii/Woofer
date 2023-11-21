@@ -34,26 +34,6 @@ const MainLanding = () => {
             repeat={Infinity}
           />
         </div>
-
-        <div className="flex flex-col lg:flex-row mt-20 ml-90">
-          <button
-            className="px-12 py-5  rounded-full w-full sm:w-fit mr-40 ml-90 bg-gradient-to-r  from-violet-200 via-blue-600 to-[#29235c]  hover:bg-slate-800 text-white border mt-3 lg:mt-0 "
-            onClick={() => {
-              router.push("/ownerform");
-            }}
-          >
-            SIGN IN
-          </button>
-
-          <button
-            className="px-12 y-5 rounded-full  ml-90 sm:w-fit bg-gradient-to-r from-violet-200 via-blue-600 to-[#29235c] hover:bg-slate-800 text-white border mt-3 lg:mt-0"
-            onClick={() => {
-              router.push("/login");
-            }}
-          >
-            SIGN UP
-          </button>
-        </div>
       </div>
     </section>
   );

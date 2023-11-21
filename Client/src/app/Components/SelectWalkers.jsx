@@ -1,6 +1,6 @@
 import WalkerCard from "./WalkerCard";
 import { useState } from "react";
-import "tailwindcss/tailwind.css";
+import styles from '../home/StyledHome.module.css'
 import walkersMock from "../home/walkersMock.js";
 
 export default function SelectWalkers() {

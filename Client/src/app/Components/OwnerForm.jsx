@@ -102,6 +102,15 @@ export default function OwnerForm(props) {
 
   return (
     <div className="bg-indigo-200 text-black p-6 max-w-md mx-auto mt-10 rounded-md shadow-md">
+       <div className="flex justify-center">
+        <Image
+          src="/ISOWoofer.png"
+          alt="logo"
+          width={200}
+          height={90}
+          className="mx-auto"
+        />
+      </div>
       <div className="bg-white rounded-md p-6">
         <form onSubmit={handleSubmit}>
           <h1 className="text-2xl font-bold mb-4">Add your dogs!</h1>
