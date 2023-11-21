@@ -19,8 +19,8 @@ const uploadImage = async imagePath => {
 
   try {
     const result = await cloudinary.uploader.upload(imagePath, options);
-    console.log(result);
-    return result.public_id;
+    // console.log(result);
+    return result.secure_url;
   } catch (error) {
     console.error(error);
   }
@@ -42,14 +42,22 @@ const ownerPost = async (username, dogs) => {
     throw new Error("Owner already exists");
   }
 
+  // upload image
+  for (const dog of dogs) {
+    if (dog.img) {
+      const result = await uploadImage(dog.img);
+      dog.img = result;
+    }
+  }
+
+  // create
   const newOwner = await Owner.create({
-    // userId: user.id,
     dog_count: dogs.length,
   });
 
   const createdDogs = await Dog.bulkCreate(dogs);
 
-  // asociate the dogs with the owner
+  // asociation
   await newOwner.addDogs(createdDogs);
 
   await user.setOwner(newOwner);
