@@ -10,7 +10,7 @@ export default function OwnerForm(props) {
     size: "",
     image: null,
   });
-
+  const [username, setUsername] = useState("");
   const [listOfDogs, setListOfDogs] = useState([]);
 
   const handleChange = (e) => {
@@ -28,16 +28,30 @@ export default function OwnerForm(props) {
       };
       reader.readAsDataURL(imageFile);
     } else {
-      setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
+      if (name === "username") {
+        setUsername(value);
+      } else {
+        setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
+      }
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Convert the data to the required format
+    const updatedListOfDogs = [...listOfDogs, { ...dogData }];
+    setListOfDogs(updatedListOfDogs);
+    setDogData({ name: "", age: "", breed: "", size: "", image: null });
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const handleAddDog = (e) => {
+    e.preventDefault();
     const postData = {
-      username: "your_username", // Replace with actual username
+      username: username,
       dogs: listOfDogs.map((dog) => ({
         name: dog.name,
         age: dog.age,
@@ -50,31 +64,21 @@ export default function OwnerForm(props) {
     console.log("Posting the following data:", postData);
 
     // Post the formatted data to localhost/ownerform
-    axios.post("http://localhost:3001/ownerform", postData)
-      .then(response => {
+    axios
+      .post("http://localhost:3001/owner", postData)
+      .then((response) => {
         console.log("Dogs posted successfully:", response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error posting dogs:", error);
       });
   };
 
-  const handleAddDog = (e) => {
-    e.preventDefault();
-    const updatedListOfDogs = [...listOfDogs, dogData];
-    setListOfDogs(updatedListOfDogs);
-    setDogData({ name: "", age: "", breed: "", size: "", image: null });
-
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
-  const renderDogs = listOfDogs.map((dog) => (
-    <div key={dog.name}>
+  const renderDogs = listOfDogs.map((dog, index) => (
+    <div key={index}>
       <h2>{dog.name}</h2>
       {dog.image && (
-        <img src={dog.image} alt="Dog Preview" height="100px" width="100px" />
+        <img src={dog.image} alt={`Dog Preview ${index + 1}`} height="100px" width="100px" />
       )}
     </div>
   ));
@@ -129,6 +133,16 @@ export default function OwnerForm(props) {
         <form onSubmit={handleSubmit}>
           <h1>Add your dogs!</h1>
           <label style={labelStyle}>
+            Your username{" "}
+            <input
+              type="text"
+              name="username"
+              onChange={handleChange}
+              value={username}
+            />
+          </label>
+          <br />
+          <label style={labelStyle}>
             Name of your dog{" "}
             <input
               type="text"
@@ -168,18 +182,27 @@ export default function OwnerForm(props) {
           </label>
           <br />
           <label style={labelStyle}>
-            Image of your dog
+          Image of your dog (Upload a photo or provide a link)
             <input
               type="file"
               name="image"
               accept="image/*"
               onChange={handleChange}
               ref={fileInputRef}
+              style={inputStyle}
+            />
+            <input
+              type="text"
+              name="image"
+              placeholder="Or provide a link to the photo"
+              onChange={handleChange}
+              value={dogData.image}
+
             />
           </label>
           <br />
           <button onClick={handleAddDog} style={buttonStyle}>
-            Add more dogs
+            Send
           </button>
           <button type="submit" style={buttonStyle}>
             Confirm
@@ -190,3 +213,4 @@ export default function OwnerForm(props) {
     </div>
   );
 }
+

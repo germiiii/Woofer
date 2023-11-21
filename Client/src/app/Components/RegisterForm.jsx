@@ -44,27 +44,25 @@ export default function RegisterForm() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const response = await axios.post(
-        "http://localhost:3001/register",
-        userData
-      );
-
+      const response = await axios.post("http://localhost:3001/register", userData );
+  
       setRegistrationStatus({
         success: true,
         message: "Registration successful",
       });
-
-      console.log("register con exito");
-
       // Check the value of isWalker before redirecting
-    if (userData.isWalker) {
-      router.push("/walkerform");
-    } else {
-      router.push("/ownerform");
-    }
-
+      console.log("isWalker:", userData.isWalker);
+  
+      if (userData.isWalker) {
+        console.log("Redirecting to walkerform");
+        router.push("/walkerform");
+      } else {
+        console.log("Redirecting to ownerform", router);
+        router.replace("/ownerform");
+        console.log(router.replace)
+      }
     } catch (error) {
       setRegistrationStatus({
         success: false,
@@ -72,6 +70,7 @@ export default function RegisterForm() {
       });
     }
   };
+  
 
   return (
     <div className="bg-white text-black p-6 max-w-md mx-auto mt-10 rounded-md shadow-md">
