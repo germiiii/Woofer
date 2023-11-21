@@ -69,6 +69,7 @@ export default function RegisterForm() {
       {formSent ? (
         <div className="text-green-500 mb-4">
           Registration successful! Check your inbox for a confirmation email.
+
           <button
             className="bg-indigo-900 text-white py-2 px-4 rounded-md hover:bg-gray-800"
             onClick={() => {
