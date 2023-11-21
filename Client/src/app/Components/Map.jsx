@@ -51,9 +51,14 @@ export default function Map(props) {
     }
   }, [userLocation]);
 
+  const titleStyle = {
+    fontSize: "2em",
+    marginBottom: "16px",
+  };
+
   return (
     <div>
-      <h1>Your location</h1>
+      <h1 style={titleStyle}>Your location</h1>
       <div>
         {userLocation ? (
           <div>

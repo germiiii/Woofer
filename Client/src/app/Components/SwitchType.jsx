@@ -9,7 +9,6 @@ export default function SwitchType() {
 
   return (
     <div>
-      <div>Choose your type</div>
       <label>
         Owner
         <input

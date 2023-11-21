@@ -20,7 +20,7 @@ const userGetAll = async () => {
         include: [
           {
             model: Dog,
-            attributes: ["name", "breed", "size", "age", "img"],
+            attributes: ["id","name", "breed", "size", "age", "img"],
             where: { is_active: true },
           },
         ],
