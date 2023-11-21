@@ -4,8 +4,9 @@ import React, { useState } from "react";
 import NavLink from "./NavLink";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import MenuOverlay from "./MenuOverlay";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
-import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 
 const navLinks = [
   {
@@ -19,51 +20,44 @@ const navLinks = [
 ];
 
 const Navbar = () => {
-  const [navbarOpen, setNavbarOpen] = useState(false);
+  const router = useRouter();
 
   return (
-    <nav className="fixed mx-auto border border-[#33353F] top-0 left-0 right-0 z-10 bg-[#363535] bg-opacity-100">
-      <div className="flex container lg:py-4 flex-wrap items-center justify-between mx-auto px-4 py-2">
-        <Link
-          href={"/"}
-          className="text-2xl md:text-3xl text-white font-semibold"
-        >
-          || WOOFER ||
+    <nav className="fixed top-0 left-0 right-0 z-10 bg-indigo-200 bg-opacity-100">
+    <div className="container mx-auto lg:py-4 flex items-center justify-between px-4 py-2">
+      <div className="flex items-center">
+        <Link href={"/"}>
+          <Image
+            src='/LOGOWoofer.png'
+            alt="logo"
+            width={50}
+            height={50}
+          />
         </Link>
-        <div className="mobile-menu block md:hidden">
-          {!navbarOpen ? (
-            <button
-              onClick={() => setNavbarOpen(true)}
-              className="flex items-center px-3 py-2 border rounded border-slate-200 text-slate-200 hover:text-white hover:border-white"
-            >
-              {/* <Bars3Icon className="h-5 w-5" /> */}
-            </button>
-          ) : (
-            <button
-              onClick={() => setNavbarOpen(false)}
-              className="flex items-center px-3 py-2 border rounded border-slate-200 text-slate-800 hover:text-white hover:border-white"
-            >
-              {/* <XMarkIcon className="h-5 w-5" /> */}
-            </button>
-          )}
-        </div>
-        <div className="menu hidden md:block md:w-auto" id="navbar">
-          <ul className="flex p-4 md:p-0 md:flex-row md:space-x-8 mt-0">
-            {navLinks.map((link, index) => (
-              <li key={index}>
-                <NavLink href={link.path} title={link.title} />
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* <button >
-      <FontAwesomeIcon icon={faGlobe} style={{ color: 'white', fontSize: '2em', marginRight: '20px'}} />
-      <span className="text-white ">En</span>
-      </button> */}
       </div>
-      {navbarOpen ? <MenuOverlay links={navLinks} /> : null}
-    </nav>
+  
+      <div className="flex items-center">
+        <button
+          className="px-4 py-3 rounded-full bg-gradient-to-r from-violet-200 via-blue-600 to-[#29235c] hover:bg-slate-800 text-white border mt-3 lg:mt-0 mr-5"
+          onClick={() => {
+            router.push("/login");
+          }}
+        >
+          SIGN IN
+        </button>
+  
+        <button
+          className="px-4 py-3 rounded-full bg-gradient-to-r from-violet-200 via-blue-600 to-[#29235c] hover:bg-slate-800 text-white border mt-3 lg:mt-0"
+          onClick={() => {
+            router.push("/register");
+          }}
+        >
+          SIGN UP
+        </button>
+      </div>
+    </div>
+  </nav>
+  
   );
 };
 
