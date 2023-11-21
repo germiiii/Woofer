@@ -6,10 +6,10 @@
   box-sizing: border-box;
 }
 :root {
-  --color-grey: hsla(45, 4%, 22%, 0.293);
+  --color-indigo: rgb(165 180 252);
   --color-red: #2c2727;
   --color-blue-light: #415293;
-  --color-blue: #111e92;
+  --color-blue: rgb(252 211 77);
 
   --size-btn-collapse: 10.5rem;
 
@@ -27,7 +27,7 @@ body {
 }
 
 .nav-main {
-  background-color: var(--color-grey);
+  background-color: var(--color-indigo);
   padding: 0.6rem 1.2rem;
   display: flex;
   align-items: center;
@@ -97,17 +97,17 @@ body {
   display: flex;
   flex-direction: column;
   width: var(--size-btn-collapse);
-  height: calc(50vh);
+  height: calc(5\20vh);
   background-color: var(--color-blue);
   padding: 2rem;
   font-size: large;
   box-shadow: var(--box-shadow);
   border-radius: 0 0 5px 5px;
-  color: white;
+  color: #29235c;
   transform: scaleY(0);
   transition: transform var(--time-animation);
   transform-origin: top;
-  z-index: 10; /*se superpone pero no pierde funcionalidad */
+  z-index: 10; 
 }
 
 .nav-main__link-item {
@@ -156,5 +156,17 @@ body {
 .nav-main__btn-collapse:checked ~ .social-networks {
   transform: scaleX(1);
   
+}
+
+.logo-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px; 
+}
+
+.logo-image {
+  width: 50px; 
+  height: auto;
 }
 
