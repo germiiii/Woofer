@@ -60,8 +60,7 @@ export default function RegisterForm() {
         router.push("/walkerform");
       } else {
         console.log("Redirecting to ownerform", router);
-        router.replace("/ownerform");
-        console.log(router.replace)
+        alert("An e-mail was sent to your direction")
       }
     } catch (error) {
       setRegistrationStatus({
