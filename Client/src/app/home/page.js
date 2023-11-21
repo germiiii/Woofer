@@ -7,6 +7,7 @@ import OwnerForm from "../Components/OwnerForm";
 import Map from "../Components/Map";
 import SelectWalkers from "../Components/SelectWalkers";
 import SwitchType from "../Components/SwitchType";
+import Image from "next/image";
 
 const Home = () => {
   const router = useRouter();
@@ -57,13 +58,26 @@ const Home = () => {
           <NavBarHome />
           <div style={switchContainerStyle}>
             <SwitchType />
+            </div>
+            <div className="flex justify-center">
+             
+              <Image
+              src='/ISOWoofer.png'
+              alt="title"
+              width={400}
+              height={100}
+            />
+            </div>
+             
+           
+          
 
-            <div>
+            {/* <div>
               <button onClick={handleAddMoreDogs} style={paginationButtonStyle}>
                 Add more dogs
               </button>
-            </div>
-          </div>
+            </div> */}
+         
           <div
             style={{
               display: "flex",
