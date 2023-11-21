@@ -28,10 +28,10 @@ export default function Nav({ onLogout }) {
           Home
         </a>
         <a href="/" className="nav-main__link-item">
-          Change Profile
+          View Profile
         </a>
-        <a href="/walker-services" className="nav-main__link-item">
-          Add Walker Service
+        <a href="/safety" className="nav-main__link-item">
+         Safety
         </a>
         <a href="/settings" className="nav-main__link-item">
           Settings
