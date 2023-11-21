@@ -27,7 +27,7 @@ module.exports = sequelize => {
         allowNull: true,
       },
       size: {
-        type: DataTypes.ENUM('small', 'medium', 'large'),
+        type: DataTypes.ENUM('Small', 'Medium', 'Large'),
         allowNull: false,
       },
       is_active: {
