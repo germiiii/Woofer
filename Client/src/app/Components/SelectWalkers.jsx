@@ -40,6 +40,13 @@ export default function SelectWalkers() {
     setCurrentPage(1);
   };
 
+  const handleRefresh = () => {
+    setDogCapacityFilter("");
+    setWalkDurationFilter("");
+    setDogSizeFilter("");
+    setCurrentPage(1);
+  };
+
   const filteredWalkers = walkersMock.filter((walker) => {
     const dogCapacityFilterCondition =
       !dogCapacityFilter ||
@@ -154,6 +161,9 @@ export default function SelectWalkers() {
           <option value="medium">medium dogs</option>
           <option value="large">large dogs</option>
         </select>
+        <button onClick={handleRefresh} style={paginationButtonStyle}>
+          Refresh
+        </button>
       </div>
       {renderList.length > 0 ? (
         renderList
