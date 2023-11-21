@@ -2,21 +2,30 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectUserDetails, updateUserDetails } from '<import>/redux/features/detailSice';
+import { fetchUserDetails, setUserDetails, selectUserDetails } from '../../redux/features/detailSice';
 
 const UserDetail = ({ users }) => {
   const [userId, setUserId] = useState(''); 
+  const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
-  const dispatch = useDispatch(); 
 
-  const handleUserDetails = async () => {
+  // Function to fetch user details by dispatching the fetchUserDetails action
+  const getUserDetails = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:3001/users/${userId}`); 
-      dispatch(updateUserDetails(response.data)); // Actualizar los detalles del usuario en el estado global
+      const response = await dispatch(fetchUserDetails(userId)); // Dispatching fetchUserDetails
+      dispatch(setUserDetails(response.payload)); // Updating Redux state using setUserDetails
     } catch (error) {
+      // Handle error if needed
       console.error('Error fetching user details:', error);
     }
   };
+
+  // Call getUserDetails somewhere in your component lifecycle
+  // For example, useEffect to fetch user details on component mount
+  useEffect(() => {
+    const userId = 'someUserId'; // Replace 'someUserId' with the actual user ID
+    getUserDetails(userId);
+  }, []); 
 
   return (
     <div>
