@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+//!Async Thunk handles asynchronous logic: takes 2 parameters
 // Acción asincrónica para obtener la información del usuario
 export const fetchUserDetails = createAsyncThunk(
-    'userDetail/fetchUserDetails',
-    async (userId) => { // Agregar userId como parámetro
+    'userDetail/fetchUserDetails', //action type or prfix
+    async (userId) => { //async function
       try {
         const response = await fetch(`http://localhost:3001/users/${userId}`); // Usar el userId en la URL
         if (!response.ok) {
@@ -17,7 +18,7 @@ export const fetchUserDetails = createAsyncThunk(
     }
   );
   
-
+//!reducers
 const initialState = {
   user: {
     name: "",

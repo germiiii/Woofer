@@ -9,19 +9,16 @@ const UserDetail = ({ users }) => {
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
 
-  // Function to fetch user details by dispatching the fetchUserDetails action
   const getUserDetails = async (userId) => {
     try {
-      const response = await dispatch(fetchUserDetails(userId)); // Dispatching fetchUserDetails
-      dispatch(setUserDetails(response.payload)); // Updating Redux state using setUserDetails
+      const response = await dispatch(fetchUserDetails(userId)); 
+      dispatch(setUserDetails(response.payload)); 
     } catch (error) {
-      // Handle error if needed
       console.error('Error fetching user details:', error);
     }
   };
 
-  // Call getUserDetails somewhere in your component lifecycle
-  // For example, useEffect to fetch user details on component mount
+  
   useEffect(() => {
     const userId = 'someUserId'; // Replace 'someUserId' with the actual user ID
     getUserDetails(userId);
