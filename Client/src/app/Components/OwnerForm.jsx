@@ -1,6 +1,5 @@
 import axios from "axios";
-import React from "react";
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 
 export default function OwnerForm(props) {
   const fileInputRef = useRef(null);
@@ -11,7 +10,7 @@ export default function OwnerForm(props) {
     size: "",
     image: null,
   });
-
+  const [username, setUsername] = useState("");
   const [listOfDogs, setListOfDogs] = useState([]);
 
   const handleChange = (e) => {
@@ -29,29 +28,57 @@ export default function OwnerForm(props) {
       };
       reader.readAsDataURL(imageFile);
     } else {
-      setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
+      if (name === "username") {
+        setUsername(value);
+      } else {
+        setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
+      }
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.onSubmit();
-  };
 
-  const handleAddDog = (e) => {
-    e.preventDefault();
+    const updatedListOfDogs = [...listOfDogs, { ...dogData }];
+    setListOfDogs(updatedListOfDogs);
     setDogData({ name: "", age: "", breed: "", size: "", image: null });
-    setListOfDogs((prevListOfDogs) => [...prevListOfDogs, dogData]);
+
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
 
-  const renderDogs = listOfDogs.map((dog) => (
-    <div>
+  const handleAddDog = (e) => {
+    e.preventDefault();
+    const postData = {
+      username: username,
+      dogs: listOfDogs.map((dog) => ({
+        name: dog.name,
+        age: dog.age,
+        breed: dog.breed,
+        size: dog.size,
+        img: dog.image,
+      })),
+    };
+
+    console.log("Posting the following data:", postData);
+
+    // Post the formatted data to localhost/ownerform
+    axios
+      .post("http://localhost:3001/owner", postData)
+      .then((response) => {
+        console.log("Dogs posted successfully:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error posting dogs:", error);
+      });
+  };
+
+  const renderDogs = listOfDogs.map((dog, index) => (
+    <div key={index}>
       <h2>{dog.name}</h2>
       {dog.image && (
-        <img src={dog.image} alt="Dog Preview" height="100px" width="100px" />
+        <img src={dog.image} alt={`Dog Preview ${index + 1}`} height="100px" width="100px" />
       )}
     </div>
   ));
@@ -113,8 +140,20 @@ export default function OwnerForm(props) {
       </div>
       <div className="bg-white rounded-md p-6">
         <form onSubmit={handleSubmit}>
-          <h1 className="text-2xl font-bold mb-4">Add your dogs!</h1>
-          <label className="block mb-2">
+
+          <h1>Add your dogs!</h1>
+          <label style={labelStyle}>
+            Your username{" "}
+            <input
+              type="text"
+              name="username"
+              onChange={handleChange}
+              value={username}
+            />
+          </label>
+          <br />
+          <label style={labelStyle}>
+
             Name of your dog{" "}
             <input
               className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
@@ -161,8 +200,10 @@ export default function OwnerForm(props) {
             </select>
           </label>
           <br />
-          <label className="block mb-2">
-            Image of your dog
+
+          <label style={labelStyle}>
+          Image of your dog (Upload a photo or provide a link)
+
             <input
               className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
               type="file"
@@ -170,14 +211,22 @@ export default function OwnerForm(props) {
               accept="image/*"
               onChange={handleChange}
               ref={fileInputRef}
+              style={inputStyle}
+            />
+            <input
+              type="text"
+              name="image"
+              placeholder="Or provide a link to the photo"
+              onChange={handleChange}
+              value={dogData.image}
+
             />
           </label>
           <br />
-          <button
-            onClick={handleAddDog}
-            className="bg-indigo-900 text-white py-2 px-4 rounded-md hover:bg-gray-800 mr-2"
-          >
-            Add more dogs
+
+          <button onClick={handleAddDog} style={buttonStyle}>
+            Send
+
           </button>
           <button
             type="submit"
@@ -192,3 +241,4 @@ export default function OwnerForm(props) {
   );
   
 }
+
