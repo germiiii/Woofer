@@ -1,6 +1,6 @@
 import WalkerCard from "./WalkerCard";
 import { useState } from "react";
-import "tailwindcss/tailwind.css";
+import styles from '../home/StyledHome.module.css'
 import walkersMock from "../home/walkersMock.js";
 
 export default function SelectWalkers() {
@@ -37,6 +37,13 @@ export default function SelectWalkers() {
 
   const handleDogSizeFilterChange = (event) => {
     setDogSizeFilter(event.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleRefresh = () => {
+    setDogCapacityFilter("");
+    setWalkDurationFilter("");
+    setDogSizeFilter("");
     setCurrentPage(1);
   };
 
@@ -154,6 +161,9 @@ export default function SelectWalkers() {
           <option value="medium">medium dogs</option>
           <option value="large">large dogs</option>
         </select>
+        <button onClick={handleRefresh} style={paginationButtonStyle}>
+          Refresh
+        </button>
       </div>
       {renderList.length > 0 ? (
         renderList
