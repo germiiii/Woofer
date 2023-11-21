@@ -10,6 +10,7 @@ export default function SwitchType() {
 
   return (
     <div>
+<<<<<<< HEAD
       <div>Choose your type</div>
       <div className="flex flex-col lg:flex-row mt-20">
   <button
@@ -29,6 +30,9 @@ export default function SwitchType() {
   </button>
 
   {/* <label>
+=======
+      <label>
+>>>>>>> origin/develop
         Owner
         <input
           type="radio"

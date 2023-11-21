@@ -33,15 +33,36 @@ const Home = () => {
     setFormCompleted(false);
   };
 
+  const paginationButtonStyle = {
+    backgroundColor: "black",
+    color: "white",
+    padding: "10px 15px",
+    margin: "0 5px",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+  };
+
+  const switchContainerStyle = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  };
+
   return (
     <div>
       {!formCompleted && <OwnerForm onSubmit={handleFormSubmit} />}
       {formCompleted && (
         <>
           <NavBarHome />
-          <SwitchType/>
-          <div>
-            <button onClick={handleAddMoreDogs}>Add more dogs</button>
+          <div style={switchContainerStyle}>
+            <SwitchType />
+
+            <div>
+              <button onClick={handleAddMoreDogs} style={paginationButtonStyle}>
+                Add more dogs
+              </button>
+            </div>
           </div>
           <div
             style={{
@@ -49,6 +70,7 @@ const Home = () => {
               flexDirection: "column",
               alignItems: "center",
               textAlign: "center",
+              height: "1400px",
             }}
           >
             <Map />

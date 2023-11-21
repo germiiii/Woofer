@@ -17,10 +17,12 @@ const userLogin = async (email, password) => {
   const loggedUser = await userGetbyId(user.id);
 
   const token = jwt.sign({ userId: user.id }, "secret", { expiresIn: "1h" });
-  userData = {
+
+  const userData = {
     token,
     loggedUser,
   };
+  
   return userData;
 };
 

@@ -15,7 +15,7 @@ const MainLanding = () => {
             src='/ISOWoofer.png'
             alt="logo"
             width={700}
-            height={500}
+            height={600}
           />
           </div>
         </h1>
