@@ -85,32 +85,32 @@ export default function RegisterForm() {
           <h1  className="text-2xl text-indigo-900 font-extrabold mb-4">REGISTER</h1>
           <label className="block mb-2">
             Your name
-            <input type="text" name="name" onChange={handleChange} className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"/>
+            <input type="text" name="name" placeholder='Enter your name...' onChange={handleChange} className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"/>
           </label>
           <br />
           <label className="block mb-2">
             Your last name
-            <input type="text" name="lastName" onChange={handleChange} className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500" />
+            <input type="text" name="lastName" placeholder='Enter your last name...' onChange={handleChange} className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500" />
           </label>
           <br />
           <label className="block mb-2">
             Your username
-            <input type="text" name="username" onChange={handleChange} className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500" />
+            <input type="text" name="username" placeholder='Enter your username...' onChange={handleChange} className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500" />
           </label>
           <br />
           <label className="block mb-2">
             Your email
-            <input type="email" name="email" onChange={handleChange} className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"/>
+            <input type="email" name="email" placeholder='Enter your email...' onChange={handleChange} className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"/>
           </label>
           <br />
           <label className="block mb-2">
-            Your adress
-            <input type="text" name="adress" onChange={handleChange} className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"/>
+            Your address
+            <input type="text" name="adress" placeholder='Enter your address...' onChange={handleChange} className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"/>
           </label>
           <br />
           <label className="block mb-2">
             Your password
-            <input type="password" name="password" onChange={handleChange} className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"/>
+            <input type="password" name="password" placeholder='Enter your password...' onChange={handleChange} className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"/>
           </label>
           <br />
           <label className="block mb-2">

@@ -58,11 +58,11 @@ const Home = () => {
           <div style={switchContainerStyle}>
             <SwitchType />
 
-            <div>
+            {/* <div>
               <button onClick={handleAddMoreDogs} style={paginationButtonStyle}>
                 Add more dogs
               </button>
-            </div>
+            </div> */}
           </div>
           <div
             style={{

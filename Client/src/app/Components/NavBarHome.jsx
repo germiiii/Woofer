@@ -30,6 +30,9 @@ export default function Nav({ onLogout }) {
         <a href="/" className="nav-main__link-item">
           View Profile
         </a>
+        <a href="/add-dogs" className="nav-main__link-item">
+         Add dogs
+        </a>
         <a href="/safety" className="nav-main__link-item">
          Safety
         </a>
