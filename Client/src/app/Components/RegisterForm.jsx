@@ -57,17 +57,17 @@ export default function RegisterForm() {
 
   return (
     <div className="bg-white text-black p-6 max-w-md mx-auto mt-10 rounded-md shadow-md">
-      {formSent ? (
-        <div className="text-green-500 mb-4">
-          Registration successful! Check your inbox for an email confirmation.
-          <button
-            className="bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800"
-            onClick={() => {
-              router.push("/login");
-            }}
-          >
-            LogIn
-          </button>
+    {formSent ? (
+      <div className="text-green-500 mb-4">
+       Registration successful! Check your inbox for a confirmation email.
+        <button
+          className="bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800"
+          onClick={() => {
+            router.push("/login");
+          }}
+        >
+          LogIn
+        </button>
         </div>
       ) : (
         <form onSubmit={handleRegister} method="post">
