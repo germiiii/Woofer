@@ -23,7 +23,7 @@ const walkerPost = async (id, dog_capacity, is_available) => {
       "email",
       "lastName",
       "username",
-      "adress",
+      "address",
       "isWalker",
       "isOwner",
     ],

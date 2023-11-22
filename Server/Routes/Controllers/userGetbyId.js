@@ -10,7 +10,7 @@ const userGetbyId = async (id) => {
         "email",
         "lastName",
         "username",
-        "adress",
+        "address",
         "isWalker",
         "isOwner",
       ],

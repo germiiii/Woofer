@@ -9,7 +9,7 @@ const userGetAll = async () => {
       "email",
       "lastName",
       "username",
-      "adress",
+      "address",
       "isWalker",
       "isOwner",
     ],
