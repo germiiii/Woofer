@@ -6,7 +6,7 @@ const userRegister = async (req, res) => {
   console.log('Entrando en userRegister');
   console.log(User); 
 
-  const { name, lastName, email, password, username, adress, isWalker, image } = req.body;
+  const { name, lastName, email, password, username, address, isWalker, image } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const newUser = await User.create({
@@ -16,7 +16,7 @@ const userRegister = async (req, res) => {
     email,
     password: hashedPassword,
     username,
-    adress,
+    address,
     isWalker,
   });
 
