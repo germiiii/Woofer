@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; 
 import Link from 'next/link';
 import axios from 'axios';
+import Image from 'next/image';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -50,38 +51,59 @@ export default function LoginForm() {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} method='post'>
-        <h1>SIGN IN</h1>
-        <label>
+    <div className="max-w-md mx-auto mt-10 p-4 bg-indigo-200 rounded shadow-md">
+     <div className="flex justify-center">
+        <Image
+          src="/ISOWoofer.png"
+          alt="logo"
+          width={200}
+          height={90}
+          className="mx-auto"
+        />
+      </div>
+
+      <form onSubmit={handleSubmit} method="post">
+        <h1 className="text-2xl text-indigo-900 font-extrabold mb-4">SIGN IN</h1>
+        <label className="block mb-2">
           Email
           <input
-            type='email'
-            name='email'
-            placeholder='Enter your email address'
+            className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
+            type="email"
+            name="email"
+            placeholder="Enter your email address"
             value={email}
             onChange={handleChange}
           />
         </label>
         <br />
-        <label>
+        <label className="block mb-2">
           Password
           <input
-            type='password'
-            name='password'
-            placeholder='Enter your password'
+            className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
+            type="password"
+            name="password"
+            placeholder="Enter your password"
             value={password}
             onChange={handleChange}
           />
         </label>
         <br />
-        <button type='submit'>Sign In</button>
+        <button className="bg-indigo-900 text-white py-2 px-4 rounded focus:outline-none hover:bg-blue-600" type="submit">
+          Sign In
+        </button>
       </form>
-      <div>
-        <Link href="/register">
-          <p>Register if you don't have an account.</p>
-        </Link>
+  
+      <div className="mt-4">
+        <p className="text-sm">
+          Don't have an account yet? Register <a href="/register" className="text-blue-500">here.</a>
+        </p>
+      </div>
+      <div className="mt-2">
+        <p className="text-sm">
+          Don't remember your password? Recover your password <a href="/forget-password" className="text-blue-500">here.</a>
+        </p>
       </div>
     </div>
   );
+  
 }

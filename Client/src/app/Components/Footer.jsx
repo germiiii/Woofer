@@ -1,11 +1,14 @@
 import React from "react";
+import Image from "next/image";
 
 const Footer = () => {
   return (
-    <footer className="footer border z-10 border-t-[#33353F] border-l-transparent border-r-transparent text-white">
-      <div className="container p-12 flex justify-between">
-        <span>|| WOOFER ||</span>
-        <p className="text-slate-600">Nice to join up for a stroll!</p>
+    <footer className="footer border z-10 border-l-transparent border-r-transparent text-white w-full">
+      <div className="container p-12 mx-auto">
+        <div className="flex justify-between items-center">
+          <Image src={'/LOGOWoofer.png'} alt="logo" width={50} height={50} />
+          <p className="text-white">Nice to join up for a stroll!</p>
+        </div>
       </div>
     </footer>
   );

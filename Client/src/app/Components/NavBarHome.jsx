@@ -4,6 +4,9 @@ import "../Styles/StyledNavHome.css";
 export default function Nav({ onLogout }) {
   return (
     <nav className="nav-main">
+      <div className="logo-container">
+        <img src='/LOGOWoofer.png' alt="Logo" className="logo-image" />
+      </div>
       <input
         type="checkbox"
         className="nav-main__btn-collapse"
@@ -25,10 +28,13 @@ export default function Nav({ onLogout }) {
           Home
         </a>
         <a href="/" className="nav-main__link-item">
-          Change Profile
+          View Profile
         </a>
-        <a href="/walker-services" className="nav-main__link-item">
-          Add Walker Service
+        <a href="/add-dogs" className="nav-main__link-item">
+         Add dogs
+        </a>
+        <a href="/safety" className="nav-main__link-item">
+         Safety
         </a>
         <a href="/settings" className="nav-main__link-item">
           Settings
