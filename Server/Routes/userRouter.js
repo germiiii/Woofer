@@ -14,7 +14,7 @@ userRouter.post("/login", validateUserLogin, userHandlerLogin);
 userRouter.post("/register", userHandlerRegister);
 
 userRouter.post('/changePassword', userHandlerChangePassword)
-userRouter.get("/user/:id", userGetByIdHandler);
+userRouter.get("/users/:id", userGetByIdHandler);
 userRouter.get("/users", userGetAllHandler);
 
 module.exports = userRouter;
