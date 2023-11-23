@@ -8,6 +8,7 @@ export default function SelectWalkers() {
   const [dogCapacityFilter, setDogCapacityFilter] = useState("");
   const [walkDurationFilter, setWalkDurationFilter] = useState("");
   const [dogSizeFilter, setDogSizeFilter] = useState("");
+  const [searchFilter, setSearchFilter] = useState("");
   const cardsPerPage = 5;
   const startIndex = (currentPage - 1) * cardsPerPage;
   const endIndex = currentPage * cardsPerPage;
@@ -40,6 +41,11 @@ export default function SelectWalkers() {
     setCurrentPage(1);
   };
 
+  const handleSearchFilterChange = (event) => {
+    setSearchFilter(event.target.value);
+    setCurrentPage(1);
+  };
+
   const handleRefresh = () => {
     setDogCapacityFilter("");
     setWalkDurationFilter("");
@@ -67,10 +73,22 @@ export default function SelectWalkers() {
       (dogSizeFilter === "medium" && walker.dogSize === "medium") ||
       (dogSizeFilter === "large" && walker.dogSize === "large");
 
+    const searchFilterCondition = !searchFilter
+      ? true
+      : searchFilter
+          .toLowerCase()
+          .split(" ")
+          .every(
+            (word) =>
+              walker.name.toLowerCase().includes(word) ||
+              walker.lastName.toLowerCase().includes(word)
+          );
+
     return (
       dogCapacityFilterCondition &&
       walkDurationFilterCondition &&
-      dogSizeFilterCondition
+      dogSizeFilterCondition &&
+      searchFilterCondition
     );
   });
 
@@ -129,6 +147,13 @@ export default function SelectWalkers() {
   return (
     <div style={containerStyle}>
       <h1 style={titleStyle}>Select a Walker</h1>
+      <input
+        type="text"
+        placeholder="Search by name or last name"
+        value={searchFilter}
+        onChange={handleSearchFilterChange}
+        className="border p-2 rounded mr-2"
+      />
       <div className="mb-8">
         <select
           className="border p-2 rounded mr-2"
