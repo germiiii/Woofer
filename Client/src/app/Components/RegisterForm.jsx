@@ -133,7 +133,7 @@ export default function RegisterForm() {
               Your address
               <input
                 type="text"
-                name="adress"
+                name="address"
                 placeholder="Enter your address..."
                 onChange={handleChange}
                 className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"

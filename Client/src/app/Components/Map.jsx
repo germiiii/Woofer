@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
@@ -7,17 +7,25 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 export default function Map(props) {
   const [userLocation, setUserLocation] = useState(null);
   const [addressInput, setAddressInput] = useState("");
+  const [cityInput, setCityInput] = useState("");
+
+  const mapRef = useRef(null);
 
   const handleAddressInputChange = (event) => {
     setAddressInput(event.target.value);
   };
 
+  const handleCityInputChange = (event) => {
+    setCityInput(event.target.value);
+  };
+
   const handleSearchAddress = async () => {
     try {
+      const formattedAddressInput = addressInput.replace(/(\d+)/, " $1");
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          addressInput
-        )}`
+        `https://nominatim.openstreetmap.org/search?format=json&street=${encodeURIComponent(
+          formattedAddressInput
+        )}&city=${encodeURIComponent(cityInput)}&country=Argentina`
       );
       const data = await response.json();
 
@@ -39,10 +47,14 @@ export default function Map(props) {
 
   useEffect(() => {
     if (userLocation) {
+      if (mapRef.current) {
+        mapRef.current.remove();
+      }
       const map = L.map("map").setView(
         [userLocation.latitude, userLocation.longitude],
         16.3
       );
+      mapRef.current = map;
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
         map
@@ -71,32 +83,56 @@ export default function Map(props) {
     width: "1000px",
     height: "300px",
     borderRadius: "8px",
-    overflow: "hidden",
-    position: "relative",
+    marginTop: "25px",
   };
 
   const loadingMessageStyle = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
+    fontSize: "1.7em", 
+    color: "grey",  
   };
+
+  const loadingMessageContainerStyle = {
+    display: "flex",
+    width: "1000px",
+    height: "300px",
+    borderRadius: "8px",
+    border: "solid grey 1px",
+    justifyContent: "center",
+    alignItems: "center"
+
+  };
+
+  const inputStyle = "border p-2 rounded mr-2";
+  const buttonStyle = "border p-2 rounded mr-2 bg-black text-white";
 
   return (
     <div>
       <h1 style={titleStyle}>Your location</h1>
       <input
         type="text"
+        placeholder="Enter your city"
+        value={cityInput}
+        onChange={handleCityInputChange}
+        className={inputStyle}
+      />
+      <input
+        type="text"
         placeholder="Enter your address"
         value={addressInput}
         onChange={handleAddressInputChange}
+        className={inputStyle}
       />
-      <button onClick={handleSearchAddress}>Search Address</button>
+      <button onClick={handleSearchAddress} className={buttonStyle}>
+        Search Address
+      </button>
       <div style={mapContainerStyle}>
         {userLocation ? (
           <div id="map" style={mapContainerStyle}></div>
         ) : (
-          <p style={loadingMessageStyle}>Waiting for address...</p>
+          <div style={loadingMessageContainerStyle}>
+            {" "}
+            <h1 style={loadingMessageStyle}>Waiting for address...</h1>
+          </div>
         )}
       </div>
     </div>
