@@ -6,27 +6,39 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 
 export default function Map(props) {
   const [userLocation, setUserLocation] = useState(null);
+  const [addressInput, setAddressInput] = useState("");
+
+  const handleAddressInputChange = (event) => {
+    setAddressInput(event.target.value);
+  };
+
+  const handleSearchAddress = async () => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          addressInput
+        )}`
+      );
+      const data = await response.json();
+
+      if (data.length > 0) {
+        const { lat, lon } = data[0];
+        setUserLocation({
+          latitude: parseFloat(lat),
+          longitude: parseFloat(lon),
+        });
+      } else {
+        window.alert(
+          "No se encontraron coordenadas para la dirección ingresada"
+        );
+      }
+    } catch (error) {
+      window.alert("Error al buscar la dirección:", error.message);
+    }
+  };
 
   useEffect(() => {
-    const handleGetLocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            setUserLocation({ latitude, longitude });
-          },
-          (error) => {
-            console.error("Error al obtener la ubicación:", error.message);
-          }
-        );
-      } else {
-        console.error("Geolocalización no es compatible en este navegador");
-      }
-    };
-
-    if (!userLocation) {
-      handleGetLocation();
-    } else {
+    if (userLocation) {
       const map = L.map("map").setView(
         [userLocation.latitude, userLocation.longitude],
         16.3
@@ -40,7 +52,6 @@ export default function Map(props) {
         userLocation.latitude,
         userLocation.longitude,
       ]).addTo(map);
-      map.panTo([userLocation.latitude, userLocation.longitude]);
 
       var circle = L.circle([userLocation.latitude, userLocation.longitude], {
         color: "red",
@@ -56,24 +67,36 @@ export default function Map(props) {
     marginBottom: "16px",
   };
 
+  const mapContainerStyle = {
+    width: "1000px",
+    height: "300px",
+    borderRadius: "8px",
+    overflow: "hidden",
+    position: "relative",
+  };
+
+  const loadingMessageStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+  };
+
   return (
     <div>
       <h1 style={titleStyle}>Your location</h1>
-      <div>
+      <input
+        type="text"
+        placeholder="Enter your address"
+        value={addressInput}
+        onChange={handleAddressInputChange}
+      />
+      <button onClick={handleSearchAddress}>Search Address</button>
+      <div style={mapContainerStyle}>
         {userLocation ? (
-          <div>
-            <div
-              id="map"
-              style={{
-                width: "1000px",
-                height: "300px",
-                borderRadius: "8px",
-                overflow: "hidden",
-              }}
-            ></div>
-          </div>
+          <div id="map" style={mapContainerStyle}></div>
         ) : (
-          <p>Obteniendo ubicación...</p>
+          <p style={loadingMessageStyle}>Waiting for address...</p>
         )}
       </div>
     </div>
