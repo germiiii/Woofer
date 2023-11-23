@@ -77,7 +77,7 @@ const dogPost = async (username, dogs) => {
       "email",
       "lastName",
       "username",
-      "adress",
+      "address",
       "isWalker",
       "isOwner",
     ],
