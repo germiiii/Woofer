@@ -9,7 +9,7 @@ export default function Map(props) {
   const [addressInput, setAddressInput] = useState("");
   const [cityInput, setCityInput] = useState("");
 
-  const mapRef = useRef(null); // Ref to store the map instance
+  const mapRef = useRef(null);
 
   const handleAddressInputChange = (event) => {
     setAddressInput(event.target.value);
@@ -21,9 +21,10 @@ export default function Map(props) {
 
   const handleSearchAddress = async () => {
     try {
+      const formattedAddressInput = addressInput.replace(/(\d+)/, " $1");
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&street=${encodeURIComponent(
-          addressInput
+          formattedAddressInput
         )}&city=${encodeURIComponent(cityInput)}&country=Argentina`
       );
       const data = await response.json();
@@ -82,15 +83,23 @@ export default function Map(props) {
     width: "1000px",
     height: "300px",
     borderRadius: "8px",
-    overflow: "hidden",
-    position: "relative",
+    marginTop: "25px",
   };
 
   const loadingMessageStyle = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
+    fontSize: "1.7em", 
+    color: "grey",  
+  };
+
+  const loadingMessageContainerStyle = {
+    display: "flex",
+    width: "1000px",
+    height: "300px",
+    borderRadius: "8px",
+    border: "solid grey 1px",
+    justifyContent: "center",
+    alignItems: "center"
+
   };
 
   const inputStyle = "border p-2 rounded mr-2";
@@ -120,7 +129,10 @@ export default function Map(props) {
         {userLocation ? (
           <div id="map" style={mapContainerStyle}></div>
         ) : (
-          <p style={loadingMessageStyle}>Waiting for address...</p>
+          <div style={loadingMessageContainerStyle}>
+            {" "}
+            <h1 style={loadingMessageStyle}>Waiting for address...</h1>
+          </div>
         )}
       </div>
     </div>
