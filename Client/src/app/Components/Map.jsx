@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
@@ -7,17 +7,24 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 export default function Map(props) {
   const [userLocation, setUserLocation] = useState(null);
   const [addressInput, setAddressInput] = useState("");
+  const [cityInput, setCityInput] = useState("");
+
+  const mapRef = useRef(null); // Ref to store the map instance
 
   const handleAddressInputChange = (event) => {
     setAddressInput(event.target.value);
   };
 
+  const handleCityInputChange = (event) => {
+    setCityInput(event.target.value);
+  };
+
   const handleSearchAddress = async () => {
     try {
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+        `https://nominatim.openstreetmap.org/search?format=json&street=${encodeURIComponent(
           addressInput
-        )}`
+        )}&city=${encodeURIComponent(cityInput)}&country=Argentina`
       );
       const data = await response.json();
 
@@ -39,10 +46,14 @@ export default function Map(props) {
 
   useEffect(() => {
     if (userLocation) {
+      if (mapRef.current) {
+        mapRef.current.remove();
+      }
       const map = L.map("map").setView(
         [userLocation.latitude, userLocation.longitude],
         16.3
       );
+      mapRef.current = map;
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
         map
@@ -82,16 +93,29 @@ export default function Map(props) {
     transform: "translate(-50%, -50%)",
   };
 
+  const inputStyle = "border p-2 rounded mr-2";
+  const buttonStyle = "border p-2 rounded mr-2 bg-black text-white";
+
   return (
     <div>
       <h1 style={titleStyle}>Your location</h1>
       <input
         type="text"
+        placeholder="Enter your city"
+        value={cityInput}
+        onChange={handleCityInputChange}
+        className={inputStyle}
+      />
+      <input
+        type="text"
         placeholder="Enter your address"
         value={addressInput}
         onChange={handleAddressInputChange}
+        className={inputStyle}
       />
-      <button onClick={handleSearchAddress}>Search Address</button>
+      <button onClick={handleSearchAddress} className={buttonStyle}>
+        Search Address
+      </button>
       <div style={mapContainerStyle}>
         {userLocation ? (
           <div id="map" style={mapContainerStyle}></div>
