@@ -1,12 +1,19 @@
 "use client";
 import "tailwindcss/tailwind.css";
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { auth } from "../firebase";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { useAuthState } from 'react-firebase-hooks/auth'
+//npm i react-firebase-hooks
 
 export default function RegisterForm() {
+  const googleAuth = new GoogleAuthProvider()
+  const [ user ] = useAuthState(auth)
+
   const router = useRouter();
   const fileInputRef = useRef(null);
   const [userData, setUserData] = useState({
@@ -20,6 +27,56 @@ export default function RegisterForm() {
     image: null,
   });
   const [formSent, setFormSent] = useState(false);
+
+  /* const loginGoogle = async (e) => {
+  e.preventDefault(); // Prevenir la acción predeterminada del formulario
+  try {
+    console.log('Antes de signInWithPopup');
+    const result = await signInWithPopup(auth, googleAuth);
+    console.log('Después de signInWithPopup');
+
+    const { user } = result;
+
+    // Dividir displayName en name y lastName
+    const [name, lastName] = user.displayName.split(' ');
+
+    console.log('Antes de router.push');
+    // Redirigir a la página de formulario con los datos de usuario
+    router.push({
+      pathname: '/aditionalForm',
+      query: { name, lastName, email: user.email, photoURL: user.photoURL },
+    });
+    console.log('Después de router.push');
+  } catch (error) {
+    // Imprimir el error exacto en la consola
+    console.error(error);
+  }
+} */
+
+const loginGoogle = async (e) => {
+  e.preventDefault(); // Prevenir la acción predeterminada del formulario
+  try {
+    const result = await signInWithPopup(auth, googleAuth);
+    console.log(result)
+    const { user } = result;
+
+    // Dividir displayName en name y lastName
+    const [name, lastName] = user.displayName.split(' ');
+
+    // Redirigir a la página de formulario con los datos de usuario
+    router.push('/aditionalForm', undefined, {
+      shallow: true,
+      query: { name, lastName, email: user.email},
+    });
+  } catch (error) {
+    // Imprimir el error exacto en la consola
+    console.error(error);
+  }
+};
+
+  /* useEffect(() =>{
+    console.log(user)
+  }, [user]) */
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -188,6 +245,7 @@ export default function RegisterForm() {
             >
               Sign Up
             </button>
+            <button onClick={loginGoogle}>Sign up with Google</button>
           </form>
         )}
       </div>
