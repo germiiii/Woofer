@@ -1,4 +1,5 @@
 const express = require('express');
+const activateRouter = require('./activateRouter');
 const userRouter = require('./userRouter');
 const ownerRouter = require('./ownerRouter');
 const walkerRouter = require('./walkerRouter');
@@ -12,6 +13,7 @@ const router = express.Router();
 // Ejemplo: router.use('/auth', authRouter);
 
 router.use('/', userRouter);
+router.use('/activate', activateRouter);
 router.use('/owner', ownerRouter);
 router.use('/walk', walkRouter);
 router.use('/walker', walkerRouter);
