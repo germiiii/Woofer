@@ -8,9 +8,7 @@ import { useRouter } from 'next/navigation';
 const AditionalForm = () => {
   const router = useRouter()
   const { userData } = useUser();
-  console.log('Datos del usuario:', userData);
 
-  // Estado local para manejar el formulario
   const [formData, setFormData] = useState({
     name: userData.name || '',
     lastName: userData.lastName || '',
@@ -22,7 +20,6 @@ const AditionalForm = () => {
     image: '',
   });
 
-  // Efecto para actualizar el formulario cuando cambian las props
   useEffect(() => {
     setFormData({
       name: userData.name || '',
@@ -36,7 +33,6 @@ const AditionalForm = () => {
     });
   }, [userData]);
 
-  // Función para manejar cambios en el formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -45,38 +41,31 @@ const AditionalForm = () => {
     }));
   };
 
-  // Función para manejar envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Puedes enviar formData a tu base de datos u otras acciones
     console.log('Datos del formulario:', formData);
   
-    // Realizar la solicitud POST a localhost:3001/register
     try {
       const response = await axios.post('http://localhost:3001/register', formData);
   
       if (response.status === 201) {
-        // Mostrar una alerta si la solicitud fue exitosa
         const loginConfirmed = window.confirm('¡Registro exitoso! ¿Quieres iniciar sesión ahora?');
   
         if (loginConfirmed) {
           router.push('/login')
         }
       } else {
-        // Mostrar una alerta si la solicitud falla
         alert('Error al registrar. Inténtalo de nuevo.');
       }
     } catch (error) {
       console.error('Error al enviar la solicitud:', error);
-      // Mostrar una alerta si hay un error en la solicitud
       alert('Error al registrar. Inténtalo de nuevo.');
     }
   };
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        {/* Campos del formulario */}
         <label>
           Name
           <input type="text" name="name" value={formData.name} onChange={handleChange} />
