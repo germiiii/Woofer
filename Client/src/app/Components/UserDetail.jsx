@@ -1,29 +1,12 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import Image from 'next/image';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchUserDetails, setUserDetails, selectUserDetails } from '../../redux/features/userDetailSlice';
-
-const UserDetail = ({ userId }) => {
-  // const dispatch = useDispatch();
-  // const userDetails = useSelector(selectUserDetails);
-
-  // useEffect(() => {
-  //   if (userId) {
-  //     dispatch(fetchUserDetails(userId));
-  //   }
-  // }, [userId, dispatch]);
-
-
+export default function UserDetail({name, lastName, email}) {
   return (
-    <div>
-      <h2>User Profile</h2>
+    <div style={{border: '1px solid black', margin: '20px', padding: '20px'}}>
+      <h4>{name}</h4>
+      <h4>{lastName}</h4>
+      <h4>{email}</h4>
     </div>
-  );
-  
-};
-
-export default UserDetail;
+  )
+}
 
 // return (
 //   <div>

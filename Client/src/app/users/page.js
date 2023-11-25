@@ -1,17 +1,24 @@
-import React from 'react';
-// import { useRouter } from 'next/router';
-// import UserDetail from '../../Components/UserDetail';
+import UserDetail from '../Components/UserDetail'
 
-const UserDetails = () => {
-  // const router = useRouter();
-  // const { id } = router.query; // Fetch the user ID from the URL query params
+async function getUsers() {
+  const res = await fetch('http://localhost:3001/users')
+  const data = await res.json()
+  return data.users
+}
+
+export default async function Users() {
+  const users = await getUsers()
+  console.log({users})
 
   return (
-    <div>
-      <h1>User Details</h1>
-      {/* id && <UserDetail userId={id} /> */}
-    </div>
-  );
-};
-
-export default UserDetails;
+    <>
+    <h1>Users</h1>
+      {
+        users.length > 0 && (
+          users.map(({id, name, lastName, email}) => 
+          <UserDetail key={id} name={name} lastName={lastName} email={email}/>)
+        )
+      }
+    </>
+  )
+}
