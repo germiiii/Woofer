@@ -1,17 +1,15 @@
 "use client";
 
-import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 
-const AditionalForm = () => {
-  const router = useRouter();
-  const { name: initialName, lastName: initialLastName, email: initialEmail } = router.query;
+const AditionalForm = ({name, lastName, email}) => {
+  console.log('props:', {name, lastName, email})
 
   // Estado local para manejar el formulario
   const [formData, setFormData] = useState({
-    name: initialName || '',
-    lastName: initialLastName || '',
-    email: initialEmail || '',
+    name: name || '',
+    lastName: lastName || '',
+    email: email || '',
     address: '',
     username: '',
     isWalker: false,
@@ -21,15 +19,15 @@ const AditionalForm = () => {
   // Efecto para actualizar el formulario cuando cambian las props
   useEffect(() => {
     setFormData({
-      name: initialName || '',
-      lastName: initialLastName || '',
-      email: initialEmail || '',
+      name: name || '',
+      lastName: lastName || '',
+      email: email || '',
       address: '',
       username: '',
       isWalker: false,
       image: '',
     });
-  }, [initialName, initialLastName, initialEmail]);
+  }, [name, lastName, email]);
 
   // Función para manejar cambios en el formulario
   const handleChange = (e) => {

@@ -74,9 +74,9 @@ const loginGoogle = async (e) => {
   }
 };
 
-  /* useEffect(() =>{
+  useEffect(() =>{
     console.log(user)
-  }, [user]) */
+  }, [user])
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
