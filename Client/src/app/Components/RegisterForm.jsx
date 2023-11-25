@@ -8,11 +8,13 @@ import Image from "next/image";
 import { auth } from "../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { useUser } from "../UserContext";
 //npm i react-firebase-hooks
 
 export default function RegisterForm() {
   const googleAuth = new GoogleAuthProvider()
   const [ user ] = useAuthState(auth)
+  const { updateUser } = useUser();
 
   const router = useRouter();
   const fileInputRef = useRef(null);
@@ -28,51 +30,23 @@ export default function RegisterForm() {
   });
   const [formSent, setFormSent] = useState(false);
 
-  /* const loginGoogle = async (e) => {
-  e.preventDefault(); // Prevenir la acción predeterminada del formulario
-  try {
-    console.log('Antes de signInWithPopup');
-    const result = await signInWithPopup(auth, googleAuth);
-    console.log('Después de signInWithPopup');
+  const loginGoogle = async (e) => {
+    e.preventDefault();
+    try {
+      const result = await signInWithPopup(auth, googleAuth);
+      const { user } = result;
 
-    const { user } = result;
+      const [name, lastName] = user.displayName.split(' ');
 
-    // Dividir displayName en name y lastName
-    const [name, lastName] = user.displayName.split(' ');
+      // Actualizar el contexto con los datos de usuario
+      updateUser({ name, lastName, email: user.email });
 
-    console.log('Antes de router.push');
-    // Redirigir a la página de formulario con los datos de usuario
-    router.push({
-      pathname: '/aditionalForm',
-      query: { name, lastName, email: user.email, photoURL: user.photoURL },
-    });
-    console.log('Después de router.push');
-  } catch (error) {
-    // Imprimir el error exacto en la consola
-    console.error(error);
-  }
-} */
-
-const loginGoogle = async (e) => {
-  e.preventDefault(); // Prevenir la acción predeterminada del formulario
-  try {
-    const result = await signInWithPopup(auth, googleAuth);
-    console.log(result)
-    const { user } = result;
-
-    // Dividir displayName en name y lastName
-    const [name, lastName] = user.displayName.split(' ');
-
-    // Redirigir a la página de formulario con los datos de usuario
-    router.push('/aditionalForm', undefined, {
-      shallow: true,
-      query: { name, lastName, email: user.email},
-    });
-  } catch (error) {
-    // Imprimir el error exacto en la consola
-    console.error(error);
-  }
-};
+      // Redirigir a la página de formulario
+      router.push('/aditionalForm');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() =>{
     console.log(user)

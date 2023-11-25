@@ -1,17 +1,23 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { useUser } from '../UserContext';
+import axios from "axios";
+import { useRouter } from 'next/navigation';
 
-const AditionalForm = ({name, lastName, email}) => {
-  console.log('props:', {name, lastName, email})
+const AditionalForm = () => {
+  const router = useRouter()
+  const { userData } = useUser();
+  console.log('Datos del usuario:', userData);
 
   // Estado local para manejar el formulario
   const [formData, setFormData] = useState({
-    name: name || '',
-    lastName: lastName || '',
-    email: email || '',
+    name: userData.name || '',
+    lastName: userData.lastName || '',
+    email: userData.email || '',
     address: '',
     username: '',
+    password: '',
     isWalker: false,
     image: '',
   });
@@ -19,15 +25,16 @@ const AditionalForm = ({name, lastName, email}) => {
   // Efecto para actualizar el formulario cuando cambian las props
   useEffect(() => {
     setFormData({
-      name: name || '',
-      lastName: lastName || '',
-      email: email || '',
+      name: userData.name || '',
+      lastName: userData.lastName || '',
+      email: userData.email || '',
       address: '',
       username: '',
+      password: '',
       isWalker: false,
       image: '',
     });
-  }, [name, lastName, email]);
+  }, [userData]);
 
   // Función para manejar cambios en el formulario
   const handleChange = (e) => {
@@ -39,12 +46,33 @@ const AditionalForm = ({name, lastName, email}) => {
   };
 
   // Función para manejar envío del formulario
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+  
     // Puedes enviar formData a tu base de datos u otras acciones
     console.log('Datos del formulario:', formData);
+  
+    // Realizar la solicitud POST a localhost:3001/register
+    try {
+      const response = await axios.post('http://localhost:3001/register', formData);
+  
+      if (response.status === 201) {
+        // Mostrar una alerta si la solicitud fue exitosa
+        const loginConfirmed = window.confirm('¡Registro exitoso! ¿Quieres iniciar sesión ahora?');
+  
+        if (loginConfirmed) {
+          router.push('/login')
+        }
+      } else {
+        // Mostrar una alerta si la solicitud falla
+        alert('Error al registrar. Inténtalo de nuevo.');
+      }
+    } catch (error) {
+      console.error('Error al enviar la solicitud:', error);
+      // Mostrar una alerta si hay un error en la solicitud
+      alert('Error al registrar. Inténtalo de nuevo.');
+    }
   };
-
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -73,6 +101,10 @@ const AditionalForm = ({name, lastName, email}) => {
           <input type="text" name="username" onChange={handleChange} />
         </label>
         <br />
+        <label>
+          Password:
+          <input type="password" name="password" onChange={handleChange} />
+        </label>
         <button type="submit">Enviar</button>
       </form>
     </div>
