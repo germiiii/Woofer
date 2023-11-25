@@ -3,7 +3,8 @@ import UserDetail from '../Components/UserDetail'
 async function getUsers() {
   const res = await fetch('http://localhost:3001/users')
   const data = await res.json()
-  return data.users
+  console.log(data)
+  return data
 }
 
 export default async function Users() {
@@ -16,9 +17,14 @@ export default async function Users() {
       {
         users.length > 0 && (
           users.map(({id, name, lastName, email}) => 
-          <UserDetail key={id} name={name} lastName={lastName} email={email}/>)
+          <UserDetail key={id} name={name} lastName={lastName} email={email} />)
         )
-      }
+      } 
     </>
   )
 }
+
+
+
+   
+  
