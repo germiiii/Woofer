@@ -1,5 +1,0 @@
-⚠️ IMPORTANTE
-
-chiquis, para usar firebase y funcione la autenticacion tienen que:
--npm i firebase
--npm i react-firebase-hooks
