@@ -1,12 +1,21 @@
 "use client";
 import "tailwindcss/tailwind.css";
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { auth } from "../firebase";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { useUser } from "../UserContext";
+//npm i react-firebase-hooks
 
 export default function RegisterForm() {
+  const googleAuth = new GoogleAuthProvider()
+  const [ user ] = useAuthState(auth)
+  const { updateUser } = useUser();
+
   const router = useRouter();
   const fileInputRef = useRef(null);
   const [userData, setUserData] = useState({
@@ -20,6 +29,28 @@ export default function RegisterForm() {
     image: null,
   });
   const [formSent, setFormSent] = useState(false);
+
+  const loginGoogle = async (e) => {
+    e.preventDefault();
+    try {
+      const result = await signInWithPopup(auth, googleAuth);
+      const { user } = result;
+
+      const [name, lastName] = user.displayName.split(' ');
+
+      // Actualizar el contexto con los datos de usuario
+      updateUser({ name, lastName, email: user.email });
+
+      // Redirigir a la página de formulario
+      router.push('/aditionalForm');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() =>{
+    console.log(user)
+  }, [user])
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -188,6 +219,7 @@ export default function RegisterForm() {
             >
               Sign Up
             </button>
+            <button onClick={loginGoogle}>Sign up with Google</button>
           </form>
         )}
       </div>

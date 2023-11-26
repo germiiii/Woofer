@@ -4,12 +4,17 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import axios from 'axios';
 import Image from 'next/image';
+import { auth } from "../firebase";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 export default function LoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const googleAuth = new GoogleAuthProvider()
+  const [ user ] = useAuthState(auth)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,6 +22,28 @@ export default function LoginForm() {
       setEmail(value);
     } else if (name === 'password') {
       setPassword(value);
+    }
+  };
+
+  const loginGoogle = async (e) => {
+    e.preventDefault();
+    try {
+      const result = await signInWithPopup(auth, googleAuth);
+      const { user } = result;
+      console.log(user)
+  
+      const email = user.email;
+      console.log(email)
+  
+      const response = await axios.post('http://localhost:3001/googleLogin', { email });
+  
+      if (response.status === 201) {
+        router.push('/home');
+      } else {
+        console.error('Authentication failed');
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -90,6 +117,9 @@ export default function LoginForm() {
         <br />
         <button className="bg-indigo-900 text-white py-2 px-4 rounded focus:outline-none hover:bg-blue-600" type="submit">
           Sign In
+        </button>
+        <button onClick={loginGoogle} className="bg-indigo-900 text-white py-2 px-4 rounded focus:outline-none hover:bg-blue-600" type="submit">
+          Log in with Google
         </button>
       </form>
   
