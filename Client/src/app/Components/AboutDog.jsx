@@ -31,8 +31,8 @@ const AboutDog = () => {
       We know you love your dog. We know you want him to be happy and in shape. So why not give him the chance to exercise when your busy? Ease back and relax, Woofer walkers can do the work for you.
     </p>
     <div className="flex items-center justify-center mt-6">
-    <button className='px-1 py-1 rounded-full w-full sm:w-fit bg-gradient-to-r  from-blue-400 via-blue-600 to-blue-900  hover:bg-slate-800 text-black border mt-3 lg:mt-0'>
-              <span className='block bg-white hover:bg-slate-800 rounded-full px-5 py-2'>Register your dog</span>
+    <button  className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5">
+              <span >Register your dog</span>
             </button>
     </div>
   </div>
