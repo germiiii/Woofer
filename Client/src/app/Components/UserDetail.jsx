@@ -1,12 +1,14 @@
 import UserDetailButton from '../Components/UserDetailButton'
 
-export default function UserDetail({id, name, lastName, email, address, noButton = false}) {
+
+export default function UserDetail({id, name, lastName, email, address, username, noButton = false}) {
   return (
     <div style={{border: '1px solid black', margin: '20px', padding: '20px'}}>
       <h4>{name}</h4>
       <h4>{lastName}</h4>
       <h4>{email}</h4>
       <h4>{address}</h4> 
+      <h4>{username}</h4>
       {
         !noButton &&  <UserDetailButton id={id}/>
       }
