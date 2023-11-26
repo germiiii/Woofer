@@ -115,12 +115,23 @@ export default function LoginForm() {
           />
         </label>
         <br />
-        <button className="bg-indigo-900 text-white py-2 px-4 rounded focus:outline-none hover:bg-blue-600" type="submit">
+        <div>
+        <button className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5" type="submit">
           Sign In
         </button>
-        <button onClick={loginGoogle} className="bg-indigo-900 text-white py-2 px-4 rounded focus:outline-none hover:bg-blue-600" type="button">
-          Log in with Google
-        </button>
+        </div>
+      
+        --------------------------------------------------------
+        <div>
+          <button onClick={loginGoogle} className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400" type="button">
+            <img src={'/google.png'} alt="Google Logo" className="w-6 h-6 mr-2" />
+            <span>Login with Google</span>
+          </button>
+        </div>
+
+       
+
+        
       </form>
   
       <div className="mt-4">
