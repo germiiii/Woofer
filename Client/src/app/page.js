@@ -5,6 +5,7 @@ import AboutWalker from './Components/AboutWalker'
 import Footer from './Components/Footer'
 import MainLanding from './Components/MainLanding'
 import AboutWoofer from './Components/AboutWoofer'
+import "tailwindcss/tailwind.css";
 
 export default function Home() {
   return (

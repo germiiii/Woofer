@@ -38,7 +38,7 @@ const Navbar = () => {
   
       <div className="flex items-center">
         <button
-          className="px-4 py-3 rounded-full bg-gradient-to-r from-violet-200 via-blue-600 to-[#29235c] hover:bg-slate-800 text-white border mt-3 lg:mt-0 mr-5"
+          className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5"
           onClick={() => {
             router.push("/login");
           }}
@@ -47,7 +47,7 @@ const Navbar = () => {
         </button>
   
         <button
-          className="px-4 py-3 rounded-full bg-gradient-to-r from-violet-200 via-blue-600 to-[#29235c] hover:bg-slate-800 text-white border mt-3 lg:mt-0"
+           className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5"
           onClick={() => {
             router.push("/register");
           }}

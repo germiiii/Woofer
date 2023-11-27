@@ -1,3 +1,4 @@
+
 // Importaciones
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -159,12 +160,29 @@ export default function Settings() {
           )}
         </div>
 
-        <div>
+
           if you need to change your password, click here :{" "}
           <button className="bg-indigo-900 text-white py-2 px-4 rounded focus:outline-none hover:bg-blue-600">change password</button>
-        </div>
-        <button type="submit" className="bg-indigo-900 text-white py-2 px-4 rounded focus:outline-none hover:bg-blue-600">Save</button>
-      </div>
-    </form>
-  );
-}
+
+            <div>
+                Name: {isEditingName ? (
+                    <input type="text" value={newName} onChange={handleNameChange} />
+                ) : (
+                    <span onClick={handleNameClick}>{name}</span>
+                )}
+            </div>
+            <div>
+                Lastname: {lastname}
+            </div>
+            <div>
+                Email: {email}
+            </div>
+            <div>
+                Address: {address}
+            </div>
+            <div>
+                Username: {username}
+            </div>
+            <div>
+                Password: ********
+            </div>
