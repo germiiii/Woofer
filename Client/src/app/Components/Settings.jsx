@@ -1,115 +1,185 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserDetails } from "../../redux/features/userDetailSlice";
+import axios from "axios";
+import "tailwindcss/tailwind.css";
+import Image from 'next/image'
 
 export default function Settings() {
-    const [name, setName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [username, setUsername] = useState("");
-    const [address, setAddress] = useState("");
-    const [image, setImage] = useState("");
-    const [showChangePassword, setShowChangePassword] = useState(false);
-    const [newPassword, setNewPassword] = useState("");
+  const dispatch = useDispatch();
+  const { name, lastName, email, address, userName, image } = useSelector((state) => state.userDetail.user);
 
-    const handleNameChange = (e) => {
-        setName(e.target.value);
+  const [isEditing, setIsEditing] = useState(false);
+  const [newName, setNewName] = useState(name);
+  const [newLastname, setNewLastname] = useState(lastName);
+  const [newAddress, setNewAddress] = useState(address);
+  const [newUserName, setNewUserName] = useState(userName);
+  const [newImage, setNewImage] = useState(image);
+
+  const handleClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleNameChange = (e) => {
+    dispatch(updateUserDetails({ name: e.target.value }));
+  };
+
+  const handleLastnameChange = (e) => {
+    dispatch(updateUserDetails({ lastName: e.target.value }));
+  };
+
+  const handleAddressChange = (e) => {
+    dispatch(updateUserDetails({ address: e.target.value }));
+};
+
+const handleUserNameChange = (e) => {
+  dispatch(updateUserDetails({ userName: e.target.value }));
+};
+
+  const handleImageChange = (e) => {
+    const imageFile = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setNewImage(reader.result);
     };
+    reader.readAsDataURL(imageFile);
+    dispatch(updateUserDetails({ image: newImage }));
+  };
 
-    const handleLastNameChange = (e) => {
-        setLastName(e.target.value);
-    };
-
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-    };
-
-    const handleUsernameChange = (e) => {
-        setUsername(e.target.value);
-    };
-
-    const handleAddressChange = (e) => {
-        setAddress(e.target.value);
-    };
-
-    const handleImageChange = (e) => {
-        setImage(e.target.value);
-    };
-
-    const handleNewPasswordChange = (e) => {
-        setNewPassword(e.target.value);
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Acá debo poner la ruta a donde se mandan todos los datos que se actualizen
-        console.log("Datos actualizados:", { name, lastName, email, username, address, image });
-    };
-
-    const handlePasswordChange = (e) => {
-        e.preventDefault();
-        // Aca debo poner la ruta a donde se mmanda la contraseña nueva
-        console.log("Contraseña actualizada:", newPassword);
-    };
-
+  const renderEditableField = (label, value, onChange, isEditable = true) => {
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Name:
-                    <input type="text" value={name} onChange={handleNameChange} />
-                </label>
-                <br />
-
-                <label>
-                    Lastname:
-                    <input type="text" value={lastName} onChange={handleLastNameChange} />
-                </label>
-                <br />
-
-                <label>
-                    Email:
-                    <input type="email" value={email} onChange={handleEmailChange} />
-                </label>
-                <br />
-
-                <label>
-                    Usearname:
-                    <input type="text" value={username} onChange={handleUsernameChange} />
-                </label>
-                <br />
-
-                <label>
-                    Addres:
-                    <input type="text" value={address} onChange={handleAddressChange} />
-                </label>
-                <br />
-
-                <label>
-                    Image:
-                    <input type="text" value={image} onChange={handleImageChange} />
-                </label>
-                <br />
-
-                <button type="submit">Save Changes</button>
-            </form>
-
-            <div>
-                <p>Do you need to change your password? Click here:</p>
-                <button onClick={() => setShowChangePassword(!showChangePassword)}>
-                    {showChangePassword ? "Hide" : "Show"} Change Password
-                </button>
-
-                {showChangePassword && (
-                    <form onSubmit={handlePasswordChange}>
-                        <label>
-                            New Password:
-                            <input type="password" value={newPassword} onChange={handleNewPasswordChange} />
-                        </label>
-                        <br />
-
-                        <button type="submit">Change Password</button>
-                    </form>
-                )}
-            </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700">
+          {label}:
+        </label>
+        <div className={`mt-1 ${isEditing && isEditable ? '' : 'bg-white p-2 rounded border border-gray-300'}`}>
+          {isEditing && isEditable ? (
+            <input
+              type="text"
+              value={value}
+              onChange={onChange}
+              className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
+            />
+          ) : (
+            <span
+              onClick={handleClick}
+              className={`cursor-pointer text-gray-500 ${
+                value ? "hover:text-blue-500" : ""
+              }`}
+            >
+              {value || `Enter your ${label.toLowerCase()}...`}
+            </span>
+          )}
         </div>
+      </div>
     );
+  };
+
+  const saveChanges = async () => {
+    const userSettingChange = {
+      name: newName,
+      lastName: newLastname,
+      address: newAddress,
+      userName: newUserName,
+      image: newImage,
+    };
+
+    // try {
+    //   const response = await axios.post(
+    //     "http://localhost:3001/register",
+    //     userSettingChange
+    //   );
+    //   console.log("Registro exitoso:", response.data);
+    // } catch (e) {
+    //   window.alert("Fallo en el registro.");
+    //   console.log("Registro sin éxito:", e.message);
+    // }
+
+    setIsEditing(false);
+    dispatch(updateUserDetails(userSettingChange));
+    alert("Se han guardado los cambios");
+  };
+
+  useEffect(() => {
+    setNewName(name);
+    setNewLastname(lastName);
+    setNewAddress(address);
+    setNewUserName(userName);
+    setNewImage(image);
+  }, [name, lastName, address, userName, image]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    saveChanges();
+  };
+
+  return (
+    <div>
+    <div className="flex justify-center">
+      <Image
+        src="/ISOWoofer.png"
+        alt="logo"
+        width={200}
+        height={90}
+        className="mx-auto"
+      />
+    </div>
+   <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-10 p-4 bg-indigo-200 rounded shadow-md">
+      
+      <div>
+        {renderEditableField("Name", newName, handleNameChange)}
+        {renderEditableField("Lastname", newLastname, handleLastnameChange)}
+        {renderEditableField("Email", email, () => {}, false)}
+        {renderEditableField("Address", newAddress, handleAddressChange)}
+        {renderEditableField("Username", newUserName, handleUserNameChange)}
+
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Profile Picture:
+        </label>
+        <div className={`mt-1 ${isEditing ? '' : 'bg-white p-2 rounded border border-gray-300'}`}>
+          {isEditing ? (
+            <>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
+              />
+              {newImage && (
+                <img
+                  src={newImage}
+                  alt="Profile"
+                  className="mt-2 rounded"
+                  style={{ maxWidth: '100px', maxHeight: '100px' }}
+                />
+              )}
+            </>
+          ) : (
+            <span
+              onClick={handleClick}
+              className="cursor-pointer text-gray-500 hover:text-blue-500"
+            >
+              {newImage ? (
+                <img
+                  src={newImage}
+                  alt="Profile"
+                  className="mt-2 rounded"
+                  style={{ maxWidth: '100px', maxHeight: '100px' }}
+                />
+              ) : 'Upload Profile Picture'}
+            </span>
+          )}
+        </div>
+
+
+        <div>
+         If you need to change your password, click here:
+         <a href="/forget-password" className="text-blue-500 hover:underline">Change Password</a>
+        </div>
+       
+        <button type="submit" className="bg-indigo-900 text-white py-2 px-4 rounded focus:outline-none hover:bg-blue-600">Save</button>
+      </div>
+    </form> 
+    </div>
+  );
 }

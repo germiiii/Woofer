@@ -1,36 +1,24 @@
-// pages/userDetails.js
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import UserDetailButton from '../Components/UserDetailButton'
 
-const UserDetail = ({ users }) => { //Whatever you return from getServerSideProps as props will be available as props in your component
+
+export default function UserDetail({ id, name, lastName, email, address, username, noButton = false, isWalker = false, image }) {
   return (
     <div>
-      <h1>User Details</h1>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>
-            <p>Name: {user.name}</p>
-            <p>Surname: {user.lastName}</p>
-            <p>Email: {user.email}</p>
-            <p>Address: {user.address}</p>
-            <p>Rating: {user.rating}</p>
-            <p>Reviews: {user.reviews}</p>
-          </li>
-        ))}
-      </ul>
+      <div>
+      
+        {image ? (
+          <img src={image} alt="" height="100px" width="100px" />
+        ) : (
+          <img src="/ProfileDetail.webp" alt="Default Profile" height="100px" width="100px" />
+        )}
+      </div>
+      <h4>Name: {name}</h4>
+      <h4>Surname: {lastName}</h4>
+      <h4>Email address: {email}</h4>
+      <h4>Home address: {address}</h4>
+      <h4>Username: {username}</h4>
+      {!noButton && <UserDetailButton id={id} />}
     </div>
   );
-};
-
-export async function getServerSideProps() {
- 
-  const res = await axios.get('http://localhost:3001/users'); 
-
-  return {
-    props: {
-      users: res.data || [], 
-    },
-  };
 }
 
-export default UserDetail;
