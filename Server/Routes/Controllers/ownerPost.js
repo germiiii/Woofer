@@ -8,23 +8,7 @@ cloudinary.config({
   api_secret: CLOUDINARY_API_SECRET,
   secure: true,
 });
-
-// upload image function
-const uploadImage = async imagePath => {
-  const options = {
-    use_filename: true,
-    unique_filename: false,
-    overwrite: true,
-  };
-
-  try {
-    const result = await cloudinary.uploader.upload(imagePath, options);
-    // console.log(result);
-    return result.secure_url;
-  } catch (error) {
-    console.error(error);
-  }
-};
+const { uploadImage } = require("../../Routes/utils/uploadImage");
 
 const ownerPost = async (data, file) => {
   const { username, name, size, age, breed } = data;
@@ -47,7 +31,7 @@ const ownerPost = async (data, file) => {
   // upload image
   if (file) {
     const result = await uploadImage(file.path);
-    file = result;
+    // file = result; //? no es necesario
   }
 
   // create
@@ -60,7 +44,7 @@ const ownerPost = async (data, file) => {
     breed,
     size,
     age,
-    img: file,
+    img: file.path,
   });
 
   // asociation
