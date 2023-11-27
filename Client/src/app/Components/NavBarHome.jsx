@@ -36,7 +36,7 @@ export default function Nav({ onLogout }) {
         <a href="/safety" className="nav-main__link-item">
          Safety
         </a>
-        <a href="/home/settings" className="nav-main__link-item">
+        <a href="/settings" className="nav-main__link-item">
           Settings
         </a>
         <a href="/" className="nav-main__link-item">
