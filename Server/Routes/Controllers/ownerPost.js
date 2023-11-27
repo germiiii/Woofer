@@ -26,12 +26,14 @@ const uploadImage = async imagePath => {
   }
 };
 
-const ownerPost = async (username, dogs) => {
+const ownerPost = async (data, file) => {
+  const { username, name, size, age, breed } = data;
+
   // validations
   if (!username) {
     throw new Error("Username is required");
   }
-  if (!dogs) {
+  if (!name || !size || !age || !breed) {
     throw new Error("Dogs are required");
   }
   const user = await User.findOne({ where: { username, is_active: true } });
@@ -43,22 +45,26 @@ const ownerPost = async (username, dogs) => {
   }
 
   // upload image
-  for (const dog of dogs) {
-    if (dog.img) {
-      const result = await uploadImage(dog.img);
-      dog.img = result;
-    }
+  if (file) {
+    const result = await uploadImage(file.path);
+    file = result;
   }
 
   // create
   const newOwner = await Owner.create({
-    dog_count: dogs.length,
+    dog_count: 1, //! ver esto
   });
 
-  const createdDogs = await Dog.bulkCreate(dogs);
+  const createdDog = await Dog.Create({
+    name,
+    breed,
+    size,
+    age,
+    img: file,
+  });
 
   // asociation
-  await newOwner.addDogs(createdDogs);
+  await newOwner.addDogs(createdDog);
 
   await user.setOwner(newOwner);
 
