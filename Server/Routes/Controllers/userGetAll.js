@@ -11,6 +11,7 @@ const userGetAll = async () => {
       "lastName",
       "username",
       "address",
+      "image",
       "isWalker",
       "isOwner",
     ],

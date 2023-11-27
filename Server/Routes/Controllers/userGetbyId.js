@@ -11,6 +11,7 @@ const userGetbyId = async (id) => {
         "lastName",
         "username",
         "address",
+        "image",
         "isWalker",
         "isOwner",
       ],
