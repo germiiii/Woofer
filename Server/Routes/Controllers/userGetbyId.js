@@ -3,7 +3,7 @@ const { User, Walker, Owner, Dog } = require("../../Database/db");
 const userGetbyId = async (id) => {
   
     const userData = await User.findOne({
-      where: { id: id },
+      where: { id: id, is_active: true },
       attributes: [
         "id",
         "name",
@@ -11,6 +11,7 @@ const userGetbyId = async (id) => {
         "lastName",
         "username",
         "address",
+        "image",
         "isWalker",
         "isOwner",
       ],
