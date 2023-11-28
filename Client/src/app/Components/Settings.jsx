@@ -147,7 +147,7 @@ const handleUserNameChange = (e) => {
                 className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
               />
               {newImage && (
-                <img
+                <Image
                   src={newImage}
                   alt="Profile"
                   className="mt-2 rounded"
@@ -161,7 +161,7 @@ const handleUserNameChange = (e) => {
               className="cursor-pointer text-gray-500 hover:text-blue-500"
             >
               {newImage ? (
-                <img
+                <Image
                   src={newImage}
                   alt="Profile"
                   className="mt-2 rounded"

@@ -1,3 +1,4 @@
+import { Image } from "next/image";
 export default function WalkerCard(props) {
   const cardStyle = {
     border: "1px solid #ccc",
@@ -54,7 +55,7 @@ export default function WalkerCard(props) {
 
   return (
     <div style={cardStyle}>
-      <img src={props.image} style={imageStyle} />
+      <Image src={props.image} style={imageStyle} />
       <div style={textStyle}>
         <h2 style={nameStyle}>{props.name + " " + props.lastName}</h2>
         <h3 style={addressStyle}>{props.address}</h3>
@@ -63,7 +64,7 @@ export default function WalkerCard(props) {
           {props.walkDuration} minutes
         </h4>
       </div>
-      <img
+      <Image
         style={checkoutStyle}
         src="https://cdn-icons-png.flaticon.com/512/5952/5952829.png"
       />

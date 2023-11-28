@@ -1,4 +1,5 @@
 import UserDetailButton from '../Components/UserDetailButton'
+import Image from 'next/image'
 
 
 export default function UserDetail({ id, name, lastName, email, address, username, noButton = false, isWalker = false, image }) {
@@ -7,9 +8,9 @@ export default function UserDetail({ id, name, lastName, email, address, usernam
       <div>
       
         {image ? (
-          <img src={image} alt="" height="100px" width="100px" />
+          <Image src={image} alt="" height="100px" width="100px" />
         ) : (
-          <img src="/ProfileDetail.webp" alt="Default Profile" height="100px" width="100px" />
+          <Image src="/ProfileDetail.webp" alt="Default Profile" height="100px" width="100px" />
         )}
       </div>
       <h4>Name: {name}</h4>
