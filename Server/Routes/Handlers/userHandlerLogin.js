@@ -2,10 +2,10 @@ const { userLogin } = require("../controllers");
 
 const userHandlerLogin = async (req, res) => {
   try {
-    const { eMail, password } = req.body;
-    const token = await userLogin(eMail, password);
+    const { email, password } = req.body;
+    const userLoginData = await userLogin(email, password);
     // Return the token as the response
-    res.json({ token });
+    res.json(userLoginData);
   } catch (error) {
     //{ message: 'An error occurred while registering the user' }
     return res.status(500).json({ error: error.message });
