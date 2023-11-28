@@ -1,4 +1,4 @@
-// Import necessary dependencies and components
+"use client";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import NavBarHome from "../Components/NavBarHome";
