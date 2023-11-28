@@ -3,13 +3,12 @@ import "tailwindcss/tailwind.css";
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useState, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import { auth } from "../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useUser } from "../UserContext";
-//npm i react-firebase-hooks
 
 export default function RegisterForm() {
   const googleAuth = new GoogleAuthProvider();
@@ -65,10 +64,10 @@ export default function RegisterForm() {
       };
       reader.readAsDataURL(imageFile);
     } else {
-      setUserData((prevUserData) => {
-        const updatedUserData = { ...prevUserData, [name]: value };
-        return updatedUserData;
-      });
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        [name]: value,
+      }));
     }
   };
 
@@ -128,28 +127,6 @@ export default function RegisterForm() {
             </label>
             <br />
             <label className="block mb-2">
-              Your last name
-              <input
-                type="text"
-                name="lastName"
-                placeholder="Enter your last name..."
-                onChange={handleChange}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              />
-            </label>
-            <br />
-            <label className="block mb-2">
-              Your username
-              <input
-                type="text"
-                name="username"
-                placeholder="Enter your username..."
-                onChange={handleChange}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              />
-            </label>
-            <br />
-            <label className="block mb-2">
               Your email
               <input
                 type="email"
@@ -184,7 +161,7 @@ export default function RegisterForm() {
             <br />
             <label className="block mb-2">
               Profile Picture
-              <img
+              <Image
                 src={userData.image ? userData.image : "/Profile.jpeg"}
                 alt=""
                 height="100px"
@@ -228,7 +205,7 @@ export default function RegisterForm() {
                 className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400"
                 type="button"
               >
-                <img
+                <Image
                   src={"/google.png"}
                   alt="Google Logo"
                   className="w-6 h-6 mr-2"

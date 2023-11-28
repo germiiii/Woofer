@@ -1,26 +1,25 @@
-
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; 
-import Link from 'next/link';
-import axios from 'axios';
-import Image from 'next/image';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router"; // Change "next/navigation" to "next/router"
+import Link from "next/link";
+import axios from "axios";
+import Image from "next/image";
 import { auth } from "../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useAuthState } from 'react-firebase-hooks/auth'
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function LoginForm() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const googleAuth = new GoogleAuthProvider()
-  const [ user ] = useAuthState(auth)
+  const googleAuth = new GoogleAuthProvider();
+  const [user] = useAuthState(auth);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'email') {
+    if (name === "email") {
       setEmail(value);
-    } else if (name === 'password') {
+    } else if (name === "password") {
       setPassword(value);
     }
   };
@@ -30,17 +29,17 @@ export default function LoginForm() {
     try {
       const result = await signInWithPopup(auth, googleAuth);
       const { user } = result;
-      console.log(user)
-  
+      console.log(user);
+
       const email = user.email;
       console.log(email)
   
       const response = await axios.post('https://woofer-server-nsjo.onrender.com/googleLogin', { email });
   
       if (response.status === 201) {
-        router.push('/home');
+        router.push("/home");
       } else {
-        console.error('Authentication failed');
+        console.error("Authentication failed");
       }
     } catch (error) {
       console.error(error);
@@ -50,26 +49,26 @@ export default function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://woofer-server-nsjo.onrender.com/login', {
+      const response = await axios.post('http://localhost:3001/login', {
         email,
         password,
       });
 
       const { token } = response.data;
-      console.log(token)
+      console.log(token);
 
       if (token) {
         // Login successful
-        alert('Welcome!');
+        alert("Welcome!");
         setIsLoggedIn(true);
-        router.push('/home');
+        router.push("/home");
       } else {
         // Login failed
-        alert('Invalid credentials.');
+        alert("Invalid credentials.");
       }
     } catch (error) {
-      alert('An error occurred while trying to login. Please try again later.');
-      console.error('Error:', error.message);
+      alert("An error occurred while trying to login. Please try again later.");
+      console.error("Error:", error.message);
     }
   };
 
@@ -79,7 +78,7 @@ export default function LoginForm() {
 
   return (
     <div className="max-w-md mx-auto mt-10 p-4 bg-indigo-200 rounded shadow-md">
-     <div className="flex justify-center">
+      <div className="flex justify-center">
         <Image
           src="/ISOWoofer.png"
           alt="logo"
@@ -90,7 +89,9 @@ export default function LoginForm() {
       </div>
 
       <form onSubmit={handleSubmit} method="post">
-        <h1 className="text-2xl text-indigo-900 font-extrabold mb-4">SIGN IN</h1>
+        <h1 className="text-2xl text-indigo-900 font-extrabold mb-4">
+          SIGN IN
+        </h1>
         <label className="block mb-2">
           Email
           <input
@@ -116,35 +117,28 @@ export default function LoginForm() {
         </label>
         <br />
         <div>
-        <button className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5" type="submit">
-          Sign In
-        </button>
-        </div>
-      
-        --------------------------------------------------------
-        <div>
-          <button onClick={loginGoogle} className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400" type="button">
-            <img src={'/google.png'} alt="Google Logo" className="w-6 h-6 mr-2" />
-            <span>Login with Google</span>
+          <button className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5" type="submit">
+            Sign In
           </button>
         </div>
 
-       
-
-        
+        <div>
+          <button onClick={loginGoogle} className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400" type="button">
+            <Image src={"/google.png"} alt="Google Logo" className="w-6 h-6 mr-2" />
+            <span>Login with Google</span>
+          </button>
+        </div>
       </form>
-  
+
       <div className="mt-4">
         <p className="text-sm">
-          Don't have an account yet? Register <a href="/register" className="text-blue-500">here.</a>
+        &quot; Dont have an account yet? Register &quot; <a href="/register" className="text-blue-500">here.</a>
         </p>
       </div>
       <div className="mt-2">
-        <p className="text-sm">
-          Don't remember your password? Recover your password <a href="/forget-password" className="text-blue-500">here.</a>
+        <p className="text-sm">&ldquo;Dont remember your password? Recover your password &ldquo;<a href="/forget-password" className="text-blue-500">here.</a>
         </p>
       </div>
     </div>
   );
-  
 }
