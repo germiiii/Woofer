@@ -2,7 +2,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic"; // Import dynamic from "next/dynamic"
-import NavBarHome from "../Components/NavBarHome.jsx";
+import Nav from "../Components/NavBarHome.jsx";
 import OwnerForm from "../Components/OwnerForm.jsx";
 import Map from "../Components/Map.jsx";
 // Import useRouter conditionally
@@ -58,7 +58,7 @@ const Home = () => {
       {!formCompleted && <OwnerForm onSubmit={handleFormSubmit} />}
       {formCompleted && (
         <>
-          <NavBarHome />
+          <Nav />
           <div style={switchContainerStyle}>
             <SwitchType />
 
