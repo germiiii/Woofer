@@ -135,12 +135,12 @@ export default function LoginForm() {
 
       <div className="mt-4">
         <p className="text-sm">
-        &quot; Dont have an account yet? Register&quot; <a href="/register" className="text-blue-500">here.</a>
+        &quot; Dont have an account yet? Register &quot; <a href="/register" className="text-blue-500">here.</a>
         </p>
       </div>
       <div className="mt-2">
         <p className="text-sm">
-        &quot;Don"t remember your password? Recover your password &quot;<a href="/forget-password" className="text-blue-500">here.</a>
+        &quot; Don"t remember your password? Recover your password &quot;<a href="/forget-password" className="text-blue-500">here.</a>
         </p>
       </div>
     </div>
