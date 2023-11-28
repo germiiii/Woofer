@@ -1,8 +1,7 @@
-
-"use client"
+/* @jsxImportSource client */
 import React, { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation"; // Change from "next/navigation" to "next/router"
+import { useRouter } from "next/router";
 
 const AboutDog = () => {
   const [tab, setTab] = useState("skills");
@@ -33,7 +32,7 @@ const AboutDog = () => {
             <button  
               className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5"
               onClick={() => {
-                router.push("/register");
+                router.push("/register").catch((err) => console.error("Error navigating:", err));
               }}
             >
               <span>Register your dog</span>

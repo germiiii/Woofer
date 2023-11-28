@@ -1,6 +1,4 @@
-import axios from "axios";
-import React from "react";
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 
 export default function AddDogs(props) {
   const fileInputRef = useRef(null);
@@ -47,11 +45,16 @@ export default function AddDogs(props) {
     }
   };
 
-  const renderDogs = listOfDogs.map((dog) => (
-    <div>
+  const renderDogs = listOfDogs.map((dog, index) => (
+    <div key={index}>
       <h2>{dog.name}</h2>
       {dog.image && (
-        <img src={dog.image} alt="Dog Preview" height="100px" width="100px" />
+        <img
+          src={dog.image}
+          alt={`Dog Preview ${index}`}
+          height="100px"
+          width="100px"
+        />
       )}
     </div>
   ));
