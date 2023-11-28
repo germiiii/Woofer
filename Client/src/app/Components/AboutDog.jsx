@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -24,9 +24,9 @@ const AboutDog = () => {
           />
         </div>
         <div className="mt-4 md:mt-0 text-left flex flex-col h-full">
-          <h2 className="text-4xl text-[#fcd34d] font-bold mb-4">Let's take your dog outside</h2>
+          <h2 className="text-4xl text-[#fcd34d] font-bold mb-4">Let&apos;s take your dog outside</h2>
           <p className="text-white lg:text-lg">
-            We know you love your dog. We know you want him to be happy and in shape. So why not give him the chance to exercise when you're busy? Ease back and relax, Woofer walkers can do the work for you.
+            We know you love your dog. We know you want him to be happy and in shape. So why not give him the chance to exercise when you&apos;re busy? Ease back and relax, Woofer walkers can do the work for you.
           </p>
           <div className="flex items-center justify-center mt-6">
             <button  
