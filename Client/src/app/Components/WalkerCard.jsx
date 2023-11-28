@@ -55,7 +55,7 @@ export default function WalkerCard(props) {
 
   return (
     <div style={cardStyle}>
-      <Image src={props.image} style={imageStyle} alter="Profile" />
+      <Image src={props.image} style={imageStyle} alt="Profile" />
       <div style={textStyle}>
         <h2 style={nameStyle}>{props.name + " " + props.lastName}</h2>
         <h3 style={addressStyle}>{props.address}</h3>
@@ -67,6 +67,7 @@ export default function WalkerCard(props) {
       <Image
         style={checkoutStyle}
         src="https://cdn-icons-png.flaticon.com/512/5952/5952829.png"
+        alt="Checkout"
       />
     </div>
   );
