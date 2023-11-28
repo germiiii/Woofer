@@ -1,3 +1,4 @@
+'use client'
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic"; // Import dynamic from "next/dynamic"
