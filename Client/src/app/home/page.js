@@ -1,15 +1,14 @@
-'use client'
+// Import necessary dependencies and components
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import NavBarHome from "../Components/NavBarHome.jsx";
-import OwnerForm from "../Components/OwnerForm.jsx";
-import Map from "../Components/Map.jsx";
-import SelectWalkers from "../Components/SelectWalkers.jsx";
-import SwitchType from "../Components/SwitchType.jsx";
+import NavBarHome from "../Components/NavBarHome";
+import OwnerForm from "../Components/OwnerForm";
+import Map from "../Components/Map";
+import SelectWalkers from "../Components/SelectWalkers";
+import SwitchType from "../Components/SwitchType";
 
 const Home = () => {
-
-  const [formCompleted, setFormCompleted] = useState(true);
+  const [formCompleted, setFormCompleted] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,12 +55,10 @@ const Home = () => {
           <NavBarHome />
           <div style={switchContainerStyle}>
             <SwitchType />
-
-            {/* <div>
-              <button onClick={handleAddMoreDogs} style={paginationButtonStyle}>
-                Add more dogs
-              </button>
-            </div> */}
+            {/* Uncomment the button below if needed */}
+            {/* <button onClick={handleAddMoreDogs} style={paginationButtonStyle}>
+              Add more dogs
+            </button> */}
           </div>
           <div
             style={{
