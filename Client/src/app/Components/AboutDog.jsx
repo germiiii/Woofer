@@ -1,11 +1,13 @@
 "use client";
 import React, { useTransition, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 
 const AboutDog = () => {
   const [tab, setTab] = useState("skills");
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const handleTabChange = (id) => {
     startTransition(() => {
@@ -31,7 +33,10 @@ const AboutDog = () => {
       We know you love your dog. We know you want him to be happy and in shape. So why not give him the chance to exercise when your busy? Ease back and relax, Woofer walkers can do the work for you.
     </p>
     <div className="flex items-center justify-center mt-6">
-    <button  className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5">
+    <button  className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5"
+     onClick={() => {
+      router.push("/register");
+    }}>
               <span >Register your dog</span>
             </button>
     </div>

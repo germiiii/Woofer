@@ -4,16 +4,18 @@ import { updateUserDetails } from "../../redux/features/userDetailSlice";
 import axios from "axios";
 import "tailwindcss/tailwind.css";
 import Image from 'next/image'
+import { useRouter } from "next/navigation";
 
 export default function Settings() {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { name, lastName, email, address, userName, image } = useSelector((state) => state.userDetail.user);
 
   const [isEditing, setIsEditing] = useState(false);
-  const [newName, setNewName] = useState(name);
-  const [newLastname, setNewLastname] = useState(lastName);
-  const [newAddress, setNewAddress] = useState(address);
-  const [newUserName, setNewUserName] = useState(userName);
+  const [newName, setNewName] = useState(name || ''); 
+  const [newLastname, setNewLastname] = useState(lastName || ''); 
+  const [newAddress, setNewAddress] = useState(address || ''); 
+  const [newUserName, setNewUserName] = useState(userName || ''); 
   const [newImage, setNewImage] = useState(image);
 
   const handleClick = () => {
@@ -67,7 +69,7 @@ const handleUserNameChange = (e) => {
                 value ? "hover:text-blue-500" : ""
               }`}
             >
-              {value || `Enter your ${label.toLowerCase()}...`}
+              {value || `Change your ${label.toLowerCase()}...`}
             </span>
           )}
         </div>
@@ -83,22 +85,18 @@ const handleUserNameChange = (e) => {
       userName: newUserName,
       image: newImage,
     };
-
-    // try {
-    //   const response = await axios.post(
-    //     "http://localhost:3001/register",
-    //     userSettingChange
-    //   );
-    //   console.log("Registro exitoso:", response.data);
-    // } catch (e) {
-    //   window.alert("Fallo en el registro.");
-    //   console.log("Registro sin éxito:", e.message);
-    // }
-
-    setIsEditing(false);
-    dispatch(updateUserDetails(userSettingChange));
-    alert("Se han guardado los cambios");
+  
+    if (!newName && !newLastname && !newAddress && !newUserName && !newImage) {
+      alert("No changes have been made");
+      router.push('/home');
+    } else {
+      setIsEditing(false);
+      dispatch(updateUserDetails(userSettingChange));
+      alert("Changes have been saved successfully!");
+      router.push('/home');
+    }
   };
+  
 
   useEffect(() => {
     setNewName(name);
@@ -116,20 +114,23 @@ const handleUserNameChange = (e) => {
   return (
     <div>
     <div className="flex justify-center">
-      <Image
+     
+    </div>
+   <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-10 p-4 bg-indigo-200 rounded shadow-md">
+   <Image
         src="/ISOWoofer.png"
         alt="logo"
         width={200}
         height={90}
         className="mx-auto"
       />
-    </div>
-   <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-10 p-4 bg-indigo-200 rounded shadow-md">
-      
+   <h1 className="text-2xl text-indigo-900 font-extrabold mb-4">
+              MANAGE PROFILE SETTINGS
+    </h1>
       <div>
         {renderEditableField("Name", newName, handleNameChange)}
         {renderEditableField("Lastname", newLastname, handleLastnameChange)}
-        {renderEditableField("Email", email, () => {}, false)}
+        {/* {renderEditableField("Email", email, () => {}, false)} */}
         {renderEditableField("Address", newAddress, handleAddressChange)}
         {renderEditableField("Username", newUserName, handleUserNameChange)}
 
@@ -173,11 +174,13 @@ const handleUserNameChange = (e) => {
 
 
         <div>
-         If you need to change your password, click here:
-         <a href="/forget-password" className="text-blue-500 hover:underline">Change Password</a>
+          <p>To change password, click{' '}
+         
+         <a href="/forget-password" className="text-blue-500 hover:underline">here</a>
+         </p>
         </div>
        
-        <button type="submit" className="bg-indigo-900 text-white py-2 px-4 rounded focus:outline-none hover:bg-blue-600">Save</button>
+        <button type="submit" className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5">Save</button>
       </div>
     </form> 
     </div>
