@@ -5,15 +5,11 @@ import dynamic from "next/dynamic"; // Import dynamic from "next/dynamic"
 import Nav from "../Components/NavBarHome.jsx";
 import OwnerForm from "../Components/OwnerForm.jsx";
 import Map from "../Components/Map.jsx";
-// Import useRouter conditionally
-const useRouter = dynamic(() => import("next/navigation").then((mod) => mod.useRouter), {
-  ssr: false, // Set ssr to false to load the module only on the client side
-});
 import SelectWalkers from "../Components/SelectWalkers.jsx";
 import SwitchType from "../Components/SwitchType.jsx";
 
 const Home = () => {
-  const router = useRouter();
+
   const [formCompleted, setFormCompleted] = useState(true);
 
   useEffect(() => {
