@@ -122,7 +122,7 @@ export default function LoginForm() {
 
         <div>
           <button onClick={loginGoogle} className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400" type="button">
-            <img src={'/google.png'} alt="Google Logo" className="w-6 h-6 mr-2" />
+            <Image src={'/google.png'} alt="Google Logo" className="w-6 h-6 mr-2" />
             <span>Login with Google</span>
           </button>
         </div>
