@@ -1,12 +1,12 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { User } = require("../../Database/db");
+const { userGetbyId } = require("./userGetbyId");
 
-const userLogin = async (eMail, password) => {
-  const user = await User.findOne({ where: { eMail } });
-
+const userLogin = async (email, password) => {
+  const user = await User.findOne({ where: { email, is_active: true } });
   if (!user) {
-    throw new Error("Invalid email");
+    throw new Error("User not found");
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -14,8 +14,16 @@ const userLogin = async (eMail, password) => {
     throw new Error("Invalid password");
   }
 
+  const loggedUser = await userGetbyId(user.id);
+
   const token = jwt.sign({ userId: user.id }, "secret", { expiresIn: "1h" });
-  return token;
+
+  const userData = {
+    token,
+    loggedUser,
+  };
+  
+  return userData;
 };
 
 module.exports = { userLogin };

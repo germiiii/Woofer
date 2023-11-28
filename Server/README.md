@@ -4,3 +4,4 @@ npm install express dotenv axios jsonwebtoken bcrypt sequelize pg passport passp
 
 npm install --save-dev nodemon
 
+Para inicial en modo dev --> npm run start:dev
