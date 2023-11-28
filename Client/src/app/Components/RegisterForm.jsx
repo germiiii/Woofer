@@ -3,7 +3,7 @@ import "tailwindcss/tailwind.css";
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useState, useRef } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { auth } from "../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
