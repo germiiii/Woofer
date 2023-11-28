@@ -7,13 +7,13 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { auth } from "../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useAuthState } from 'react-firebase-hooks/auth'
+import { useAuthState } from "react-firebase-hooks/auth";
 import { useUser } from "../UserContext";
 //npm i react-firebase-hooks
 
 export default function RegisterForm() {
-  const googleAuth = new GoogleAuthProvider()
-  const [ user ] = useAuthState(auth)
+  const googleAuth = new GoogleAuthProvider();
+  const [user] = useAuthState(auth);
   const { updateUser } = useUser();
 
   const router = useRouter();
@@ -36,21 +36,21 @@ export default function RegisterForm() {
       const result = await signInWithPopup(auth, googleAuth);
       const { user } = result;
 
-      const [name, lastName] = user.displayName.split(' ');
+      const [name, lastName] = user.displayName.split(" ");
 
       // Actualizar el contexto con los datos de usuario
       updateUser({ name, lastName, email: user.email });
 
       // Redirigir a la página de formulario
-      router.push('/aditionalForm');
+      router.push("/aditionalForm");
     } catch (error) {
       console.error(error);
     }
   };
 
-  useEffect(() =>{
-    console.log(user)
-  }, [user])
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -214,22 +214,28 @@ export default function RegisterForm() {
             </label>
             <br />
             <div>
-            <button
-              type="submit"
-              className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5"
-            >
-              Sign Up
-            </button>
+              <button
+                type="submit"
+                className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5"
+              >
+                Sign Up
+              </button>
             </div>
-           
-          
-                <div>
-                  <button onClick={loginGoogle} className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400" type="button">
-                    <img src={'/google.png'} alt="Google Logo" className="w-6 h-6 mr-2" />
-                    <span>Sign Up with Google</span>
-                  </button>
-                </div>
 
+            <div>
+              <button
+                onClick={loginGoogle}
+                className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400"
+                type="button"
+              >
+                <img
+                  src={"/google.png"}
+                  alt="Google Logo"
+                  className="w-6 h-6 mr-2"
+                />
+                <span>Sign Up with Google</span>
+              </button>
+            </div>
           </form>
         )}
       </div>
