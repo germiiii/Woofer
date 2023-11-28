@@ -1,25 +1,25 @@
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router'; // Change 'next/navigation' to 'next/router'
-import Link from 'next/link';
-import axios from 'axios';
-import Image from 'next/image';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router"; // Change "next/navigation" to "next/router"
+import Link from "next/link";
+import axios from "axios";
+import Image from "next/image";
 import { auth } from "../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function LoginForm() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const googleAuth = new GoogleAuthProvider();
   const [user] = useAuthState(auth);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'email') {
+    if (name === "email") {
       setEmail(value);
-    } else if (name === 'password') {
+    } else if (name === "password") {
       setPassword(value);
     }
   };
@@ -34,12 +34,12 @@ export default function LoginForm() {
       const email = user.email;
       console.log(email);
 
-      const response = await axios.post('http://localhost:3001/googleLogin', { email });
+      const response = await axios.post("http://localhost:3001/googleLogin", { email });
 
       if (response.status === 201) {
-        router.push('/home');
+        router.push("/home");
       } else {
-        console.error('Authentication failed');
+        console.error("Authentication failed");
       }
     } catch (error) {
       console.error(error);
@@ -49,7 +49,7 @@ export default function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/login', {
+      const response = await axios.post("http://localhost:3001/login", {
         email,
         password,
       });
@@ -59,16 +59,16 @@ export default function LoginForm() {
 
       if (token) {
         // Login successful
-        alert('Welcome!');
+        alert("Welcome!");
         setIsLoggedIn(true);
-        router.push('/home');
+        router.push("/home");
       } else {
         // Login failed
-        alert('Invalid credentials.');
+        alert("Invalid credentials.");
       }
     } catch (error) {
-      alert('An error occurred while trying to login. Please try again later.');
-      console.error('Error:', error.message);
+      alert("An error occurred while trying to login. Please try again later.");
+      console.error("Error:", error.message);
     }
   };
 
@@ -122,7 +122,7 @@ export default function LoginForm() {
 
         <div>
           <button onClick={loginGoogle} className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400" type="button">
-            <Image src={'/google.png'} alt="Google Logo" className="w-6 h-6 mr-2" />
+            <Image src={"/google.png"} alt="Google Logo" className="w-6 h-6 mr-2" />
             <span>Login with Google</span>
           </button>
         </div>
@@ -130,12 +130,12 @@ export default function LoginForm() {
 
       <div className="mt-4">
         <p className="text-sm">
-          Don't have an account yet? Register <a href="/register" className="text-blue-500">here.</a>
+          Don"t have an account yet? Register <a href="/register" className="text-blue-500">here.</a>
         </p>
       </div>
       <div className="mt-2">
         <p className="text-sm">
-          Don't remember your password? Recover your password <a href="/forget-password" className="text-blue-500">here.</a>
+          Don"t remember your password? Recover your password <a href="/forget-password" className="text-blue-500">here.</a>
         </p>
       </div>
     </div>
