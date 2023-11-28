@@ -1,5 +1,5 @@
 import { Image } from "next/image";
-export default function WalkerCard(props) {
+const WalkerCard = (props) =>{
   const cardStyle = {
     border: "1px solid #ccc",
     borderRadius: "8px",
@@ -72,3 +72,5 @@ export default function WalkerCard(props) {
     </div>
   );
 }
+
+export default WalkerCard

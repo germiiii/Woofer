@@ -10,7 +10,7 @@ import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useUser } from "../UserContext";
 
-export default function RegisterForm() {
+const RegisterForm = () => {
   const googleAuth = new GoogleAuthProvider();
   const [user] = useAuthState(auth);
   const { updateUser } = useUser();
@@ -219,3 +219,5 @@ export default function RegisterForm() {
     </div>
   );
 }
+
+export default RegisterForm

@@ -2,7 +2,7 @@ import UserDetailButton from '../Components/UserDetailButton'
 import Image from 'next/image'
 
 
-export default function UserDetail({ id, name, lastName, email, address, username, noButton = false, isWalker = false, image }) {
+const UserDetail = ({ id, name, lastName, email, address, username, noButton = false, isWalker = false, image }) => {
   return (
     <div>
       <div>
@@ -23,3 +23,4 @@ export default function UserDetail({ id, name, lastName, email, address, usernam
   );
 }
 
+export default UserDetail

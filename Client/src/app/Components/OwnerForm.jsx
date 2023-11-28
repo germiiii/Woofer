@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import Image from "next/image";
 
-export default function OwnerForm(props) {
+const OwnerForm = (props) => {
   const fileInputRef = useRef(null);
   const [dogData, setDogData] = useState({
     name: "",
@@ -171,3 +171,5 @@ export default function OwnerForm(props) {
     </div>
   );
 }
+
+export default OwnerForm

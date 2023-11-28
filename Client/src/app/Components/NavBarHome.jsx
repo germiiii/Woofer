@@ -2,7 +2,7 @@ import Link from "next/link";
 import "../Styles/StyledNavHome.css";
 import Image from "next/image";
 
-export default function Nav({ onLogout }) {
+const NavBarHome = ({ onLogout }) => {
   return (
     <nav className="nav-main">
       <div className="logo-container">
@@ -53,3 +53,5 @@ export default function Nav({ onLogout }) {
     </nav>
   );
 }
+
+export default NavBarHome

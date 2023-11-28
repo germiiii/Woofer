@@ -6,7 +6,7 @@ import "tailwindcss/tailwind.css";
 import Image from 'next/image'
 import { useRouter } from "next/navigation";
 
-export default function Settings() {
+const Settings = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { name, lastName, email, address, userName, image } = useSelector((state) => state.userDetail.user);
@@ -186,3 +186,5 @@ const handleUserNameChange = (e) => {
     </div>
   );
 }
+
+export default Settings

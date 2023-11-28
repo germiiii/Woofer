@@ -1,7 +1,7 @@
 "use client"
 import { useRouter } from "next/navigation"
 
-export default function UserDetailButton({id}) {
+const UserDetailButton = ({id}) => {
     const router = useRouter()
 
     function handleClick(){
@@ -15,3 +15,5 @@ export default function UserDetailButton({id}) {
     </div>
   )
 }
+
+export default UserDetailButton

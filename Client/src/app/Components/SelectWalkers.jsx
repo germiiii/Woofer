@@ -3,7 +3,7 @@ import { useState } from "react";
 import "tailwindcss/tailwind.css";
 import walkersMock from "../../app/walkersMock";
 
-export default function SelectWalkers() {
+const SelectWalkers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [dogCapacityFilter, setDogCapacityFilter] = useState("");
   const [walkDurationFilter, setWalkDurationFilter] = useState("");
@@ -207,3 +207,5 @@ export default function SelectWalkers() {
     </div>
   );
 }
+
+export default SelectWalkers

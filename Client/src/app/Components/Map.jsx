@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 
-export default function Map(props) {
+const Map = (props) => {
   const [userLocation, setUserLocation] = useState(null);
   const [addressInput, setAddressInput] = useState("");
   const [cityInput, setCityInput] = useState("");
@@ -138,3 +138,5 @@ export default function Map(props) {
     </div>
   );
 }
+
+export default Map

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function SwitchType() {
+const SwitchType = () => {
   const [isWalkerMock, setIsWalkerMock] = useState(false);
 
   const handleSwitchChange = (newValue) => {
@@ -28,3 +28,5 @@ export default function SwitchType() {
     </div>
   );
 }
+
+export default SwitchType

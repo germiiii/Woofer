@@ -7,7 +7,7 @@ import { auth } from "../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-export default function LoginForm() {
+const LoginForm = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -142,3 +142,5 @@ export default function LoginForm() {
     </div>
   );
 }
+
+export default LoginForm
