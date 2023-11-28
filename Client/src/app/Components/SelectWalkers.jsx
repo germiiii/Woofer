@@ -1,7 +1,7 @@
 import WalkerCard from "./WalkerCard";
 import { useState } from "react";
 import "tailwindcss/tailwind.css";
-import walkersMock from "../home/walkersMock.js";
+import walkersMock from "../app/walkersMock.js";
 
 export default function SelectWalkers() {
   const [currentPage, setCurrentPage] = useState(1);
