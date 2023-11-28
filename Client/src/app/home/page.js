@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic"; // Import dynamic from "next/dynamic"
 import NavBarHome from "../Components/NavBarHome";
 import OwnerForm from "../Components/OwnerForm";
+import Map from "../Components/Map";
 // Import useRouter conditionally
 const useRouter = dynamic(() => import("next/navigation").then((mod) => mod.useRouter), {
   ssr: false, // Set ssr to false to load the module only on the client side
