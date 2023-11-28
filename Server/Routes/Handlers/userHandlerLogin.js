@@ -1,4 +1,4 @@
-const { userLogin } = require("../controllers");
+const { userLogin } = require("../Controllers/userLogin");
 
 const userHandlerLogin = async (req, res) => {
   try {
