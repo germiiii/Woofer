@@ -55,7 +55,7 @@ export default function WalkerCard(props) {
 
   return (
     <div style={cardStyle}>
-      <Image src={props.image} style={imageStyle} />
+      <Image src={props.image} style={imageStyle} alter="Profile" />
       <div style={textStyle}>
         <h2 style={nameStyle}>{props.name + " " + props.lastName}</h2>
         <h3 style={addressStyle}>{props.address}</h3>

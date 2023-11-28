@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; // Change 'next/navigation' to 'next/router'
+import { useRouter } from 'next/router'; // Change 'next/navigation' to 'next/router'
 import Link from 'next/link';
 import axios from 'axios';
 import Image from 'next/image';
