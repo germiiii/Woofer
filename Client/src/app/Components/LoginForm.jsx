@@ -139,8 +139,7 @@ export default function LoginForm() {
         </p>
       </div>
       <div className="mt-2">
-        <p className="text-sm">
-        &quot; Don"t remember your password? Recover your password &quot;<a href="/forget-password" className="text-blue-500">here.</a>
+        <p className="text-sm">"Don"t remember your password? Recover your password "<a href="/forget-password" className="text-blue-500">here.</a>
         </p>
       </div>
     </div>
