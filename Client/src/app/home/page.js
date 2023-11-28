@@ -8,7 +8,7 @@ import SelectWalkers from "../Components/SelectWalkers";
 import SwitchType from "../Components/SwitchType";
 
 const Home = () => {
-  const [formCompleted, setFormCompleted] = useState(false);
+  const [formCompleted, setFormCompleted] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
