@@ -2,7 +2,7 @@ import UserDetail from "../../Components/UserDetail"
 import "tailwindcss/tailwind.css";
 
 async function generateStaticParams() {
-  const res = await fetch('http://localhost:3001/users')
+  const res = await fetch('https://woofer-server-nsjo.onrender.com/users')
   const data = await res.json()
 
   return data.users.map((u) => ({
@@ -13,7 +13,7 @@ async function generateStaticParams() {
 }
 
 async function getUser(id) {
-  const res = await fetch (`http://localhost:3001/users/${id}`)
+  const res = await fetch (`https://woofer-server-nsjo.onrender.com/users/${id}`)
   const data = await res.json()
   return data;
 }
