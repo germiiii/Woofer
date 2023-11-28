@@ -7,6 +7,13 @@ const { dogHandlerPost } = require("./dogHandlerPost");
 const { dogHandlerGet } = require("./dogHandlerGet");
 const { ownerHandlerGetAll } = require("./ownerHandlerGetAll");
 const { walkHandlerPost } = require("./walkHandlerPost");
+const { userHandlerActivate } = require("./userHandlerActivate");
+const { userHandlerDeActivate } = require("./userHandlerDeActivate");
+const { ownerHandlerDeActivate } = require("./ownerHandlerDeActivate");
+const { ownerHandlerActivate } = require("./ownerHandlerActivate");
+const { walkerHandlerActivate } = require("./walkerHandlerActivate");
+const { walkerHandlerDeActivate } = require("./walkerHandlerDeActivate");
+
 
 module.exports = {
   userHandlerLogin,
@@ -18,4 +25,13 @@ module.exports = {
   dogHandlerGet,
   ownerHandlerGetAll,
   walkHandlerPost,
+  userHandlerActivate,
+  userHandlerDeActivate,
+  ownerHandlerDeActivate,
+  ownerHandlerActivate,
+  walkerHandlerActivate,
+  walkerHandlerDeActivate
+
+
+
 };
