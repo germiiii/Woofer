@@ -1,4 +1,4 @@
-const { walkPost } = require("../controllers");
+const { walkPost } = require("../Controllers/walkPost");
 
 const walkHandlerPost = async (req, res) => {
   try {
