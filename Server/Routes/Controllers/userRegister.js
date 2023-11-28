@@ -20,8 +20,7 @@ const userRegister = async (req, res) => {
 
   	// upload image
     if (req.file) {
-      const result = await uploadImage(req.file.path)
-      // const image = result //? no es necesario
+      await uploadImage(req.file.path)
     }
 
   const newUser = await User.create({

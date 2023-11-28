@@ -39,8 +39,7 @@ const dogPost = async (data, file) => {
 
   // upload image
   if (file) {
-    const result = await uploadImage(file.path);
-    file = result; // file = result; //? no es necesario
+    await uploadImage(file.path);
   }
 
   // create
@@ -56,8 +55,7 @@ const dogPost = async (data, file) => {
   await owner.addDogs(createdDog);
 
   // update dog count
-  await owner.update({ dog_count: createdDog.length + owner.dog_count });
-  //! ver esto del count
+  await owner.update({ dog_count: owner.dog_count + 1 });
 
   // data to return
   const userData = await User.findOne({

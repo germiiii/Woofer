@@ -30,13 +30,12 @@ const ownerPost = async (data, file) => {
 
   // upload image
   if (file) {
-    const result = await uploadImage(file.path);
-    // file = result; //? no es necesario
+    await uploadImage(file.path);
   }
 
   // create
   const newOwner = await Owner.create({
-    dog_count: 1, //! ver esto
+    dog_count: 1, // se inicializa en 1
   });
 
   const createdDog = await Dog.Create({
