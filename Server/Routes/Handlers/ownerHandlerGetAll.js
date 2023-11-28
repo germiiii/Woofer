@@ -1,4 +1,4 @@
-const { ownerGetAll } = require("../controllers");
+const { ownerGetAll } = require("../Controllers/ownerGetAll");
 
 const ownerHandlerGetAll = async (req, res) => {
   try {

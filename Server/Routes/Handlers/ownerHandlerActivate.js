@@ -1,4 +1,4 @@
-const { ownerActivate } = require("../controllers");
+const { ownerActivate } = require("../Controllers/ownerActivate");
 
 const ownerHandlerActivate = async (req, res) => {
   try {

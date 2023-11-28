@@ -1,4 +1,4 @@
-const { walkerDeActivate } = require("../controllers");
+const { walkerDeActivate } = require("../Controllers/walkerDeActivate");
 
 const walkerHandlerDeActivate = async (req, res) => {
   try {
