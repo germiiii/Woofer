@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import Image from "next/image"; // Import the Image component from next/image
 
 export default function AddDogs(props) {
   const fileInputRef = useRef(null);
@@ -49,15 +50,16 @@ export default function AddDogs(props) {
     <div key={index}>
       <h2>{dog.name}</h2>
       {dog.image && (
-        <img
+        <Image
           src={dog.image}
           alt={`Dog Preview ${index}`}
-          height="100px"
-          width="100px"
+          height={100}
+          width={100}
         />
       )}
     </div>
   ));
+
 
   const formContainerStyle = {
     textAlign: "center",
