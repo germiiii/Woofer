@@ -31,7 +31,7 @@ export default async function UserPage({params}) {
           <h1 className="text-2xl mb-4 font-bold text-indigo-500">User Profile</h1>
           <UserDetail
             noButton
-            image={user.image ? <Image src={user.image} alt="" height="100px" width="100px" /> : "/ProfileDetail.webp"}
+            image={user.image ? <Image src={user.image} alter="ola" height="100px" width="100px" /> : "/ProfileDetail.webp"}
             name={user.name}
             lastName={user.lastName}
             username={user.username}

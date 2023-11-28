@@ -34,7 +34,10 @@ export default function LoginForm() {
       const email = user.email;
       console.log(email);
 
-      const response = await axios.post("http://localhost:3001/googleLogin", { email });
+      const response = await axios.post(
+        "http://localhost:3001/googleLogin",
+        { email }
+      );
 
       if (response.status === 201) {
         router.push("/home");
@@ -89,7 +92,9 @@ export default function LoginForm() {
       </div>
 
       <form onSubmit={handleSubmit} method="post">
-        <h1 className="text-2xl text-indigo-900 font-extrabold mb-4">SIGN IN</h1>
+        <h1 className="text-2xl text-indigo-900 font-extrabold mb-4">
+          SIGN IN
+        </h1>
         <label className="block mb-2">
           Email
           <input
