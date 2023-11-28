@@ -2,18 +2,14 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic"; // Import dynamic from "next/dynamic"
-import NavBarHome from "../Components/NavBarHome";
-import OwnerForm from "../Components/OwnerForm";
-import Map from "../Components/Map";
-// Import useRouter conditionally
-const useRouter = dynamic(() => import("next/navigation").then((mod) => mod.useRouter), {
-  ssr: false, // Set ssr to false to load the module only on the client side
-});
-import SelectWalkers from "../Components/SelectWalkers";
-import SwitchType from "../Components/SwitchType";
+import Nav from "../Components/NavBarHome.jsx";
+import OwnerForm from "../Components/OwnerForm.jsx";
+import Map from "../Components/Map.jsx";
+import SelectWalkers from "../Components/SelectWalkers.jsx";
+import SwitchType from "../Components/SwitchType.jsx";
 
 const Home = () => {
-  const router = useRouter();
+
   const [formCompleted, setFormCompleted] = useState(true);
 
   useEffect(() => {
@@ -58,7 +54,7 @@ const Home = () => {
       {!formCompleted && <OwnerForm onSubmit={handleFormSubmit} />}
       {formCompleted && (
         <>
-          <NavBarHome />
+          <Nav />
           <div style={switchContainerStyle}>
             <SwitchType />
 

@@ -1,6 +1,5 @@
 "use client"
-import LoginForm from '../Components/LoginForm';
-import { useDispatch } from 'react-redux'
+import LoginForm from '../Components/LoginForm.jsx';
 
 export default function LoginPage() {
 
