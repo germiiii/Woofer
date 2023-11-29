@@ -8,6 +8,21 @@ import { DataGrid } from "@mui/x-data-grid";
 const columns = [
   { field: "id", headerName: "ID", width: 90 },
   {
+    field: "image",
+    headerName: "Image",
+    width: 130,
+    renderCell: (params) => {
+      return (
+        <img
+          src={params.row.image}
+          alt={`Image ${params.row.username}`}
+          width="100px"
+          height="100px"
+        />
+      );
+    },
+  },
+  {
     field: "username",
     headerName: "Username",
     description: "This column has a value getter and is not sortable.",
@@ -98,6 +113,7 @@ export default function DataGridDemo() {
         <DataGrid
           rows={users}
           columns={columns}
+          rowHeight={120}
           initialState={{
             pagination: {
               paginationModel: {

@@ -26,10 +26,10 @@ export default function RegisterForm() {
     email: "",
     password: "",
     isWalker: false,
-    image: '',
+    image: "",
   });
   const [formSent, setFormSent] = useState(false);
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState("");
 
   const loginGoogle = async (e) => {
     e.preventDefault();
@@ -56,7 +56,7 @@ export default function RegisterForm() {
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     if (type === "file") {
-      setImage(e.target.files[0])
+      setImage(e.target.files[0]);
     } else {
       setUserData((prevUserData) => {
         const updatedUserData = { ...prevUserData, [name]: value };
@@ -187,12 +187,6 @@ export default function RegisterForm() {
             <br />
             <label className="block mb-2">
               Profile Picture
-              <img
-                src={userData.image ? userData.image : "/Profile.jpeg"}
-                alt=""
-                height="100px"
-                width="100px"
-              />
               <input
                 type="file"
                 name="image"

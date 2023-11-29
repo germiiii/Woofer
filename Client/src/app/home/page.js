@@ -8,25 +8,13 @@ import SelectWalkers from "../Components/SelectWalkers.jsx";
 import SwitchType from "../Components/SwitchType.jsx";
 
 const Home = () => {
-  const [users, setUsers] = React.useState([]);
-
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:3001/users");
-        setUsers(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   const [formCompleted, setFormCompleted] = useState(true);
 
   const userCity = "Buenos Aires";
   const userAddress = "Sarachaga 4632";
+
+  const token = localStorage.getItem("access_token");
+  console.log(token);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,9 +76,6 @@ const Home = () => {
             }}
           >
             <Map userCity={userCity} userAddress={userAddress} />
-            <div>
-              <img src={users[0]?.image} width='400px' height='400px'></img>
-            </div>
             <SelectWalkers userCity={userCity} userAddress={userAddress} />
           </div>
         </>
