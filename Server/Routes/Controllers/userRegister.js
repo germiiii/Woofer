@@ -21,20 +21,30 @@ const userRegister = async (req, res) => {
   	// upload image
     if (req.file) {
       await uploadImage(req.file.path)
+      const newUser = await User.create({
+        image: req.file.path,
+        name,
+        lastName,
+        email,
+        password: hashedPassword,
+        username,
+        address,
+        isWalker,
+      });
+      return newUser;
+    } else {
+      const newUser = await User.create({
+        image: '',
+        name,
+        lastName,
+        email,
+        password: hashedPassword,
+        username,
+        address,
+        isWalker,
+      });
+      return newUser;
     }
-
-  const newUser = await User.create({
-    image: req.file.path,
-    name,
-    lastName,
-    email,
-    password: hashedPassword,
-    username,
-    address,
-    isWalker,
-  });
-
-  return newUser;
 };
 
 module.exports = userRegister;
