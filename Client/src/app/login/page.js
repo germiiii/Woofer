@@ -1,15 +1,10 @@
-"use client"
-import LoginForm from '../Components/LoginForm';
-import styles from '../login/LoginStyles.module.scss'
-import { useDispatch } from 'react-redux'
+"use client";
+import LoginForm from "../Components/LoginForm.jsx";
 
 export default function LoginPage() {
-
-  
-    
   return (
     <div>
-    <LoginForm />
-  </div>
+      <LoginForm />
+    </div>
   );
-};
+}

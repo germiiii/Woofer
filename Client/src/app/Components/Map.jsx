@@ -1,13 +1,10 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import "leaflet/dist/leaflet.css";
-import "leaflet-defaulticon-compatibility";
-import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 
 export default function Map(props) {
   const [userLocation, setUserLocation] = useState(null);
-  const [addressInput, setAddressInput] = useState("");
-  const [cityInput, setCityInput] = useState("");
+  const [addressInput, setAddressInput] = useState(props.userAddress);
+  const [cityInput, setCityInput] = useState(props.userCity);
 
   const mapRef = useRef(null);
 
@@ -46,31 +43,43 @@ export default function Map(props) {
   };
 
   useEffect(() => {
-    if (userLocation) {
-      if (mapRef.current) {
-        mapRef.current.remove();
-      }
-      const map = L.map("map").setView(
-        [userLocation.latitude, userLocation.longitude],
-        16.3
+    if (typeof window !== "undefined") {
+      import("leaflet").then((L) => {
+        if (userLocation) {
+          if (mapRef.current) {
+            mapRef.current.remove();
+          }
+          const map = L.map("map").setView(
+            [userLocation.latitude, userLocation.longitude],
+            16.3
+          );
+          mapRef.current = map;
+
+          L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          ).addTo(map);
+
+          const marker = L.marker([
+            userLocation.latitude,
+            userLocation.longitude,
+          ]).addTo(map);
+
+          var circle = L.circle(
+            [userLocation.latitude, userLocation.longitude],
+            {
+              color: "red",
+              fillColor: "#f03",
+              fillOpacity: 0.2,
+              radius: 800,
+            }
+          ).addTo(map);
+        }
+      });
+      import("leaflet/dist/leaflet.css");
+      import("leaflet-defaulticon-compatibility");
+      import(
+        "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css"
       );
-      mapRef.current = map;
-
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
-        map
-      );
-
-      const marker = L.marker([
-        userLocation.latitude,
-        userLocation.longitude,
-      ]).addTo(map);
-
-      var circle = L.circle([userLocation.latitude, userLocation.longitude], {
-        color: "red",
-        fillColor: "#f03",
-        fillOpacity: 0.2,
-        radius: 800,
-      }).addTo(map);
     }
   }, [userLocation]);
 
@@ -87,8 +96,8 @@ export default function Map(props) {
   };
 
   const loadingMessageStyle = {
-    fontSize: "1.7em", 
-    color: "grey",  
+    fontSize: "1.7em",
+    color: "grey",
   };
 
   const loadingMessageContainerStyle = {
@@ -98,8 +107,7 @@ export default function Map(props) {
     borderRadius: "8px",
     border: "solid grey 1px",
     justifyContent: "center",
-    alignItems: "center"
-
+    alignItems: "center",
   };
 
   const inputStyle = "border p-2 rounded mr-2";
