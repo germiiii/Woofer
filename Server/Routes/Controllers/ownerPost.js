@@ -8,30 +8,16 @@ cloudinary.config({
   api_secret: CLOUDINARY_API_SECRET,
   secure: true,
 });
+const { uploadImage } = require("../../Routes/utils/uploadImage");
 
-// upload image function
-const uploadImage = async imagePath => {
-  const options = {
-    use_filename: true,
-    unique_filename: false,
-    overwrite: true,
-  };
+const ownerPost = async (data, file) => {
+  const { username, name, size, age, breed } = data;
 
-  try {
-    const result = await cloudinary.uploader.upload(imagePath, options);
-    // console.log(result);
-    return result.secure_url;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const ownerPost = async (username, dogs) => {
   // validations
   if (!username) {
     throw new Error("Username is required");
   }
-  if (!dogs) {
+  if (!name || !size || !age || !breed) {
     throw new Error("Dogs are required");
   }
   const user = await User.findOne({ where: { username, is_active: true } });
@@ -43,22 +29,25 @@ const ownerPost = async (username, dogs) => {
   }
 
   // upload image
-  for (const dog of dogs) {
-    if (dog.img) {
-      const result = await uploadImage(dog.img);
-      dog.img = result;
-    }
+  if (file) {
+    await uploadImage(file.path);
   }
 
   // create
   const newOwner = await Owner.create({
-    dog_count: dogs.length,
+    dog_count: 1, // se inicializa en 1
   });
 
-  const createdDogs = await Dog.bulkCreate(dogs);
+  const createdDog = await Dog.Create({
+    name,
+    breed,
+    size,
+    age,
+    img: file.path,
+  });
 
   // asociation
-  await newOwner.addDogs(createdDogs);
+  await newOwner.addDogs(createdDog);
 
   await user.setOwner(newOwner);
 

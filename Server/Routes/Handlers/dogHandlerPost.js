@@ -1,9 +1,17 @@
-const { dogPost } = require("../Controllers");
+const { dogPost } = require("../controllers");
 
 const dogHandlerPost = async (req, res) => {
   try {
-    const { username, dogs } = req.body;
-    const UpdatedUser = await dogPost(username, dogs);
+    const file = req.file;
+    const { username, name, size, age, breed } = req.body;
+    const data = {
+      username,
+      name,
+      size,
+      age,
+      breed,
+    };
+    const UpdatedUser = await dogPost(data, file);
     res.json({ UpdatedUser });
   } catch (error) {
     return res.status(500).json({ error: error.message });
