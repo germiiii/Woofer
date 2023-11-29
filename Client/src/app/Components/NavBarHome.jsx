@@ -1,11 +1,18 @@
 import Link from "next/link";
 import "../Styles/StyledNavHome.css";
+import Image from "next/image";
 
-export default function Nav({ onLogout }) {
+const NavBarHome = ({ onLogout }) => {
   return (
     <nav className="nav-main">
       <div className="logo-container">
-        <img src='/LOGOWoofer.png' alt="Logo" className="logo-image" />
+        <Image
+                src="/LOGOWoofer.png"
+                alt="logo"
+                width={200}
+                height={90}
+                className="logo-image"
+              />
       </div>
       <input
         type="checkbox"
@@ -46,3 +53,5 @@ export default function Nav({ onLogout }) {
     </nav>
   );
 }
+
+export default NavBarHome

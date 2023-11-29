@@ -1,4 +1,4 @@
-const userRegister = require("../controllers/userRegister");
+const userRegister = require("../Controllers/userRegister");
 
 const successHandler = (res, newUser) => {
   res.status(201).json({ message: "Registro exitoso", user: newUser });

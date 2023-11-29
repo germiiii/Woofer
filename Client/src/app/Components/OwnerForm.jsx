@@ -1,8 +1,7 @@
-import axios from "axios";
-import React from "react";
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
+import Image from "next/image";
 
-export default function OwnerForm(props) {
+const OwnerForm = (props) => {
   const fileInputRef = useRef(null);
   const [dogData, setDogData] = useState({
     name: "",
@@ -41,17 +40,22 @@ export default function OwnerForm(props) {
   const handleAddDog = (e) => {
     e.preventDefault();
     setDogData({ name: "", age: "", breed: "", size: "", image: null });
-    setListOfDogs((prevListOfDogs) => [...prevListOfDogs, dogData]);
+    setListOfDogs((prevListOfDogs) => [...prevListOfDogs, { ...dogData }]);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
 
-  const renderDogs = listOfDogs.map((dog) => (
-    <div>
+  const renderDogs = listOfDogs.map((dog, index) => (
+    <div key={index}>
       <h2>{dog.name}</h2>
       {dog.image && (
-        <img src={dog.image} alt="Dog Preview" height="100px" width="100px" />
+        <Image
+          src={dog.image}
+          alt={`Dog Preview ${index}`}
+          height={100}
+          width={100}
+        />
       )}
     </div>
   ));
@@ -167,3 +171,5 @@ export default function OwnerForm(props) {
     </div>
   );
 }
+
+export default OwnerForm

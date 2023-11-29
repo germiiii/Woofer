@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; // Change "next/navigation" to "next/router"
 import Link from "next/link";
 import axios from "axios";
 import Image from "next/image";
@@ -7,7 +7,7 @@ import { auth } from "../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-export default function LoginForm() {
+const LoginForm = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -66,11 +66,15 @@ export default function LoginForm() {
         alert("Welcome!");
         setIsLoggedIn(true);
         router.push("/home");
+        router.push("/home");
       } else {
         // Login failed
         alert("Invalid credentials.");
+        alert("Invalid credentials.");
       }
     } catch (error) {
+      alert("An error occurred while trying to login. Please try again later.");
+      console.error("Error:", error.message);
       alert("An error occurred while trying to login. Please try again later.");
       console.error("Error:", error.message);
     }
@@ -82,7 +86,7 @@ export default function LoginForm() {
 
   return (
     <div className="max-w-md mx-auto mt-10 p-4 bg-indigo-200 rounded shadow-md">
-      <div className="flex justify-center">
+       <div className="flex justify-center">
         <Image
           src="/ISOWoofer.png"
           alt="logo"
@@ -94,7 +98,9 @@ export default function LoginForm() {
 
       <form onSubmit={handleSubmit} method="post">
         <h1 className="text-2xl text-indigo-900 font-extrabold mb-4">
+          
           SIGN IN
+        
         </h1>
         <label className="block mb-2">
           Email
@@ -121,25 +127,22 @@ export default function LoginForm() {
         </label>
         <br />
         <div>
-          <button
+            <button
             className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5"
             type="submit"
           >
-            Sign In
-          </button>
+              Sign In
+            </button>
         </div>
-        --------------------------------------------------------
+
         <div>
-          <button
-            onClick={loginGoogle}
-            className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400"
-            type="button"
-          >
-            <img
-              src={"/google.png"}
-              alt="Google Logo"
-              className="w-6 h-6 mr-2"
-            />
+          <button onClick={loginGoogle} className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400" type="button">
+            <Image 
+            src={"/google.png"} 
+            alt="Google Logo" 
+            width={50}
+            height={50}
+            className="w-6 h-6 mr-2" />
             <span>Login with Google</span>
           </button>
         </div>
@@ -147,20 +150,15 @@ export default function LoginForm() {
 
       <div className="mt-4">
         <p className="text-sm">
-          Don't have an account yet? Register{" "}
-          <a href="/register" className="text-blue-500">
-            here.
-          </a>
+        &quot; Dont have an account yet? Register &quot; <a href="/register" className="text-blue-500">here.</a>
         </p>
       </div>
       <div className="mt-2">
-        <p className="text-sm">
-          Don't remember your password? Recover your password{" "}
-          <a href="/forget-password" className="text-blue-500">
-            here.
-          </a>
+        <p className="text-sm">&ldquo;Dont remember your password? Recover your password &ldquo;<a href="/forget-password" className="text-blue-500">here.</a>
         </p>
       </div>
     </div>
   );
 }
+
+export default LoginForm

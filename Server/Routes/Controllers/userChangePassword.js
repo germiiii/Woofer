@@ -26,7 +26,7 @@ const sendPasswordResetEmail = (email, token, res) => {
     from: 'woofer@gmail.com',
     to: email,
     subject: 'Solicitud de Cambio de Contraseña',
-    text: `Para cambiar tu contraseña, haz clic en el siguiente enlace: http://localhost:3001/changePassword/${token}`,
+    text: `Para cambiar tu contraseña, haz clic en el siguiente enlace: http://localhost:3001/changePassword/${token}`
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

@@ -1,4 +1,4 @@
-import Image from 'next/image'
+
 import Navbar from './Components/NavBar'
 import AboutDog from './Components/AboutDog'
 import AboutWalker from './Components/AboutWalker'

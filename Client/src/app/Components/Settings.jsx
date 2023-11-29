@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUserDetails } from "../../redux/features/userDetailSlice";
-import axios from "axios";
 import "tailwindcss/tailwind.css";
 import Image from 'next/image'
 import { useRouter } from "next/navigation";
 
-export default function Settings() {
+const Settings = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { name, lastName, email, address, userName, image } = useSelector((state) => state.userDetail.user);
@@ -147,7 +146,7 @@ const handleUserNameChange = (e) => {
                 className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
               />
               {newImage && (
-                <img
+                <Image
                   src={newImage}
                   alt="Profile"
                   className="mt-2 rounded"
@@ -161,7 +160,7 @@ const handleUserNameChange = (e) => {
               className="cursor-pointer text-gray-500 hover:text-blue-500"
             >
               {newImage ? (
-                <img
+                <Image
                   src={newImage}
                   alt="Profile"
                   className="mt-2 rounded"
@@ -186,3 +185,5 @@ const handleUserNameChange = (e) => {
     </div>
   );
 }
+
+export default Settings

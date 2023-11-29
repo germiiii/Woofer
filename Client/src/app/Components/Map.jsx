@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 
-export default function Map(props) {
+const Map = (props) => {
   const [userLocation, setUserLocation] = useState(null);
   const [addressInput, setAddressInput] = useState(props.userAddress);
   const [cityInput, setCityInput] = useState(props.userCity);
@@ -146,3 +146,5 @@ export default function Map(props) {
     </div>
   );
 }
+
+export default Map
