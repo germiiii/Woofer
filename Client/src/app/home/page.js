@@ -13,7 +13,7 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://woofer-server-nsjo.onrender.com/users");
+        const response = await axios.get("http://localhost:3001/users");
         console.log(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);

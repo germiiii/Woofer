@@ -34,7 +34,7 @@ const LoginForm = () => {
       const email = user.email;
       console.log(email)
   
-      const response = await axios.post('https://woofer-server-nsjo.onrender.com/googleLogin', { email });
+      const response = await axios.post('http://localhost:3001/googleLogin', { email });
   
       if (response.status === 201) {
         router.push("/home");
@@ -49,7 +49,7 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://woofer-server-nsjo.onrender.com/login', {
+      const response = await axios.post('http://localhost:3001/login', {
         email,
         password,
       });
@@ -124,7 +124,12 @@ const LoginForm = () => {
 
         <div>
           <button onClick={loginGoogle} className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400" type="button">
-            <Image src={"/google.png"} alt="Google Logo" className="w-6 h-6 mr-2" />
+            <Image 
+            src={"/google.png"} 
+            alt="Google Logo" 
+            width={50}
+            height={50}
+            className="w-6 h-6 mr-2" />
             <span>Login with Google</span>
           </button>
         </div>

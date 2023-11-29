@@ -50,7 +50,7 @@ const AditionalForm = () => {
 
     try {
       const response = await axios.post(
-        "https://woofer-server-nsjo.onrender.com/register",
+        "http://localhost:3001/register",
         formData
       );
 

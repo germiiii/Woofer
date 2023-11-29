@@ -76,7 +76,7 @@ const RegisterForm = () => {
 
     try {
       const response = await axios.post(
-        "https://woofer-server-nsjo.onrender.com/register",
+        "http://localhost:3001/register",
         userData
       );
       setFormSent(true);
@@ -164,8 +164,8 @@ const RegisterForm = () => {
               <Image
                 src={userData.image ? userData.image : "/Profile.jpeg"}
                 alt=""
-                height="100px"
-                width="100px"
+                width={50}
+                height={50}
               />
               <input
                 type="file"
@@ -208,6 +208,8 @@ const RegisterForm = () => {
                 <Image
                   src={"/google.png"}
                   alt="Google Logo"
+                  width={50}
+                  height={50}
                   className="w-6 h-6 mr-2"
                 />
                 <span>Sign Up with Google</span>

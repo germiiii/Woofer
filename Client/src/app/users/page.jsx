@@ -1,7 +1,7 @@
 import UserDetail from '../Components/UserDetail'
 
 async function getUsers() {
-  const res = await fetch('https://woofer-server-nsjo.onrender.com/users')
+  const res = await fetch('http://localhost:3001/users')
   const data = await res.json()
   console.log('page at users:', data)
   return data
