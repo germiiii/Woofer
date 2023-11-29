@@ -26,9 +26,10 @@ export default function RegisterForm() {
     email: "",
     password: "",
     isWalker: false,
-    image: null,
+    image: '',
   });
   const [formSent, setFormSent] = useState(false);
+  const [image, setImage] = useState('');
 
   const loginGoogle = async (e) => {
     e.preventDefault();
@@ -55,15 +56,7 @@ export default function RegisterForm() {
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     if (type === "file") {
-      const imageFile = e.target.files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUserData((prevUserData) => ({
-          ...prevUserData,
-          [name]: reader.result,
-        }));
-      };
-      reader.readAsDataURL(imageFile);
+      setImage(e.target.files[0])
     } else {
       setUserData((prevUserData) => {
         const updatedUserData = { ...prevUserData, [name]: value };
@@ -75,10 +68,20 @@ export default function RegisterForm() {
   const handleRegister = async (e) => {
     e.preventDefault();
 
+    const userFormData = new FormData();
+    userFormData.append("name", userData.name);
+    userFormData.append("lastName", userData.lastName);
+    userFormData.append("address", userData.address);
+    userFormData.append("username", userData.username);
+    userFormData.append("email", userData.email);
+    userFormData.append("password", userData.password);
+    userFormData.append("isWalker", userData.isWalker);
+    userFormData.append("image", image);
+
     try {
       const response = await axios.post(
         "http://localhost:3001/register",
-        userData
+        userFormData
       );
       setFormSent(true);
     } catch (e) {

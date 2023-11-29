@@ -9,6 +9,21 @@ import SelectWalkers from "../Components/SelectWalkers";
 import SwitchType from "../Components/SwitchType";
 
 const Home = () => {
+  const [users, setUsers] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:3001/users");
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const router = useRouter();
   const [formCompleted, setFormCompleted] = useState(true);
 
@@ -74,6 +89,9 @@ const Home = () => {
             }}
           >
             <Map />
+          <div>
+            <img src={users[0]?.image} width="400px" height="400px"></img>
+          </div>
             <SelectWalkers />
           </div>
         </>
