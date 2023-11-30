@@ -48,14 +48,10 @@ const RegisterForm = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     if (type === "file") {
-      const imageFile = e.target.files[0];
+      setImage(e.target.files[0]);
     } else {
       setUserData((prevUserData) => {
         const updatedUserData = { ...prevUserData, [name]: value };
@@ -124,6 +120,28 @@ const RegisterForm = () => {
                 type="text"
                 name="name"
                 placeholder="Enter your name..."
+                onChange={handleChange}
+                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
+              />
+            </label>
+            <br />
+            <label className="block mb-2">
+              Your last name
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Enter your last name..."
+                onChange={handleChange}
+                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
+              />
+            </label>
+            <br />
+            <label className="block mb-2">
+              Your username
+              <input
+                type="text"
+                name="username"
+                placeholder="Enter your username..."
                 onChange={handleChange}
                 className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
               />

@@ -1,9 +1,8 @@
-
 "use client";
 import WalkerCard from "./WalkerCard.jsx";
 import { useState } from "react";
 import "tailwindcss/tailwind.css";
-
+import walkersMock from "../walkersMock.js";
 
 const SelectWalkers = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -214,4 +213,4 @@ const SelectWalkers = (props) => {
   );
 };
 
-
+export default SelectWalkers;
