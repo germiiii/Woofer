@@ -1,4 +1,4 @@
-function formatNumber(valor) {
+export function formatNumber(valor) {
     let str = valor.toString();
     let partes = str.split(".");
   
