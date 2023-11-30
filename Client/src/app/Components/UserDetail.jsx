@@ -8,9 +8,9 @@ const UserDetail = ({ id, name, lastName, email, address, username, noButton = f
       <div>
       
         {image ? (
-          <Image src={image} alt="" height="100px" width="100px" />
+          <Image src={image} alt="" height={100} width={100} />
         ) : (
-          <Image src="/ProfileDetail.webp" alt="Default Profile" height="100px" width="100px" />
+          <Image src="/ProfileDetail.webp" alt="Default Profile" height={100} width={100} />
         )}
       </div>
       <h4>Name: {name}</h4>
