@@ -1,7 +1,8 @@
+
 "use client";
 import Image from "next/image";
 
-const WalkerCard = (props) => {
+
   const cardStyle = {
     border: "1px solid #ccc",
     borderRadius: "8px",
@@ -57,7 +58,7 @@ const WalkerCard = (props) => {
 
   return (
     <div style={cardStyle}>
-      <Image src={props.image} alt="Profile" width={100} height={100} />
+
       <div style={textStyle}>
         <h2 style={nameStyle}>{props.name + " " + props.lastName}</h2>
         <h3 style={addressStyle}>{props.address}</h3>
