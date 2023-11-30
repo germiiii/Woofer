@@ -24,13 +24,11 @@ module.exports = (sequelize) => {
       },
       walk_type: {
         type: DataTypes.ENUM("premium", "normal", "express"),
-        allowNull: true,
-        defaultValue: 1,
+        allowNull: true
       },
       dog_capacity: {
         type: DataTypes.ENUM("low", "medium", "high"),
         allowNull: true,
-        defaultValue: 1,
       },
       walk_duration: {
         type: DataTypes.ENUM("15", "30", "60", "90"),

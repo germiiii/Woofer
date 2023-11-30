@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  sequelize.define("calification", {
+  sequelize.define("review", {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
         max: 5,
       },
     },
-    review: {
+    description: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
