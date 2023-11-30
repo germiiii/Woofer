@@ -217,6 +217,6 @@ const RegisterForm = () => {
       </div>
     </div>
   );
-}
+};
 
-export default RegisterForm
+export default RegisterForm;

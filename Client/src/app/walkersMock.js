@@ -1,7 +1,7 @@
-const walkerImage1 =
-  "https://media.licdn.com/dms/image/D4D03AQEfzyneqdEzLg/profile-displayphoto-shrink_800_800/0/1665425697970?e=2147483647&v=beta&t=WoUnEAdkV5redn5-Zx4rqayYduHxE647VhCZ6tIAzL8";
-const walkerImage2 =
-  "https://i.scdn.co/image/ab6761610000517420445c2cc9d93a550e1488b0";
+// const walkerImage1 =
+//   "https://media.licdn.com/dms/image/D4D03AQEfzyneqdEzLg/profile-displayphoto-shrink_800_800/0/1665425697970?e=2147483647&v=beta&t=WoUnEAdkV5redn5-Zx4rqayYduHxE647VhCZ6tIAzL8";
+// const walkerImage2 =
+//   "https://i.scdn.co/image/ab6761610000517420445c2cc9d93a550e1488b0";
 
 const walkersMock = [
   {
@@ -10,7 +10,7 @@ const walkersMock = [
     lastName: "Zibaitis",
     city: "Mendoza",
     address: "Sarachaga 4632",
-    image: walkerImage1,
+    // image: walkerImage1,
     dogCapacity: 3,
     walkDuration: 15,
     dogSize: "small",
@@ -21,7 +21,7 @@ const walkersMock = [
     lastName: "Torres",
     city: "Buenos Aires",
     address: "Aranguren 1020",
-    image: walkerImage1,
+    // image: walkerImage1,
     dogCapacity: 7,
     walkDuration: 30,
     dogSize: "medium",
@@ -32,7 +32,7 @@ const walkersMock = [
     lastName: "Correas",
     city: "Mendoza",
     address: "Juan B. Justo 302",
-    image: walkerImage2,
+    // image: walkerImage2,
     dogCapacity: 1,
     walkDuration: 60,
     dogSize: "large",
@@ -43,7 +43,7 @@ const walkersMock = [
     lastName: "Johnson",
     city: "Buenos Aires",
     address: "Maple Street 123",
-    image: walkerImage2,
+    // image: walkerImage2,
     dogCapacity: 9,
     walkDuration: 15,
     dogSize: "small",
@@ -54,7 +54,7 @@ const walkersMock = [
     lastName: "Smith",
     city: "Mendoza",
     address: "Oak Avenue 456",
-    image: walkerImage1,
+    // image: walkerImage1,
     dogCapacity: 4,
     walkDuration: 30,
     dogSize: "medium",
@@ -65,7 +65,7 @@ const walkersMock = [
     lastName: "Williams",
     city: "Buenos Aires",
     address: "Pine Road 789",
-    image: walkerImage2,
+    // image: walkerImage2,
     dogCapacity: 8,
     walkDuration: 60,
     dogSize: "large",
@@ -76,7 +76,7 @@ const walkersMock = [
     lastName: "Miller",
     city: "Mendoza",
     address: "Cedar Lane 567",
-    image: walkerImage1,
+    // image: walkerImage1,
     dogCapacity: 2,
     walkDuration: 15,
     dogSize: "small",
@@ -87,7 +87,7 @@ const walkersMock = [
     lastName: "Brown",
     city: "Buenos Aires",
     address: "Birch Court 890",
-    image: walkerImage1,
+    // image: walkerImage1,
     dogCapacity: 6,
     walkDuration: 30,
     dogSize: "medium",
@@ -98,7 +98,7 @@ const walkersMock = [
     lastName: "Davis",
     city: "Mendoza",
     address: "Elm Place 234",
-    image: walkerImage2,
+    // image: walkerImage2,
     dogCapacity: 10,
     walkDuration: 60,
     dogSize: "large",
@@ -109,7 +109,7 @@ const walkersMock = [
     lastName: "Jackson",
     city: "Mendoza",
     address: "Spruce Drive 567",
-    image: walkerImage2,
+    // image: walkerImage2,
     dogCapacity: 5,
     walkDuration: 15,
     dogSize: "small",
