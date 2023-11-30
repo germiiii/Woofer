@@ -55,9 +55,6 @@ const SelectWalkers = (props) => {
     setCurrentPage(1);
   };
 
-  const getFilteredWalkers = () =>
-    walkersMock.filter((walker) => walker.city === userCity);
-
   const filteredWalkers = walkersMock.filter((walker) => {
     const dogCapacityFilterCondition =
       !dogCapacityFilter ||
@@ -93,23 +90,26 @@ const SelectWalkers = (props) => {
       dogCapacityFilterCondition &&
       walkDurationFilterCondition &&
       dogSizeFilterCondition &&
-      searchFilterCondition
+      searchFilterCondition &&
+      walker.city === userCity
     );
   });
 
   const renderList = filteredWalkers
     .slice(startIndex, endIndex)
     .map((walker) => (
-      <WalkerCard
-        key={walker.id}
-        name={walker.name}
-        lastName={walker.lastName}
-        address={walker.address}
-        image={walker.image}
-        dogCapacity={walker.dogCapacity}
-        walkDuration={walker.walkDuration}
-        dogSize={walker.dogSize}
-      />
+      <div>
+        <WalkerCard
+          key={walker.id}
+          name={walker.name}
+          lastName={walker.lastName}
+          address={walker.address}
+          image={walker.image}
+          dogCapacity={walker.dogCapacity}
+          walkDuration={walker.walkDuration}
+          dogSize={walker.dogSize}
+        />
+      </div>
     ));
 
   const containerStyle = {
@@ -149,9 +149,9 @@ const SelectWalkers = (props) => {
     marginTop: "20px",
   };
 
-  return (
+  return userCity ? (
     <div style={containerStyle}>
-      <h1 style={titleStyle}>Select a Walker</h1>
+      <h1 style={titleStyle}>Select a Walker from {props.userCity}</h1>
       <input
         type="text"
         placeholder="Search by name or last name"
@@ -210,7 +210,7 @@ const SelectWalkers = (props) => {
         </button>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default SelectWalkers;
