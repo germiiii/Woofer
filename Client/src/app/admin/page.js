@@ -3,22 +3,30 @@
 import axios from "axios";
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 
 const columns = [
-  { field: "id", headerName: "ID", width: 90 },
+  { field: "id", headerName: "ID", width: 300 },
   {
     field: "image",
     headerName: "Image",
-    width: 130,
+    width: 140,
     renderCell: (params) => {
       return (
-        <img
-          src={params.row.image}
-          alt={`Image ${params.row.username}`}
-          width="100px"
-          height="100px"
-        />
+        <div
+          style={{
+            width: "100px",
+            height: "100px",
+            borderRadius: "50%",
+            overflow: "hidden",
+          }}
+        >
+          <img
+            src={params.row.image}
+            alt={`Image ${params.row.username}`}
+            style={{ width: "100%", height: "100%" }}
+          />
+        </div>
       );
     },
   },
@@ -52,7 +60,7 @@ const columns = [
     headerName: "Is Walker",
     description: "This column has a value getter and is not sortable.",
     sortable: false,
-    width: 160,
+    width: 110,
   },
 
   {
@@ -60,7 +68,7 @@ const columns = [
     headerName: "Address",
     description: "This column has a value getter and is not sortable.",
     sortable: false,
-    width: 250,
+    width: 200,
   },
   {
     field: "email",
@@ -70,14 +78,13 @@ const columns = [
     width: 200,
   },
   {
-    field: "actions",
-    headerName: "Actions",
+    field: "action",
+    headerName: "Action",
     width: 100,
     sortable: false,
     renderCell: (params) => {
       return (
         <div className="action">
-          <div className="view">View</div>
           <div className="delete">Delete</div>
         </div>
       );
@@ -93,6 +100,7 @@ export default function DataGridDemo() {
       try {
         const response = await axios.get("http://localhost:3001/users");
         setUsers(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -109,11 +117,11 @@ export default function DataGridDemo() {
         Woofer Panel
       </div>
 
-      <Box sx={{ height: 800, width: "100%" }}>
+      <Box sx={{ height: 850, width: "100%" }}>
         <DataGrid
           rows={users}
           columns={columns}
-          rowHeight={120}
+          rowHeight={130}
           initialState={{
             pagination: {
               paginationModel: {
@@ -124,6 +132,13 @@ export default function DataGridDemo() {
           ptypeSizeOptions={[5]}
           checkboxSelection
           disableRowSelectionOnClick
+          slots={{ toolbar: GridToolbar }}
+          slotProps={{
+            toolbar: {
+              showQuickFilter: true,
+              quickFilterProps: { debounceMs: 500 },
+            },
+          }}
         />
       </Box>
     </div>

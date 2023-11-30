@@ -131,7 +131,7 @@ const Map = (props) => {
         className={inputStyle}
       />
       <button onClick={handleSearchAddress} className={buttonStyle}>
-        Search Address
+        Set my address
       </button>
       <div style={mapContainerStyle}>
         {userLocation ? (
@@ -145,6 +145,6 @@ const Map = (props) => {
       </div>
     </div>
   );
-}
+};
 
-export default Map
+export default Map;
