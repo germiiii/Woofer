@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Change "next/navigation" to "next/router"
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import axios from "axios";
 import Image from "next/image";
@@ -29,16 +29,20 @@ const LoginForm = () => {
     try {
       const result = await signInWithPopup(auth, googleAuth);
       const { user } = result;
-      console.log(user);
 
       const email = user.email;
-      console.log(email)
-  
-      const response = await axios.post('http://localhost:3001/googleLogin', { email });
-  
+
+      const response = await axios.post("http://localhost:3001/googleLogin", {
+        email,
+      });
+
+      const { token } = response.data;
+      localStorage.setItem("access_token", token);
+
       if (response.status === 201) {
         router.push("/home");
       } else {
+        console.error("Authentication failed");
         console.error("Authentication failed");
       }
     } catch (error) {
@@ -49,16 +53,16 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/login', {
+      const response = await axios.post("http://localhost:3001/login", {
         email,
         password,
       });
 
       const { token } = response.data;
-      console.log(token);
 
       if (token) {
         // Login successful
+        localStorage.setItem("access_token", token);
         alert("Welcome!");
         setIsLoggedIn(true);
         router.push("/home");
@@ -117,7 +121,10 @@ const LoginForm = () => {
         </label>
         <br />
         <div>
-          <button className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5" type="submit">
+          <button
+            className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5"
+            type="submit"
+          >
             Sign In
           </button>
         </div>
@@ -147,5 +154,6 @@ const LoginForm = () => {
     </div>
   );
 }
+
 
 export default LoginForm

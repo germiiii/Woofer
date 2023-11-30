@@ -25,9 +25,10 @@ const RegisterForm = () => {
     email: "",
     password: "",
     isWalker: false,
-    image: null,
+    image: "",
   });
   const [formSent, setFormSent] = useState(false);
+  const [image, setImage] = useState("");
 
   const loginGoogle = async (e) => {
     e.preventDefault();
@@ -55,29 +56,31 @@ const RegisterForm = () => {
     const { name, value, type } = e.target;
     if (type === "file") {
       const imageFile = e.target.files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUserData((prevUserData) => ({
-          ...prevUserData,
-          [name]: reader.result,
-        }));
-      };
-      reader.readAsDataURL(imageFile);
     } else {
-      setUserData((prevUserData) => ({
-        ...prevUserData,
-        [name]: value,
-      }));
+      setUserData((prevUserData) => {
+        const updatedUserData = { ...prevUserData, [name]: value };
+        return updatedUserData;
+      });
     }
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
+    const userFormData = new FormData();
+    userFormData.append("name", userData.name);
+    userFormData.append("lastName", userData.lastName);
+    userFormData.append("address", userData.address);
+    userFormData.append("username", userData.username);
+    userFormData.append("email", userData.email);
+    userFormData.append("password", userData.password);
+    userFormData.append("isWalker", userData.isWalker);
+    userFormData.append("image", image);
+
     try {
       const response = await axios.post(
         "http://localhost:3001/register",
-        userData
+        userFormData
       );
       setFormSent(true);
     } catch (e) {
@@ -161,12 +164,6 @@ const RegisterForm = () => {
             <br />
             <label className="block mb-2">
               Profile Picture
-              <Image
-                src={userData.image ? userData.image : "/Profile.jpeg"}
-                alt=""
-                width={50}
-                height={50}
-              />
               <input
                 type="file"
                 name="image"

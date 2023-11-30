@@ -3,8 +3,8 @@ import { useState, useEffect, useRef } from "react";
 
 const Map = (props) => {
   const [userLocation, setUserLocation] = useState(null);
-  const [addressInput, setAddressInput] = useState("");
-  const [cityInput, setCityInput] = useState("");
+  const [addressInput, setAddressInput] = useState(props.userAddress);
+  const [cityInput, setCityInput] = useState(props.userCity);
 
   const mapRef = useRef(null);
 
@@ -96,8 +96,8 @@ const Map = (props) => {
   };
 
   const loadingMessageStyle = {
-    fontSize: "1.7em", 
-    color: "grey",  
+    fontSize: "1.7em",
+    color: "grey",
   };
 
   const loadingMessageContainerStyle = {
@@ -107,8 +107,7 @@ const Map = (props) => {
     borderRadius: "8px",
     border: "solid grey 1px",
     justifyContent: "center",
-    alignItems: "center"
-
+    alignItems: "center",
   };
 
   const inputStyle = "border p-2 rounded mr-2";

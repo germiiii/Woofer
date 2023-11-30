@@ -3,15 +3,16 @@
 // import "tailwindcss/tailwind.css";
 // import walkersMock from "../../app/walkersMock";
 
-// const SelectWalkers = () => {
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const [dogCapacityFilter, setDogCapacityFilter] = useState("");
-//   const [walkDurationFilter, setWalkDurationFilter] = useState("");
-//   const [dogSizeFilter, setDogSizeFilter] = useState("");
-//   const [searchFilter, setSearchFilter] = useState("");
-//   const cardsPerPage = 5;
-//   const startIndex = (currentPage - 1) * cardsPerPage;
-//   const endIndex = currentPage * cardsPerPage;
+export default function SelectWalkers(props) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [dogCapacityFilter, setDogCapacityFilter] = useState("");
+  const [walkDurationFilter, setWalkDurationFilter] = useState("");
+  const [dogSizeFilter, setDogSizeFilter] = useState("");
+  const [searchFilter, setSearchFilter] = useState("");
+  const cardsPerPage = 5;
+  const startIndex = (currentPage - 1) * cardsPerPage;
+  const endIndex = currentPage * cardsPerPage;
+  const userCity = props.userCity;
 
 //   const handlePreviousPage = () => {
 //     if (currentPage > 1) {
@@ -46,12 +47,15 @@
 //     setCurrentPage(1);
 //   };
 
-//   const handleRefresh = () => {
-//     setDogCapacityFilter("");
-//     setWalkDurationFilter("");
-//     setDogSizeFilter("");
-//     setCurrentPage(1);
-//   };
+  const handleRefresh = () => {
+    setDogCapacityFilter("");
+    setWalkDurationFilter("");
+    setDogSizeFilter("");
+    setCurrentPage(1);
+  };
+
+  // const getFilteredWalkers = () =>
+  //   walkersMock.filter((walker) => walker.city === userCity);
 
 //   const filteredWalkers = walkersMock.filter((walker) => {
 //     const dogCapacityFilterCondition =
