@@ -1,11 +1,11 @@
 "use client";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import Nav from "../Components/NavBarHome";
-import OwnerForm from "../Components/OwnerForm";
-import Map from "../Components/Map";
-import SelectWalkers from "../Components/SelectWalkers";
-import SwitchType from "../Components/SwitchType";
+import Nav from "../Components/NavBarHome.jsx";
+import OwnerForm from "../Components/OwnerForm.jsx";
+import Map from "../Components/Map.jsx";
+import SelectWalkers from "../Components/SelectWalkers.jsx";
+import SwitchType from "../Components/SwitchType.jsx";
 
 const Home = () => {
   const [formCompleted, setFormCompleted] = useState(true);
@@ -59,10 +59,12 @@ const Home = () => {
           <Nav />
           <div style={switchContainerStyle}>
             <SwitchType />
-            {/* Uncomment the button below if needed */}
-            {/* <button onClick={handleAddMoreDogs} style={paginationButtonStyle}>
-              Add more dogs
-            </button> */}
+
+            {/* <div>
+              <button onClick={handleAddMoreDogs} style={paginationButtonStyle}>
+                Add more dogs
+              </button>
+            </div> */}
           </div>
           <div
             style={{
