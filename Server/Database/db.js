@@ -84,11 +84,11 @@ Walker.belongsTo(User);
 Owner.hasMany(Dog);
 Dog.belongsTo(Owner);
 
-Owner.belongsToMany(Walker, {through: Walk});
-Walker.belongsToMany(Owner, {through: Walk});
+Owner.belongsToMany(Walker, { through: { model: Walk, unique: false } });
+Walker.belongsToMany(Owner, { through: { model: Walk, unique: false } });
 
-Dog.belongsToMany(Walk, { through: 'DogWalk' });
-Walk.belongsToMany(Dog, { through: 'DogWalk' });
+Dog.belongsToMany(Walk, { through: "dogWalk" });
+Walk.belongsToMany(Dog, { through: "dogWalk" });
 
 Owner.hasMany(Walk);
 Walk.belongsTo(Owner);
