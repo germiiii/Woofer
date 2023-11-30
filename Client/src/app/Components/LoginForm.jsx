@@ -37,7 +37,6 @@ const LoginForm = () => {
       });
 
       const { token } = response.data;
-      localStorage.setItem("access_token", token);
 
       if (response.status === 201) {
         router.push("/home");
@@ -62,7 +61,6 @@ const LoginForm = () => {
 
       if (token) {
         // Login successful
-        localStorage.setItem("access_token", token);
         alert("Welcome!");
         setIsLoggedIn(true);
         router.push("/home");
@@ -130,13 +128,18 @@ const LoginForm = () => {
         </div>
 
         <div>
-          <button onClick={loginGoogle} className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400" type="button">
-            <Image 
-            src={"/google.png"} 
-            alt="Google Logo" 
-            width={50}
-            height={50}
-            className="w-6 h-6 mr-2" />
+          <button
+            onClick={loginGoogle}
+            className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400"
+            type="button"
+          >
+            <Image
+              src={"/google.png"}
+              alt="Google Logo"
+              width={50}
+              height={50}
+              className="w-6 h-6 mr-2"
+            />
             <span>Login with Google</span>
           </button>
         </div>
@@ -144,16 +147,22 @@ const LoginForm = () => {
 
       <div className="mt-4">
         <p className="text-sm">
-        &quot; Dont have an account yet? Register &quot; <a href="/register" className="text-blue-500">here.</a>
+          &quot; Dont have an account yet? Register &quot;{" "}
+          <a href="/register" className="text-blue-500">
+            here.
+          </a>
         </p>
       </div>
       <div className="mt-2">
-        <p className="text-sm">&ldquo;Dont remember your password? Recover your password &ldquo;<a href="/forget-password" className="text-blue-500">here.</a>
+        <p className="text-sm">
+          &ldquo;Dont remember your password? Recover your password &ldquo;
+          <a href="/forget-password" className="text-blue-500">
+            here.
+          </a>
         </p>
       </div>
     </div>
   );
-}
+};
 
-
-export default LoginForm
+export default LoginForm;

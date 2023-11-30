@@ -13,9 +13,6 @@ const Home = () => {
   const userCity = "Buenos Aires";
   const userAddress = "Sarachaga 4632";
 
-  const token = localStorage.getItem("access_token");
-  console.log(token);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -76,7 +73,7 @@ const Home = () => {
             }}
           >
             <Map userCity={userCity} userAddress={userAddress} />
-            <SelectWalkers userCity={userCity} userAddress={userAddress} />
+            <SelectWalkers />
           </div>
         </>
       )}

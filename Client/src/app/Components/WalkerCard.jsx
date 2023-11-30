@@ -1,6 +1,8 @@
-import { Image } from "next/image";
 
-const WalkerCard = (props) =>{
+"use client";
+import Image from "next/image";
+
+
   const cardStyle = {
     border: "1px solid #ccc",
     borderRadius: "8px",
@@ -56,12 +58,7 @@ const WalkerCard = (props) =>{
 
   return (
     <div style={cardStyle}>
-     <Image
-          src={props.image}
-          alt="Profile"
-          width={100}
-          height={100}
-          />
+
       <div style={textStyle}>
         <h2 style={nameStyle}>{props.name + " " + props.lastName}</h2>
         <h3 style={addressStyle}>{props.address}</h3>
@@ -70,14 +67,9 @@ const WalkerCard = (props) =>{
           {props.walkDuration} minutes
         </h4>
       </div>
-      <Image
-          src="https://cdn-icons-png.flaticon.com/512/5952/5952829.png"
-          alt="Checkout"
-          width={40}
-          height={40}
-          />
+      <Image alt="Checkout" width={40} height={40} />
     </div>
   );
-}
+};
 
-export default WalkerCard
+export default WalkerCard;

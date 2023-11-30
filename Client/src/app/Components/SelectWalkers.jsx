@@ -1,9 +1,11 @@
-import WalkerCard from "./WalkerCard";
+
+"use client";
+import WalkerCard from "./WalkerCard.jsx";
 import { useState } from "react";
 import "tailwindcss/tailwind.css";
-import walkersMock from "../../app/walkersMock";
 
-export default function SelectWalkers(props) {
+
+const SelectWalkers = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [dogCapacityFilter, setDogCapacityFilter] = useState("");
   const [walkDurationFilter, setWalkDurationFilter] = useState("");
@@ -210,5 +212,6 @@ export default function SelectWalkers(props) {
       </div>
     </div>
   );
-}
+};
+
 
