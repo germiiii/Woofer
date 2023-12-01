@@ -28,17 +28,6 @@ const walkerPost = async (
 
   const userData = await User.findOne({
     where: { username },
-    attributes: [
-      "id",
-      "name",
-      "email",
-      "lastName",
-      "username",
-      "address",
-      "image",
-      "isWalker",
-      "isOwner",
-    ],
     include: [
       {
         model: Walker,

@@ -4,17 +4,6 @@ const userGetbyId = async (id) => {
   
     const userData = await User.findOne({
       where: { id: id, is_active: true },
-      attributes: [
-        "id",
-        "name",
-        "email",
-        "lastName",
-        "username",
-        "address",
-        "image",
-        "isWalker",
-        "isOwner",
-      ],
       include: [
         {
           model: Owner,
