@@ -7,7 +7,7 @@ mercadopago.configure({
   access_token: process.env.WOOFER_ACCESS_TOKEN,
 });
 
-const MercadoPagoHandler = async (req, res) => {
+const MercadoPagoHandler = async (req = NextApiRequest, res = NextApiResponse) => {
   if (req.method === "POST") {
     const productName = req.body.product; // Assuming productName is sent in the request body
 
