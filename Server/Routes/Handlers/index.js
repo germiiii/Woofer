@@ -6,14 +6,18 @@ const { userGetByIdHandler } = require("./userGetByIdHandler");
 const { dogHandlerPost } = require("./dogHandlerPost");
 const { dogHandlerGet } = require("./dogHandlerGet");
 const { ownerHandlerGetAll } = require("./ownerHandlerGetAll");
-const { walkHandlerPost } = require("./walkHandlerPost");
 const { userHandlerActivate } = require("./userHandlerActivate");
 const { userHandlerDeActivate } = require("./userHandlerDeActivate");
 const { ownerHandlerDeActivate } = require("./ownerHandlerDeActivate");
 const { ownerHandlerActivate } = require("./ownerHandlerActivate");
 const { walkerHandlerActivate } = require("./walkerHandlerActivate");
 const { walkerHandlerDeActivate } = require("./walkerHandlerDeActivate");
-
+const { walkerHandlerSetAvailable } = require("./walkerHandlerSetAvailable");
+const { walkerHandlerGetAll } = require("./walkerHandlerGetAll");
+const { walkHandlerPost } = require("./walkHandlerPost");
+const { walkHandlerGeAll } = require("./walkHandlerGeAll");
+const { walkHandlerGetByWalker } = require("./walkHandlerGetByWalker");
+const { walkHandlerGetByOwner } = require("./walkHandlerGetByOwner");
 
 module.exports = {
   userHandlerLogin,
@@ -24,14 +28,16 @@ module.exports = {
   dogHandlerPost,
   dogHandlerGet,
   ownerHandlerGetAll,
-  walkHandlerPost,
   userHandlerActivate,
   userHandlerDeActivate,
   ownerHandlerDeActivate,
   ownerHandlerActivate,
   walkerHandlerActivate,
-  walkerHandlerDeActivate
-
-
-
+  walkerHandlerDeActivate,
+  walkerHandlerSetAvailable,
+  walkerHandlerGetAll,
+  walkHandlerPost,
+  walkHandlerGeAll,
+  walkHandlerGetByWalker,
+  walkHandlerGetByOwner
 };

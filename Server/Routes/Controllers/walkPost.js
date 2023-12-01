@@ -33,36 +33,35 @@ const walkPost = async (ownerId, walkerId, dogs, duration, totalPrice) => {
       }
     })
   );
-
- const walk = await Walk.findOne({
-   where: { id: newWalk.id },
-   include: [
-     {
-       model: Owner,
-       include: [
-         {
-           model: Dog,
-           attributes: ["id", "name"],
-           through: { attributes: [] },
-           where: { '$Walks.id$': newWalk.id },
-         },
-        //  {
-        //    model: User,
-        //    attributes: ["name"],
-        //  },
-       ],
-     },
-     {
-       model: Walker,
-       include: [
-         {
-           model: User,
-           attributes: ["name"],
-         },
-       ],
-     },
-   ],
- });
+  const walk = await Walk.findOne({
+    where: { id: newWalk.id },
+    include: [
+      {
+        model: Owner,
+        include: [
+          {
+            model: User,
+            attributes: ["name"],
+          },
+        ],
+      },
+      {
+        model: Walker,
+        include: [
+          {
+            model: User,
+            attributes: ["name"],
+          },
+        ],
+      },
+      {
+        model: Dog,
+        attributes: ["id", "name"], // Include only the required attributes
+        through: { attributes: [] }, // Exclude the join table attributes
+        // where: { '$walks.id$': newWalk.id },
+      },
+    ],
+  });
 
   return walk;
 };

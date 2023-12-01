@@ -9,20 +9,6 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      // id_dog: {
-      //   type: DataTypes.UUID,
-      //   allowNull: false,
-      //   FOREGEINKEY: true,
-      // },
-      // id_walker: {
-      //   type: DataTypes.UUID,
-      //   allowNull: false,
-      //   FOREGEINKEY: true,
-      // },
-      // is_owner: {
-      //   type: DataTypes.STRING,
-      //   allowNull: false,
-      // },
       date: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -32,7 +18,7 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       totalPrice: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
       },
       dogNumber: {
@@ -46,6 +32,8 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
     },
-    { timestamps: false }
+    {
+      timestamps: false,
+    }
   );
 };

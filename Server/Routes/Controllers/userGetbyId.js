@@ -29,7 +29,7 @@ const userGetbyId = async (id) => {
         },
         {
           model: Walker,
-          attributes: ["dog_capacity", "is_available"],
+          // attributes: ["dog_capacity", "is_available"],
         },
       ],
     });
