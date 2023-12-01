@@ -27,6 +27,7 @@ const walkerPost = async (
   );
 
   const userData = await User.findOne({
+    attributes: { exclude: ['password'] },
     where: { username },
     include: [
       {

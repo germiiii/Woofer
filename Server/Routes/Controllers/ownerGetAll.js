@@ -2,6 +2,7 @@ const { User, Owner, Dog } = require("../../Database/db");
 
 const ownerGetAll = async () => {
   const userData = await User.findAll({
+    attributes: { exclude: ['password'] },
     where: { isOwner: true, is_active: true },
     include: [
       {

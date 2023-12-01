@@ -2,6 +2,7 @@ const { User, Walker } = require("../../Database/db");
 
 const walkerGetAll = async () => {
   const allWalkers = await User.findAll({
+    attributes: { exclude: ['password'] },
     where: { is_active: true, isWalker: true },
 
     include: [

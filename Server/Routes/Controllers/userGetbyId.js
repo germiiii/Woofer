@@ -3,6 +3,7 @@ const { User, Walker, Owner, Dog } = require("../../Database/db");
 const userGetbyId = async (id) => {
   
     const userData = await User.findOne({
+      attributes: { exclude: ['password'] },
       where: { id: id, is_active: true },
       include: [
         {
