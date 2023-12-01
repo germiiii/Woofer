@@ -55,10 +55,14 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: false,
       },
+      verificationToken: {
+        type: DataTypes.STRING,
+        allowNull: true, 
+      },
       is_active: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: true,
+        defaultValue: false,
       },
       score: {
         type: DataTypes.INTEGER,
