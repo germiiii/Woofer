@@ -60,6 +60,19 @@
 - PUT /activate/walker/:id
     This route will activate the walker
 
+**WALK TYPES**
+- GET /walkType
+    This route will bring all walk types
+
+- POST /walkType
+    This route will create a new walk type, it will require a body with the characteristics of the walk type
+
+- PUT /walkType/:id
+    This route will update a walk type
+
+- DELETE /walkType/:id
+    This route will delete a walk type
+
 
 ## **⚠️ IMPORTANTE**
 
