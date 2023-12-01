@@ -22,8 +22,7 @@ const userRegister = async (req, res) => {
     username,
     address,
     city,
-    province,
-    isWalker,
+    province
   } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -39,8 +38,7 @@ const userRegister = async (req, res) => {
       username,
       address,
       city,
-      province,
-      isWalker,
+      province
     });
     return newUser;
   } else {
@@ -54,8 +52,7 @@ const userRegister = async (req, res) => {
       username,
       address,
       city,
-      province,
-      isWalker,
+      province
     });
     return newUser;
   }
