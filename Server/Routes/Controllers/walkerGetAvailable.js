@@ -4,17 +4,7 @@ const getAvailableWalkers = async () => {
   try {
     const availableWalkers = await User.findAll({
       where: { is_active: true },
-      attributes: [
-        "id",
-        "name",
-        "email",
-        "lastName",
-        "username",
-        "address",
-        "image",
-        "isWalker",
-        "isOwner",
-      ],
+
       include: [
         {
           model: Walker,

@@ -60,16 +60,7 @@ const dogPost = async (data, file) => {
   // data to return
   const userData = await User.findOne({
     where: { username: username, is_active: true },
-    attributes: [
-      "id",
-      "name",
-      "email",
-      "lastName",
-      "username",
-      "address",
-      "isWalker",
-      "isOwner",
-    ],
+
     include: [
       {
         model: Owner,

@@ -11,22 +11,9 @@ const userGetAll = async (role) => {
 
   const users = await User.findAll({
     where: whereCondition,
-    attributes: [
-      "id",
-      "name",
-      "email",
-      "lastName",
-      "username",
-      "address",
-      "image",
-      "isWalker",
-      "isOwner",
-      "is_active",
-    ],
     include: [
       {
         model: Owner,
-        where: { is_active: true },
         where: whereCondition,
         include: [
           {
