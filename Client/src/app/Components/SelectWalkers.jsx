@@ -13,7 +13,10 @@ const SelectWalkers = (props) => {
   const cardsPerPage = 4;
   const startIndex = (currentPage - 1) * cardsPerPage;
   const endIndex = currentPage * cardsPerPage;
-  const userCity = props.userCity;
+  const userProvince = props.userProvince;
+
+
+  
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
@@ -91,7 +94,7 @@ const SelectWalkers = (props) => {
       walkDurationFilterCondition &&
       dogSizeFilterCondition &&
       searchFilterCondition &&
-      walker.city === userCity
+      walker.province === userProvince
     );
   });
 
@@ -149,9 +152,9 @@ const SelectWalkers = (props) => {
     marginTop: "20px",
   };
 
-  return userCity ? (
+  return userProvince ? (
     <div style={containerStyle}>
-      <h1 style={titleStyle}>Select a Walker from {props.userCity}</h1>
+      <h1 style={titleStyle}>Select a Walker from {props.userProvince}</h1>
       <input
         type="text"
         placeholder="Search by name or last name"

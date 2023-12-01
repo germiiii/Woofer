@@ -10,8 +10,8 @@ import SwitchType from "../Components/SwitchType.jsx";
 const Home = () => {
   const [formCompleted, setFormCompleted] = useState(true);
   const [addressInput, setAddressInput] = useState("");
-  const [cityInput, setCityInput] = useState("");
-  const [userCity, setUserCity] = useState("");
+  const [provinceInput, setProvinceInput] = useState("");
+  const [userProvince, setUserProvince] = useState("");
   const [userAddress, setUserAddress] = useState("");
 
   useEffect(() => {
@@ -37,12 +37,12 @@ const Home = () => {
     setAddressInput(event.target.value);
   };
 
-  const handleCityInputChange = (event) => {
-    setCityInput(event.target.value);
+  const handleProvinceInputChange = (event) => {
+    setProvinceInput(event.target.value);
   };
 
   const handleInputSubmit = () => {
-    setUserCity(cityInput);
+    setUserProvince(provinceInput);
     setUserAddress(addressInput);
   };
 
@@ -91,9 +91,9 @@ const Home = () => {
             <div style={{ marginTop: "20px", marginBottom: "20px" }}>
               <input
                 type="text"
-                placeholder="Enter your city"
-                value={cityInput}
-                onChange={handleCityInputChange}
+                placeholder="Enter your province"
+                value={provinceInput}
+                onChange={handleProvinceInputChange}
                 className={inputStyle}
               />
               <input
@@ -107,8 +107,8 @@ const Home = () => {
             <button onClick={handleInputSubmit} className={buttonStyle}>
               Set Your Location
             </button>
-            <Map userCity={userCity} userAddress={userAddress} />
-            <SelectWalkers userCity={userCity} />
+            <Map userProvince={userProvince} userAddress={userAddress} />
+            <SelectWalkers userProvince={userProvince} />
           </div>
         </>
       )}

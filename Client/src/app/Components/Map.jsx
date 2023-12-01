@@ -5,7 +5,7 @@ const Map = (props) => {
   const [userLocation, setUserLocation] = useState(null);
 
   const userAddress = props.userAddress;
-  const userCity = props.userCity;
+  const userProvince = props.userProvince;
 
   const mapRef = useRef(null);
 
@@ -15,7 +15,7 @@ const Map = (props) => {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&street=${encodeURIComponent(
           formattedAddressInput
-        )}&city=${encodeURIComponent(userCity)}&country=Argentina`
+        )}&city=${encodeURIComponent(userProvince)}&country=Argentina`
       );
       const data = await response.json();
 
@@ -77,10 +77,10 @@ const Map = (props) => {
   }, [userLocation]);
 
   useEffect(() => {
-    if (userAddress || userCity) {
+    if (userAddress || userProvince) {
       handleSearchAddress();
     }
-  }, [userAddress, userCity]);
+  }, [userAddress, userProvince]);
 
   const titleStyle = {
     fontSize: "2em",
