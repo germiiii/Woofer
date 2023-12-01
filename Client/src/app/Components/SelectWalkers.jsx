@@ -10,7 +10,7 @@ const SelectWalkers = (props) => {
   const [walkDurationFilter, setWalkDurationFilter] = useState("");
   const [dogSizeFilter, setDogSizeFilter] = useState("");
   const [searchFilter, setSearchFilter] = useState("");
-  const cardsPerPage = 5;
+  const cardsPerPage = 4;
   const startIndex = (currentPage - 1) * cardsPerPage;
   const endIndex = currentPage * cardsPerPage;
   const userCity = props.userCity;
@@ -157,7 +157,7 @@ const SelectWalkers = (props) => {
         placeholder="Search by name or last name"
         value={searchFilter}
         onChange={handleSearchFilterChange}
-        className="border p-2 rounded mr-2"
+        className="border p-2 rounded mr-2 mb-7"
       />
       <div className="mb-8">
         <select

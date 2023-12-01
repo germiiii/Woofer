@@ -77,7 +77,7 @@ const Map = (props) => {
   }, [userLocation]);
 
   useEffect(() => {
-    if (userAddress && userCity) {
+    if (userAddress || userCity) {
       handleSearchAddress();
     }
   }, [userAddress, userCity]);
