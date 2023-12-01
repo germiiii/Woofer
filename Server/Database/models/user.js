@@ -38,11 +38,11 @@ module.exports = (sequelize) => {
       },
       city: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       province: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
       },
       image: {
         type: DataTypes.STRING,
