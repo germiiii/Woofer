@@ -9,9 +9,10 @@ import SwitchType from "../Components/SwitchType.jsx";
 
 const Home = () => {
   const [formCompleted, setFormCompleted] = useState(true);
-
-  const userCity = "Buenos Aires";
-  const userAddress = "Sarachaga 4632";
+  const [addressInput, setAddressInput] = useState("");
+  const [cityInput, setCityInput] = useState("");
+  const [userCity, setUserCity] = useState("");
+  const [userAddress, setUserAddress] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +33,19 @@ const Home = () => {
     setFormCompleted(false);
   };
 
+  const handleAddressInputChange = (event) => {
+    setAddressInput(event.target.value);
+  };
+
+  const handleCityInputChange = (event) => {
+    setCityInput(event.target.value);
+  };
+
+  const handleInputSubmit = () => {
+    setUserCity(cityInput);
+    setUserAddress(addressInput);
+  };
+
   const paginationButtonStyle = {
     backgroundColor: "black",
     color: "white",
@@ -48,21 +62,23 @@ const Home = () => {
     alignItems: "center",
   };
 
+  const titleStyle = {
+    fontSize: "2em",
+    marginBottom: "16px",
+  };
+
+  const inputStyle = "border p-4 rounded-lg mr-2";
+  const buttonStyle = "border p-3 rounded-lg mr-2 bg-black text-white";
+
   return (
     <div>
       {!formCompleted && <OwnerForm onSubmit={handleFormSubmit} />}
       {formCompleted && (
         <>
           <Nav />
-          <div style={switchContainerStyle}>
+          {/* <div style={switchContainerStyle}>
             <SwitchType />
-
-            {/* <div>
-              <button onClick={handleAddMoreDogs} style={paginationButtonStyle}>
-                Add more dogs
-              </button>
-            </div> */}
-          </div>
+          </div> */}
           <div
             style={{
               display: "flex",
@@ -72,8 +88,27 @@ const Home = () => {
               height: "1400px",
             }}
           >
+            <div style={{ marginTop: "20px", marginBottom: "20px" }}>
+              <input
+                type="text"
+                placeholder="Enter your city"
+                value={cityInput}
+                onChange={handleCityInputChange}
+                className={inputStyle}
+              />
+              <input
+                type="text"
+                placeholder="Enter your address"
+                value={addressInput}
+                onChange={handleAddressInputChange}
+                className={inputStyle}
+              />
+            </div>
+            <button onClick={handleInputSubmit} className={buttonStyle}>
+              Set Your Location
+            </button>
             <Map userCity={userCity} userAddress={userAddress} />
-            <SelectWalkers />
+            <SelectWalkers userCity={userCity} />
           </div>
         </>
       )}

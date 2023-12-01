@@ -3,26 +3,19 @@ import { useState, useEffect, useRef } from "react";
 
 const Map = (props) => {
   const [userLocation, setUserLocation] = useState(null);
-  const [addressInput, setAddressInput] = useState(props.userAddress);
-  const [cityInput, setCityInput] = useState(props.userCity);
+
+  const userAddress = props.userAddress;
+  const userCity = props.userCity;
 
   const mapRef = useRef(null);
 
-  const handleAddressInputChange = (event) => {
-    setAddressInput(event.target.value);
-  };
-
-  const handleCityInputChange = (event) => {
-    setCityInput(event.target.value);
-  };
-
   const handleSearchAddress = async () => {
     try {
-      const formattedAddressInput = addressInput.replace(/(\d+)/, " $1");
+      const formattedAddressInput = userAddress.replace(/(\d+)/, " $1");
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&street=${encodeURIComponent(
           formattedAddressInput
-        )}&city=${encodeURIComponent(cityInput)}&country=Argentina`
+        )}&city=${encodeURIComponent(userCity)}&country=Argentina`
       );
       const data = await response.json();
 
@@ -83,6 +76,12 @@ const Map = (props) => {
     }
   }, [userLocation]);
 
+  useEffect(() => {
+    if (userAddress || userCity) {
+      handleSearchAddress();
+    }
+  }, [userAddress, userCity]);
+
   const titleStyle = {
     fontSize: "2em",
     marginBottom: "16px",
@@ -115,36 +114,18 @@ const Map = (props) => {
 
   return (
     <div>
-      <h1 style={titleStyle}>Your location</h1>
-      <input
-        type="text"
-        placeholder="Enter your city"
-        value={cityInput}
-        onChange={handleCityInputChange}
-        className={inputStyle}
-      />
-      <input
-        type="text"
-        placeholder="Enter your address"
-        value={addressInput}
-        onChange={handleAddressInputChange}
-        className={inputStyle}
-      />
-      <button onClick={handleSearchAddress} className={buttonStyle}>
-        Search Address
-      </button>
       <div style={mapContainerStyle}>
         {userLocation ? (
           <div id="map" style={mapContainerStyle}></div>
         ) : (
           <div style={loadingMessageContainerStyle}>
             {" "}
-            <h1 style={loadingMessageStyle}>Waiting for address...</h1>
+            <h1 style={loadingMessageStyle}>Waiting for Location...</h1>
           </div>
         )}
       </div>
     </div>
   );
-}
+};
 
-export default Map
+export default Map;
