@@ -15,7 +15,10 @@
     This route returns data for a user ID.
 
 - GET /users
-    This route returns data for all users
+    This route returns data for all users. 
+
+- GET /users?role=admin
+    This admin-role route returns data for all users including soft-deleted users.
 
 **OWNERS**
 - POST /owner
@@ -30,7 +33,7 @@
 **WALKERS**
 - POST /walker
     This route will create a new walker, it will require a "userName" and walker properties (dog_capacity, dog_size, walk_duration)
-- GET /walker/all walker
+- GET /walker/all 
     This route will bring all the active walkers
 - GET /walker/available
     This route will bring all the available and active walkers

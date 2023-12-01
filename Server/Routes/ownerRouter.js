@@ -32,7 +32,7 @@ const upload = multer({ storage: storage });
 
 //owner routes
 ownerRouter.post("/", upload.single("image"), ownerHandlerPost);
-ownerRouter.get("/", ownerHandlerGetAll);
+ownerRouter.get("/all", ownerHandlerGetAll);
 ownerRouter.post("/dog", upload.single("image"), dogHandlerPost);
 ownerRouter.get("/dog/:username", dogHandlerGet);
 

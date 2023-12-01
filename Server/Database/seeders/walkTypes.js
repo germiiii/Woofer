@@ -1,4 +1,4 @@
-const walkTypes = [
+const walkTypeData = [
   {
     title: "15 minute Premium dog walk",
     price: 30,
@@ -92,4 +92,13 @@ const walkTypes = [
   },
 ];
 
-module.exports = walkTypes;
+const seedWalkTypes = async (WalkType) => {
+  try {
+    await WalkType.bulkCreate(walkTypeData);
+    console.log("- WalkTypes seeded successfully");
+  } catch (error) {
+    console.error("Error seeding WalkTypes:", error);
+  }
+};
+
+module.exports = seedWalkTypes;
