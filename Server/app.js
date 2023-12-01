@@ -145,10 +145,10 @@ const Walktypes = [
 
 const items = Walktypes.map(walkType => ({
   title: walkType.title,
-  description: walkType.description, // Keep description as a string, not an array
+  description: walkType.description, 
   quantity: 1,
   unit_price: walkType.price,
-  currency_id: walkType.currency_id, // Include currency_id for each item
+  currency_id: walkType.currency_id, 
 }));
 
 const preference = new Preference(client);
@@ -159,42 +159,5 @@ preference.create({
   }
 }).then(console.log).catch(console.log);
 
-
-// mercadopago.configure({
-//   access_token: "TEST-5466072518364478-111710-958d4575644352b88caad9750f6b548e-272949259",
-// });
-
-// server.get("/", function (req, res) {
-//   res.send("el servidor de mercado pago funciona! :)");
-// });
-
-// server.post("/create_preference", (req, res) => {
-//   let preference = {
-//     items: [
-//       {
-//         title: req.body.description,
-//         unit_price: Number(req.body.price),
-//         quantity: Number(req.body.quantity),
-//       },
-//     ],
-//     back_urls: {
-//       success: "http://localhost:3000",
-//       failure: "http://localhost:3000",
-//       pending: "",
-//     },
-//     auto_return: "approved",
-//   };
-
-//   mercadopago.preferences
-//     .create(preference)
-//     .then(function (response) {
-//       res.json({
-//         id: response.body.id,
-//       });
-//     })
-//     .catch(function (error) {
-//       console.log(error);
-//     });
-// });
 
 module.exports = server;
