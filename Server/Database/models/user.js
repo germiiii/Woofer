@@ -41,6 +41,14 @@ module.exports = (sequelize) => {
         allowNull: true,
         defaultValue: path.join(__dirname, '..', 'images', 'perfilSinFoto.jpg')
       },
+      resetPasswordToken: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      resetPasswordExpires: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
       location: {
         type: DataTypes.STRING,
         allowNull: true,
