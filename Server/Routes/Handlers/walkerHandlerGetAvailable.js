@@ -1,4 +1,4 @@
-const { getAvailableWalkers } = require('../Controllers/getWalkers');
+const { getAvailableWalkers } = require('../Controllers/walkerGetAvailable');
 
 const successHandler = (res, walkers) => {
   res.status(200).json({ walkers });
@@ -9,7 +9,7 @@ const failureHandler = (res, error) => {
   res.status(500).json({ error: 'Error al obtener walkers' });
 };
 
-const walkersHandlerGetAll = async (req, res) => {
+const walkerHandlerGetAvailable = async (req, res) => {
   try {
     const walkers = await getAvailableWalkers();
     successHandler(res, walkers);
@@ -19,5 +19,5 @@ const walkersHandlerGetAll = async (req, res) => {
 };
 
 module.exports = {
-  walkersHandlerGetAll,
+  walkerHandlerGetAvailable,
 };
