@@ -1,10 +1,9 @@
-
+"use client";
 import React from 'react';
 import NavBarHome from '../Components/NavBarHome'
-import UserDetail from '../Components/UserDetail'
 import PayPal from '../Components/PayPal'
 // import MercadoPago from '../Components/MercadoPago'
-
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 
 const CheckoutPage = () => {
   // return (
@@ -17,14 +16,8 @@ const CheckoutPage = () => {
   return (
     <div>
       <NavBarHome/>
-    <div>
-      <UserDetail/>
+     <PayPal/>
     </div>
-       <div>
-        <PayPal/>
-       </div>
-   
-  </div>
   )
 };
 
