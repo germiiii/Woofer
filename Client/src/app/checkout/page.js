@@ -1,15 +1,31 @@
-"use client";
+
 import React from 'react';
 import NavBarHome from '../Components/NavBarHome'
-import MercadoPago from '../Components/MercadoPago'
+import UserDetail from '../Components/UserDetail'
+import PayPal from '../Components/PayPal'
+// import MercadoPago from '../Components/MercadoPago'
+
 
 const CheckoutPage = () => {
+  // return (
+  //   <div>
+  //     <NavBarHome />
+  //     <MercadoPago />
+  //   </div>
+  // );
+
   return (
     <div>
-      <NavBarHome />
-      <MercadoPago />
+      <NavBarHome/>
+    <div>
+      <UserDetail/>
     </div>
-  );
+       <div>
+        <PayPal/>
+       </div>
+   
+  </div>
+  )
 };
 
 export default CheckoutPage;
