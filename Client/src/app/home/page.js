@@ -6,6 +6,7 @@ import OwnerForm from "../Components/OwnerForm.jsx";
 import Map from "../Components/Map.jsx";
 import SelectWalkers from "../Components/SelectWalkers.jsx";
 import SwitchType from "../Components/SwitchType.jsx";
+import provinces from "../register/provinces.js";
 
 const Home = () => {
   const [formCompleted, setFormCompleted] = useState(true);
@@ -89,13 +90,19 @@ const Home = () => {
             }}
           >
             <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-              <input
-                type="text"
-                placeholder="Enter your province"
-                value={provinceInput}
+              <select
+                name="province"
                 onChange={handleProvinceInputChange}
+                value={provinceInput}
                 className={inputStyle}
-              />
+              >
+                <option value="">Select your province</option>
+                {provinces.map((province) => (
+                  <option key={province} value={province}>
+                    {province}
+                  </option>
+                ))}
+              </select>
               <input
                 type="text"
                 placeholder="Enter your address"
