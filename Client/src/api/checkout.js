@@ -8,7 +8,7 @@ const environment = new paypal.core.SandboxEnvironment(clientId, clientSecret)
 const client = new paypal.core.PayPalHttpClient(environment)
 
 export async function POST() {
-    try {
+ 
         const request = new paypal.orders.OrdersCreateRequest()
 
         request.requestBody({
@@ -17,7 +17,7 @@ export async function POST() {
                 {
                     amount: {
                         currency_code: 'USD',
-                        value: '30.00'
+                        value: '30.00',
                     },
                     items: [
                         {
@@ -31,16 +31,12 @@ export async function POST() {
         })
 
         const response = await client.execute(request)
+        console.log(response)
 
-        if (response.statusCode === 201) {
-            const orderId = response.result.id
-            return NextResponse.json({ id: orderId })
-        } else {
-            console.error('Failed to create order:', response)
-            return NextResponse.error('Failed to create order')
-        }
-    } catch (error) {
-        console.error('Error creating order:', error)
-        return NextResponse.error('Error creating order')
-    }
+      return NextResponse.json({
+        id: response.result.id
+      })
+    
+
+   
 }
