@@ -6,9 +6,9 @@ const seedOwners = require("./seeders/owners");
 const seed = async (User, WalkType ) => {
   console.log(`Wait while seeding database...`);
   await userSeeder(User);
-  await seedWalkTypes(WalkType);
   await seedWalkers(User);
   await seedOwners(User);
+  await seedWalkTypes(WalkType);
 };
 
 module.exports = seed;

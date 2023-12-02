@@ -97,9 +97,23 @@ Walk.belongsTo(Owner);
 Walker.hasMany(Walk);
 Walk.belongsTo(Walker);
 
+try {
+  //  agrego un admin por defecto
+  User.create({
+    name: "ADMIN",
+    lastName: "",
+    email: "admin@admin.com",
+    password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
+    username: "admin",
+    address: "",
+    province: "",
+    role: "admin",
+  });
+  console.log("ADMIN user successfully created");
+} catch (error) {}
 
 // Call the seed function
-seed(User, WalkType )
+seed(User, WalkType)
   .then(() => {
     console.log("Seeding completed successfully");
   })
