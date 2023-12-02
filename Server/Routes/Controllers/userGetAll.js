@@ -1,42 +1,36 @@
 const { User, Walker, Owner, Dog } = require("../../Database/db");
 
-const userGetAll = async () => {
+const userGetAll = async (role) => {
   // Fetch all users from the database
+
+  let whereCondition = { is_active: true };
+
+  if (role && role === "admin") {
+    whereCondition = {}; //admin has access to all users
+  }
+
   const users = await User.findAll({
-    where: { is_active: true },
-    attributes: [
-      "id",
-      "name",
-      "email",
-      "lastName",
-      "username",
-      "address",
-      "image",
-      "isWalker",
-      "isOwner",
-    ],
+    where: whereCondition,
     include: [
       {
         model: Owner,
-        where: { is_active: true },
-        attributes: ["dog_count"],
+        where: whereCondition,
         include: [
           {
             model: Dog,
-            attributes: ["id", "name", "breed", "size", "age", "img"],
-            where: { is_active: true },
+            attributes: ["id", "name", "breed", "size", "age", "img"]           
           },
         ],
         required: false, // Make Owner optional
       },
       {
         model: Walker,
-        where: { is_active: true },
-        attributes: ["dog_capacity", "is_available"],
+        where: whereCondition,
         required: false, // Make Walker optional
       },
     ],
   });
+
   return users;
 };
 

@@ -3,6 +3,7 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
+const seed = require("./seed.js");
 
 ////postgres://fl0user:KdQaqVxu9h1N@ep-polished-haze-56223027.us-east-2.aws.neon.fl0.io:5432/pokemon?sslmode=require
 // const sequelize = new Sequelize(
@@ -70,7 +71,7 @@ sequelize.models = Object.fromEntries(capsEntries);
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
 
-const { User, Owner, Dog, Walker, Walk } = sequelize.models;
+const { User, Owner, Dog, Walker, Walk, WalkType } = sequelize.models;
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
@@ -84,17 +85,27 @@ Walker.belongsTo(User);
 Owner.hasMany(Dog);
 Dog.belongsTo(Owner);
 
-Owner.belongsToMany(Walker, {through: Walk});
-Walker.belongsToMany(Owner, {through: Walk});
+Owner.belongsToMany(Walker, { through: { model: Walk, unique: false } });
+Walker.belongsToMany(Owner, { through: { model: Walk, unique: false } });
 
-Dog.belongsToMany(Walk, { through: 'DogWalk' });
-Walk.belongsToMany(Dog, { through: 'DogWalk' });
+Dog.belongsToMany(Walk, { through: "dogWalk" });
+Walk.belongsToMany(Dog, { through: "dogWalk" });
 
 Owner.hasMany(Walk);
 Walk.belongsTo(Owner);
 
 Walker.hasMany(Walk);
 Walk.belongsTo(Walker);
+
+
+// Call the seed function
+seed(User, WalkType )
+  .then(() => {
+    console.log("Seeding completed successfully");
+  })
+  .catch((error) => {
+    console.error("Seeding failed:", error);
+  });
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

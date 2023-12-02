@@ -14,8 +14,16 @@ const userRegister = async (req, res) => {
   console.log("Entrando en userRegister");
   console.log(User);
 
-  const { name, lastName, email, password, username, address, isWalker } =
-    req.body;
+  const {
+    name,
+    lastName,
+    email,
+    password,
+    username,
+    address,
+    city,
+    province
+  } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   // upload image
@@ -29,7 +37,8 @@ const userRegister = async (req, res) => {
       password: hashedPassword,
       username,
       address,
-      isWalker,
+      city,
+      province
     });
     return newUser;
   } else {
@@ -42,7 +51,8 @@ const userRegister = async (req, res) => {
       password: hashedPassword,
       username,
       address,
-      isWalker,
+      city,
+      province
     });
     return newUser;
   }
