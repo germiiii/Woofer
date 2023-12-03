@@ -15,7 +15,7 @@ const Map = (props) => {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&street=${encodeURIComponent(
           formattedAddressInput
-        )}&city=${encodeURIComponent(userProvince)}&country=Argentina`
+        )}&state=${encodeURIComponent(userProvince)}&country=Argentina`
       );
       const data = await response.json();
 
