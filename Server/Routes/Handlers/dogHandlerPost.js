@@ -3,9 +3,9 @@ const { dogPost } = require("../controllers");
 const dogHandlerPost = async (req, res) => {
   try {
     const file = req.file;
-    const { username, name, size, age, breed } = req.body;
+    const { id, name, size, age, breed } = req.body;
     const data = {
-      username,
+      id,
       name,
       size,
       age,
