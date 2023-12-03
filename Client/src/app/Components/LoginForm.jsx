@@ -32,7 +32,7 @@ const LoginForm = () => {
 
       const email = user.email;
 
-      const response = await axios.post("http://localhost:3001/googleLogin", {
+      const response = await axios.post('https://woofer-server-nsjo.onrender.com/googleLogin', {
         email,
       });
 
@@ -52,7 +52,7 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3001/login", {
+      const response = await axios.post('https://woofer-server-nsjo.onrender.com/login', {
         email,
         password,
       });
