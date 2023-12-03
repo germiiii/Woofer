@@ -11,11 +11,11 @@ cloudinary.config({
 const { uploadImage } = require("../../Routes/utils/uploadImage");
 
 const dogPost = async (data, file) => {
-  const { username, name, size, age, breed } = data;
+  const { id, name, size, age, breed } = data;
 
   // validations
-  if (!username) {
-    throw new Error("Username is required");
+  if (!id) {
+    throw new Error("User id is required");
   }
   if (!name || !size || !age || !breed) {
     throw new Error("Dogs are required");
@@ -23,7 +23,7 @@ const dogPost = async (data, file) => {
 
   // find the user
   const user = await User.findOne({
-    where: { username, is_active: true },
+    where: { id, is_active: true },
   });
   if (!user) {
     throw new Error("User not found");
