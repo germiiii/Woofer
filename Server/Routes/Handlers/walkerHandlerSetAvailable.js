@@ -1,4 +1,4 @@
-const { walkerSetAvailable } = require("../controllers");
+const { walkerSetAvailable } = require("../Controllers");
 
 const walkerHandlerSetAvailable = async (req, res) => {
   try {
