@@ -9,6 +9,7 @@ import { auth } from "../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useUser } from "../UserContext";
+import provinces from "../../app/register/provinces";
 
 const RegisterForm = () => {
   const googleAuth = new GoogleAuthProvider();
@@ -25,9 +26,11 @@ const RegisterForm = () => {
     email: "",
     password: "",
     isWalker: false,
-    image: null,
+    image: "",
+    province: "",
   });
   const [formSent, setFormSent] = useState(false);
+  const [image, setImage] = useState("");
 
   const loginGoogle = async (e) => {
     e.preventDefault();
@@ -47,37 +50,36 @@ const RegisterForm = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     if (type === "file") {
-      const imageFile = e.target.files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUserData((prevUserData) => ({
-          ...prevUserData,
-          [name]: reader.result,
-        }));
-      };
-      reader.readAsDataURL(imageFile);
+      setImage(e.target.files[0]);
     } else {
-      setUserData((prevUserData) => ({
-        ...prevUserData,
-        [name]: value,
-      }));
+      setUserData((prevUserData) => {
+        const updatedUserData = { ...prevUserData, [name]: value };
+        return updatedUserData;
+      });
     }
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
+    const userFormData = new FormData();
+    userFormData.append("name", userData.name);
+    userFormData.append("lastName", userData.lastName);
+    userFormData.append("address", userData.address);
+    userFormData.append("username", userData.username);
+    userFormData.append("email", userData.email);
+    userFormData.append("password", userData.password);
+    userFormData.append("isWalker", userData.isWalker);
+    userFormData.append("image", image);
+    userFormData.append("province", userData.province);
+
     try {
       const response = await axios.post(
-        "https://woofer-server-nsjo.onrender.com/register",
-        userData
+        "http://localhost:3001/register",
+        userFormData
       );
       setFormSent(true);
     } catch (e) {
@@ -127,6 +129,28 @@ const RegisterForm = () => {
             </label>
             <br />
             <label className="block mb-2">
+              Your last name
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Enter your last name..."
+                onChange={handleChange}
+                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
+              />
+            </label>
+            <br />
+            <label className="block mb-2">
+              Your username
+              <input
+                type="text"
+                name="username"
+                placeholder="Enter your username..."
+                onChange={handleChange}
+                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
+              />
+            </label>
+            <br />
+            <label className="block mb-2">
               Your email
               <input
                 type="email"
@@ -135,6 +159,23 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
               />
+            </label>
+            <br />
+            <label className="block mb-2">
+              Your province
+              <select
+                name="province"
+                onChange={handleChange}
+                value={userData.province}
+                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
+              >
+                <option value="">Select your province</option>
+                {provinces.map((province) => (
+                  <option key={province} value={province}>
+                    {province}
+                  </option>
+                ))}
+              </select>
             </label>
             <br />
             <label className="block mb-2">
@@ -161,12 +202,6 @@ const RegisterForm = () => {
             <br />
             <label className="block mb-2">
               Profile Picture
-              <Image
-                src={userData.image ? userData.image : "/Profile.jpeg"}
-                alt=""
-                height="100px"
-                width="100px"
-              />
               <input
                 type="file"
                 name="image"
@@ -208,6 +243,8 @@ const RegisterForm = () => {
                 <Image
                   src={"/google.png"}
                   alt="Google Logo"
+                  width={50}
+                  height={50}
                   className="w-6 h-6 mr-2"
                 />
                 <span>Sign Up with Google</span>
@@ -218,6 +255,6 @@ const RegisterForm = () => {
       </div>
     </div>
   );
-}
+};
 
-export default RegisterForm
+export default RegisterForm;

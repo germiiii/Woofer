@@ -1,4 +1,4 @@
-
+import styles from '../Styles/Loader.module.css'
 
 const Loader = ({ size = 25 }) => {
   return (

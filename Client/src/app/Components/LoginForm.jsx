@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Change "next/navigation" to "next/router"
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import axios from "axios";
 import Image from "next/image";
@@ -29,16 +29,19 @@ const LoginForm = () => {
     try {
       const result = await signInWithPopup(auth, googleAuth);
       const { user } = result;
-      console.log(user);
 
       const email = user.email;
-      console.log(email)
-  
-      const response = await axios.post('https://woofer-server-nsjo.onrender.com/googleLogin', { email });
-  
+
+      const response = await axios.post("http://localhost:3001/googleLogin", {
+        email,
+      });
+
+      const { token } = response.data;
+
       if (response.status === 201) {
         router.push("/home");
       } else {
+        console.error("Authentication failed");
         console.error("Authentication failed");
       }
     } catch (error) {
@@ -49,13 +52,12 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://woofer-server-nsjo.onrender.com/login', {
+      const response = await axios.post("http://localhost:3001/login", {
         email,
         password,
       });
 
       const { token } = response.data;
-      console.log(token);
 
       if (token) {
         // Login successful
@@ -117,14 +119,27 @@ const LoginForm = () => {
         </label>
         <br />
         <div>
-          <button className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5" type="submit">
+          <button
+            className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5"
+            type="submit"
+          >
             Sign In
           </button>
         </div>
 
         <div>
-          <button onClick={loginGoogle} className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400" type="button">
-            <Image src={"/google.png"} alt="Google Logo" className="w-6 h-6 mr-2" />
+          <button
+            onClick={loginGoogle}
+            className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400"
+            type="button"
+          >
+            <Image
+              src={"/google.png"}
+              alt="Google Logo"
+              width={50}
+              height={50}
+              className="w-6 h-6 mr-2"
+            />
             <span>Login with Google</span>
           </button>
         </div>
@@ -132,15 +147,22 @@ const LoginForm = () => {
 
       <div className="mt-4">
         <p className="text-sm">
-        &quot; Dont have an account yet? Register &quot; <a href="/register" className="text-blue-500">here.</a>
+          &quot; Dont have an account yet? Register &quot;{" "}
+          <a href="/register" className="text-blue-500">
+            here.
+          </a>
         </p>
       </div>
       <div className="mt-2">
-        <p className="text-sm">&ldquo;Dont remember your password? Recover your password &ldquo;<a href="/forget-password" className="text-blue-500">here.</a>
+        <p className="text-sm">
+          &ldquo;Dont remember your password? Recover your password &ldquo;
+          <a href="/forget-password" className="text-blue-500">
+            here.
+          </a>
         </p>
       </div>
     </div>
   );
-}
+};
 
-export default LoginForm
+export default LoginForm;

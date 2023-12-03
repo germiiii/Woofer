@@ -8,36 +8,22 @@ cloudinary.config({
   api_secret: CLOUDINARY_API_SECRET,
   secure: true,
 });
+const { uploadImage } = require("../../Routes/utils/uploadImage");
 
-// upload image function
-const uploadImage = async imagePath => {
-  const options = {
-    use_filename: true,
-    unique_filename: false,
-    overwrite: true,
-  };
+const dogPost = async (data, file) => {
+  const { id, name, size, age, breed } = data;
 
-  try {
-    const result = await cloudinary.uploader.upload(imagePath, options);
-    // console.log(result);
-    return result.secure_url;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const dogPost = async (username, dogs) => {
   // validations
-  if (!username) {
-    throw new Error("Username is required");
+  if (!id) {
+    throw new Error("User id is required");
   }
-  if (!dogs) {
+  if (!name || !size || !age || !breed) {
     throw new Error("Dogs are required");
   }
 
   // find the user
   const user = await User.findOne({
-    where: { username, is_active: true },
+    where: { id, is_active: true },
   });
   if (!user) {
     throw new Error("User not found");
@@ -52,35 +38,29 @@ const dogPost = async (username, dogs) => {
   }
 
   // upload image
-  for (const dog of dogs) {
-    if (dog.img) {
-      const result = await uploadImage(dog.img);
-      dog.img = result;
-    }
+  if (file) {
+    await uploadImage(file.path);
   }
 
-  // create the dog
-  const createdDogs = await Dog.bulkCreate(dogs);
+  // create
+  const createdDog = await Dog.create({
+    name,
+    breed,
+    size,
+    age,
+    img: file.path,
+  });
 
   // asociate the dogs with the owner
-  await owner.addDogs(createdDogs);
+  await owner.addDogs(createdDog);
 
   // update dog count
-  await owner.update({ dog_count: createdDogs.length + owner.dog_count });
+  await owner.update({ dog_count: owner.dog_count + 1 });
 
   // data to return
   const userData = await User.findOne({
     where: { username: username, is_active: true },
-    attributes: [
-      "id",
-      "name",
-      "email",
-      "lastName",
-      "username",
-      "address",
-      "isWalker",
-      "isOwner",
-    ],
+
     include: [
       {
         model: Owner,

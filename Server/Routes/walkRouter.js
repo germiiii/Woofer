@@ -1,11 +1,17 @@
 const { Router } = require("express");
 const {
-  walkHandlerPost
+  walkHandlerPost,
+  walkHandlerGeAll,
+  walkHandlerGetByWalker,
+  walkHandlerGetByOwner
 } = require("./Handlers");
 
 const walkRouter = Router();
 
-//owner routes
+//walk routes
 walkRouter.post("/", walkHandlerPost);
+walkRouter.get("/walker/:walkerId", walkHandlerGetByWalker);
+walkRouter.get("/walker/:ownerId", walkHandlerGetByOwner);
+walkRouter.get("/all", walkHandlerGeAll);
 
 module.exports = walkRouter;

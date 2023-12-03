@@ -3,7 +3,7 @@ import "tailwindcss/tailwind.css";
 import Image from "next/image";
 
 async function generateStaticParams() {
-  const res = await fetch('https://woofer-server-nsjo.onrender.com/users')
+  const res = await fetch('http://localhost:3001/users')
   const data = await res.json()
 
   return data.users.map((u) => ({
@@ -14,7 +14,7 @@ async function generateStaticParams() {
 }
 
 async function getUser(id) {
-  const res = await fetch (`https://woofer-server-nsjo.onrender.com/users/${id}`)
+  const res = await fetch (`http://localhost:3001/users/${id}`)
   const data = await res.json()
   return data;
 }

@@ -6,7 +6,7 @@ export const fetchUserDetails = createAsyncThunk(
     'userDetail/fetchUserDetails', //action type or prfix
     async (userId) => { //async function
       try {
-        const response = await fetch(`https://woofer-server-nsjo.onrender.com/users/${userId}`); // Usar el userId en la URL
+        const response = await fetch(`http://localhost:3001/users/${userId}`); // Usar el userId en la URL
         if (!response.ok) {
           throw new Error('Network response was not ok.');
         }

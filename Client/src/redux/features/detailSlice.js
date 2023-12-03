@@ -4,7 +4,7 @@ export const fetchUserDetails = createAsyncThunk(
     "fetUserDetails",
     async (userId) => {
         try {
-          const userData = await axios(`https://woofer-server-nsjo.onrender.com/user/${userId}`);
+          const userData = await axios(`http://localhost:3001/users/${userId}`);
           return userData;
         } catch (error) {
           throw new EvalError("Error fetcing user details: "+ error.message);      

@@ -15,14 +15,27 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: 1,
       },
-      // schedule_availability: {
-      //   type: DataTypes.STRING,
-      //   allowNull: true,
-      // },        
+      walk_duration: {
+        type: DataTypes.ARRAY(DataTypes.ENUM("15", "30", "60", "90")),
+        allowNull: true,
+      },
+      dog_size: {
+        type: DataTypes.ARRAY(DataTypes.ENUM("small", "medium", "large")),
+        allowNull: true,
+      },
+      dog_capacity_actual: { 
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
       is_available: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+      },
+      schedule_availability: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       is_active: {
         type: DataTypes.BOOLEAN,

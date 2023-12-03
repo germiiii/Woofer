@@ -1,19 +1,25 @@
 const { userLogin } = require("./userLogin");
 // const { userRegister } = require("./userRegister");
-const { ownerPost } = require("./ownerPost");
-const { dogPost } = require("./dogPost");
-const { walkerPost } = require("./walkerPost");
-const { userGetbyId } = require("./userGetbyId");
-const { getDogs } = require("./getDogs");
-const { ownerGetAll } = require("./ownerGetAll");
-const { walkPost } = require("./walkPost");
 const { userActivate } = require("./userActivate");
 const { userDeActivate } = require("./userDeActivate");
 const { walkerActivate } = require("./walkerActivate");
 const { walkerDeActivate } = require("./walkerDeActivate");
 const { ownerActivate } = require("./ownerActivate");
 const { ownerDeActivate } = require("./ownerDeActivate");
-
+const { userGetbyId } = require("./userGetbyId");
+const { ownerPost } = require("./ownerPost");
+const { dogPost } = require("./dogPost");
+const { getDogs } = require("./getDogs");
+const { ownerGetAll } = require("./ownerGetAll");
+const { ownerGetById } = require("./ownerGetById");
+const { walkerSetAvailable } = require("./walkerSetAvailable");
+const { walkerPost } = require("./walkerPost");
+const { walkerGetById } = require("./walkerGetById");
+const { walkerGetAll } = require("./walkerGetAll");
+const { walkPost } = require("./walkPost");
+const { walkGetByWalker } = require("./walkGetByWalker");
+const { walkGetByOwner } = require("./walkGetByOwner");
+const { walkGetAll } = require("./walkGetAll");
 
 module.exports = {
   userLogin,
@@ -30,5 +36,12 @@ module.exports = {
   dogPost,
   getDogs,
   ownerGetAll,
+  ownerGetById,
+  walkerSetAvailable,
+  walkerGetAll,
+  walkerGetById,
   walkPost,
+  walkGetAll,
+  walkGetByWalker,
+  walkGetByOwner,
 };

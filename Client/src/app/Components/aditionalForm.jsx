@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useUser } from "../UserContext";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import provinces from "../../app/register/provinces";
 
 const AditionalForm = () => {
   const router = useRouter();
@@ -19,6 +20,7 @@ const AditionalForm = () => {
     password: "",
     isWalker: false,
     image: "",
+    province: "",
   });
 
   useEffect(() => {
@@ -31,12 +33,12 @@ const AditionalForm = () => {
       password: "",
       isWalker: false,
       image: "",
+      province: "",
     });
   }, [userData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(formData);
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -46,11 +48,9 @@ const AditionalForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Datos del formulario:", formData);
-
     try {
       const response = await axios.post(
-        "https://woofer-server-nsjo.onrender.com/register",
+        "http://localhost:3001/register",
         formData
       );
 
@@ -114,6 +114,23 @@ const AditionalForm = () => {
             disabled
             className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
           />
+        </label>
+        <br />
+        <label className="block mb-2">
+          Your province
+          <select
+            name="province"
+            onChange={handleChange}
+            value={formData.province}
+            className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
+          >
+            <option value="">Select your province</option>
+            {provinces.map((province) => (
+              <option key={province} value={province}>
+                {province}
+              </option>
+            ))}
+          </select>
         </label>
         <label className="block mb-2">
           Address:
