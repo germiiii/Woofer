@@ -19,6 +19,7 @@ const AditionalForm = () => {
     password: "",
     isWalker: false,
     image: "",
+    province: "",
   });
 
   useEffect(() => {
@@ -31,6 +32,7 @@ const AditionalForm = () => {
       password: "",
       isWalker: false,
       image: "",
+      province: "",
     });
   }, [userData]);
 
@@ -112,6 +114,16 @@ const AditionalForm = () => {
             value={formData.email}
             onChange={handleChange}
             disabled
+            className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
+          />
+        </label>
+        <br />
+        <label className="block mb-2">
+          Province:
+          <input
+            type="text"
+            name="province"
+            onChange={handleChange}
             className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
           />
         </label>
