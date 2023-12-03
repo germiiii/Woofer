@@ -2,8 +2,8 @@
 import paypal from '@paypal/checkout-server-sdk';
 import fetch from 'node-fetch';
 
-const clientId = 'YOUR_CLIENT_ID';
-const clientSecret = 'YOUR_CLIENT_SECRET';
+const clientId = process.env.PAYPAL_CLIENT_ID;
+const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
 const tokenUrl = 'https://api-m.sandbox.paypal.com/v1/oauth2/token';
 
 export default async function CheckoutHandler(req, res) {
