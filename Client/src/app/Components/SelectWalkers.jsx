@@ -20,7 +20,7 @@ const SelectWalkers = (props) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3001/walker/available"
+          "https://woofer-server-nsjo.onrender.com/walker/available"
         );
         setWalkers(response.data.walkers);
       } catch (error) {
