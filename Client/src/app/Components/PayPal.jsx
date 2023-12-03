@@ -50,23 +50,21 @@ const PayPal = () => {
   
 
   return (
-    <div className="flex justify-center items-center h-screen">
-    <div className="bg-white p-8 rounded-lg shadow-md flex flex-col lg:flex-row lg:justify-between lg:max-w-3xl">
-      <div className="lg:w-1/2">
-        <h1 className="text-3xl font-bold mb-4">15 minute Premium Woofer Walk</h1>
-        <h3 className="text-lg mb-4">
-          Woofers will devote their full attention to walk your furry companion privately for 15 minutes.
-        </h3>
-        <h3 className="text-lg">Price: USD 30</h3>
-      </div>
-      <div className="lg:w-1/2 mt-8 lg:mt-0 flex justify-center">
+    <div className="flex justify-center items-center h-screen " >
+   
         <PayPalScriptProvider
         options={{
           clientId: 'AahLJYwOxpB8rxP5MCqopNDEgLYJFoaNOxwA0BmVEEzeJCj9yYml78eYMLTpAjVAjYS4svveNkYIXGeF'
         }}
         >
-          <PayPalButtons
-              style={{ layout: "vertical", color: "gold" }}
+          <PayPalButtons className='paypal-button-container'
+              style={{ 
+                layout: "vertical", 
+                color: "gold", 
+                label: "pay",
+                shape: "pill",
+               
+               }}
               
               createOrder={async (data, actions) => {
                 try {
@@ -114,8 +112,7 @@ const PayPal = () => {
 
         </PayPalScriptProvider>
       </div>
-    </div>
-  </div>  
+
   )  
 };
 
