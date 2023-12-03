@@ -10,6 +10,7 @@ const userGetAll = async (role) => {
   }
 
   const users = await User.findAll({
+    attributes: { exclude: ['password'] },
     where: whereCondition,
     include: [
       {

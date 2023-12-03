@@ -1,8 +1,9 @@
-const { User, Walker } = require("../../Database/db");
+const { User, Walker, WalkType } = require("../../Database/db");
 
 const getAvailableWalkers = async () => {
   try {
     const availableWalkers = await User.findAll({
+      attributes: { exclude: ["password"] },
       where: { is_active: true },
 
       include: [
@@ -14,6 +15,11 @@ const getAvailableWalkers = async () => {
             "dog_size",
             "walk_duration",
             "is_available",
+          ],
+          include: [
+            {
+              model: WalkType,
+            },
           ],
         },
       ],

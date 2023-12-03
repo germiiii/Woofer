@@ -78,21 +78,57 @@ const walkerData = [
   },
 ];
 
-const seedWalkers = async (User) => {
+const seedWalkers = async (User, WalkType) => {
   try {
     for (const walker of walkerData) {
       const { username, ...walkerAttributes } = walker;
       const user = await User.findOne({ where: { username } });
+
       if (user) {
-        await user.createWalker(walkerAttributes);
-        user.isWalker = true; // Set the isWalker property to true
-        await user.save(); // Save the updated user
-        // console.log(`Walker created for user with username ${username}`);
+        const createdWalker = await user.createWalker(walkerAttributes);
+        await user.update({ isWalker: true });
+
+        for (const duration of walkerAttributes.walk_duration) {
+          const walkType = await WalkType.findAll({
+            where: { walk_duration: duration },
+          });
+          await createdWalker.addWalkType(walkType);
+        }
+
+        let capacityType = "";
+        if (
+          walkerAttributes.dog_capacity > 0 &&
+          walkerAttributes.dog_capacity <= 3
+        ) {
+          capacityType = "low";
+        } else if (
+          walkerAttributes.dog_capacity > 3 &&
+          walkerAttributes.dog_capacity <= 6
+        ) {
+          capacityType = "medium";
+        } else if (walkerAttributes.dog_capacity > 6) {
+          capacityType = "high";
+        }
+
+        const capacityWalkType = await WalkType.findAll({
+          where: { dog_capacity: capacityType },
+        });
+
+        if (createdWalker.WalkTypes) {
+          // Add null check for WalkTypes property
+          const newWalkTypes = capacityWalkType.filter(
+            (type) => !createdWalker.WalkTypes.includes(type)
+          );
+          await createdWalker.addWalkType(newWalkTypes);
+        } else {
+          await createdWalker.setWalkTypes(capacityWalkType); // If WalkTypes property is undefined, set it with capacityWalkType
+        }
       } else {
         console.error(`User with username ${username} not found`);
       }
     }
-    console.log(`- Walkers seeded successfully`);
+
+    console.log("- Walkers seeded successfully");
   } catch (error) {
     console.error("Error seeding walkers:", error);
   }

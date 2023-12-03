@@ -41,19 +41,19 @@ export default function DataGridDemo() {
     {
       field: "name",
       headerName: "Name",
-      width: 150,
+      width: 130,
       editable: true,
     },
     {
       field: "lastName",
       headerName: "Last Name",
-      width: 150,
+      width: 130,
       editable: true,
     },
     {
       field: "isOwner",
       headerName: "Is Owner",
-      width: 110,
+      width: 90,
       editable: true,
     },
     {
@@ -61,9 +61,15 @@ export default function DataGridDemo() {
       headerName: "Is Walker",
       description: "This column has a value getter and is not sortable.",
       sortable: false,
-      width: 110,
+      width: 90,
     },
-
+    {
+      field: "province",
+      headerName: "Province",
+      description: "This column has a value getter and is not sortable.",
+      sortable: true,
+      width: 160,
+    },
     {
       field: "address",
       headerName: "Address",
@@ -83,7 +89,7 @@ export default function DataGridDemo() {
       headerName: "Active",
       description: "This column has a value getter and is not sortable.",
       sortable: true,
-      width: 100,
+      width: 80,
     },
     {
       field: "action",
@@ -112,6 +118,7 @@ export default function DataGridDemo() {
         "http://localhost:3001/users?role=admin"
       );
       setUsers(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }

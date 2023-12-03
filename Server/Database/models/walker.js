@@ -23,6 +23,11 @@ module.exports = (sequelize) => {
         type: DataTypes.ARRAY(DataTypes.ENUM("small", "medium", "large")),
         allowNull: true,
       },
+      dog_capacity_actual: { 
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
       is_available: {
         type: DataTypes.BOOLEAN,
         allowNull: false,

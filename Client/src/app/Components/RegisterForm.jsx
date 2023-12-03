@@ -9,6 +9,7 @@ import { auth } from "../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useUser } from "../UserContext";
+import provinces from "../../app/register/provinces";
 
 const RegisterForm = () => {
   const googleAuth = new GoogleAuthProvider();
@@ -26,6 +27,7 @@ const RegisterForm = () => {
     password: "",
     isWalker: false,
     image: "",
+    province: "",
   });
   const [formSent, setFormSent] = useState(false);
   const [image, setImage] = useState("");
@@ -72,6 +74,7 @@ const RegisterForm = () => {
     userFormData.append("password", userData.password);
     userFormData.append("isWalker", userData.isWalker);
     userFormData.append("image", image);
+    userFormData.append("province", userData.province);
 
     try {
       const response = await axios.post(
@@ -156,6 +159,23 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
               />
+            </label>
+            <br />
+            <label className="block mb-2">
+              Your province
+              <select
+                name="province"
+                onChange={handleChange}
+                value={userData.province}
+                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
+              >
+                <option value="">Select your province</option>
+                {provinces.map((province) => (
+                  <option key={province} value={province}>
+                    {province}
+                  </option>
+                ))}
+              </select>
             </label>
             <br />
             <label className="block mb-2">
