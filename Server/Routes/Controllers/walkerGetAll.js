@@ -1,16 +1,12 @@
-const { User, Walker } = require("../../Database/db");
+const { User, Walker, WalkType } = require("../../Database/db");
 
-const walkerGetAll = async (province, is_available, walkTypes) => {
+const walkerGetAll = async (province, is_available ) => {
   const whereUser = { is_active: true, isWalker: true };
   const whereWalker = { is_active: true };
   if (is_available) {
     whereWalker["is_available"] = is_available;
   }
-  // if (walkTypes) {
-  //   whereWalker: {
-  //     walkTypes;
-  //   }
-  // }
+
   if (province) {
     whereUser[["province"]] = province;
   }
@@ -26,6 +22,11 @@ const walkerGetAll = async (province, is_available, walkTypes) => {
           "dog_size",
           "walk_duration",
           "is_available",
+        ],
+        include: [
+          {
+            model: WalkType,
+          },
         ],
       },
     ],

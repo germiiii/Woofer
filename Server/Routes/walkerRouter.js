@@ -12,9 +12,9 @@ const walkerRouter = Router();
 
 //walker routes
 walkerRouter.post("/", walkerHandlerPost);
-walkerRouter.get("/:id", walkerHandlerGetById);
 walkerRouter.get("/", walkerHandlerGetAll);
 walkerRouter.get("/available", walkerHandlerGetAvailable);
+walkerRouter.get("/:id", walkerHandlerGetById);
 walkerRouter.put("/:id", walkerHandlerSetAvailable);
 
 module.exports = walkerRouter;

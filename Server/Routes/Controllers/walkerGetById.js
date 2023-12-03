@@ -1,4 +1,4 @@
-const { User, Walker } = require("../../Database/db");
+const { User, Walker, WalkType } = require("../../Database/db");
 
 const walkerGetById = async (id) => {
   const walker = await User.findByPk(id, {
@@ -13,6 +13,11 @@ const walkerGetById = async (id) => {
           "dog_size",
           "walk_duration",
           "is_available",
+        ],
+        include: [
+          {
+            model: WalkType,
+          },
         ],
       },
     ],

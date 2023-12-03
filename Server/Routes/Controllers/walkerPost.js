@@ -1,11 +1,12 @@
-const { User, Walker } = require("../../Database/db");
+const { User, Walker, WalkType } = require("../../Database/db");
 
 const walkerPost = async (
   username,
   dog_capacity,
   dog_size,
   walk_duration,
-  is_available
+  is_available,
+  walkTypes
 ) => {
   const user = await User.findOne({ where: { username, is_active: true } });
   if (!user) {
@@ -19,6 +20,10 @@ const walkerPost = async (
     is_available,
   });
 
+  if (walkTypes) {//chequear que los tipos existan
+    await newWalker.setWalkTypes(walkTypes);
+  }
+
   await user.setWalker(newWalker);
 
   await User.update(
@@ -27,7 +32,7 @@ const walkerPost = async (
   );
 
   const userData = await User.findOne({
-    attributes: { exclude: ['password'] },
+    attributes: { exclude: ["password"] },
     where: { username },
     include: [
       {
@@ -37,6 +42,11 @@ const walkerPost = async (
           "dog_size",
           "walk_duration",
           "is_available",
+        ],
+        include: [
+          {
+            model: WalkType,
+          },
         ],
       },
     ],
