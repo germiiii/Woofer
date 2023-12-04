@@ -57,6 +57,23 @@
 - PUT /walker/:id
   This route will set the walker "id" to be available or not, requiring a body with the value "is_available" set to true or false as needed.
 
+
+**WALK TYPES**
+- GET /walkType
+  This route will bring all walk types.
+
+- GET /walkType/:id
+  This route will bring all the data of the walk type "id".
+
+- POST /walkType
+  This route will create a new walk type, it will require a body with the characteristics of the walk type.
+
+- PUT /walkType/:id
+  This route will update a walk type.
+
+- DELETE /walkType/:id
+  This route will delete a walk type.
+
 **ACTIVATE (Soft DELETE)**
 //users
 
@@ -79,19 +96,7 @@
 - PUT /activate/walker/:id
   This route will activate the walker.
 
-**WALK TYPES**
-- GET /walkType
-  This route will bring all walk types.
-
-- POST /walkType
-  This route will create a new walk type, it will require a body with the characteristics of the walk type.
-
-- PUT /walkType/:id
-  This route will update a walk type.
-
-- DELETE /walkType/:id
-  This route will delete a walk type.
-
+  
 ## **⚠️ IMPORTANTE**
 
 npm install express dotenv axios jsonwebtoken bcrypt sequelize pg passport passport-jwt
