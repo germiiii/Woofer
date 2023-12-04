@@ -35,7 +35,7 @@ const userRouter = Router();
 userRouter.post("/login", validateUserLogin, userHandlerLogin);
 userRouter.post("/register", upload.single("image"), userHandlerRegister);
 userRouter.post('/googleLogin', googleLogin)
-userRouter.post('/activateAccount', activateAccount);
+userRouter.post('/activateAccount/:verificationToken', activateAccount);
 
 userRouter.post('/changePassword', userHandlerChangePassword)
 userRouter.get("/users/:id", userGetByIdHandler);

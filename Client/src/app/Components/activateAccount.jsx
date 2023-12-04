@@ -1,18 +1,47 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-const ActivationConfirmation = () => {
+const ActivateAccount = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    const pathArray = window.location.pathname.split('/');
+    const token = pathArray[pathArray.length - 1];
+
+    if (token) {
+      activateAccount(token);
+    }
+  }, []);
+
+  const activateAccount = async (token) => {
+    try {
+      const response = await fetch(`http://localhost:3001/activateAccount/${token}`, {
+        method: 'POST',
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      } else {
+        console.error('Error al activar la cuenta:', response.status);
+      }
+    } catch (error) {
+      console.error('Error al activar la cuenta:', error);
+    }
+  };
+
+  const redirectToLogin = () => {
+    router.push('/login');
+  };
+
   return (
     <div>
-      <h2>Felicidades, has activado tu cuenta</h2>
-      <p>Por favor, inicia sesión para comenzar</p>
-      <Link href="/login">
-        <button>Iniciar Sesión</button>
-      </Link>
+      <p>Activando cuenta...</p>
+      <button onClick={redirectToLogin}>Ir a Iniciar Sesión</button>
     </div>
   );
 };
 
-export default ActivationConfirmation;
+export default ActivateAccount;
