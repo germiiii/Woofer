@@ -115,7 +115,7 @@ export default function DataGridDemo() {
   const fetchAllUsers = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3001/users?role=admin"
+        "https://woofer-server-nsjo.onrender.com/users?role=admin"
       );
       setUsers(response.data);
       console.log(response.data);
@@ -130,7 +130,7 @@ export default function DataGridDemo() {
 
   const handleActivate = async (userId) => {
     try {
-      await axios.put(`http://localhost:3001/activate/users/${userId}`);
+      await axios.put(`https://woofer-server-nsjo.onrender.com/activate/users/${userId}`);
       await fetchAllUsers();
     } catch (error) {
       console.error("Error activating user:", error);
@@ -139,7 +139,7 @@ export default function DataGridDemo() {
 
   const handleDeactivate = async (userId) => {
     try {
-      await axios.delete(`http://localhost:3001/activate/users/${userId}`);
+      await axios.delete(`https://woofer-server-nsjo.onrender.com/activate/users/${userId}`);
       await fetchAllUsers();
     } catch (error) {
       console.error("Error deactivating user:", error);

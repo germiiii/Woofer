@@ -1,4 +1,4 @@
-const { walkGetAll } = require("../controllers");
+const { walkGetAll } = require("../Controllers");
 
 const walkHandlerGeAll = async (req, res) => {
   try {

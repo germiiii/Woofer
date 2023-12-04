@@ -1,4 +1,4 @@
-const { ownerPost } = require("../controllers");
+const { ownerPost } = require("../Controllers");
 
 const ownerHandlerPost = async (req, res) => {
   try {

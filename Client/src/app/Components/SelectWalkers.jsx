@@ -20,7 +20,7 @@ const SelectWalkers = (props) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3001/walker/available"
+          "https://woofer-server-nsjo.onrender.com/walker/available"
         );
         setWalkers(response.data.walkers);
       } catch (error) {
@@ -119,7 +119,6 @@ const SelectWalkers = (props) => {
   const renderList = filteredWalkers
     .slice(startIndex, endIndex)
     .map((walker) => (
-      <div>
         <WalkerCard
           key={walker.id}
           name={walker.name}
@@ -130,7 +129,6 @@ const SelectWalkers = (props) => {
           walkDuration={walker.walker.walk_duration}
           dogSize={walker.walker.dog_size}
         />
-      </div>
     ));
 
   const containerStyle = {
