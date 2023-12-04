@@ -1,4 +1,4 @@
-const { walkerGetById } = require("../controllers");
+const { walkerGetById } = require("../Controllers");
 
 const walkerHandlerGetById = async (req, res) => {
   try {

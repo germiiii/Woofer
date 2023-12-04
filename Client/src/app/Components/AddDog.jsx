@@ -1,7 +1,11 @@
 import React, { useState, useRef } from "react";
 import Image from "next/image"; // Import the Image component from next/image
+import axios from "axios";
 
 export default function AddDogs(props) {
+
+  const api = process.env.NEXT_PUBLIC_APIURL
+
   const fileInputRef = useRef(null);
   const [dogData, setDogData] = useState({
     name: "",

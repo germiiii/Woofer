@@ -3,6 +3,7 @@ import ProvidersWrapper from "./ProvidersWrapper"
 import Providers from "../redux/provider"
 import { UserProvider } from "./UserContext";
 
+
 // import './globals.css'
 
 const inter = Inter({ subsets: ["latin"] });
