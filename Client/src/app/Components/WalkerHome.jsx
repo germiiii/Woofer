@@ -1,43 +1,36 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import WalkerTypeCards from './WalkerTypeCards';
 
 const WalkerHome = () => {
-  const [duracionPaseos, setDuracionPaseos] = useState([]);
   const [otrosDetalles, setOtrosDetalles] = useState('');
   const [comentarios, setComentarios] = useState([]);
   const [nuevoComentario, setNuevoComentario] = useState('');
-  const [contratacionCliente, setContratacionCliente] = useState('');
+  const [contratacionCliente, setContratacionCliente] = useState([]);
+
+  useEffect(() => {
+    }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (contratacionCliente) {
-      toast.success(`¡${contratacionCliente} ha contratado tu servicio!`, {
+    if (contratacionCliente.length > 0) {
+      toast.success(`¡${contratacionCliente.join(', ')} han contratado tu servicio!`, {
         position: toast.POSITION.TOP_RIGHT,
       });
-      setContratacionCliente('');
+      setContratacionCliente([]);
     }
-
-    setDuracionPaseos([]);
-    setOtrosDetalles('');
-  };
-
-  const prueba = () => {
-    toast.success(`¡${contratacionCliente} ha contratado tu servicio!`, {
-      position: toast.POSITION.TOP_RIGHT,
-    });
-    setContratacionCliente('');
   };
 
   const handleDuracionChange = (id) => {
-    const index = duracionPaseos.indexOf(id);
+    const index = contratacionCliente.indexOf(id);
     if (index === -1) {
-      setDuracionPaseos([...duracionPaseos, id]);
+      setContratacionCliente([...contratacionCliente, id]);
     } else {
-      setDuracionPaseos(duracionPaseos.filter((item) => item !== id));
+      setContratacionCliente(contratacionCliente.filter((item) => item !== id));
     }
   };
 
@@ -53,12 +46,43 @@ const WalkerHome = () => {
     setComentarios(updatedComentarios);
   };
 
+  const handleActivoClick = async () => {
+    try {
+      const userId = localStorage.getItem('user_id');
+      if (contratacionCliente.length > 0) {
+        await axios.put(`http://localhost:3001/walker/${userId}`, {
+          contrataciones: contratacionCliente,
+        });
+
+        toast.success('¡Estado actualizado correctamente!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      } else {
+        toast.warning('Debes realizar al menos una selección antes de actualizar el estado.', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    } catch (error) {
+      console.error('Error al actualizar el estado:', error);
+      toast.error('Ocurrió un error al intentar actualizar el estado.', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
+
+  const prueba = () => {
+    toast.success(`¡${contratacionCliente.join(', ')} han contratado tu servicio! (Prueba)`, {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+    setContratacionCliente([]);
+  };
+
   return (
     <div>
       <ToastContainer />
       <button onClick={prueba}>Contratar Servicio</button>
       <h2>Ofrecer Paseos de Perros</h2>
-      <WalkerTypeCards />
+      <WalkerTypeCards handleDuracionChange={handleDuracionChange} />
       <form onSubmit={handleSubmit}>
         <div>
           <h3>Otros Detalles</h3>
@@ -97,6 +121,14 @@ const WalkerHome = () => {
           <button type="submit">Comentar</button>
         </form>
       </div>
+
+      {/* Agrega el botón "Activo" habilitado solo si hay al menos una selección en contratacionCliente */}
+      <button
+        onClick={handleActivoClick}
+        disabled={contratacionCliente.length === 0}
+      >
+        Activo
+      </button>
     </div>
   );
 };
