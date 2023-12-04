@@ -13,14 +13,15 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('/api/reset-password', {
+      // Cambia la ruta de la solicitud a http://localhost:3001/changePassword
+      const response = await fetch('http://localhost:3001/changePassword', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email }),
       });
- 
+
       const data = await response.json();
 
       setMessage(data.message);
@@ -31,13 +32,13 @@ const ForgotPassword = () => {
 
   return (
     <div>
-      <h2>Recover account</h2>
+      <h2>Recuperar cuenta</h2>
       <form onSubmit={handleSubmit}>
         <label>
-          E-mail addres:
+          Dirección de correo electrónico:
           <input type="email" value={email} onChange={handleEmailChange} />
         </label>
-        <button type="submit">Send Form</button>
+        <button type="submit">Enviar Formulario</button>
       </form>
       {message && <p>{message}</p>}
     </div>

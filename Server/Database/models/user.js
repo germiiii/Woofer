@@ -81,7 +81,13 @@ module.exports = (sequelize) => {
         type: DataTypes.ENUM("admin", "user"),
         allowNull: true,
         defaultValue: "user",
-      }
+      },
+      resetPasswordToken: {
+        type: DataTypes.STRING,
+      },
+      resetPasswordExpires: {
+        type: DataTypes.DATE,
+      },
     },
     { timestamps: false }
   );
