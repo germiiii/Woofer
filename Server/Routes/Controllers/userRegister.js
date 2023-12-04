@@ -19,8 +19,18 @@ const generateVerificationToken = () => {
 
 const userRegister = async (req, res) => {
   console.log("Entrando en userRegister");
-  const { name, lastName, email, password, username, address, isWalker } =
-    req.body;
+  console.log(User);
+
+  const {
+    name,
+    lastName,
+    email,
+    password,
+    username,
+    address,
+    city,
+    province
+  } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const verificationToken = generateVerificationToken();
@@ -36,7 +46,8 @@ const userRegister = async (req, res) => {
       password: hashedPassword,
       username,
       address,
-      isWalker,
+      city,
+      province,
       verificationToken
     })
 
@@ -65,7 +76,8 @@ const userRegister = async (req, res) => {
       password: hashedPassword,
       username,
       address,
-      isWalker,
+      city,
+      province,
       verificationToken
     })
 

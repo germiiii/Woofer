@@ -10,23 +10,11 @@ const userGetAll = async (role) => {
   }
 
   const users = await User.findAll({
+    attributes: { exclude: ['password'] },
     where: whereCondition,
-    attributes: [
-      "id",
-      "name",
-      "email",
-      "lastName",
-      "username",
-      "address",
-      "image",
-      "isWalker",
-      "isOwner",
-      "is_active",
-    ],
     include: [
       {
         model: Owner,
-        where: { is_active: true },
         where: whereCondition,
         include: [
           {

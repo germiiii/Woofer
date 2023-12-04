@@ -24,17 +24,9 @@ const walkerPost = async (
   await User.update({ isWalker: true }, { where: { id, is_active: true } });
 
   const userData = await User.findOne({
+    attributes: { exclude: ['password'] },
     where: { id },
-    attributes: [
-      "id",
-      "name",
-      "email",
-      "lastName",
-      "username",
-      "address",
-      "isWalker",
-      "isOwner",
-    ],
+
     include: [
       {
         model: Walker,

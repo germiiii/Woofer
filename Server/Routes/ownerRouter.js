@@ -5,6 +5,7 @@ const {
   dogHandlerPost,
   dogHandlerGet,
   ownerHandlerGetAll,
+  ownerHandlerGetById,
 } = require("./Handlers");
 
 const cloudinary = require("cloudinary").v2;
@@ -31,9 +32,10 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage: storage });
 
 //owner routes
-ownerRouter.post("/", upload.single("image"), ownerHandlerPost);
+ownerRouter.get("/:id", ownerHandlerGetById);
 ownerRouter.get("/", ownerHandlerGetAll);
-ownerRouter.post("/dog", upload.single("image"), dogHandlerPost);
 ownerRouter.get("/dog/:username", dogHandlerGet);
+ownerRouter.post("/dog", upload.single("image"), dogHandlerPost);
+ownerRouter.post("/", upload.single("image"), ownerHandlerPost);
 
 module.exports = ownerRouter;

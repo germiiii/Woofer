@@ -36,6 +36,14 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      city: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      province: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       image: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -68,6 +76,11 @@ module.exports = (sequelize) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
+      },
+      role: {
+        type: DataTypes.ENUM("admin", "user"),
+        allowNull: true,
+        defaultValue: "user",
       }
     },
     { timestamps: false }

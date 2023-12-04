@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import checkoutImage from "../../../public/checkout.png";
 
 const WalkerCard = (props) => {
   const cardStyle = {
@@ -37,8 +38,6 @@ const WalkerCard = (props) => {
   };
 
   const imageStyle = {
-    height: "100px",
-    width: "100px",
     borderRadius: "8px",
   };
 
@@ -51,12 +50,11 @@ const WalkerCard = (props) => {
 
   const checkoutStyle = {
     marginRight: "50px",
-    width: "40px",
-    height: "40px",
   };
 
   return (
     <div style={cardStyle}>
+      <Image style={imageStyle} src={props.image} width={100} height={100} />
       <div style={textStyle}>
         <h2 style={nameStyle}>{props.name + " " + props.lastName}</h2>
         <h3 style={addressStyle}>{props.address}</h3>
@@ -65,7 +63,13 @@ const WalkerCard = (props) => {
           {props.walkDuration} minutes
         </h4>
       </div>
-      <Image alt="Checkout" width={40} height={40} />
+      <Image
+        alt="Checkout"
+        src={checkoutImage}
+        style={checkoutStyle}
+        width={40}
+        height={40}
+      />
     </div>
   );
 };

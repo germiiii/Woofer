@@ -3,6 +3,7 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
+// const seed = require("./seed.js");
 
 ////postgres://fl0user:KdQaqVxu9h1N@ep-polished-haze-56223027.us-east-2.aws.neon.fl0.io:5432/pokemon?sslmode=require
 // const sequelize = new Sequelize(
@@ -70,7 +71,7 @@ sequelize.models = Object.fromEntries(capsEntries);
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
 
-const { User, Owner, Dog, Walker, Walk } = sequelize.models;
+const { User, Owner, Dog, Walker, Walk, WalkType } = sequelize.models;
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
@@ -95,6 +96,10 @@ Walk.belongsTo(Owner);
 
 Walker.hasMany(Walk);
 Walk.belongsTo(Walker);
+
+Walker.belongsToMany(WalkType, { through: "walkerWalkType" });
+WalkType.belongsToMany(Walker, { through: "walkerWalkType" });
+
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

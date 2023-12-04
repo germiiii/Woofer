@@ -59,17 +59,8 @@ const ownerPost = async (data, file) => {
   );
 
   const userData = await User.findOne({
+    attributes: { exclude: ['password'] },
     where: { username: username, is_active: true },
-    attributes: [
-      "id",
-      "name",
-      "email",
-      "lastName",
-      "username",
-      "address",
-      "isWalker",
-      "isOwner",
-    ],
     include: [
       {
         model: Owner,

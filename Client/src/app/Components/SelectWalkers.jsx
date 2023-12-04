@@ -1,19 +1,36 @@
 "use client";
+import axios from "axios";
 import WalkerCard from "./WalkerCard.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "tailwindcss/tailwind.css";
-import walkersMock from "../walkersMock.js";
 
 const SelectWalkers = (props) => {
+  const [walkers, setWalkers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [dogCapacityFilter, setDogCapacityFilter] = useState("");
   const [walkDurationFilter, setWalkDurationFilter] = useState("");
   const [dogSizeFilter, setDogSizeFilter] = useState("");
   const [searchFilter, setSearchFilter] = useState("");
-  const cardsPerPage = 5;
+  const cardsPerPage = 4;
   const startIndex = (currentPage - 1) * cardsPerPage;
   const endIndex = currentPage * cardsPerPage;
-  const userCity = props.userCity;
+  const userProvince = props.userProvince;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3001/walker/available"
+        );
+        setWalkers(response.data.walkers);
+      } catch (error) {
+        console.error("Error fetching walkers:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  console.log(walkers);
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
@@ -22,7 +39,7 @@ const SelectWalkers = (props) => {
   };
 
   const handleNextPage = () => {
-    const maxPage = Math.ceil(walkersMock.length / cardsPerPage);
+    const maxPage = Math.ceil(walkers.length / cardsPerPage);
     if (currentPage < maxPage) {
       setCurrentPage(currentPage + 1);
     }
@@ -55,28 +72,29 @@ const SelectWalkers = (props) => {
     setCurrentPage(1);
   };
 
-  const getFilteredWalkers = () =>
-    walkersMock.filter((walker) => walker.city === userCity);
-
-  const filteredWalkers = walkersMock.filter((walker) => {
+  const filteredWalkers = walkers.filter((walker) => {
     const dogCapacityFilterCondition =
       !dogCapacityFilter ||
-      (dogCapacityFilter === "1" && walker.dogCapacity === 1) ||
-      (dogCapacityFilter === "<3" && walker.dogCapacity < 3) ||
-      (dogCapacityFilter === "<5" && walker.dogCapacity < 5) ||
-      (dogCapacityFilter === ">5" && walker.dogCapacity > 5);
+      (dogCapacityFilter === "1" && walker.walker.dog_capacity === 1) ||
+      (dogCapacityFilter === "<3" && walker.walker.dog_capacity < 3) ||
+      (dogCapacityFilter === "<5" && walker.walker.dog_capacity < 5) ||
+      (dogCapacityFilter === ">5" && walker.walker.dog_capacity > 5);
 
     const walkDurationFilterCondition =
       !walkDurationFilter ||
-      (walkDurationFilter === "15" && walker.walkDuration === 15) ||
-      (walkDurationFilter === "30" && walker.walkDuration === 30) ||
-      (walkDurationFilter === "60" && walker.walkDuration === 60);
+      (walkDurationFilter === "15" &&
+        walker.walker.walk_duration.includes("15")) ||
+      (walkDurationFilter === "30" &&
+        walker.walker.walk_duration.includes("30")) ||
+      (walkDurationFilter === "60" &&
+        walker.walker.walk_duration.includes("60"));
 
     const dogSizeFilterCondition =
       !dogSizeFilter ||
-      (dogSizeFilter === "small" && walker.dogSize === "small") ||
-      (dogSizeFilter === "medium" && walker.dogSize === "medium") ||
-      (dogSizeFilter === "large" && walker.dogSize === "large");
+      (dogSizeFilter === "small" && walker.walker.dog_size.includes("small")) ||
+      (dogSizeFilter === "medium" &&
+        walker.walker.dog_size.includes("medium")) ||
+      (dogSizeFilter === "large" && walker.walker.dog_size.includes("large"));
 
     const searchFilterCondition = !searchFilter
       ? true
@@ -93,23 +111,26 @@ const SelectWalkers = (props) => {
       dogCapacityFilterCondition &&
       walkDurationFilterCondition &&
       dogSizeFilterCondition &&
-      searchFilterCondition
+      searchFilterCondition &&
+      walker.province === userProvince
     );
   });
 
   const renderList = filteredWalkers
     .slice(startIndex, endIndex)
     .map((walker) => (
-      <WalkerCard
-        key={walker.id}
-        name={walker.name}
-        lastName={walker.lastName}
-        address={walker.address}
-        image={walker.image}
-        dogCapacity={walker.dogCapacity}
-        walkDuration={walker.walkDuration}
-        dogSize={walker.dogSize}
-      />
+      <div>
+        <WalkerCard
+          key={walker.id}
+          name={walker.name}
+          lastName={walker.lastName}
+          address={walker.address}
+          image={walker.image}
+          dogCapacity={walker.walker.dog_capacity}
+          walkDuration={walker.walker.walk_duration}
+          dogSize={walker.walker.dog_size}
+        />
+      </div>
     ));
 
   const containerStyle = {
@@ -149,15 +170,15 @@ const SelectWalkers = (props) => {
     marginTop: "20px",
   };
 
-  return (
+  return userProvince ? (
     <div style={containerStyle}>
-      <h1 style={titleStyle}>Select a Walker</h1>
+      <h1 style={titleStyle}>Select a Walker from {props.userProvince}</h1>
       <input
         type="text"
         placeholder="Search by name or last name"
         value={searchFilter}
         onChange={handleSearchFilterChange}
-        className="border p-2 rounded mr-2"
+        className="border p-2 rounded mr-2 mb-7"
       />
       <div className="mb-8">
         <select
@@ -210,7 +231,7 @@ const SelectWalkers = (props) => {
         </button>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default SelectWalkers;
