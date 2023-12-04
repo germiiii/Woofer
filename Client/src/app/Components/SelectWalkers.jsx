@@ -119,18 +119,16 @@ const SelectWalkers = (props) => {
   const renderList = filteredWalkers
     .slice(startIndex, endIndex)
     .map((walker) => (
-      <div>
-        <WalkerCard
-          key={walker.id}
-          name={walker.name}
-          lastName={walker.lastName}
-          address={walker.address}
-          image={walker.image}
-          dogCapacity={walker.walker.dog_capacity}
-          walkDuration={walker.walker.walk_duration}
-          dogSize={walker.walker.dog_size}
-        />
-      </div>
+      <WalkerCard
+        key={walker.id}
+        name={walker.name}
+        lastName={walker.lastName}
+        address={walker.address}
+        image={walker.image}
+        dogCapacity={walker.walker.dog_capacity}
+        walkDuration={walker.walker.walk_duration}
+        dogSize={walker.walker.dog_size}
+      />
     ));
 
   const containerStyle = {
