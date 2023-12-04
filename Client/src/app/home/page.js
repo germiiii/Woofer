@@ -21,7 +21,7 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios(`${api}/users`);
+        const response = await axios.get(`${api}/users`);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

@@ -6,7 +6,7 @@ async function getUsers() {
   const api = process.env.NEXT_PUBLIC_APIURL
 
   try {
-    const response = await axios(`${api}/users`);
+    const response = await axios.get(`${api}/users`);
     const data = response.data;
     console.log('page at users:', data);
     return data;
