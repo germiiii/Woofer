@@ -1,10 +1,19 @@
 import UserDetail from '../Components/UserDetail'
+import axios from 'axios'
 
 async function getUsers() {
-  const res = await fetch('http://localhost:3001/users')
-  const data = await res.json()
-  console.log('page at users:', data)
-  return data
+
+  const api = process.env.NEXT_PUBLIC_APIURL
+
+  try {
+    const response = await axios.get(`${api}/users`);
+    const data = response.data;
+    console.log('page at users:', data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
+  }
 }
 
 export default async function Users() {

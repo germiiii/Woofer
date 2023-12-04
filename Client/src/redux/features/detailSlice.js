@@ -1,10 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
 export const fetchUserDetails = createAsyncThunk(
     "fetUserDetails",
     async (userId) => {
+
+        const api = process.env.NEXT_PUBLIC_APIURL
         try {
-          const userData = await axios(`http://localhost:3001/users/${userId}`);
+          const userData = await axios.get(`${api}/users/${userId}`);
           return userData;
         } catch (error) {
           throw new EvalError("Error fetcing user details: "+ error.message);      

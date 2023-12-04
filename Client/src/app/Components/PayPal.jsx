@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { useRouter } from 'next/navigation'
+import axios from 'axios'
 import "tailwindcss/tailwind.css";
 
 const PayPal = () => {
@@ -20,15 +21,16 @@ const PayPal = () => {
       // Fetch a new access token if not stored
       async function fetchAccessToken() {
         try {
-          const response = await fetch('https://api-m.sandbox.paypal.com/v1/oauth2/token', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-              Authorization: 'Basic ' + btoa(clientId + ':' + clientSecret),
-            },
-            body: 'grant_type=client_credentials',
-          });
-          const data = await response.json();
+          const { data } = await axios.post(
+            'https://api-m.sandbox.paypal.com/v1/oauth2/token',
+            'grant_type=client_credentials',
+            {
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                Authorization: 'Basic ' + btoa(clientId + ':' + clientSecret),
+              },
+            }
+          );
   
           // Store access token in localStorage
           localStorage.setItem('accessToken', data.access_token);
@@ -73,7 +75,7 @@ const PayPal = () => {
                     headers: {
                       "Content-Type": "application/json",
                       //PayPal access token  after Bearer
-                      "Authorization": `Bearer A21AAI1HPNYh2QtbKqXwumBxrR-n1Q72BZ47G1aKe4Wauy70fITLsHkDc67PVEKCNeLPKfjDynnMAYuPM3WduRev044wxzxjw`,
+                      "Authorization": `Bearer A21AAL6Nld_rJE-ENaSNWeNn_FIx2jNtOTeF_Yw16K2RwgTAmzhetyEVGJSeQaurc06hPb4f0rqQQqh8rYB3nW1mgjjnnxALw`,
                     },
                     body: JSON.stringify({
                       intent: "CAPTURE",

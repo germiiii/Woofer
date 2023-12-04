@@ -1,7 +1,11 @@
 "use client";
 import { useState } from 'react';
+import axios from 'axios';
 
 const ForgotPassword = () => {
+
+  const api = process.env.NEXT_PUBLIC_APIURL
+
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
@@ -11,18 +15,18 @@ const ForgotPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const response = await fetch('/api/reset-password', {
-        method: 'POST',
+      const response = await axios.post(`${api}/reset-password`, { //! a qué URL estamos haciendo la petición?
+        email: email, // Assuming 'email' is defined somewhere
+      }, {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
       });
- 
-      const data = await response.json();
-
+  
+      const data = response.data;
+  
       setMessage(data.message);
     } catch (error) {
       console.error('Error:', error);

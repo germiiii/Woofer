@@ -6,18 +6,22 @@ import OwnerForm from "../Components/OwnerForm.jsx";
 import Map from "../Components/Map.jsx";
 import SelectWalkers from "../Components/SelectWalkers.jsx";
 import SwitchType from "../Components/SwitchType.jsx";
+import provinces from "../register/provinces.js";
 
 const Home = () => {
+
+  const api = process.env.NEXT_PUBLIC_APIURL
+
   const [formCompleted, setFormCompleted] = useState(true);
   const [addressInput, setAddressInput] = useState("");
-  const [cityInput, setCityInput] = useState("");
-  const [userCity, setUserCity] = useState("");
+  const [provinceInput, setProvinceInput] = useState("");
+  const [userProvince, setUserProvince] = useState("");
   const [userAddress, setUserAddress] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/users");
+        const response = await axios.get(`${api}/users`);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -37,12 +41,12 @@ const Home = () => {
     setAddressInput(event.target.value);
   };
 
-  const handleCityInputChange = (event) => {
-    setCityInput(event.target.value);
+  const handleProvinceInputChange = (event) => {
+    setProvinceInput(event.target.value);
   };
 
   const handleInputSubmit = () => {
-    setUserCity(cityInput);
+    setUserProvince(provinceInput);
     setUserAddress(addressInput);
   };
 
@@ -89,13 +93,19 @@ const Home = () => {
             }}
           >
             <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-              <input
-                type="text"
-                placeholder="Enter your city"
-                value={cityInput}
-                onChange={handleCityInputChange}
+              <select
+                name="province"
+                onChange={handleProvinceInputChange}
+                value={provinceInput}
                 className={inputStyle}
-              />
+              >
+                <option value="">Select your province</option>
+                {provinces.map((province) => (
+                  <option key={province} value={province}>
+                    {province}
+                  </option>
+                ))}
+              </select>
               <input
                 type="text"
                 placeholder="Enter your address"
@@ -107,8 +117,8 @@ const Home = () => {
             <button onClick={handleInputSubmit} className={buttonStyle}>
               Set Your Location
             </button>
-            <Map userCity={userCity} userAddress={userAddress} />
-            <SelectWalkers userCity={userCity} />
+            <Map userProvince={userProvince} userAddress={userAddress} />
+            <SelectWalkers userProvince={userProvince} />
           </div>
         </>
       )}
