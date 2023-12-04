@@ -1,0 +1,54 @@
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+    align-items: center;
+    padding: 2rem;
+    position: relative;
+  }
+  
+  .textContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fcd34d;
+    margin-bottom: 3rem;
+    margin-top: -2rem;
+  }
+  
+  .paragraph {
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    margin-top: -2rem;
+ 
+  }
+  
+  .buttonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+  
+  .button {
+    padding: 0.75rem 1rem;
+    border-radius: 9999px;
+    background-color: #29235c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 0.1rem;
+    
+  }
+
+  .button:hover {
+    background-color: #f39200; /* Corrected color value */
+  }
+
+  
