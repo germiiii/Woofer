@@ -1,6 +1,5 @@
 const { ownerGetById } = require("../Controllers");
 
-
 const ownerHandlerGetById = async (req, res) => {
   try {
     const { id } = req.params;

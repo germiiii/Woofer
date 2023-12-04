@@ -4,7 +4,7 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const routes = require("./Routes/index.js");
-const mercadopago = require('mercadopago'); //!
+const mercadopago = require("mercadopago"); //!
 
 //* const passport = require('./Routes/Middlewares/passport.js');
 const { FRONTEND } = process.env;
@@ -12,8 +12,8 @@ const { FRONTEND } = process.env;
 require("./Database/db.js");
 
 const server = express();
-server.use(express.json());//!
-server.use(cors());//!
+server.use(express.json()); //!
+server.use(cors()); //!
 
 server.name = "API";
 
@@ -27,7 +27,8 @@ server.use(morgan("dev"));
 
 server.use((req, res, next) => {
   res.header(
-    "Access-Control-Allow-Origin", "*"
+    "Access-Control-Allow-Origin",
+    "*"
     // `${FRONTEND || "https://woofer-taupe.vercel.app"}`
   );
   res.header("Access-Control-Allow-Credentials", "true");
@@ -50,7 +51,6 @@ server.use((err, req, res, next) => {
   res.status(status).send(message);
 });
 
-
 //!Mercadopago
 
 // const { MercadoPagoConfig, Preference } = require('mercadopago');
@@ -63,7 +63,7 @@ server.use((err, req, res, next) => {
 //     id: 1,
 //     title: "15 minute Premium dog walk",
 //     price: 30,
-//     currency_id: 'USD', 
+//     currency_id: 'USD',
 //     description: [
 //       "Woofers will devote their full attention to walk your furry companion privately for 15 minutes.",
 //     ],
@@ -72,7 +72,7 @@ server.use((err, req, res, next) => {
 //     id: 2,
 //     title: "30 minute Premium dog walk",
 //     price: 35,
-//     currency_id: 'USD', 
+//     currency_id: 'USD',
 //     description: [
 //       "Woofers will devote their full attention to walk your furry companion privately for 30 minutes.",
 //     ],
@@ -81,7 +81,7 @@ server.use((err, req, res, next) => {
 //     id: 3,
 //     title: "60 minute Premium dog walk",
 //     price: 45,
-//     currency_id: 'USD', 
+//     currency_id: 'USD',
 //     description: [
 //       "Woofers will devote their full attention to walk your furry companion privately for 60 minutes.",
 //     ],
@@ -90,7 +90,7 @@ server.use((err, req, res, next) => {
 //     id: 4,
 //     title: "15 minute dog walk for small groups",
 //     price: 20,
-//     currency_id: 'USD', 
+//     currency_id: 'USD',
 //     description: [
 //       "Woofers will take your furry companion for a brief 15 minute work out with three to five other dog friends.",
 //     ],
@@ -99,7 +99,7 @@ server.use((err, req, res, next) => {
 //     id: 5,
 //     title: "30 minute dog walk for small groups",
 //     price: 25,
-//     currency_id: 'USD', 
+//     currency_id: 'USD',
 //     description: [
 //       "Woofers will take your furry companion for a nice 30 minute work out with three to five other dog friends.",
 //     ],
@@ -108,7 +108,7 @@ server.use((err, req, res, next) => {
 //     id: 6,
 //     title: "60 minute dog walk for small groups",
 //     price: 35,
-//     currency_id: 'USD', 
+//     currency_id: 'USD',
 //     description: [
 //       "Woofers will take your furry companion for an intense 60 minute work out with three to five other dog friends.",
 //     ],
@@ -117,7 +117,7 @@ server.use((err, req, res, next) => {
 //     id: 7,
 //     title: "15 minute dog walk for big groups",
 //     price: 15,
-//     currency_id: 'USD', 
+//     currency_id: 'USD',
 //     description: [
 //       "Woofers will take your furry companion for a brief 15 minute work out with five dog friends, or more.",
 //     ],
@@ -126,7 +126,7 @@ server.use((err, req, res, next) => {
 //     id: 8,
 //     title: "30 minute dog walk for big groups",
 //     price: 20,
-//     currency_id: 'USD', 
+//     currency_id: 'USD',
 //     description: [
 //       "Woofers will take your furry companion for a nice 30 minute work out with five dog friends, or more.",
 //     ],
@@ -135,7 +135,7 @@ server.use((err, req, res, next) => {
 //     id: 9,
 //     title: "60 minute dog walk for big groups",
 //     price: 30,
-//     currency_id: 'USD', 
+//     currency_id: 'USD',
 //     description: [
 //       "Woofers will take your furry companion for an intense 60 minute work out with five dog friends, or more.",
 //     ],
@@ -144,10 +144,10 @@ server.use((err, req, res, next) => {
 
 // const items = Walktypes.map(walkType => ({
 //   title: walkType.title,
-//   description: walkType.description, 
+//   description: walkType.description,
 //   quantity: 1,
 //   unit_price: walkType.price,
-//   currency_id: walkType.currency_id, 
+//   currency_id: walkType.currency_id,
 // }));
 
 // const preference = new Preference(client);
@@ -157,8 +157,5 @@ server.use((err, req, res, next) => {
 //     items,
 //   }
 // }).then(console.log).catch(console.log);
-
-
-
 
 module.exports = server;
