@@ -1,7 +1,7 @@
 const { User } = require("../../Database/db");
 
 const activateAccount = async (req, res) => {
-    const { verificationToken } = req.body;
+    const { verificationToken } = req.params;
   
     try {
       const user = await User.findOne({
