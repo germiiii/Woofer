@@ -1,10 +1,19 @@
 import UserDetail from '../Components/UserDetail'
+import axios from 'axios'
 
 async function getUsers() {
-  const res = await fetch('https://woofer-server-nsjo.onrender.com/users')
-  const data = await res.json()
-  console.log('page at users:', data)
-  return data
+
+  const api = process.env.NEXT_PUBLIC_APIURL
+
+  try {
+    const response = await axios(`${api}/users`);
+    const data = response.data;
+    console.log('page at users:', data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
+  }
 }
 
 export default async function Users() {

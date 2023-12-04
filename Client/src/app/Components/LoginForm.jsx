@@ -8,6 +8,9 @@ import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 const LoginForm = () => {
+
+  const api = process.env.NEXT_PUBLIC_APIURL
+
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,7 +35,7 @@ const LoginForm = () => {
 
       const email = user.email;
 
-      const response = await axios.post('https://woofer-server-nsjo.onrender.com/googleLogin', {
+      const response = await axios.post(`${api}/googleLogin`, {
         email,
       });
 
@@ -52,7 +55,7 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://woofer-server-nsjo.onrender.com/login', {
+      const response = await axios.post(`${api}/login`, {
         email,
         password,
       });

@@ -9,6 +9,9 @@ import SwitchType from "../Components/SwitchType.jsx";
 import provinces from "../register/provinces.js";
 
 const Home = () => {
+
+  const api = process.env.NEXT_PUBLIC_APIURL
+
   const [formCompleted, setFormCompleted] = useState(true);
   const [addressInput, setAddressInput] = useState("");
   const [provinceInput, setProvinceInput] = useState("");
@@ -18,7 +21,7 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://woofer-server-nsjo.onrender.com/users");
+        const response = await axios(`${api}/users`);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
