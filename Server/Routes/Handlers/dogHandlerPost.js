@@ -1,4 +1,4 @@
-const { dogPost } = require("../controllers");
+const { dogPost } = require("../Controllers");
 
 const dogHandlerPost = async (req, res) => {
   try {
