@@ -18,6 +18,22 @@ const LoginForm = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const googleAuth = new GoogleAuthProvider();
   const [user] = useAuthState(auth);
+  const [validationErrors, setValidationErrors] = useState({});
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!email.trim()) {
+      errors.email = "email cannot be empty";
+    }
+
+    if (!password.trim()) {
+      errors.password = "password cannot be empty";
+    }
+    console.log("Validation Errors:", errors);
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,6 +46,7 @@ const LoginForm = () => {
 
   const loginGoogle = async (e) => {
     e.preventDefault();
+
     try {
       const result = await signInWithPopup(auth, googleAuth);
       const { user } = result;
@@ -55,6 +72,9 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     try {
       const response = await axios.post(`${api}/login`, {
         email,
@@ -73,8 +93,8 @@ const LoginForm = () => {
         alert("Invalid credentials.");
       }
     } catch (error) {
-      alert("An error occurred while trying to login. Please try again later.");
       console.error("Error:", error.message);
+      window.alert("Error: ", error);
     }
   };
 
@@ -99,26 +119,40 @@ const LoginForm = () => {
         >
           Sign in
         </h1>
-        <label className="mb-10">
+        <label className="mb-10" style={{ height: "64px" }}>
           <input
-            className="rounded-full px-10 py-2  w-full placeholder-"
+            className={`rounded-full px-10 py-2 w-full ${
+              validationErrors.email ? "border-[#F39200]" : ""
+            }`}
             type="email"
             name="email"
             placeholder="email"
             value={email}
             onChange={handleChange}
           />
+          {validationErrors.email && (
+            <p className="text-[#F39200] text-sm mt-1">
+              {validationErrors.email}
+            </p>
+          )}
         </label>
         <br />
-        <label className="mb-10">
+        <label className="mb-10" style={{ height: "64px" }}>
           <input
-            className="rounded-full px-10 py-2 w-full"
+            className={`rounded-full px-10 py-2 w-full ${
+              validationErrors.password ? "border-[#F39200]" : ""
+            }`}
             type="password"
             name="password"
             placeholder="password"
             value={password}
             onChange={handleChange}
           />
+          {validationErrors.password && (
+            <p className="text-[#F39200] text-sm mt-1">
+              {validationErrors.password}
+            </p>
+          )}
         </label>
         <br />
         <div className="flex items-center justify-center">
