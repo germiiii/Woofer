@@ -1,17 +1,23 @@
 "use client";
 import React from "react";
 
-const DogWalkOption = ({ option }) => {
+const DogWalkOption = ({ option, setOptionChosen }) => {
   const cardStyle = {
     border: "1px solid #ddd",
     padding: "15px",
     margin: "10px",
     borderRadius: "5px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    cursor: "pointer", // Añadir un cursor indicando que es clickeable
+  };
+
+  const handleCardClick = () => {
+    // Ejecutar la función cuando se hace clic en la tarjeta
+    setOptionChosen(option);
   };
 
   return (
-    <div style={cardStyle}>
+    <div style={cardStyle} onClick={handleCardClick}>
       <h2>{option.title}</h2>
       <p>{option.description}</p>
       <p>Price: ${option.price}</p>
