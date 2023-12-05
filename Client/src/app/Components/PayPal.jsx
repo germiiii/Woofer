@@ -29,10 +29,10 @@ const PayPal = () => {
             },
           }
         );
-        const expiresIn = data.expires_in; // Get expiration time from the response
-        const expirationTime = Date.now() + expiresIn * 1000; // Convert expiresIn to milliseconds and calculate expiration time
+        const expiresIn = data.expires_in;
+        const expirationTime = Date.now() + expiresIn * 1000;
         localStorage.setItem('accessToken', data.access_token);
-        localStorage.setItem('tokenExpiration', expirationTime); // Store token expiration time
+        localStorage.setItem('tokenExpiration', expirationTime);
         setAccessToken(data.access_token);
       } catch (error) {
         console.error('Error fetching access token:', error);
@@ -41,11 +41,13 @@ const PayPal = () => {
   
     const tokenExpiration = localStorage.getItem('tokenExpiration');
     if (!storedAccessToken || !tokenExpiration || Date.now() > tokenExpiration) {
-      fetchAccessToken(); // Fetch a new token if none exists or if the token is expired
+      fetchAccessToken();
     } else {
-      setAccessToken(storedAccessToken); // Use the existing token if it's valid and not expired
+      setAccessToken(storedAccessToken);
     }
-  }, [clientId, clientSecret, setAccessToken]);
+  }, [clientId, clientSecret, setAccessToken]); // Include 'id' in the dependency array
+  
+  
   
   console.log(accessToken)
   
