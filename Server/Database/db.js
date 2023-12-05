@@ -100,6 +100,8 @@ Walk.belongsTo(Walker);
 Walker.belongsToMany(WalkType, { through: "walkerWalkType" });
 WalkType.belongsToMany(Walker, { through: "walkerWalkType" });
 
+WalkType.belongsToMany(Walk, { through: "walkTypeWalk" });
+Walk.belongsToMany(WalkType, { through: "walkTypeWalk" });
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
