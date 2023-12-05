@@ -6,8 +6,7 @@ import Box from "@mui/material/Box";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 
 export default function DataGridDemo() {
-
-  const api = process.env.NEXT_PUBLIC_APIURL
+  const api = process.env.NEXT_PUBLIC_APIURL;
 
   const columns = [
     { field: "id", headerName: "ID", width: 300 },
@@ -154,7 +153,7 @@ export default function DataGridDemo() {
 
   return (
     <div>
-      <div style={{ textAlign: "center", fontSize: "30px", margin: "20px 0" }}>
+      <div style={{ textAlign: "center", fontSize: "30px", margin: "10px 0" }}>
         Woofer Panel
       </div>
 

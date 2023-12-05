@@ -19,30 +19,21 @@ const Navbar = () => {
   const router = useRouter();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-10 bg-[#F39200] bg-opacity-100">
-      <div className="container mx-auto lg:py-4 flex items-center justify-between px-2 py-2">
-      <div className="flex items-center">
-          <Link href={"/"}>
-            <div className="rounded-full bg-white w-12 h-12 flex items-center justify-center">
-              <Image src="/LOGOWoofer.png" alt="logo" width={30} height={30} />
-            </div>
-          </Link>
-        </div>
-        <div className="flex items-center">
-          <Link href={"/login"}>
-            <button className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:text-[#F39200] border mt-3 lg:mt-0 mr-5">
-              SIGN IN
-            </button>
-          </Link>
+    <div className="bg-[#F39200] py-6 flex justify-end px-2">
+      <div className="flex mr-10">
+        <Link href={"/login"}>
+          <button className="w-30 px-10 py-2 rounded-full bg-[#29235c] text-white hover:text-[#F39200] mt-3 lg:mt-0 mr-7 transition transition-colors duration-300">
+            sign in
+          </button>
+        </Link>
 
-          <Link href={"/register"}>
-            <button className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:text-[#F39200] border mt-3 lg:mt-0 mr-5">
-              SIGN UP
-            </button>
-          </Link>
-        </div>
+        <Link href={"/register"}>
+          <button className="w-30 px-10 py-2 rounded-full bg-[#29235c] text-white hover:text-[#F39200] mt-3 lg:mt-0 transition transition-colors duration-300">
+            sign up
+          </button>
+        </Link>
       </div>
-    </nav>
+    </div>
   );
 };
 
