@@ -1,6 +1,5 @@
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
-import ProvidersWrapper from "./ProvidersWrapper";
 import Providers from "../redux/provider";
 import { UserProvider } from "./UserContext";
 
@@ -16,9 +15,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <UserProvider>
-          <ProvidersWrapper>
-            <Providers>{children}</Providers>
-          </ProvidersWrapper>
+          <Providers>{children}</Providers>
         </UserProvider>
       </body>
     </html>
