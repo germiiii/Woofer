@@ -24,6 +24,7 @@
     "firebase": "^10.6.0",
     "install": "^0.13.0",
     "js-cookie": "^3.0.5",
+    "jsonwebtoken": "^9.0.2",
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
     "next": "^14.0.2",
