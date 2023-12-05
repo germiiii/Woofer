@@ -37,7 +37,7 @@ const Navbar = () => {
         <Link href={"/register"}>
           <button
             className={`w-30 px-10 py-2 rounded-full bg-[#29235c] text-white ${
-              currentPath === "/register"
+              currentPath === "/register" || currentPath === "/aditionalForm"
                 ? "text-[#F39200]"
                 : "hover:text-[#F39200]"
             } mt-3 lg:mt-0 transition transition-colors duration-300`}
