@@ -1,8 +1,8 @@
-"use client"
-import Link from 'next/link.js';
-import LoginForm from '../Components/LoginForm.jsx';
-import MainLanding from '../Components/MainLanding.jsx';
-import Image from 'next/image'
+"use client";
+import Link from "next/link.js";
+import LoginForm from "../Components/LoginForm.jsx";
+import MainLanding from "../Components/MainLanding.jsx";
+import Image from "next/image";
 
 export default function LoginPage() {
   return (
@@ -16,12 +16,16 @@ export default function LoginPage() {
           </Link>
         </div>
       </div>
-  
+
       <div className="flex min-h-screen absolute w-full">
-        <div className="w-full md:w-1/2 px-6 py-4 bg-white h-971 overflow-y-auto">
-          <MainLanding />
-        </div>
-        <div className="w-full md:w-1/2 flex flex-col relative" style={{ marginTop: '5rem', height: 'calc(100vh - 4rem)', overflowY: 'auto' }}>
+        <div
+          className="w-full md:w-1/2 flex flex-col relative"
+          style={{
+            marginTop: "5rem",
+            height: "calc(100vh - 4rem)",
+            overflowY: "auto",
+          }}
+        >
           <LoginForm />
         </div>
       </div>
