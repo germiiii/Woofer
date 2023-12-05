@@ -20,7 +20,12 @@ export default function LoginPage() {
             style={{ marginTop: "-100px" }}
           >
             <Link href={"/"}>
-              <Image src="/ISOWoofer.png" width="600" height="0" />
+              <Image
+                src="/ISOWoofer.png"
+                width="600"
+                height="0"
+                alt="woofer logo"
+              />
             </Link>
           </div>
         </div>

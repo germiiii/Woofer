@@ -2,6 +2,8 @@
 import Link from "next/link";
 import React from "react";
 import { usePathname } from "next/navigation";
+import "tailwindcss/tailwind.css";
+import "../stylesLanding.css";
 
 const navLinks = [
   {
