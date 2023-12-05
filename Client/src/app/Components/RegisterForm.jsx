@@ -10,10 +10,11 @@ import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useUser } from "../UserContext";
 import provinces from "../../app/register/provinces";
+import "tailwindcss/tailwind.css";
+import "../stylesLanding.css";
 
 const RegisterForm = () => {
-
-  const api = process.env.NEXT_PUBLIC_APIURL
+  const api = process.env.NEXT_PUBLIC_APIURL;
 
   const googleAuth = new GoogleAuthProvider();
   const [user] = useAuthState(auth);
@@ -28,7 +29,7 @@ const RegisterForm = () => {
     username: "",
     email: "",
     password: "",
-    isWalker: false,
+    isWalker: "",
     image: "",
     province: "",
   });
@@ -80,11 +81,8 @@ const RegisterForm = () => {
     userFormData.append("province", userData.province);
 
     try {
-      const response = await axios.post(
-        `${api}/register`,
-        userFormData
-      );
-      console.log(axios.defaults.baseURL)
+      const response = await axios.post(`${api}/register`, userFormData);
+      console.log(axios.defaults.baseURL);
       setFormSent(true);
     } catch (e) {
       window.alert("Registration failed.");
@@ -93,170 +91,161 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-4 bg-indigo-200 rounded shadow-md">
-      <div className="flex justify-center">
-        {formSent ? (
-          <div className="text-green-500 mb-4">
-            Registration successful! Check your inbox for a confirmation email.
-            <button
-              className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5"
-              onClick={() => {
-                router.push("/login");
-              }}
+    <div className="w-full h-full bg-[#29235c] flex items-center justify-center ">
+      {formSent ? (
+        <div className="text-[#F39200] text-2xl text-center">
+          Registration successful!
+          <br />
+          Check your inbox for a confirmation email.
+        </div>
+      ) : (
+        <div className="w-full h-full flex flex-col justify-center">
+          <div className="flex justify-center mb-20">
+            <h1
+              className="text-6xl text-[#F39200] font-extrabold"
+              style={{ fontFamily: "LikeEat" }}
             >
-              LogIn
-            </button>
-          </div>
-        ) : (
-          <form onSubmit={handleRegister} method="post">
-            <div className="flex justify-center">
-              <Image
-                src="/ISOWoofer.png"
-                alt="logo"
-                width={200}
-                height={90}
-                className="mx-auto"
-              />
-            </div>
-            <h1 className="text-2xl text-indigo-900 font-extrabold mb-4">
-              REGISTER
+              Sign up
             </h1>
-            <label className="block mb-2">
-              Your name
-              <input
-                type="text"
-                name="name"
-                placeholder="Enter your name..."
-                onChange={handleChange}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              />
-            </label>
-            <br />
-            <label className="block mb-2">
-              Your last name
-              <input
-                type="text"
-                name="lastName"
-                placeholder="Enter your last name..."
-                onChange={handleChange}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              />
-            </label>
-            <br />
-            <label className="block mb-2">
-              Your username
-              <input
-                type="text"
-                name="username"
-                placeholder="Enter your username..."
-                onChange={handleChange}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              />
-            </label>
-            <br />
-            <label className="block mb-2">
-              Your email
-              <input
-                type="email"
-                name="email"
-                placeholder="Enter your email..."
-                onChange={handleChange}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              />
-            </label>
-            <br />
-            <label className="block mb-2">
-              Your province
-              <select
-                name="province"
-                onChange={handleChange}
-                value={userData.province}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              >
-                <option value="">Select your province</option>
-                {provinces.map((province) => (
-                  <option key={province} value={province}>
-                    {province}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <br />
-            <label className="block mb-2">
-              Your address
-              <input
-                type="text"
-                name="address"
-                placeholder="Enter your address..."
-                onChange={handleChange}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              />
-            </label>
-            <br />
-            <label className="block mb-2">
-              Your password
-              <input
-                type="password"
-                name="password"
-                placeholder="Enter your password..."
-                onChange={handleChange}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              />
-            </label>
-            <br />
-            <label className="block mb-2">
-              Profile Picture
-              <input
-                type="file"
-                name="image"
-                accept="image/*"
-                onChange={handleChange}
-                ref={fileInputRef}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              />
-            </label>
-            <br />
-            <label className="block mb-2">
-              Type of Woofer
-              <select
-                name="isWalker"
-                onChange={handleChange}
-                value={userData.isWalker}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              >
-                <option value="false">Owner</option>
-                <option value="true">Walker</option>
-              </select>
-            </label>
-            <br />
-            <div>
-              <button
-                type="submit"
-                className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5"
-              >
-                Sign Up
-              </button>
+          </div>
+
+          <form
+            onSubmit={handleRegister}
+            method="post"
+            className="flex items-center justify-center w-full"
+          >
+            <div className="flex flex-col justify-center mr-14 h-full">
+              <label className="mb-16">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="name"
+                  onChange={handleChange}
+                  className="rounded-full px-10 py-2  w-full"
+                />
+              </label>
+              <label className=" mb-16">
+                <input
+                  type="text"
+                  name="lastName"
+                  placeholder="last name"
+                  onChange={handleChange}
+                  className="rounded-full px-3  py-2  w-full"
+                />
+              </label>
+              <label className=" mb-16">
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="username"
+                  onChange={handleChange}
+                  className="rounded-full px-3 py-2  w-full"
+                />
+              </label>
+              <label className=" mb-16">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="email"
+                  onChange={handleChange}
+                  className="rounded-full px-3 py-2  w-full"
+                />
+              </label>
+              <label className="">
+                <select
+                  name="isWalker"
+                  onChange={handleChange}
+                  value={userData.isWalker}
+                  className="rounded-full px-3 py-2 w-full text-[#29235c]"
+                >
+                  <option value="">select your woofer type</option>
+                  <option value="false">Owner</option>
+                  <option value="true">Walker</option>
+                </select>
+              </label>
             </div>
 
-            <div>
-              <button
-                onClick={loginGoogle}
-                className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400"
-                type="button"
-              >
-                <Image
-                  src={"/google.png"}
-                  alt="Google Logo"
-                  width={50}
-                  height={50}
-                  className="w-6 h-6 mr-2"
+            <div className="flex flex-col">
+              <label className=" mb-16">
+                <select
+                  name="province"
+                  onChange={handleChange}
+                  value={userData.province}
+                  className="rounded-full px-3 py-2 text-[#29235c]"
+                  style={{ width: "300px", height: "40px" }}
+                >
+                  <option value="">select your province</option>
+                  {provinces.map((province) => (
+                    <option key={province} value={province}>
+                      {province}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className=" mb-16">
+                <input
+                  type="text"
+                  name="address"
+                  placeholder="address"
+                  onChange={handleChange}
+                  className="rounded-full px-10 py-2 w-full"
                 />
-                <span>Sign Up with Google</span>
-              </button>
+              </label>
+              <label className=" mb-16">
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="password"
+                  onChange={handleChange}
+                  className="rounded-full px-3 py-2 w-full"
+                />
+              </label>
+              <label className=" mb-16">
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  onChange={handleChange}
+                  ref={fileInputRef}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current.click()}
+                  className="rounded-full px-3 py-2 bg-white w-full hover:text-[#F39200] text-[#29235c]"
+                >
+                  select your profile picture
+                </button>
+              </label>
+              <div className="flex items-center justify-center">
+                <button
+                  type="submit"
+                  className="px-8 py-2 rounded-full bg-white text-[#29235c] font-extrabold transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
+                >
+                  sign up
+                </button>
+                <div className="flex items-center justify-center ml-5 mr-5">
+                  <h1 className="text-white">or</h1>
+                </div>
+                <button
+                  onClick={loginGoogle}
+                  className="bg-white text-[#29235c] px-5 py-2 rounded-full flex items-center justify-center focus:outline-none transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
+                  type="button"
+                >
+                  <Image
+                    src={"/google.png"}
+                    alt="Google Logo"
+                    width={20}
+                    height={20}
+                    className="mr-2"
+                  />
+                  <span>Google</span>
+                </button>
+              </div>
             </div>
           </form>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
