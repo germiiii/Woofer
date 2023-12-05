@@ -11,7 +11,7 @@ const walkRouter = Router();
 //walk routes
 walkRouter.post("/", walkHandlerPost);
 walkRouter.get("/walker/:walkerId", walkHandlerGetByWalker);
-walkRouter.get("/walker/:ownerId", walkHandlerGetByOwner);
+walkRouter.get("/owner/:ownerId", walkHandlerGetByOwner);
 walkRouter.get("/all", walkHandlerGeAll);
 
 module.exports = walkRouter;
