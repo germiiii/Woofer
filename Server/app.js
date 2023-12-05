@@ -4,7 +4,7 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const routes = require("./Routes/index.js");
-const mercadopago = require('mercadopago'); //!
+// const mercadopago = require('mercadopago'); //!
 
 //* const passport = require('./Routes/Middlewares/passport.js');
 const { FRONTEND } = process.env;
@@ -27,7 +27,7 @@ server.use(morgan("dev"));
 
 server.use((req, res, next) => {
   res.header(
-    "Access-Control-Allow-Origin", "*"
+    "Access-Control-Allow-Origin", 
     `${FRONTEND || "https://woofer-taupe.vercel.app"}`
   );
   res.header("Access-Control-Allow-Credentials", "true");

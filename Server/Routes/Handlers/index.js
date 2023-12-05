@@ -21,6 +21,7 @@ const { walkHandlerPost } = require("./walkHandlerPost");
 const { walkHandlerGeAll } = require("./walkHandlerGeAll");
 const { walkHandlerGetByWalker } = require("./walkHandlerGetByWalker");
 const { walkHandlerGetByOwner } = require("./walkHandlerGetByOwner");
+const { paymentHandlerPost } = require("./paymentHandlerPost");
 
 module.exports = {
   userHandlerLogin,
@@ -46,4 +47,5 @@ module.exports = {
   walkHandlerGetByWalker,
   walkHandlerGetByOwner,
   ownerHandlerGetById,
+  paymentHandlerPost,
 };
