@@ -6,7 +6,8 @@ const walkPost = async (
   walkTypes,
   dogs,
   duration,
-  totalPrice
+  totalPrice,
+  paymentMethod
 ) => {
   const owner = await Owner.findOne({
     where: { userId: ownerId, is_active: true },
@@ -31,15 +32,19 @@ const walkPost = async (
 
   const newWalk = await Walk.create({
     date: new Date(),
+    startTime: new Date().toLocaleTimeString(), //obtengo la hora actual
     duration: duration || 60,
-    totalPrice,
     dogNumber: dogsCount,
+    totalPrice,
+    paymentMethod,
   });
+
+  newWalk.addWalkTypes(walkTypes);
 
   await owner.addWalk(newWalk, { through: Walk });
   await walker.addWalk(newWalk, { through: Walk });
-  
-  //si hay un array de dogs los guardo en la info del paseo   
+
+  //si hay un array de dogs los guardo en la info del paseo
   if (Array.isArray(dogs)) {
     const ownerDogs = await owner.getDogs();
     await Promise.all(
