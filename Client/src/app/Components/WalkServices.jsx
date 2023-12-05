@@ -41,7 +41,7 @@ const WalkTypes = () => {
       {walkTypes.length > 0 ? (
         walkTypes.map(({ id, title, price, description }) => (
           <div className="mb-4" key={id}>
-            <Link href={`/services/${id}`}>
+            <Link href={`/services/${id}`} passHref>
               <div>
                 <WalkServiceDetail
                   id={id}
@@ -60,5 +60,22 @@ const WalkTypes = () => {
     </div>
   );
 };
+
+export async function getServerSideProps() {
+  let walkTypes = [];
+
+  try {
+    const data = await getWalkTypes();
+    walkTypes = data;
+  } catch (error) {
+    console.error('Error fetching walk types:', error);
+  }
+
+  return {
+    props: {
+      walkTypes,
+    },
+  };
+}
 
 export default WalkTypes;

@@ -1,27 +1,45 @@
 "use client"
-import React from 'react';
-import axios from 'axios';
-import WalkServiceDetail from '../../Components/WalkServiceDetail'
+import { useParams, useRouter } from 'next/navigation';
+import WalkServiceDetail from '../../Components/WalkServiceDetail';
+import { useState, useEffect } from 'react';
+import Loader  from '../../Components/Loader';
+import axios from 'axios'; // Import axios or other necessary modules
 
-const ServiceDetail = ({ service }) => {
+const ServiceDetail = () => {
+  
+  const { id } = useParams()
+  const [service, setService] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const api = process.env.NEXT_PUBLIC_APIURL;
+        const response = await axios.get(`${api}/walkType/${id}`); 
+        setService(response.data);
+      } catch (error) {
+        console.error('Error fetching service details:', error);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
   if (!service) {
-    return <div>Loading...</div>; // Handle loading state or error state
+    return (
+      <div>
+        <Loader/>
+      </div>
+    )
   }
 
-  return <WalkServiceDetail {...service} />;
-};
+  const { title, price, description } = service;
 
-ServiceDetail.getInitialProps = async ({ query }) => {
-  try {
-    const { id } = query;
-    const { data } = await axios.get(`http://localhost:3001/walkType/${id}`);
-    const service = data; // Assuming data contains details of the specific service
-
-    return { service };
-  } catch (error) {
-    console.error('Error fetching service details:', error);
-    return { service: null }; // Or handle error state
-  }
+  return (
+    <div>
+      <h1 className="text-3xl font-bold mb-4">{title}</h1>
+   
+    </div>
+  );
 };
 
 export default ServiceDetail;
