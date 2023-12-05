@@ -4,11 +4,8 @@ import WalkerCard from "./WalkerCard.jsx";
 import { useState, useEffect } from "react";
 import "tailwindcss/tailwind.css";
 
-
 const SelectWalkers = (props) => {
-
-
-  const api = process.env.NEXT_PUBLIC_APIURL
+  const api = process.env.NEXT_PUBLIC_APIURL;
 
   const [walkers, setWalkers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,19 +21,14 @@ const SelectWalkers = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${api}/walker/available`
-        );
+        const response = await axios.get(`${api}/walker/available`);
         setWalkers(response.data.walkers);
       } catch (error) {
         console.error("Error fetching walkers:", error);
       }
     };
     fetchData();
-  
   }, []);
-
-  console.log(walkers);
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
@@ -125,16 +117,16 @@ const SelectWalkers = (props) => {
   const renderList = filteredWalkers
     .slice(startIndex, endIndex)
     .map((walker) => (
-        <WalkerCard
-          key={walker.id}
-          name={walker.name}
-          lastName={walker.lastName}
-          address={walker.address}
-          image={walker.image}
-          dogCapacity={walker.walker.dog_capacity}
-          walkDuration={walker.walker.walk_duration}
-          dogSize={walker.walker.dog_size}
-        />
+      <WalkerCard
+        key={walker.id}
+        name={walker.name}
+        lastName={walker.lastName}
+        address={walker.address}
+        image={walker.image}
+        dogCapacity={walker.walker.dog_capacity}
+        walkDuration={walker.walker.walk_duration}
+        dogSize={walker.walker.dog_size}
+      />
     ));
 
   const containerStyle = {

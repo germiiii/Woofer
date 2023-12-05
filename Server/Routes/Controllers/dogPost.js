@@ -36,10 +36,11 @@ const dogPost = async (data, file) => {
   if (!owner) {
     throw new Error("Owner not found");
   }
-
+  let imagePath = "";
   // upload image
   if (file) {
-    await uploadImage(file.path);
+    imagePath = file.path;
+    await uploadImage(imagePath);
   }
 
   // create
@@ -48,7 +49,7 @@ const dogPost = async (data, file) => {
     breed,
     size,
     age,
-    img: file.path,
+    img: imagePath,
   });
 
   // asociate the dogs with the owner
@@ -59,7 +60,7 @@ const dogPost = async (data, file) => {
 
   // data to return
   const userData = await User.findOne({
-    where: { username: username, is_active: true },
+    where: { id: id, is_active: true },
 
     include: [
       {
