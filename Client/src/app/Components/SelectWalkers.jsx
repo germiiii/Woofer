@@ -4,7 +4,12 @@ import WalkerCard from "./WalkerCard.jsx";
 import { useState, useEffect } from "react";
 import "tailwindcss/tailwind.css";
 
+
 const SelectWalkers = (props) => {
+
+
+  const api = process.env.NEXT_PUBLIC_APIURL
+
   const [walkers, setWalkers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [dogCapacityFilter, setDogCapacityFilter] = useState("");
@@ -20,7 +25,7 @@ const SelectWalkers = (props) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://woofer-server-nsjo.onrender.com/walker/available"
+          `${api}/walker/available`
         );
         setWalkers(response.data.walkers);
       } catch (error) {
@@ -28,6 +33,7 @@ const SelectWalkers = (props) => {
       }
     };
     fetchData();
+  
   }, []);
 
   console.log(walkers);

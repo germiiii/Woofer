@@ -12,6 +12,9 @@ import { useUser } from "../UserContext";
 import provinces from "../../app/register/provinces";
 
 const RegisterForm = () => {
+
+  const api = process.env.NEXT_PUBLIC_APIURL
+
   const googleAuth = new GoogleAuthProvider();
   const [user] = useAuthState(auth);
   const { updateUser } = useUser();
@@ -78,9 +81,10 @@ const RegisterForm = () => {
 
     try {
       const response = await axios.post(
-        "https://woofer-server-nsjo.onrender.com/register",
+        `${api}/register`,
         userFormData
       );
+      console.log(axios.defaults.baseURL)
       setFormSent(true);
     } catch (e) {
       window.alert("Registration failed.");

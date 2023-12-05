@@ -8,6 +8,9 @@ import { useRouter } from "next/navigation";
 import provinces from "../../app/register/provinces";
 
 const AditionalForm = () => {
+
+  const api = process.env.NEXT_PUBLIC_APIURL;
+
   const router = useRouter();
   const { userData } = useUser();
 
@@ -50,7 +53,7 @@ const AditionalForm = () => {
 
     try {
       const response = await axios.post(
-        "https://woofer-server-nsjo.onrender.com/register",
+        `${api}/register`,
         formData
       );
 
