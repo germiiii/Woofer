@@ -87,7 +87,7 @@ const LoginForm = () => {
   }
 
   return (
-    <div className="w-full h-full bg-[#29235c] flex flex-col items-center justify-center ">
+    <div className="w-full h-full bg-[#29235c] flex flex-col items-center justify-center  ">
       <form
         onSubmit={handleSubmit}
         method="post"
@@ -101,7 +101,7 @@ const LoginForm = () => {
         </h1>
         <label className="mb-10">
           <input
-            className="rounded-full px-10 py-2  w-full"
+            className="rounded-full px-10 py-2  w-full placeholder-"
             type="email"
             name="email"
             placeholder="email"

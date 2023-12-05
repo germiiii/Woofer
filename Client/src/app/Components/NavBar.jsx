@@ -2,6 +2,8 @@
 import Link from "next/link";
 import React from "react";
 import { usePathname } from "next/navigation";
+import "tailwindcss/tailwind.css";
+import "../stylesLanding.css";
 
 const navLinks = [
   {
@@ -16,6 +18,7 @@ const navLinks = [
 
 const Navbar = () => {
   const currentPath = usePathname();
+  console.log(currentPath);
   return (
     <div className="bg-[#F39200] py-6 flex justify-end px-2">
       <div className="flex mr-10">
@@ -34,7 +37,7 @@ const Navbar = () => {
         <Link href={"/register"}>
           <button
             className={`w-30 px-10 py-2 rounded-full bg-[#29235c] text-white ${
-              currentPath === "/register" || currentPath === "/aditionalForm"
+              currentPath === "/register"
                 ? "text-[#F39200]"
                 : "hover:text-[#F39200]"
             } mt-3 lg:mt-0 transition transition-colors duration-300`}
