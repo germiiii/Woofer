@@ -23,7 +23,7 @@ module.exports = (sequelize) => {
         allowNull: true,
       },
       walk_type: {
-        type: DataTypes.ENUM("premium", "normal", "express"),
+        type: DataTypes.ENUM("premium", "standart", "express"),
         allowNull: true
       },
       dog_capacity: {
