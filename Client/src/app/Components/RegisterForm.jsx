@@ -59,8 +59,7 @@ const RegisterForm = () => {
     } else if (userData.username.length > 255) {
       errors.username = "username cannot exceed 255 characters";
     } else if (!usernameRegex.test(userData.username)) {
-      errors.username =
-        "username can only contain alphanumeric characters and underscores";
+      errors.username = "username must be alphanumeric";
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
