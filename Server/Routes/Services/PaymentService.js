@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { ACCESS_TOKEN } = process.env;
+const { MERCADOPAGO_ACCESS_TOKEN } = process.env;
 
 class PaymentService {
   async createPayment(payer_email, title, description, price) {
@@ -28,7 +28,7 @@ class PaymentService {
     const payment = await axios.post(url, body, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        Authorization: `Bearer ${MERCADOPAGO_ACCESS_TOKEN}`,
       },
     });
     return payment.data;
