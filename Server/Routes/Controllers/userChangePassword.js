@@ -9,6 +9,7 @@ const generateToken = () => {
 const updateUserPasswordInfo = async (email) => {
   //verificamos que el email existe en la bd
   const user = await User.findOne({ where: { email } });
+  console.log('usuario encontrado:', user)
 
   if (!user) {
     throw new Error('Correo electrónico no encontrado');
@@ -18,6 +19,8 @@ const updateUserPasswordInfo = async (email) => {
   user.resetPasswordToken = token;
   user.resetPasswordExpires = Date.now() + 3600000;
   await user.save();
+  console.log(token)
+  console.log('Nuevos datos:', user)
   return token;
 };
 
@@ -26,7 +29,7 @@ const sendPasswordResetEmail = (email, token, res) => {
     from: 'woofer@gmail.com',
     to: email,
     subject: 'Solicitud de Cambio de Contraseña',
-    text: `Para cambiar tu contraseña, haz clic en el siguiente enlace: http://localhost:3001/changePassword/${token}`
+    text: `Para cambiar tu contraseña, haz clic en el siguiente enlace: http://localhost:3000/changePassword/${token}`
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

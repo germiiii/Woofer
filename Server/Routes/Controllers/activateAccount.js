@@ -9,9 +9,8 @@ const activateAccount = async (req, res) => {
       });
   
       if (user) {
-        // Usuario encontrado, activar la cuenta
         user.is_active = true;
-        user.verificationToken = null; // Limpia el token después de activar la cuenta
+        user.verificationToken = null; //limpiar token
         await user.save();
   
         return res.status(200).json({ success: true, message: 'Cuenta activada exitosamente' });

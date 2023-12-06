@@ -38,7 +38,7 @@ const ActivateAccount = () => {
 
   return (
     <div>
-      <p>Activando cuenta...</p>
+      <p>Cuenta activada. Por favor, inicia sesión.</p>
       <button onClick={redirectToLogin}>Ir a Iniciar Sesión</button>
     </div>
   );
