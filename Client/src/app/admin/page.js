@@ -6,6 +6,8 @@ import Box from "@mui/material/Box";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 
 export default function DataGridDemo() {
+  const api = process.env.NEXT_PUBLIC_APIURL;
+
   const columns = [
     { field: "id", headerName: "ID", width: 300 },
     {
@@ -114,9 +116,7 @@ export default function DataGridDemo() {
 
   const fetchAllUsers = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:3001/users?role=admin"
-      );
+      const response = await axios.get(`${api}/users?role=admin`);
       setUsers(response.data);
       console.log(response.data);
     } catch (error) {
@@ -130,7 +130,7 @@ export default function DataGridDemo() {
 
   const handleActivate = async (userId) => {
     try {
-      await axios.put(`http://localhost:3001/activate/users/${userId}`);
+      await axios.put(`${api}/activate/users/${userId}`);
       await fetchAllUsers();
     } catch (error) {
       console.error("Error activating user:", error);
@@ -139,7 +139,7 @@ export default function DataGridDemo() {
 
   const handleDeactivate = async (userId) => {
     try {
-      await axios.delete(`http://localhost:3001/activate/users/${userId}`);
+      await axios.delete(`${api}/activate/users/${userId}`);
       await fetchAllUsers();
     } catch (error) {
       console.error("Error deactivating user:", error);
@@ -153,7 +153,7 @@ export default function DataGridDemo() {
 
   return (
     <div>
-      <div style={{ textAlign: "center", fontSize: "30px", margin: "20px 0" }}>
+      <div style={{ textAlign: "center", fontSize: "30px", margin: "10px 0" }}>
         Woofer Panel
       </div>
 

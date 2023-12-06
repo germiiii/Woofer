@@ -6,10 +6,15 @@ import { useUser } from "../UserContext";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import provinces from "../../app/register/provinces";
+import "tailwindcss/tailwind.css";
+import "../stylesLanding.css";
 
 const AditionalForm = () => {
+  const api = process.env.NEXT_PUBLIC_APIURL;
+
   const router = useRouter();
   const { userData } = useUser();
+  const [validationErrors, setValidationErrors] = useState({});
 
   const [formData, setFormData] = useState({
     name: userData.name || "",
@@ -18,7 +23,7 @@ const AditionalForm = () => {
     address: "",
     username: "",
     password: "",
-    isWalker: false,
+    isWalker: "",
     image: "",
     province: "",
   });
@@ -31,11 +36,38 @@ const AditionalForm = () => {
       address: "",
       username: "",
       password: "",
-      isWalker: false,
+      isWalker: "",
       image: "",
       province: "",
     });
   }, [userData]);
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!formData.province) {
+      errors.province = "select your province";
+    }
+
+    if (!formData.address.trim()) {
+      errors.address = "address cannot be empty";
+    }
+
+    if (!formData.username.trim()) {
+      errors.username = "username cannot be empty";
+    }
+
+    if (!formData.password.trim()) {
+      errors.password = "password cannot be empty";
+    }
+
+    if (!formData.isWalker) {
+      errors.isWalker = "select your woofer type";
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,16 +79,16 @@ const AditionalForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
 
     try {
-      const response = await axios.post(
-        "http://localhost:3001/register",
-        formData
-      );
+      const response = await axios.post(`${api}/register`, formData);
 
       if (response.status === 201) {
         const loginConfirmed = window.confirm(
-          "¡Registro exitoso! ¿Quieres iniciar sesión ahora?"
+          "Registration successful! Do you want to log in now?"
         );
 
         if (loginConfirmed) {
@@ -66,120 +98,162 @@ const AditionalForm = () => {
         alert("Error al registrar. Inténtalo de nuevo.");
       }
     } catch (error) {
-      console.error("Error al enviar la solicitud:", error);
-      alert("Error al registrar. Inténtalo de nuevo.");
+      console.error("Error sending request:", error);
+      alert("Error registering. Please try again.");
     }
   };
+
   return (
-    <div className="max-w-md mx-auto mt-10 p-4 bg-indigo-200 rounded shadow-md">
-      <form onSubmit={handleSubmit}>
-        <div className="flex justify-center">
-          <Image
-            src="/ISOWoofer.png"
-            alt="logo"
-            width={200}
-            height={90}
-            className="mx-auto"
-          />
+    <div className="w-full h-full bg-[#29235c] flex items-center justify-center ">
+      <div className="w-full h-full flex flex-col justify-center">
+        <div className="flex justify-center items-center">
+          <h1
+            className="text-6xl text-[#F39200] font-extrabold"
+            style={{ fontFamily: "LikeEat" }}
+          >
+            Sign up with Google
+          </h1>
         </div>
-        <label className="block mb-2">
-          Name
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-          />
-        </label>
-        <br />
-        <label className="block mb-2">
-          Last Name:
-          <input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-          />
-        </label>
-        <br />
-        <label className="block mb-2">
-          Email:
-          <input
-            type="text"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            disabled
-            className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-          />
-        </label>
-        <br />
-        <label className="block mb-2">
-          Your province
-          <select
-            name="province"
-            onChange={handleChange}
-            value={formData.province}
-            className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-          >
-            <option value="">Select your province</option>
-            {provinces.map((province) => (
-              <option key={province} value={province}>
-                {province}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="block mb-2">
-          Address:
-          <input
-            type="text"
-            name="address"
-            onChange={handleChange}
-            className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-          />
-        </label>
-        <br />
-        <label className="block mb-2">
-          Username:
-          <input
-            type="text"
-            name="username"
-            onChange={handleChange}
-            className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-          />
-        </label>
-        <br />
-        <label className="block mb-2">
-          Password:
-          <input
-            type="password"
-            name="password"
-            onChange={handleChange}
-            className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-          />
-        </label>
-        <label className="block mb-2">
-          Type of Woofer
-          <select
-            name="isWalker"
-            onChange={handleChange}
-            value={formData.isWalker}
-            className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-          >
-            <option value="false">Owner</option>
-            <option value="true">Walker</option>
-          </select>
-        </label>
-        <button
-          type="submit"
-          className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5"
+        <form
+          onSubmit={handleSubmit}
+          className="flex justify-center w-full mt-20"
         >
-          Confirm
-        </button>
-      </form>
+          <div className="flex flex-col r mr-14 h-full">
+            <label className="mb-10" style={{ height: "64px" }}>
+              <input
+                type="text"
+                name="name"
+                placeholder="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="rounded-full px-10 py-2  w-full"
+                disabled
+              />
+            </label>
+            <label className="mb-10" style={{ height: "64px" }}>
+              <input
+                type="text"
+                name="lastName"
+                placeholder="last name"
+                value={formData.lastName}
+                onChange={handleChange}
+                className="rounded-full px-10 py-2  w-full"
+                disabled
+              />
+            </label>
+            <label className=" mb-10" style={{ height: "64px" }}>
+              <input
+                type="text"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                disabled
+                className="rounded-full px-10 py-2  w-full"
+              />
+            </label>
+            <label className="mb-10" style={{ height: "64px" }}>
+              <select
+                name="province"
+                onChange={handleChange}
+                value={formData.province}
+                className={`rounded-full px-3 py-2 text-[#29235c] ${
+                  validationErrors.province ? "border-[#F39200]" : ""
+                }`}
+                style={{ width: "300px", height: "38px" }}
+              >
+                <option value="">select your province</option>
+                {provinces.map((province) => (
+                  <option key={province} value={province}>
+                    {province}
+                  </option>
+                ))}
+              </select>
+              {validationErrors.province && (
+                <p className="text-[#F39200] text-sm mt-1">
+                  {validationErrors.province}
+                </p>
+              )}
+            </label>
+          </div>
+          <div className="flex flex-col">
+            <label className=" mb-10" style={{ height: "64px" }}>
+              <input
+                type="text"
+                name="address"
+                placeholder="address"
+                onChange={handleChange}
+                className={`rounded-full px-10 py-2  w-full ${
+                  validationErrors.address ? "border-[#F39200]" : ""
+                }`}
+              />
+              {validationErrors.address && (
+                <p className="text-[#F39200] text-sm mt-1">
+                  {validationErrors.address}
+                </p>
+              )}
+            </label>
+            <label className=" mb-10" style={{ height: "64px" }}>
+              <input
+                type="text"
+                name="username"
+                placeholder="username"
+                onChange={handleChange}
+                className={`rounded-full px-10 py-2  w-full ${
+                  validationErrors.username ? "border-[#F39200]" : ""
+                }`}
+              />
+              {validationErrors.username && (
+                <p className="text-[#F39200] text-sm mt-1">
+                  {validationErrors.username}
+                </p>
+              )}
+            </label>
+            <label className=" mb-10" style={{ height: "64px" }}>
+              <input
+                type="password"
+                name="password"
+                placeholder="password"
+                onChange={handleChange}
+                className={`rounded-full px-10 py-2  w-full ${
+                  validationErrors.password ? "border-[#F39200]" : ""
+                }`}
+              />
+              {validationErrors.password && (
+                <p className="text-[#F39200] text-sm mt-1">
+                  {validationErrors.password}
+                </p>
+              )}
+            </label>
+            <label className="mb-10" style={{ height: "64px" }}>
+              <select
+                name="isWalker"
+                onChange={handleChange}
+                value={formData.isWalker}
+                className={`rounded-full px-3 py-2 w-full text-[#29235c] ${
+                  validationErrors.isWalker ? "border-[#F39200]" : ""
+                }`}
+              >
+                <option value="">select your woofer type</option>
+                <option value="false">Owner</option>
+                <option value="true">Walker</option>
+              </select>
+              {validationErrors.isWalker && (
+                <p className="text-[#F39200] text-sm mt-1">
+                  {validationErrors.isWalker}
+                </p>
+              )}
+            </label>
+            <div className="flex items-end justify-end">
+              <button
+                type="submit"
+                className="px-8 py-2 rounded-full bg-white text-[#29235c] font-extrabold transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
+              >
+                confirm
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

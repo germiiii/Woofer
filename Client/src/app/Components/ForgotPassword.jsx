@@ -1,7 +1,11 @@
 "use client";
 import { useState } from 'react';
+import axios from 'axios';
 
 const ForgotPassword = () => {
+
+  const api = process.env.NEXT_PUBLIC_APIURL
+
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
@@ -11,15 +15,13 @@ const ForgotPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      // Cambia la ruta de la solicitud a http://localhost:3001/changePassword
       const response = await fetch('http://localhost:3001/changePassword', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
       });
 
       const data = await response.json();

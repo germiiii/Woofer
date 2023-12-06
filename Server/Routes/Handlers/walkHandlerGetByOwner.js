@@ -1,4 +1,4 @@
-const { walkGetByOwner } = require("../controllers");
+const { walkGetByOwner } = require("../Controllers");
 
 const walkHandlerGetByOwner = async (req, res) => {
   try {

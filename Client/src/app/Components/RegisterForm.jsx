@@ -10,8 +10,12 @@ import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useUser } from "../UserContext";
 import provinces from "../../app/register/provinces";
+import "tailwindcss/tailwind.css";
+import "../stylesLanding.css";
 
 const RegisterForm = () => {
+  const api = process.env.NEXT_PUBLIC_APIURL;
+
   const googleAuth = new GoogleAuthProvider();
   const [user] = useAuthState(auth);
   const { updateUser } = useUser();
@@ -25,12 +29,72 @@ const RegisterForm = () => {
     username: "",
     email: "",
     password: "",
-    isWalker: false,
+    isWalker: "",
     image: "",
     province: "",
   });
   const [formSent, setFormSent] = useState(false);
   const [image, setImage] = useState("");
+
+  const [validationErrors, setValidationErrors] = useState({});
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!userData.name.trim()) {
+      errors.name = "name cannot be empty";
+    } else if (userData.name.length > 255) {
+      errors.name = "name cannot exceed 255 characters";
+    }
+
+    if (!userData.lastName.trim()) {
+      errors.lastName = "last name cannot be empty";
+    } else if (userData.lastName.length > 255) {
+      errors.lastName = "last name cannot exceed 255 characters";
+    }
+
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
+    if (!userData.username.trim()) {
+      errors.username = "username cannot be empty";
+    } else if (userData.username.length > 255) {
+      errors.username = "username cannot exceed 255 characters";
+    } else if (!usernameRegex.test(userData.username)) {
+      errors.username =
+        "username can only contain alphanumeric characters and underscores";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!userData.email.trim()) {
+      errors.email = "email cannot be empty";
+    } else if (userData.email.length > 255) {
+      errors.email = "email cannot exceed 255 characters";
+    } else if (!emailRegex.test(userData.email)) {
+      errors.email = "invalid email format";
+    }
+
+    if (!userData.isWalker) {
+      errors.isWalker = "select your woofer type";
+    }
+
+    if (!userData.province) {
+      errors.province = "select your province";
+    }
+
+    if (!userData.address.trim()) {
+      errors.address = "address cannot be empty";
+    } else if (userData.address.length > 255) {
+      errors.address = "address cannot exceed 255 characters";
+    }
+
+    if (userData.password.length > 255) {
+      errors.password = "password cannot exceed 255 characters";
+    } else if (!userData.password.trim()) {
+      errors.password = "password cannot be empty";
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const loginGoogle = async (e) => {
     e.preventDefault();
@@ -40,10 +104,7 @@ const RegisterForm = () => {
 
       const [name, lastName] = user.displayName.split(" ");
 
-      // Actualizar el contexto con los datos de usuario
       updateUser({ name, lastName, email: user.email });
-
-      // Redirigir a la página de formulario
       router.push("/aditionalForm");
     } catch (error) {
       console.error(error);
@@ -65,6 +126,10 @@ const RegisterForm = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
+    if (!validateForm()) {
+      return;
+    }
+
     const userFormData = new FormData();
     userFormData.append("name", userData.name);
     userFormData.append("lastName", userData.lastName);
@@ -77,10 +142,8 @@ const RegisterForm = () => {
     userFormData.append("province", userData.province);
 
     try {
-      const response = await axios.post(
-        "http://localhost:3001/register",
-        userFormData
-      );
+      const response = await axios.post(`${api}/register`, userFormData);
+      console.log(axios.defaults.baseURL);
       setFormSent(true);
     } catch (e) {
       window.alert("Registration failed.");
@@ -89,170 +152,219 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-4 bg-indigo-200 rounded shadow-md">
-      <div className="flex justify-center">
-        {formSent ? (
-          <div className="text-green-500 mb-4">
-            Registration successful! Check your inbox for a confirmation email.
-            <button
-              className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5"
-              onClick={() => {
-                router.push("/login");
-              }}
+    <div className="w-full h-full bg-[#29235c] flex items-center justify-center ">
+      {formSent ? (
+        <div className="text-[#F39200] text-2xl text-center">
+          Registration successful!
+          <br />
+          Check your inbox for a confirmation email.
+        </div>
+      ) : (
+        <div className="w-full h-full flex flex-col justify-center">
+          <div className="flex justify-center mb-20">
+            <h1
+              className="text-6xl text-[#F39200] font-extrabold"
+              style={{ fontFamily: "LikeEat" }}
             >
-              LogIn
-            </button>
-          </div>
-        ) : (
-          <form onSubmit={handleRegister} method="post">
-            <div className="flex justify-center">
-              <Image
-                src="/ISOWoofer.png"
-                alt="logo"
-                width={200}
-                height={90}
-                className="mx-auto"
-              />
-            </div>
-            <h1 className="text-2xl text-indigo-900 font-extrabold mb-4">
-              REGISTER
+              Sign up
             </h1>
-            <label className="block mb-2">
-              Your name
-              <input
-                type="text"
-                name="name"
-                placeholder="Enter your name..."
-                onChange={handleChange}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              />
-            </label>
-            <br />
-            <label className="block mb-2">
-              Your last name
-              <input
-                type="text"
-                name="lastName"
-                placeholder="Enter your last name..."
-                onChange={handleChange}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              />
-            </label>
-            <br />
-            <label className="block mb-2">
-              Your username
-              <input
-                type="text"
-                name="username"
-                placeholder="Enter your username..."
-                onChange={handleChange}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              />
-            </label>
-            <br />
-            <label className="block mb-2">
-              Your email
-              <input
-                type="email"
-                name="email"
-                placeholder="Enter your email..."
-                onChange={handleChange}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              />
-            </label>
-            <br />
-            <label className="block mb-2">
-              Your province
-              <select
-                name="province"
-                onChange={handleChange}
-                value={userData.province}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              >
-                <option value="">Select your province</option>
-                {provinces.map((province) => (
-                  <option key={province} value={province}>
-                    {province}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <br />
-            <label className="block mb-2">
-              Your address
-              <input
-                type="text"
-                name="address"
-                placeholder="Enter your address..."
-                onChange={handleChange}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              />
-            </label>
-            <br />
-            <label className="block mb-2">
-              Your password
-              <input
-                type="password"
-                name="password"
-                placeholder="Enter your password..."
-                onChange={handleChange}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              />
-            </label>
-            <br />
-            <label className="block mb-2">
-              Profile Picture
-              <input
-                type="file"
-                name="image"
-                accept="image/*"
-                onChange={handleChange}
-                ref={fileInputRef}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              />
-            </label>
-            <br />
-            <label className="block mb-2">
-              Type of Woofer
-              <select
-                name="isWalker"
-                onChange={handleChange}
-                value={userData.isWalker}
-                className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
-              >
-                <option value="false">Owner</option>
-                <option value="true">Walker</option>
-              </select>
-            </label>
-            <br />
-            <div>
-              <button
-                type="submit"
-                className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5"
-              >
-                Sign Up
-              </button>
+          </div>
+
+          <form
+            onSubmit={handleRegister}
+            method="post"
+            className="flex items-center justify-center w-full"
+          >
+            <div className="flex flex-col justify-center mr-14 h-full">
+              <label className="mb-16" style={{ height: "64px" }}>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="name"
+                  onChange={handleChange}
+                  className={`rounded-full px-10 py-2  w-full ${
+                    validationErrors.name ? "border-[#F39200]" : ""
+                  }`}
+                />
+                {validationErrors.name && (
+                  <p className="text-[#F39200] text-sm mt-1">
+                    {validationErrors.name}
+                  </p>
+                )}
+              </label>
+              <label className="mb-16" style={{ height: "64px" }}>
+                <input
+                  type="text"
+                  name="lastName"
+                  placeholder="last name"
+                  onChange={handleChange}
+                  className={`rounded-full px-3 py-2  w-full ${
+                    validationErrors.lastName ? "border-[#F39200]" : ""
+                  }`}
+                />
+                {validationErrors.lastName && (
+                  <p className="text-[#F39200] text-sm mt-1">
+                    {validationErrors.lastName}
+                  </p>
+                )}
+              </label>
+              <label className=" mb-16" style={{ height: "64px" }}>
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="username"
+                  onChange={handleChange}
+                  className={`rounded-full px-3 py-2  w-full ${
+                    validationErrors.username ? "border-[#F39200]" : ""
+                  }`}
+                />
+                {validationErrors.username && (
+                  <p className="text-[#F39200] text-sm mt-1">
+                    {validationErrors.username}
+                  </p>
+                )}
+              </label>
+              <label className=" mb-16" style={{ height: "64px" }}>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="email"
+                  onChange={handleChange}
+                  className={`rounded-full px-3 py-2  w-full ${
+                    validationErrors.email ? "border-[#F39200]" : ""
+                  }`}
+                />
+                {validationErrors.email && (
+                  <p className="text-[#F39200] text-sm mt-1">
+                    {validationErrors.email}
+                  </p>
+                )}
+              </label>
+              <label className="" style={{ height: "64px" }}>
+                <select
+                  name="isWalker"
+                  onChange={handleChange}
+                  value={userData.isWalker}
+                  className={`rounded-full px-3 py-2 w-full text-[#29235c] ${
+                    validationErrors.isWalker ? "border-[#F39200]" : ""
+                  }`}
+                >
+                  <option value="">select your woofer type</option>
+                  <option value="false">Owner</option>
+                  <option value="true">Walker</option>
+                </select>
+                {validationErrors.isWalker && (
+                  <p className="text-[#F39200] text-sm mt-1">
+                    {validationErrors.isWalker}
+                  </p>
+                )}
+              </label>
             </div>
 
-            <div>
-              <button
-                onClick={loginGoogle}
-                className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400"
-                type="button"
-              >
-                <Image
-                  src={"/google.png"}
-                  alt="Google Logo"
-                  width={50}
-                  height={50}
-                  className="w-6 h-6 mr-2"
+            <div className="flex flex-col">
+              <label className=" mb-16" style={{ height: "64px" }}>
+                <select
+                  name="province"
+                  onChange={handleChange}
+                  value={userData.province}
+                  className={`rounded-full px-3 py-2 text-[#29235c] ${
+                    validationErrors.province ? "border-[#F39200]" : ""
+                  }`}
+                  style={{ width: "300px", height: "40px" }}
+                >
+                  <option value="">select your province</option>
+                  {provinces.map((province) => (
+                    <option key={province} value={province}>
+                      {province}
+                    </option>
+                  ))}
+                </select>
+                {validationErrors.province && (
+                  <p className="text-[#F39200] text-sm mt-1">
+                    {validationErrors.province}
+                  </p>
+                )}
+              </label>
+              <label className=" mb-16" style={{ height: "64px" }}>
+                <input
+                  type="text"
+                  name="address"
+                  placeholder="address"
+                  onChange={handleChange}
+                  className={`rounded-full px-10 py-2 w-full ${
+                    validationErrors.address ? "border-[#F39200]" : ""
+                  }`}
                 />
-                <span>Sign Up with Google</span>
-              </button>
+                {validationErrors.address && (
+                  <p className="text-[#F39200] text-sm mt-1">
+                    {validationErrors.address}
+                  </p>
+                )}
+              </label>
+              <label className=" mb-16" style={{ height: "64px" }}>
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="password"
+                  onChange={handleChange}
+                  className={`rounded-full px-3 py-2 w-full ${
+                    validationErrors.password ? "border-[#F39200]" : ""
+                  }`}
+                />
+                {validationErrors.password && (
+                  <p className="text-[#F39200] text-sm mt-1">
+                    {validationErrors.password}
+                  </p>
+                )}
+              </label>
+              <label className=" mb-16" style={{ height: "64px" }}>
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  onChange={handleChange}
+                  ref={fileInputRef}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current.click()}
+                  className={`rounded-full px-3 py-2 bg-white w-full hover:text-[#F39200] text-[#29235c] ${
+                    validationErrors.image ? "border-[#F39200]" : ""
+                  }`}
+                >
+                  select your profile picture
+                </button>
+              </label>
+              <div className="flex items-center justify-center mb-6">
+                <button
+                  type="submit"
+                  className="px-8 py-2 rounded-full bg-white text-[#29235c] font-extrabold transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
+                >
+                  Sign up
+                </button>
+                <div className="flex items-center justify-center ml-5 mr-5">
+                  <h1 className="text-white">or</h1>
+                </div>
+                <button
+                  onClick={loginGoogle}
+                  className="bg-white text-[#29235c] px-5 py-2 rounded-full flex items-center justify-center focus:outline-none transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
+                  type="button"
+                >
+                  <Image
+                    src={"/google.png"}
+                    alt="Google Logo"
+                    width={20}
+                    height={20}
+                    className="mr-2"
+                  />
+                  <span>Google</span>
+                </button>
+              </div>
             </div>
           </form>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

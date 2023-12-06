@@ -7,8 +7,12 @@ import Map from "../Components/Map.jsx";
 import SelectWalkers from "../Components/SelectWalkers.jsx";
 import SwitchType from "../Components/SwitchType.jsx";
 import provinces from "../register/provinces.js";
+import "tailwindcss/tailwind.css";
+import "../stylesLanding.css";
 
 const Home = () => {
+  const api = process.env.NEXT_PUBLIC_APIURL;
+
   const [formCompleted, setFormCompleted] = useState(true);
   const [addressInput, setAddressInput] = useState("");
   const [provinceInput, setProvinceInput] = useState("");
@@ -18,7 +22,7 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/users");
+        const response = await axios.get(`${api}/users`);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -72,7 +76,7 @@ const Home = () => {
   const buttonStyle = "border p-3 rounded-lg mr-2 bg-black text-white";
 
   return (
-    <div>
+    <div className="bg-[#E4E2ED]">
       {!formCompleted && <OwnerForm onSubmit={handleFormSubmit} />}
       {formCompleted && (
         <>
