@@ -8,7 +8,6 @@ const { ownerActivate } = require("./ownerActivate");
 const { ownerDeActivate } = require("./ownerDeActivate");
 const { userGetbyId } = require("./userGetbyId");
 const { ownerPost } = require("./ownerPost");
-const { dogPost } = require("./dogPost");
 const { getDogs } = require("./getDogs");
 const { ownerGetAll } = require("./ownerGetAll");
 const { ownerGetById } = require("./ownerGetById");
@@ -34,7 +33,6 @@ module.exports = {
   ownerPost,
   walkerPost,
   userGetbyId,
-  dogPost,
   getDogs,
   ownerGetAll,
   ownerGetById,

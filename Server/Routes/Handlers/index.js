@@ -11,7 +11,6 @@ const { ownerHandlerGetAll } = require("./ownerHandlerGetAll");
 const { ownerHandlerGetById } = require("./ownerHandlerGetById");
 const { ownerHandlerPost } = require("./ownerHandlerPost");
 const { dogHandlerGet } = require("./dogHandlerGet");
-const { dogHandlerPost } = require("./dogHandlerPost");
 const { walkerHandlerPost } = require("./walkerHandlerPost");
 const { walkerHandlerGetAvailable } = require("./walkerHandlerGetAvailable");
 const { walkerHandlerSetAvailable } = require("./walkerHandlerSetAvailable");
@@ -29,7 +28,6 @@ module.exports = {
   ownerHandlerPost,
   walkerHandlerPost,
   userGetByIdHandler,
-  dogHandlerPost,
   dogHandlerGet,
   ownerHandlerGetAll,
   userHandlerActivate,
