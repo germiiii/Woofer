@@ -3,12 +3,11 @@ import React from "react";
 import WalkServices from "../Components/WalkServices";
 import NavBarHome from "../Components/NavBarHome";
 
-export default function RegisterPage() {
+export default function WalkServicesPage() {
  
 
   return (
     <div>
-        <NavBarHome/>
         <WalkServices />
     </div>
   );

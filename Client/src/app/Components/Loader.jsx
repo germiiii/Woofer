@@ -1,8 +1,11 @@
 import styles from '../Styles/Loader.module.css'
 
-const Loader = ({ size = 25 }) => {
+const Loader = ({ size = 55 }) => {
   return (
-    <div style={{ width: size, height: size }} className={styles.spinner} />
+    <div className={styles.spinnerContainer}>
+       <div style={{ width: size, height: size }} className={styles.spinner} />
+    </div>
+   
   );
 }
 
