@@ -5,6 +5,7 @@ const ownerRouter = require("./ownerRouter");
 const walkerRouter = require("./walkerRouter");
 const walkRouter = require("./walkRouter");
 const walkTypeRouter = require("./walkTypeRouter");
+const paymentRouter = require("./paymentRouter");
 
 const router = express.Router();
 
@@ -18,5 +19,6 @@ router.use("/owner", ownerRouter);
 router.use("/walk", walkRouter);
 router.use("/walker", walkerRouter);
 router.use("/walkType", walkTypeRouter);
+router.use("/payment", paymentRouter);
 
 module.exports = router;

@@ -4,7 +4,6 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const routes = require("./Routes/index.js");
-const mercadopago = require("mercadopago"); //!
 
 //* const passport = require('./Routes/Middlewares/passport.js');
 const { FRONTEND } = process.env;

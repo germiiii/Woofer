@@ -58,6 +58,7 @@ const LoginForm = () => {
       });
 
       const { token } = response.data;
+      localStorage.setItem("token", token);
 
       if (response.status === 201) {
         router.push("/home");
@@ -82,6 +83,7 @@ const LoginForm = () => {
       });
 
       const { token } = response.data;
+      localStorage.setItem("token", token);
 
       if (token) {
         // Login successful
