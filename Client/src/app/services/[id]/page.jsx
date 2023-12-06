@@ -6,7 +6,7 @@ import axios from 'axios';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import "tailwindcss/tailwind.css";
 import Link from 'next/link';
-import { store } from '@/src/redux/store';
+import "./stylesCheckout.css";
 
 const Detail = () => {
   const router = useRouter();
@@ -133,6 +133,10 @@ const Detail = () => {
       router.push('/home');
     }, 3000);
   };
+
+  const handleCancel = (data) => {
+    console.log("Cancelled:", data);
+  };
   
   
   return (
@@ -147,7 +151,7 @@ const Detail = () => {
         </div>
       </div>
       <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center relative">
-    <h1 className="text-4xl font-bold mb-2">Service Details</h1>
+    <h1 className="text-4xl text-[#29235C] font-bold mb-2 mt-11"  style={{ fontFamily: "LikeEat" }}>Service Details</h1>
     <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg flex flex-col items-center relative">
       
         <div className="w-1/2 p-4">
@@ -162,9 +166,9 @@ const Detail = () => {
         <div className="w-1/2 p-4">
           {service.walkTypeData ? (
             <div>
-              <h2>{service.walkTypeData.title}</h2>
-              <h2>{service.walkTypeData.price}</h2>
+              <h1 className='font-bold text-2xl text-[#29235C] ' style={{ fontFamily: "LikeEat" }}>{service.walkTypeData.title}</h1>
               <h2>{service.walkTypeData.description}</h2>
+              <h1 className='font-bold text-2xl'>Price: ${service.walkTypeData.price}</h1>
             </div>
           ) : (
             <p>No hay información disponible para ese servicio</p>
@@ -183,9 +187,7 @@ const Detail = () => {
                   shape: "pill",
                 }}
                 createOrder={createOrder}
-                onCancel={(data) => {
-                console.log("Cancelled:", data);
-                }}
+                onCancel={handleCancel}
                 onApprove={handleApprove}
               />
             </PayPalScriptProvider>
