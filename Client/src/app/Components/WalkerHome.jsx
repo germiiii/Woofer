@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import DogWalkOption from "../Components/DogWalkOption";
 import "tailwindcss/tailwind.css";
 import Map from "../Components/Map";
-// import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 // agregar filtros por dog capacity / precio / tiempo
 
 const WalkerHome = () => {
@@ -14,22 +14,32 @@ const WalkerHome = () => {
   const [comentarios, setComentarios] = useState([]);
   const [contratacionCliente, setContratacionCliente] = useState([]);
   const [priceList, setPriceList] = useState([]);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState("");
   const [dogCapacityFilter, setDogCapacityFilter] = useState('');
   const [walkDurationFilter, setWalkDurationFilter] = useState('');
-  const [walkers, setWalkers] = useState([]);
   const [optionChosen, setOptionChosen] = useState('');
+  const [userProvince, setUserProvince] = useState('');
+  const [userAddress, setUserAddress] = useState('');
   
   useEffect(() => {
-    // const token = localStorage.getItem('token');
-    // if(token){
-    //   const decodedToken = jwt.decode(token);
-    //   setUser(decodedToken.userId);
-    //   console.log("Decode Token", decodedToken)
-    //DESCOMENTA TODO ESTO CABEZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-    // }
-    }, []);
-    
+      const obtenerDatos = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const decodedToken = jwt.decode(token);
+        try {
+          const response = await fetch(`http://localhost:3001/users/${decodedToken.userId}`);
+          const data = await response.json();
+          setUser(data);
+          setUserProvince(data.province);
+          setUserAddress(data.address);
+                } catch (error) {
+          console.error('Error al obtener datos del servidor', error);
+        }
+      }
+    };
+    obtenerDatos();
+  }, []);
+  console.log(userProvince);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,23 +53,18 @@ const WalkerHome = () => {
     fetchData();
   }, []); 
  
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${api}/walker/available`
-        );
-        setWalkers(response.data.walkers);
-      } catch (error) {
-        console.error("Error fetching walkers:", error);
-      }
-    };
-    fetchData();
-  
-  }, []);
-  console.log(priceList)
-    const handleSubmit = (event) => {
+    const handleSubmit = async(event) => {
     event.preventDefault();
+    try {
+      const saleDetailsValue = otrosDetalles
+      const response = await axios.post(
+      "http://localhost:3001/walker",
+      {sale_detail: saleDetailsValue }
+    );
+      
+    } catch (error) {
+      console.error("Error en la solicitud POST:", error);
+    }
      };
 
   const handleDogCapacityFilterChange = (event) => {
@@ -107,9 +112,8 @@ const WalkerHome = () => {
 
   const handleActivoClick = async () => {
     try {
-      const userId = localStorage.getItem('user_id');
       if (userId) {
-        await axios.put(`http://localhost:3001/walker/${userId}`, {
+        await axios.put(`http://localhost:3001/walker/${user.id}`, {
           is_available: true,
         });   
       }
@@ -123,13 +127,12 @@ const WalkerHome = () => {
       position: toast.POSITION.TOP_RIGHT,
     });
    };
-
+   
   return (
     <div className="text-center m-20">
       <ToastContainer />
-      <Map 
-      privince={walkers.province}
-      address={walkers.address}/>
+      <Map userProvince={userProvince} userAddress={userAddress} />
+
       <button onClick={prueba} className="bg-black text-white px-4 py-2">
         Prueba para cuando llegue una solicitud de paseo
       </button>
