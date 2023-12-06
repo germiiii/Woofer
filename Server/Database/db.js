@@ -71,37 +71,46 @@ sequelize.models = Object.fromEntries(capsEntries);
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
 
-const { User, Owner, Dog, Walker, Walk, WalkType } = sequelize.models;
+const { User, Owner, Dog, Walker, Walk, WalkType, Review } = sequelize.models;
 
-// Aca vendrian las relaciones
-// Product.hasMany(Reviews);
 
+//relacion de herencia de user a owner y walker
 User.hasOne(Owner);
-Owner.belongsTo(User);
-
 User.hasOne(Walker);
+Owner.belongsTo(User);
 Walker.belongsTo(User);
 
+//relaciones owner con dog
 Owner.hasMany(Dog);
 Dog.belongsTo(Owner);
 
-Owner.belongsToMany(Walker, { through: { model: Walk, unique: false } });
-Walker.belongsToMany(Owner, { through: { model: Walk, unique: false } });
-
-Dog.belongsToMany(Walk, { through: "dogWalk" });
-Walk.belongsToMany(Dog, { through: "dogWalk" });
-
-Owner.hasMany(Walk);
-Walk.belongsTo(Owner);
-
-Walker.hasMany(Walk);
-Walk.belongsTo(Walker);
-
+//relaciones walker con los tipos de paseo que hace
 Walker.belongsToMany(WalkType, { through: "walkerWalkType" });
 WalkType.belongsToMany(Walker, { through: "walkerWalkType" });
 
+//RELACIONES DE PASEO
+//relaciones de walk con owner y walker
+Owner.belongsToMany(Walker, { through: { model: Walk, unique: false } });
+Walker.belongsToMany(Owner, { through: { model: Walk, unique: false } });
+
+//relaciones walk con owner y walker
+Owner.hasMany(Walk);
+Walker.hasMany(Walk);
+Walk.belongsTo(Owner);
+Walk.belongsTo(Walker);
+
+//relacion para detallar cada perro que hace el paseo
+Dog.belongsToMany(Walk, { through: "dogWalk" });
+Walk.belongsToMany(Dog, { through: "dogWalk" });
+
+//relacion para detallar cada tipo de paseo de wall
 WalkType.belongsToMany(Walk, { through: "walkTypeWalk" });
 Walk.belongsToMany(WalkType, { through: "walkTypeWalk" });
+
+
+//relaciones entre paseo y review
+Walk.hasMany(Review);
+Review.belongsTo(Walk);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

@@ -40,6 +40,16 @@ module.exports = (sequelize) => {
         defaultValue: "toDo",
         allowNull: false,
       },
+      hasOwnerReview: {
+        type: DataTypes.BOOLEAN ,
+        defaultValue: false,
+        allowNull: false,
+      },
+      hasWalkerReview: {
+        type: DataTypes.BOOLEAN ,
+        defaultValue: false,
+        allowNull: false,
+      },
     },
     {
       timestamps: false,

@@ -15,6 +15,11 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: 1,
       },
+      dog_capacity_actual: { //counter for the actual number of dogs
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
       walk_duration: {
         type: DataTypes.ARRAY(DataTypes.ENUM("15", "30", "60", "90")),
         allowNull: true,
@@ -23,10 +28,9 @@ module.exports = (sequelize) => {
         type: DataTypes.ARRAY(DataTypes.ENUM("small", "medium", "large")),
         allowNull: true,
       },
-      dog_capacity_actual: { 
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0,
+      sale_details: {
+        type: DataTypes.TEXT,
+        allowNull: true,
       },
       is_available: {
         type: DataTypes.BOOLEAN,
