@@ -6,16 +6,18 @@ import axios from 'axios';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import "tailwindcss/tailwind.css";
 import Link from 'next/link';
+import { store } from '@/src/redux/store';
 
 const Detail = () => {
   const router = useRouter();
   const { id } = useParams();
   const [service, setService] = useState({});
+  const [orderCount, setOrderCount] = useState(0);
+  const [accessToken, setAccessToken] = useState('');
 
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
   const clientSecret = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_SECRET;
 
-  const [accessToken, setAccessToken] = useState('');
 
   useEffect(() => {
     const fetchServiceDetail = async () => {
@@ -47,12 +49,7 @@ const Detail = () => {
 
   //! PayPal
  
-  
   useEffect(() => {
-    const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
-    const clientSecret = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_SECRET;
-    const storedAccessToken = localStorage.getItem('accessToken');
-  
     async function fetchAccessToken() {
       try {
         const { data } = await axios.post(
@@ -61,32 +58,81 @@ const Detail = () => {
           {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
-              Authorization: 'Basic ' + btoa(clientId + ':' + clientSecret),
+              Authorization: `Basic ${btoa(clientId + ':' + clientSecret)}`,
             },
           }
         );
-        const expiresIn = data.expires_in;
-        const expirationTime = Date.now() + expiresIn * 1000;
-        localStorage.setItem('accessToken', data.access_token);
-        localStorage.setItem('tokenExpiration', expirationTime);
+
+        sessionStorage.setItem('accessToken', data.access_token);
         setAccessToken(data.access_token);
       } catch (error) {
-        console.error('Error fetching access token:', error);
+        console.error('Error fetching/accessing token:', error);
       }
     }
-  
-    const tokenExpiration = localStorage.getItem('tokenExpiration');
-    if (!storedAccessToken || !tokenExpiration || Date.now() > tokenExpiration) {
+
+    const storedAccessToken = sessionStorage.getItem('accessToken');
+    if (!storedAccessToken) {
       fetchAccessToken();
     } else {
       setAccessToken(storedAccessToken);
     }
-    
-  }, [clientId, clientSecret, setAccessToken]); 
+  }, []);
   
-  
-  
-  console.log(accessToken)
+  // console.log(accessToken)
+
+
+  const createOrder = async (data, actions) => {
+    try {
+      console.log('Creating order...');
+
+      const res = await fetch('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          intent: 'CAPTURE',
+          purchase_units: [
+            {
+              amount: {
+                currency_code: 'USD',
+                value: service.walkTypeData.price,
+              },
+              description: service.walkTypeData.description,
+              reference_id: `order-${orderCount}` 
+            },
+          ],
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to create order');
+      }
+
+      const order = await res.json();
+
+      if (order.id) {
+        console.log('Order ID:', order.id);
+        setOrderCount(orderCount + 1); // Increment order count for the next order
+        return order.id;
+      } else {
+        throw new Error('Order ID not received');
+      }
+    } catch (error) {
+      console.error('Error creating PayPal order:', error);
+      // Implement your error handling here
+    }
+  };
+
+  const handleApprove = (data, actions) => {
+    console.log("Approved:", data);
+    actions.order.capture();
+    alert('Payment successful');
+    setTimeout(() => {
+      router.push('/home');
+    }, 3000);
+  };
   
   
   return (
@@ -126,7 +172,7 @@ const Detail = () => {
           <div className="mt-4">
             <PayPalScriptProvider
               options={{
-                clientId: 'AahLJYwOxpB8rxP5MCqopNDEgLYJFoaNOxwA0BmVEEzeJCj9yYml78eYMLTpAjVAjYS4svveNkYIXGeF'
+                clientId: clientId
               }}
             >
               <PayPalButtons
@@ -136,45 +182,11 @@ const Detail = () => {
                   label: "pay",
                   shape: "pill",
                 }}
-                createOrder={async (data, actions) => {
-                  try {
-                    const res = await fetch('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${accessToken}`,
-                      },
-                      body: JSON.stringify({
-                        intent: 'CAPTURE',
-                        purchase_units: [
-                          {
-                            amount: {
-                              currency_code: 'USD',
-                              value: service.walkTypeData.price, // Use the service price from props
-                            },
-                            description: service.walkTypeData.description, // Use service description from props
-                          },
-                        ],
-                      }),
-                    });
-                    const order = await res.json();
-                    console.log(order);
-                    return order.id; 
-                  } catch (error) {
-                    console.error('Error creating PayPal order:', error);
-                  }
-                }}
+                createOrder={createOrder}
                 onCancel={(data) => {
-                  console.log("Cancelled:", data);
+                console.log("Cancelled:", data);
                 }}
-                onApprove={(data, actions) => {
-                  console.log("Approved:", data);
-                  actions.order.capture();
-                  alert('Payment successful')
-                  setTimeout(() => {
-                    router.push('/home');
-                  }, 3000); 
-                }}
+                onApprove={handleApprove}
               />
             </PayPalScriptProvider>
           </div>
