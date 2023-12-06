@@ -21,7 +21,12 @@ export default function Home() {
             className="flex items-center justify-center "
             style={{ marginTop: "-100px" }}
           >
-            <Image src="/ISOWoofer.png" width="600" height="0" alt="woofer logo" />
+            <Image
+              src="/ISOWoofer.png"
+              width="600"
+              height="0"
+              alt="woofer logo"
+            />
           </div>
         </div>
 
