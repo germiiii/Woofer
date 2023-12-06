@@ -101,6 +101,7 @@ const RegisterForm = () => {
     try {
       const result = await signInWithPopup(auth, googleAuth);
       const { user } = result;
+      console.log(user)
 
       const [name, lastName] = user.displayName.split(" ");
 

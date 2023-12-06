@@ -3,7 +3,7 @@ const { User } = require("../../Database/db");
 
 const changePassword = async (req, res) => {
   const token = req.params.token;
-  const newPassword = req.body.password; // Cambiado de "newPassword" a "password"
+  const newPassword = req.body.password; 
   console.log('Token obtenido:', token);
 
   try {

@@ -3,8 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 
 const ForgotPassword = () => {
-
-  const api = process.env.NEXT_PUBLIC_APIURL
+  const api = process.env.NEXT_PUBLIC_APIURL;
 
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -22,6 +21,7 @@ const ForgotPassword = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ email }),
       });
 
       const data = await response.json();
