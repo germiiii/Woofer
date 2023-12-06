@@ -27,8 +27,7 @@ server.use(morgan("dev"));
 server.use((req, res, next) => {
   res.header(
     "Access-Control-Allow-Origin",
-    "*"
-    //`${FRONTEND || "https://woofer-taupe.vercel.app"}`
+    `${FRONTEND || "http://localhost:3000"}`
   );
   res.header("Access-Control-Allow-Credentials", "true");
   res.header(
