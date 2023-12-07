@@ -8,7 +8,10 @@ cloudinary.config({
   api_secret: CLOUDINARY_API_SECRET,
   secure: true,
 });
-const { validateSpecialAndNumber } = require("../../Routes/utils/validations");
+const {
+  validateSpecialAndNumber,
+  validateAlphanumeric,
+} = require("../../Routes/utils/validations");
 const { uploadImage } = require("../../Routes/utils/uploadImage");
 
 const userEdit = async (data, file) => {
@@ -25,22 +28,27 @@ const userEdit = async (data, file) => {
 
   //changes
   if (username) {
-    if (typeof username === "string" && username.length < 20) {
-      User.update(
-        { username: username },
-        {
-          where: { id: userID, is_active: true },
-        }
-      );
-    } else {
-      throw new Error("Error en el username");
+    if (typeof username === "string") {
+      throw new Error("El username debe ser string");
     }
+    if (username.length < 40) {
+      throw new Error("El username debe ser menor a 40 caracteres");
+    }
+    if (validateAlphanumeric(username)) {
+      throw new Error("El username debe ser alfanumerico sin espacios");
+    }
+    User.update(
+      { username: username },
+      {
+        where: { id: userID, is_active: true },
+      }
+    );
   }
 
   if (name) {
     if (
       typeof name === "string" &&
-      name.length < 20 &&
+      name.length < 40 &&
       validateSpecialAndNumber(name)
     ) {
       await User.update(
@@ -57,7 +65,7 @@ const userEdit = async (data, file) => {
   if (lastname) {
     if (
       typeof lastname === "string" &&
-      lastname.length < 35 &&
+      lastname.length < 40 &&
       validateSpecialAndNumber(lastname)
     ) {
       await User.update(
@@ -72,7 +80,11 @@ const userEdit = async (data, file) => {
   }
 
   if (address) {
-    if (typeof address === "string" && address.length < 25) {
+    if (
+      typeof address === "string" &&
+      address.length < 40 &&
+      validateAlphanumeric(address)
+    ) {
       await User.update(
         { address: address },
         {
@@ -84,38 +96,30 @@ const userEdit = async (data, file) => {
     }
   }
 
-  if (city) {
-    if (
-      typeof city === "string" &&
-      city.length < 40 &&
-      validateSpecialAndNumber(city)
-    ) {
-      await User.update(
-        { city: city },
-        {
-          where: { id: userID, is_active: true },
-        }
-      );
-    } else {
-      throw new Error("Error en la ciudad");
-    }
-  }
+  // if (city) {
+  //   if (
+  //     typeof city === "string" &&
+  //     city.length < 40 &&
+  //     validateSpecialAndNumber(city)
+  //   ) {
+  //     await User.update(
+  //       { city: city },
+  //       {
+  //         where: { id: userID, is_active: true },
+  //       }
+  //     );
+  //   } else {
+  //     throw new Error("Error en la ciudad");
+  //   }
+  // } //! ver qué onda con este campo, no es de user supuestamente
 
   if (province) {
-    if (
-      typeof province === "string" &&
-      province.length < 30 &&
-      validateSpecialAndNumber(province)
-    ) {
-      await User.update(
-        { province: province },
-        {
-          where: { id: userID, is_active: true },
-        }
-      );
-    } else {
-      throw new Error("Error en la provincia");
-    }
+    await User.update(
+      { province: province },
+      {
+        where: { id: userID, is_active: true },
+      }
+    );
   }
 
   if (file) {
@@ -123,6 +127,7 @@ const userEdit = async (data, file) => {
     await User.update({ image: file.path });
   }
 
+  // data to return
   const userData = await User.findOne({
     attributes: { exclude: ["password"] },
     where: { id: userID, is_active: true },
