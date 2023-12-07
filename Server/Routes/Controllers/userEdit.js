@@ -15,7 +15,7 @@ const {
 const { uploadImage } = require("../../Routes/utils/uploadImage");
 
 const userEdit = async (data, file) => {
-  const { userID, name, lastname, username, address, city, province } = data;
+  const { userID, name, lastname, username, address, province } = data;
 
   // validations
   if (!userID) {
@@ -95,23 +95,6 @@ const userEdit = async (data, file) => {
       throw new Error("Error en la dirección");
     }
   }
-
-  // if (city) {
-  //   if (
-  //     typeof city === "string" &&
-  //     city.length < 40 &&
-  //     validateSpecialAndNumber(city)
-  //   ) {
-  //     await User.update(
-  //       { city: city },
-  //       {
-  //         where: { id: userID, is_active: true },
-  //       }
-  //     );
-  //   } else {
-  //     throw new Error("Error en la ciudad");
-  //   }
-  // } //! ver qué onda con este campo, no es de user supuestamente
 
   if (province) {
     await User.update(
