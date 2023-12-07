@@ -12,6 +12,7 @@ const { uploadImage } = require("../../Routes/utils/uploadImage");
 
 const ownerPost = async (data, file) => {
   const { userID, name, size, age, breed } = data;
+  let newDog;
   let newOwner;
 
   // validations
@@ -26,18 +27,26 @@ const ownerPost = async (data, file) => {
     throw new Error("User not found");
   }
 
-  // upload image
+  // upload image and create
   if (file) {
     await uploadImage(file.path);
-  }
 
-  const createdDog = await Dog.Create({
-    name,
-    breed,
-    size,
-    age,
-    img: file.path,
-  });
+    newDog = await Dog.Create({
+      name,
+      breed,
+      size,
+      age,
+      img: file.path,
+    });
+  } else {
+    newDog = await Dog.Create({
+      name,
+      breed,
+      size,
+      age,
+      img: "https://static.vecteezy.com/system/resources/previews/012/777/450/non_2x/cat-or-dog-paw-footprint-concept-silhouette-icon-vector.jpg",
+    });
+  }
 
   if (!user.isOwner) {
     // create
@@ -48,7 +57,7 @@ const ownerPost = async (data, file) => {
     // asociation
     await user.setOwner(newOwner);
 
-    await newOwner.addDogs(createdDog);
+    await newOwner.addDogs(newDog);
 
     // update isOwner
     await User.update(
@@ -66,7 +75,7 @@ const ownerPost = async (data, file) => {
     }
 
     // asociate the dogs with the owner
-    await owner.addDogs(createdDog);
+    await owner.addDogs(newDog);
 
     // update dog count
     await owner.update({ dog_count: owner.dog_count + 1 });
