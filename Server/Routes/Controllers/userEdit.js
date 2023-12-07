@@ -12,7 +12,7 @@ const { validateSpecialAndNumber } = require("../../Routes/utils/validations");
 const { uploadImage } = require("../../Routes/utils/uploadImage");
 
 const userEdit = async (data, file) => {
-  const { userID, name, lastname, username, adress, city, province } = data;
+  const { userID, name, lastname, username, address, city, province } = data;
 
   // validations
   if (!userID) {
@@ -43,7 +43,7 @@ const userEdit = async (data, file) => {
       name.length < 20 &&
       validateSpecialAndNumber(name)
     ) {
-      User.update(
+      await User.update(
         { name: name },
         {
           where: { id: userID, is_active: true },
@@ -60,8 +60,8 @@ const userEdit = async (data, file) => {
       lastname.length < 35 &&
       validateSpecialAndNumber(lastname)
     ) {
-      User.update(
-        { lastname: lastname },
+      await User.update(
+        { lastName: lastname },
         {
           where: { id: userID, is_active: true },
         }
@@ -71,10 +71,10 @@ const userEdit = async (data, file) => {
     }
   }
 
-  if (adress) {
-    if (typeof adress === "string" && adress.length < 25) {
-      User.update(
-        { adress: adress },
+  if (address) {
+    if (typeof address === "string" && address.length < 25) {
+      await User.update(
+        { address: address },
         {
           where: { id: userID, is_active: true },
         }
@@ -90,7 +90,7 @@ const userEdit = async (data, file) => {
       city.length < 40 &&
       validateSpecialAndNumber(city)
     ) {
-      User.update(
+      await User.update(
         { city: city },
         {
           where: { id: userID, is_active: true },
@@ -107,7 +107,7 @@ const userEdit = async (data, file) => {
       province.length < 30 &&
       validateSpecialAndNumber(province)
     ) {
-      User.update(
+      await User.update(
         { province: province },
         {
           where: { id: userID, is_active: true },
@@ -120,25 +120,12 @@ const userEdit = async (data, file) => {
 
   if (file) {
     await uploadImage(file.path);
-    User.update({ image: file.path });
+    await User.update({ image: file.path });
   }
 
   const userData = await User.findOne({
     attributes: { exclude: ["password"] },
     where: { id: userID, is_active: true },
-    include: [
-      {
-        model: Owner,
-        attributes: ["dog_count"],
-        include: [
-          {
-            model: Dog,
-            attributes: ["name", "breed", "size", "age", "img"],
-            where: { is_active: true },
-          },
-        ],
-      },
-    ],
   });
 
   return userData;
