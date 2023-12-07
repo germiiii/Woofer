@@ -74,18 +74,18 @@ const WalkerCard = (props) => {
       serviceId = "b2b40736-b68c-46a1-9bd4-a7c075bfd0e2";
     } else if (props.walkDuration.includes("60") && props.dogCapacity === 1) {
       serviceId = "6095c3d3-1eff-4346-abb1-94805f809004";
-    } else if (props.walkDuration.includes("15") && props.dogCapacity > 3 && props.dogCapacity < 5) {
-      serviceId = "80afbb09-a4dd-45ba-a0a1-c991ec8034b6";
-    } else if (props.walkDuration.includes("30") && props.dogCapacity > 3 && props.dogCapacity < 5) {
-      serviceId = "1ffa747b-12ba-4c8d-905d-73911ed0c6cf";
-    } else if (props.walkDuration.includes("60") && props.dogCapacity > 3 && props.dogCapacity < 5) {
-      serviceId = "0a2782b4-4abc-40a8-b0c3-3f9dc2d50fa0";
+    } else if (props.walkDuration.includes("15") && props.dogCapacity > 2 && props.dogCapacity < 5) {
+      serviceId = "4e38244e-63e4-4f38-b44c-d4ce40125a73";
+    } else if (props.walkDuration.includes("30") && props.dogCapacity > 2 && props.dogCapacity < 5) {
+      serviceId = "774e50ac-00fa-4e4f-8ff3-51172285f540";
+    } else if (props.walkDuration.includes("60") && props.dogCapacity > 2 && props.dogCapacity < 5) {
+      serviceId = "e941d376-ae18-4586-9a0f-02b3fae8e846";
     } else if (props.walkDuration.includes("15") && props.dogCapacity > 5) {
-      serviceId = "67647912-27f6-45b7-9c00-2d65209c9ebd";
+      serviceId = "b8311648-213e-4974-bf7d-e73147b910b0";
     } else if (props.walkDuration.includes("30") && props.dogCapacity > 5) {
-      serviceId = "5567874b-b873-46a0-8109-c13d93161dcb";
+      serviceId = "91e3adf6-6efc-4298-bec2-608a90b11823";
     } else if (props.walkDuration.includes("60") && props.dogCapacity > 5) {
-      serviceId = "c311d641-c5ec-45cc-8ba4-19d7d1753d59";
+      serviceId = "cfdfe8a4-393b-4e69-883d-ea73950f8063";
     }
   
     if (serviceId) {
