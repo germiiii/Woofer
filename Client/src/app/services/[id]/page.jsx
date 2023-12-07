@@ -19,13 +19,14 @@ const Detail = () => {
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
   const clientSecret = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_SECRET;
 
-  console.log("api : ", api)
-  console.log("clientId : ", clientId)
-  console.log("clientSecret : ", clientSecret)
+
 
   useEffect(() => {
     const fetchServiceDetail = async () => {
       try {
+          console.log("api : ", api)
+  console.log("clientId : ", clientId)
+  console.log("clientSecret : ", clientSecret)
         const response = await axios.get(`${api}/walkType/${id}`);
         const data = response.data;
 
