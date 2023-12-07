@@ -110,7 +110,12 @@ const userEdit = async (data, file) => {
 
   if (file) {
     await uploadImage(file.path);
-    await User.update({ image: file.path });
+    await User.update(
+      { image: file.path },
+      {
+        where: { id: userID, is_active: true },
+      }
+    );
   }
 
   // data to return
