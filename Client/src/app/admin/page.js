@@ -3,7 +3,24 @@
 import axios from "axios";
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridToolbar,
+  GridToolbarContainer,
+  GridToolbarExportContainer,
+  GridCsvExportMenuItem,
+  GridToolbarColumnsButton,
+  GridToolbarFilterButton,
+  GridToolbarDensitySelector,
+  GridToolbarExport,
+  useGridApiContext,
+  gridFilteredSortedRowIdsSelector,
+  gridVisibleColumnFieldsSelector,
+} from "@mui/x-data-grid";
+import Navbar from "../Components/NavBar";
+import "tailwindcss/tailwind.css";
+import "../stylesLanding.css";
+import Link from "next/link.js";
 
 export default function DataGridDemo() {
   const api = process.env.NEXT_PUBLIC_APIURL;
@@ -96,15 +113,21 @@ export default function DataGridDemo() {
     {
       field: "action",
       headerName: "Action",
-      width: 100,
+      width: 130,
       sortable: false,
       renderCell: (params) => {
         return (
-          <div className="action" style={actionContainer}>
-            <button onClick={() => handleDeactivate(params.row.id)}>
+          <div className="action flex flex-col" style={actionContainer}>
+            <button
+              onClick={() => handleDeactivate(params.row.id)}
+              className="w-30 px-4 py-1 rounded-full bg-[#29235c] text-[#F39200]"
+            >
               Deactivate
             </button>
-            <button onClick={() => handleActivate(params.row.id)}>
+            <button
+              onClick={() => handleActivate(params.row.id)}
+              className="w-30 px-4 py-1 rounded-full bg-[#29235c] text-green-500 mt-1"
+            >
               Activate
             </button>
           </div>
@@ -151,13 +174,45 @@ export default function DataGridDemo() {
     flexDirection: "column",
   };
 
-  return (
-    <div>
-      <div style={{ textAlign: "center", fontSize: "30px", margin: "10px 0" }}>
-        Woofer Panel
-      </div>
+  const csvOptions = { delimiter: ";" };
 
-      <Box sx={{ height: 850, width: "100%" }}>
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarDensitySelector />
+        <GridToolbarExport
+          csvOptions={{
+            fileName: "wooferUsers",
+            delimiter: ";",
+          }}
+        />
+      </GridToolbarContainer>
+    );
+  }
+
+  return (
+    <div className="flex flex-col h-full">
+      <div
+        className="flex items-center bg-[#29235c]"
+        style={{ minHeight: "100px" }}
+      >
+        <Link href={"/"}>
+          <button className="ml-4 h-8 w-20 rounded-full bg-white text-[#29235c] hover:bg-[#F39200] transition-all duration-300 font-bold">
+            exit
+          </button>
+        </Link>
+        <div className="flex-1 flex items-center justify-center">
+          <h1
+            style={{ fontFamily: "LikeEat" }}
+            className="font-bold text-[#F39200] mb-3 text-6xl"
+          >
+            Woofer Panel
+          </h1>
+        </div>
+      </div>
+      <Box sx={{ height: "100%", width: "100%" }}>
         <DataGrid
           rows={users}
           columns={columns}
@@ -172,7 +227,7 @@ export default function DataGridDemo() {
           ptypeSizeOptions={[5]}
           checkboxSelection
           disableRowSelectionOnClick
-          slots={{ toolbar: GridToolbar }}
+          slots={{ toolbar: CustomToolbar }}
           slotProps={{
             toolbar: {
               showQuickFilter: true,

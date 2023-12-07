@@ -88,7 +88,7 @@ const AditionalForm = () => {
 
       if (response.status === 201) {
         const loginConfirmed = window.confirm(
-          "Registration successful! Do you want to log in now?"
+          "Registration successful! please, check your inbox to activate your account"
         );
 
         if (loginConfirmed) {
