@@ -12,7 +12,6 @@ import "../stylesLanding.css";
 
 const Home = () => {
   const api = process.env.NEXT_PUBLIC_APIURL;
-  const token = localStorage.getItem("token");
   const [formCompleted, setFormCompleted] = useState(true);
   const [addressInput, setAddressInput] = useState("");
   const [provinceInput, setProvinceInput] = useState("");
