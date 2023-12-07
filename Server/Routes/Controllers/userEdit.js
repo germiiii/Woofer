@@ -29,13 +29,13 @@ const userEdit = async (data, file) => {
   //changes
   if (username) {
     if (typeof username === "string") {
-      throw new Error("El username debe ser string");
+      throw new Error("Username debe ser string");
     }
     if (username.length < 40) {
-      throw new Error("El username debe ser menor a 40 caracteres");
+      throw new Error("Username debe ser menor a 40 caracteres");
     }
     if (validateAlphanumeric(username)) {
-      throw new Error("El username debe ser alfanumerico sin espacios");
+      throw new Error("Username debe ser alfanumerico sin espacios");
     }
     User.update(
       { username: username },
@@ -46,20 +46,21 @@ const userEdit = async (data, file) => {
   }
 
   if (name) {
-    if (
-      typeof name === "string" &&
-      name.length < 40 &&
-      validateSpecialAndNumber(name)
-    ) {
-      await User.update(
-        { name: name },
-        {
-          where: { id: userID, is_active: true },
-        }
-      );
-    } else {
-      throw new Error("Error en el nombre");
+    if (typeof name === "string") {
+      throw new Error("Name debe ser un string");
     }
+    if (name.length < 40) {
+      throw new Error("Name debe ser menor a 40 caracteres");
+    }
+    if (validateSpecialAndNumber(name)) {
+      throw new Error("Name no debe contener ni números ni símbolos");
+    }
+    await User.update(
+      { name: name },
+      {
+        where: { id: userID, is_active: true },
+      }
+    );
   }
 
   if (lastname) {
