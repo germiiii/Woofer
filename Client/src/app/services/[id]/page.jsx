@@ -1,11 +1,11 @@
-"use client"
-import { useParams, useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import axios from 'axios';
-import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
+"use client";
+import { useParams, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import axios from "axios";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import "tailwindcss/tailwind.css";
-import Link from 'next/link';
+import Link from "next/link";
 import "./stylesCheckout.css";
 
 const Detail = () => {
@@ -13,11 +13,10 @@ const Detail = () => {
   const { id } = useParams();
   const [service, setService] = useState({});
   const [orderCount, setOrderCount] = useState(0);
-  const [accessToken, setAccessToken] = useState('');
+  const [accessToken, setAccessToken] = useState("");
 
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
   const clientSecret = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_SECRET;
-
 
   useEffect(() => {
     const fetchServiceDetail = async () => {
@@ -26,15 +25,13 @@ const Detail = () => {
         const response = await axios.get(`${api}/walkType/${id}`);
         const data = response.data;
 
-        // console.log('Data:', data);
-
         if (data) {
           setService(data); // Assuming response data is the service object
         } else {
-          window.alert('No hay información para ese ID');
+          window.alert("No hay información para ese ID");
         }
       } catch (error) {
-        console.error('Error fetching service details:', error);
+        console.error("Error fetching service details:", error);
       }
     };
 
@@ -48,79 +45,80 @@ const Detail = () => {
   }, [id]);
 
   //! PayPal
- 
+
   useEffect(() => {
     async function fetchAccessToken() {
       try {
         const { data } = await axios.post(
-          'https://api-m.sandbox.paypal.com/v1/oauth2/token',
-          'grant_type=client_credentials',
+          "https://api-m.sandbox.paypal.com/v1/oauth2/token",
+          "grant_type=client_credentials",
           {
             headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-              Authorization: `Basic ${btoa(clientId + ':' + clientSecret)}`,
+              "Content-Type": "application/x-www-form-urlencoded",
+              Authorization: `Basic ${btoa(clientId + ":" + clientSecret)}`,
             },
           }
         );
-
-        sessionStorage.setItem('accessToken', data.access_token);
-        setAccessToken(data.access_token);
+        localStorage.setItem("paypal_accessToken", data.access_token);
       } catch (error) {
-        console.error('Error fetching/accessing token:', error);
+        console.error("Error fetching/accessing token:", error);
       }
     }
-
-    const storedAccessToken = sessionStorage.getItem('accessToken');
-    if (!storedAccessToken) {
-      fetchAccessToken();
-    } else {
-      setAccessToken(storedAccessToken);
+    fetchAccessToken();
+    if (!accessToken) {
+      const token = localStorage.getItem("paypal_accessToken");
+      setAccessToken(token);
     }
   }, []);
+
+  console.log(accessToken)
   
-  // console.log(accessToken)
-
-
   const createOrder = async (data, actions) => {
     try {
-      console.log('Creating order...');
-
-      const res = await fetch('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          intent: 'CAPTURE',
-          purchase_units: [
-            {
-              amount: {
-                currency_code: 'USD',
-                value: service.walkTypeData.price,
+      console.log("Creating order...");
+      if (!accessToken) {
+        console.log("missing token");
+        return;
+      }
+      const res = await fetch(
+        "https://api-m.sandbox.paypal.com/v2/checkout/orders",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({
+            intent: "CAPTURE",
+            purchase_units: [
+              {
+                amount: {
+                  currency_code: "USD",
+                  value: service.walkTypeData.price,
+                },
+                description: service.walkTypeData.description,
+                reference_id: `order-${orderCount}`,
               },
-              description: service.walkTypeData.description,
-              reference_id: `order-${orderCount}` 
-            },
-          ],
-        }),
-      });
+            ],
+          }),
+        }
+      );
 
       if (!res.ok) {
-        throw new Error('Failed to create order');
+        throw new Error("Failed to create order");
       }
 
       const order = await res.json();
 
       if (order.id) {
-        console.log('Order ID:', order.id);
+        console.log("Order ID:", order.id);
         setOrderCount(orderCount + 1); // Increment order count for the next order
         return order.id;
       } else {
-        throw new Error('Order ID not received');
+        throw new Error("Order ID not received");
       }
     } catch (error) {
-      console.error('Error creating PayPal order:', error);
+      console.error("Error creating PayPal order:", error);
       // Implement your error handling here
     }
   };
@@ -128,19 +126,18 @@ const Detail = () => {
   const handleApprove = (data, actions) => {
     console.log("Approved:", data);
     actions.order.capture();
-    alert('Payment successful');
+    alert("Payment successful");
     setTimeout(() => {
-      router.push('/home');
+      router.push("/home");
     }, 3000);
   };
 
   const handleCancel = (data) => {
     console.log("Cancelled:", data);
   };
-  
-  
+
   return (
-   <div>
+    <div>
       <div className="fixed top-0 left-0 right-0 z-10 bg-[#F39200] bg-opacity-100">
         <div className="container mx-auto lg:py-4 flex items-center justify-between px-2 py-2">
           <Link href={"/"}>
@@ -151,53 +148,63 @@ const Detail = () => {
         </div>
       </div>
       <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center relative">
-    <h1 className="text-4xl text-[#29235C] font-bold mb-2 mt-11"  style={{ fontFamily: "LikeEat" }}>Service Details</h1>
-    <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg flex flex-col items-center relative">
-      
-        <div className="w-1/2 p-4">
-          <Image 
-            src="/WalkTypeDetail.png" 
-            alt="Detail"
-            width={500} 
-            height={500}
-            className="rounded-full" 
-          />
-        </div>
-        <div className="w-1/2 p-4">
-          {service.walkTypeData ? (
-            <div>
-              <h1 className='font-bold text-2xl text-[#29235C] ' style={{ fontFamily: "LikeEat" }}>{service.walkTypeData.title}</h1>
-              <h2>{service.walkTypeData.description}</h2>
-              <h1 className='font-bold text-2xl'>Price: ${service.walkTypeData.price}</h1>
-            </div>
-          ) : (
-            <p>No hay información disponible para ese servicio</p>
-          )}
-          <div className="mt-4">
-            <PayPalScriptProvider
-              options={{
-                clientId: clientId
-              }}
-            >
-              <PayPalButtons
-                style={{ 
-                  layout: "horizontal", 
-                  color: "gold", 
-                  label: "pay",
-                  shape: "pill",
+        <h1
+          className="text-4xl text-[#29235C] font-bold mb-2 mt-11"
+          style={{ fontFamily: "LikeEat" }}
+        >
+          Service Details
+        </h1>
+        <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg flex flex-col items-center relative">
+          <div className="w-1/2 p-4">
+            <Image
+              src="/WalkTypeDetail.png"
+              alt="Detail"
+              width={500}
+              height={500}
+              className="rounded-full"
+            />
+          </div>
+          <div className="w-1/2 p-4">
+            {service.walkTypeData ? (
+              <div>
+                <h1
+                  className="font-bold text-2xl text-[#29235C] "
+                  style={{ fontFamily: "LikeEat" }}
+                >
+                  {service.walkTypeData.title}
+                </h1>
+                <h2>{service.walkTypeData.description}</h2>
+                <h1 className="font-bold text-2xl">
+                  Price: ${service.walkTypeData.price}
+                </h1>
+              </div>
+            ) : (
+              <p>No hay información disponible para ese servicio</p>
+            )}
+            <div className="mt-4">
+              <PayPalScriptProvider
+                options={{
+                  clientId: clientId,
                 }}
-                createOrder={createOrder}
-                onCancel={handleCancel}
-                onApprove={handleApprove}
-              />
-            </PayPalScriptProvider>
+              >
+                <PayPalButtons
+                  style={{
+                    layout: "horizontal",
+                    color: "gold",
+                    label: "pay",
+                    shape: "pill",
+                  }}
+                  createOrder={createOrder}
+                  onCancel={handleCancel}
+                  onApprove={handleApprove}
+                />
+              </PayPalScriptProvider>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    </div>
   );
-  
 };
 
 export default Detail;

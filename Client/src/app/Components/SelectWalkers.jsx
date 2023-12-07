@@ -2,9 +2,13 @@
 import axios from "axios";
 import WalkerCard from "./WalkerCard.jsx";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation.js";
 import "tailwindcss/tailwind.css";
 
 const SelectWalkers = (props) => {
+
+  const router = useRouter()
+
   const api = process.env.NEXT_PUBLIC_APIURL;
 
   const [walkers, setWalkers] = useState([]);
@@ -13,10 +17,39 @@ const SelectWalkers = (props) => {
   const [walkDurationFilter, setWalkDurationFilter] = useState("");
   const [dogSizeFilter, setDogSizeFilter] = useState("");
   const [searchFilter, setSearchFilter] = useState("");
+  const [filteredWalkers, setFilteredWalkers] = useState([]);
   const cardsPerPage = 4;
   const startIndex = (currentPage - 1) * cardsPerPage;
   const endIndex = currentPage * cardsPerPage;
   const userProvince = props.userProvince;
+
+ 
+
+
+  useEffect(() => {
+    const updatedFilteredWalkers = walkers.filter((walker) => {
+      const dogCapacityFilterCondition =
+        !dogCapacityFilter ||
+        (dogCapacityFilter === "1" && walker.walker.dog_capacity === 1) ||
+        (dogCapacityFilter === "<3" && walker.walker.dog_capacity < 3) ||
+        (dogCapacityFilter === "<5" && walker.walker.dog_capacity < 5) ||
+        (dogCapacityFilter === ">5" && walker.walker.dog_capacity > 5);
+
+      const walkDurationFilterCondition =
+        !walkDurationFilter ||
+        (walkDurationFilter === "15" &&
+          walker.walker.walk_duration.includes("15")) ||
+        (walkDurationFilter === "30" &&
+          walker.walker.walk_duration.includes("30")) ||
+        (walkDurationFilter === "60" &&
+          walker.walker.walk_duration.includes("60"));
+
+      return dogCapacityFilterCondition && walkDurationFilterCondition;
+    });
+
+    setFilteredWalkers(updatedFilteredWalkers);
+  }, [walkers, dogCapacityFilter, walkDurationFilter]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,50 +102,6 @@ const SelectWalkers = (props) => {
     setDogSizeFilter("");
     setCurrentPage(1);
   };
-
-  const filteredWalkers = walkers.filter((walker) => {
-    const dogCapacityFilterCondition =
-      !dogCapacityFilter ||
-      (dogCapacityFilter === "1" && walker.walker.dog_capacity === 1) ||
-      (dogCapacityFilter === "<3" && walker.walker.dog_capacity < 3) ||
-      (dogCapacityFilter === "<5" && walker.walker.dog_capacity < 5) ||
-      (dogCapacityFilter === ">5" && walker.walker.dog_capacity > 5);
-
-    const walkDurationFilterCondition =
-      !walkDurationFilter ||
-      (walkDurationFilter === "15" &&
-        walker.walker.walk_duration.includes("15")) ||
-      (walkDurationFilter === "30" &&
-        walker.walker.walk_duration.includes("30")) ||
-      (walkDurationFilter === "60" &&
-        walker.walker.walk_duration.includes("60"));
-
-    const dogSizeFilterCondition =
-      !dogSizeFilter ||
-      (dogSizeFilter === "small" && walker.walker.dog_size.includes("small")) ||
-      (dogSizeFilter === "medium" &&
-        walker.walker.dog_size.includes("medium")) ||
-      (dogSizeFilter === "large" && walker.walker.dog_size.includes("large"));
-
-    const searchFilterCondition = !searchFilter
-      ? true
-      : searchFilter
-          .toLowerCase()
-          .split(" ")
-          .every(
-            (word) =>
-              walker.name.toLowerCase().includes(word) ||
-              walker.lastName.toLowerCase().includes(word)
-          );
-
-    return (
-      dogCapacityFilterCondition &&
-      walkDurationFilterCondition &&
-      dogSizeFilterCondition &&
-      searchFilterCondition &&
-      walker.province === userProvince
-    );
-  });
 
   const renderList = filteredWalkers
     .slice(startIndex, endIndex)
@@ -230,4 +219,4 @@ const SelectWalkers = (props) => {
   ) : null;
 };
 
-export default SelectWalkers;
+export default SelectWalkers; 
