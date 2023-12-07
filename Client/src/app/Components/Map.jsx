@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import "tailwindcss/tailwind.css";
+import "../stylesLanding.css";
 
 const Map = (props) => {
   const [userLocation, setUserLocation] = useState(null);
@@ -108,9 +110,6 @@ const Map = (props) => {
     justifyContent: "center",
     alignItems: "center",
   };
-
-  const inputStyle = "border p-2 rounded mr-2";
-  const buttonStyle = "border p-2 rounded mr-2 bg-black text-white";
 
   return (
     <div>
