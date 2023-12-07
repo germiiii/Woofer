@@ -137,7 +137,10 @@ export default function DataGridDemo() {
     },
   ];
   const router = useRouter();
-  const token = localStorage.getItem("token");
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const decodedToken = jwt.decode(token);
+  const userId = decodedToken?.userId;
   const [users, setUsers] = React.useState([]);
   const [userRole, setUserRole] = React.useState(null);
   const [loadingRole, setLoadingRole] = React.useState(true);
@@ -146,7 +149,6 @@ export default function DataGridDemo() {
     try {
       const response = await axios.get(`${api}/users?role=admin`);
       setUsers(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -156,21 +158,15 @@ export default function DataGridDemo() {
     try {
       const response = await axios.get(`${api}/users/${userId}`);
       setUserRole(response.data.role);
-      setLoadingRole(false);
-      console.log(response.data.role);
     } catch (error) {
       console.error("Error fetching user role:", error);
+    } finally {
       setLoadingRole(false);
     }
   };
 
   React.useEffect(() => {
-    const decodedToken = jwt.decode(token);
-    const userId = decodedToken?.userId;
-
-    if (userId) {
-      fetchUserRole(userId);
-    }
+    fetchUserRole(userId);
   }, [token]);
 
   React.useEffect(() => {
