@@ -28,13 +28,13 @@ const userEdit = async (data, file) => {
 
   //changes
   if (username) {
-    if (typeof username === "string") {
+    if (typeof username !== "string") {
       throw new Error("Username debe ser string");
     }
-    if (username.length < 40) {
+    if (username.length > 40) {
       throw new Error("Username debe ser menor a 40 caracteres");
     }
-    if (validateAlphanumeric(username)) {
+    if (!validateAlphanumeric(username)) {
       throw new Error("Username debe ser alfanumerico sin espacios");
     }
     User.update(
@@ -46,14 +46,14 @@ const userEdit = async (data, file) => {
   }
 
   if (name) {
-    if (typeof name === "string") {
+    if (typeof name !== "string") {
       throw new Error("Name debe ser un string");
     }
-    if (name.length < 40) {
+    if (name.length > 40) {
       throw new Error("Name debe ser menor a 40 caracteres");
     }
-    if (validateSpecialAndNumber(name)) {
-      throw new Error("Name no debe contener ni números ni símbolos");
+    if (!validateSpecialAndNumber(name)) {
+      throw new Error("Name no puede contener ni números ni símbolos");
     }
     await User.update(
       { name: name },
@@ -64,37 +64,39 @@ const userEdit = async (data, file) => {
   }
 
   if (lastname) {
-    if (
-      typeof lastname === "string" &&
-      lastname.length < 40 &&
-      validateSpecialAndNumber(lastname)
-    ) {
-      await User.update(
-        { lastName: lastname },
-        {
-          where: { id: userID, is_active: true },
-        }
-      );
-    } else {
-      throw new Error("Error en el apellido");
+    if (typeof lastname !== "string") {
+      throw new Error("Lastname debe ser un string");
     }
+    if (lastname.length > 40) {
+      throw new Error("Lastname debe ser menor a 40 caracteres");
+    }
+    if (!validateSpecialAndNumber(lastname)) {
+      throw new Error("Lastname no puede contener ni números ni símbolos");
+    }
+    await User.update(
+      { lastName: lastname },
+      {
+        where: { id: userID, is_active: true },
+      }
+    );
   }
 
   if (address) {
-    if (
-      typeof address === "string" &&
-      address.length < 40 &&
-      validateAlphanumeric(address)
-    ) {
-      await User.update(
-        { address: address },
-        {
-          where: { id: userID, is_active: true },
-        }
-      );
-    } else {
-      throw new Error("Error en la dirección");
+    if (typeof address !== "string") {
+      throw new Error("Address debe ser un string");
     }
+    if (address.length > 40) {
+      throw new Error("Address debe ser menor a 40 caracteres");
+    }
+    if (!validateAlphanumeric(address)) {
+      throw new Error("Address debe ser alfanumerico sin espacios");
+    }
+    await User.update(
+      { address: address },
+      {
+        where: { id: userID, is_active: true },
+      }
+    );
   }
 
   if (province) {
