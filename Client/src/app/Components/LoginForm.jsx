@@ -68,6 +68,7 @@ const LoginForm = () => {
       }
     } catch (error) {
       console.error(error);
+      alert("Authentication error. Please try again.");
     }
   };
 
@@ -96,7 +97,7 @@ const LoginForm = () => {
       }
     } catch (error) {
       console.error("Error:", error.message);
-      window.alert("Error: ", error);
+      alert("Authentication error. Please try again.");
     }
   };
 
