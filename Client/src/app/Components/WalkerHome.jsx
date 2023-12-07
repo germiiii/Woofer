@@ -7,7 +7,7 @@ import DogWalkOption from "../Components/DogWalkOption";
 import "tailwindcss/tailwind.css";
 import Map from "../Components/Map";
 import jwt from 'jsonwebtoken';
-// agregar filtros por dog capacity / precio / tiempo
+
 
 const WalkerHome = () => {
   const [otrosDetalles, setOtrosDetalles] = useState('');
@@ -17,15 +17,17 @@ const WalkerHome = () => {
   const [user, setUser] = useState("");
   const [dogCapacityFilter, setDogCapacityFilter] = useState('');
   const [walkDurationFilter, setWalkDurationFilter] = useState('');
-  const [optionChosen, setOptionChosen] = useState('');
+  const [optionChosen, setOptionChosen] = useState('');   //me falta q de DogWalkOption me setee el optionChosen
   const [userProvince, setUserProvince] = useState('');
   const [userAddress, setUserAddress] = useState('');
   
   useEffect(() => {
       const obtenerDatos = async () => {
       const token = localStorage.getItem('token');
+
       if (token) {
         const decodedToken = jwt.decode(token);
+        console.log(decodedToken.userId);
         try {
           const response = await fetch(`http://localhost:3001/users/${decodedToken.userId}`);
           const data = await response.json();
@@ -57,7 +59,7 @@ const WalkerHome = () => {
     event.preventDefault();
     try {
       const saleDetailsValue = otrosDetalles
-      const response = await axios.post(
+      const response = await axios.put(
       "http://localhost:3001/walker",
       {sale_detail: saleDetailsValue }
     );
@@ -225,7 +227,7 @@ const WalkerHome = () => {
       <button
         onClick={handleActivoClick}
         disabled={renderList.length === 0}
-        className={`bg-black text-white px-4 py-2 ${contratacionCliente.length === 0 && 'opacity-50 cursor-not-allowed'}`}
+        className={`bg-black text-white px-4 py-2 ${optionChosen.length === 0 && 'opacity-50 cursor-not-allowed'}`}
       >
         Activo
       </button>
