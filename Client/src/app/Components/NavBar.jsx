@@ -5,17 +5,6 @@ import { usePathname } from "next/navigation";
 import "tailwindcss/tailwind.css";
 import "../stylesLanding.css";
 
-const navLinks = [
-  {
-    title: "Sign In",
-    path: "login",
-  },
-  {
-    title: "Sign Up",
-    path: "register",
-  },
-];
-
 const Navbar = () => {
   const currentPath = usePathname();
   console.log(currentPath);
@@ -24,11 +13,7 @@ const Navbar = () => {
       <div className="flex mr-10">
         <Link href={"/login"}>
           <button
-            className={`w-30 px-10 py-2 rounded-full bg-[#29235c] text-white ${
-              currentPath === "/login"
-                ? "text-[#F39200]"
-                : "hover:text-[#F39200]"
-            } mt-3 lg:mt-0 mr-7 transition transition-colors duration-300`}
+            className={`w-30 px-10 py-2 rounded-full bg-[#29235c] text-white hover:text-[#F39200] mt-3 lg:mt-0 mr-7 transition transition-colors duration-300`}
           >
             sign in
           </button>
@@ -36,11 +21,7 @@ const Navbar = () => {
 
         <Link href={"/register"}>
           <button
-            className={`w-30 px-10 py-2 rounded-full bg-[#29235c] text-white ${
-              currentPath === "/register" || currentPath === "/aditionalForm"
-                ? "text-[#F39200]"
-                : "hover:text-[#F39200]"
-            } mt-3 lg:mt-0 transition transition-colors duration-300`}
+            className={`w-30 px-10 py-2 rounded-full bg-[#29235c] text-white hover:text-[#F39200] mt-3 lg:mt-0 transition transition-colors duration-300`}
           >
             sign up
           </button>
