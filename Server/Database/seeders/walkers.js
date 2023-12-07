@@ -1,8 +1,8 @@
 const walkerData = [
   {
     username: "janesmith",
-    dog_capacity: 2,
-    walk_duration: ["30", "60"],
+    dog_capacity: 1,
+    walk_duration: ["60"],
     dog_size: ["medium", "large"],
     is_available: true,
     schedule_availability: "",
@@ -13,7 +13,7 @@ const walkerData = [
   {
     username: "martinmanrique",
     dog_capacity: 5,
-    walk_duration: ["15", "30", "60"],
+    walk_duration: ["30"],
     dog_size: ["small", "medium", "large"],
     is_available: false,
     schedule_availability: "",
@@ -25,7 +25,7 @@ const walkerData = [
   {
     username: "sofialugat",
     dog_capacity: 8,
-    walk_duration: ["15", "30", "60"],
+    walk_duration: ["15"],
     dog_size: ["small"],
     is_available: true,
     schedule_availability: "",
@@ -49,7 +49,7 @@ const walkerData = [
   {
     username: "anaperez",
     dog_capacity: 4,
-    walk_duration: ["60"],
+    walk_duration: ["30"],
     dog_size: ["medium"],
     is_available: true,
     schedule_availability: "",
@@ -60,7 +60,7 @@ const walkerData = [
 
   {
     username: "sofiarodriguez",
-    dog_capacity: 4,
+    dog_capacity: 10,
     walk_duration: ["60"],
     dog_size: ["small", "medium"],
     is_available: true,
@@ -73,7 +73,7 @@ const walkerData = [
   {
     username: "martinfernandez",
     dog_capacity: 1,
-    walk_duration: ["60"],
+    walk_duration: ["15"],
     dog_size: ["large"],
     is_available: true,
     schedule_availability: "",
