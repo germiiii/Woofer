@@ -1,4 +1,4 @@
-const { User, Walker, Owner, Dog, Walk } = require("../../Database/db");
+const { User, Walker, Owner, Dog, Walk, WalkType } = require("../../Database/db");
 
 const walkPost = async (
   ownerId,
@@ -9,15 +9,13 @@ const walkPost = async (
   totalPrice,
   paymentMethod
 ) => {
-  const owner = await Owner.findOne({
-    where: { userId: ownerId, is_active: true },
-  });
+  const userOwner = await User.findByPk(ownerId);
+  const owner = await userOwner?.getOwner();
 
-  const walker = await Walker.findOne({
-    where: { userId: walkerId, is_active: true },
-  });
+  const userWalker = await User.findByPk(walkerId);
+  const walker = await userWalker?.getWalker();
 
-  if (!owner || !walker) {
+  if (!owner || !walker || !owner.is_active || !walker.is_active) {
     throw new Error("Walker or Owner not found");
   }
 
@@ -32,7 +30,7 @@ const walkPost = async (
 
   const newWalk = await Walk.create({
     date: new Date(),
-    startTime: new Date().toLocaleTimeString(), //obtengo la hora actual
+    startTime: new Date().toLocaleTimeString(),
     duration: duration || 60,
     dogNumber: dogsCount,
     totalPrice,
@@ -44,7 +42,6 @@ const walkPost = async (
   await owner.addWalk(newWalk, { through: Walk });
   await walker.addWalk(newWalk, { through: Walk });
 
-  //si hay un array de dogs los guardo en la info del paseo
   if (Array.isArray(dogs)) {
     const ownerDogs = await owner.getDogs();
     await Promise.all(
@@ -61,26 +58,34 @@ const walkPost = async (
     include: [
       {
         model: Owner,
+        attributes: ["score"],
         include: [
           {
             model: User,
-            attributes: ["name"],
+            attributes: ["name", "lastName"],
           },
         ],
       },
       {
         model: Walker,
+        attributes: ["score"],
         include: [
           {
             model: User,
-            attributes: ["name"],
+            attributes: ["name", "lastName"],
           },
         ],
+      },
+      {
+        model: WalkType,
+        attributes: ["title"],
+        through: { attributes: [] },
       },
       {
         model: Dog,
         attributes: ["id", "name"],
         through: { attributes: [] },
+        required: false,
       },
     ],
   });

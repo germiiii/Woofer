@@ -36,8 +36,18 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       state: {
-        type: DataTypes.ENUM("toDo", "inProgress", "done"),
+        type: DataTypes.ENUM("toDo", "inProgress", "done", "rejected"),
         defaultValue: "toDo",
+        allowNull: false,
+      },
+      hasOwnerReview: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+      },
+      hasWalkerReview: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
       },
     },

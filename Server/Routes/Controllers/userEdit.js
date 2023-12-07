@@ -124,7 +124,13 @@ const userEdit = async (data, file) => {
   }
 
   const userData = await User.findOne({
-    attributes: { exclude: ["password"] },
+    attributes: {
+      exclude: [
+        "password",
+        "verificationToken",
+        "resetPasswordToken",
+        "resetPasswordExpires",
+      ]},
     where: { id: userID, is_active: true },
   });
 
