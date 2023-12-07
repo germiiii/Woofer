@@ -14,14 +14,13 @@ const Detail = () => {
   const [service, setService] = useState({});
   const [orderCount, setOrderCount] = useState(0);
   const [accessToken, setAccessToken] = useState("");
-
+const api = process.env.NEXT_PUBLIC_APIURL;
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
   const clientSecret = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_SECRET;
-console.log("client id: ", clientId);
+
   useEffect(() => {
     const fetchServiceDetail = async () => {
       try {
-        const api = process.env.NEXT_PUBLIC_APIURL;
         const response = await axios.get(`${api}/walkType/${id}`);
         const data = response.data;
 
