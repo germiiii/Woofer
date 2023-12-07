@@ -1,6 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import axios from "axios";
+import jwt from "jsonwebtoken";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import {
@@ -24,7 +26,6 @@ import Link from "next/link.js";
 
 export default function DataGridDemo() {
   const api = process.env.NEXT_PUBLIC_APIURL;
-
   const columns = [
     { field: "id", headerName: "ID", width: 300 },
     {
@@ -135,7 +136,11 @@ export default function DataGridDemo() {
       },
     },
   ];
+  const router = useRouter();
+  const token = localStorage.getItem("token");
   const [users, setUsers] = React.useState([]);
+  const [userRole, setUserRole] = React.useState(null);
+  const [loadingRole, setLoadingRole] = React.useState(true);
 
   const fetchAllUsers = async () => {
     try {
@@ -146,6 +151,35 @@ export default function DataGridDemo() {
       console.error("Error fetching data:", error);
     }
   };
+
+  const fetchUserRole = async (userId) => {
+    try {
+      const response = await axios.get(`${api}/users/${userId}`);
+      setUserRole(response.data.role);
+      setLoadingRole(false);
+      console.log(response.data.role);
+    } catch (error) {
+      console.error("Error fetching user role:", error);
+      setLoadingRole(false);
+    }
+  };
+
+  React.useEffect(() => {
+    const decodedToken = jwt.decode(token);
+    const userId = decodedToken?.userId;
+
+    if (userId) {
+      fetchUserRole(userId);
+    }
+  }, [token]);
+
+  React.useEffect(() => {
+    if (!loadingRole) {
+      if (userRole !== "admin") {
+        router.push("/login");
+      }
+    }
+  }, [userRole, loadingRole, router]);
 
   React.useEffect(() => {
     fetchAllUsers();
@@ -169,12 +203,14 @@ export default function DataGridDemo() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+  };
+
   const actionContainer = {
     display: "flex",
     flexDirection: "column",
   };
-
-  const csvOptions = { delimiter: ";" };
 
   function CustomToolbar() {
     return (
@@ -199,8 +235,11 @@ export default function DataGridDemo() {
         style={{ minHeight: "100px" }}
       >
         <Link href={"/"}>
-          <button className="ml-4 h-8 w-20 rounded-full bg-white text-[#29235c] hover:bg-[#F39200] transition-all duration-300 font-bold">
-            exit
+          <button
+            className="ml-4 h-8 w-20 rounded-full bg-white text-[#29235c] hover:bg-[#F39200] transition-all duration-300 font-bold"
+            onClick={handleLogout}
+          >
+            log out
           </button>
         </Link>
         <div className="flex-1 flex items-center justify-center">
