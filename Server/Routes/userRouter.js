@@ -4,6 +4,7 @@ const { validateUser, validateUserLogin } = require("./Middlewares");
 const { userHandlerRegister }= require('./Handlers/userHandlerRegister')
 const { userHandlerChangePassword } = require ('./Handlers/userHandlerChangePassword')
 const { userGetAllHandler } = require ('./Handlers/userGetHandler');
+const { userHandlerEdit } = require("./Handlers/userHandlerEdit");
 const { googleLogin } = require("./Controllers/googleLogin");
 const { activateAccount } = require('./Controllers/activateAccount')
 const cloudinary = require("cloudinary").v2;
@@ -42,5 +43,7 @@ userRouter.post('/changePassword/:token', changePassword)
 userRouter.post('/changePassword', userHandlerChangePassword)
 userRouter.get("/users/:id", userGetByIdHandler);
 userRouter.get("/users", userGetAllHandler);
+
+userRouter.put("/editUser", upload.single("image"), userHandlerEdit);
 
 module.exports = userRouter;
