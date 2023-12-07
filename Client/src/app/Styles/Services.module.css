@@ -1,0 +1,113 @@
+
+.DetailContainer {
+	width: 1100px;
+	margin: 50px auto;
+	display: flex;
+	justify-content: center;
+	flex-direction: row repeat(4, 1fr);
+    flex-wrap: wrap;
+	
+	
+} 
+
+.cardWrap {
+	width: 300px;
+	margin: 20px;
+	-webkit-perspective: 800px;
+	perspective: 800px;
+	
+}
+
+.card {
+    width: 250px;
+    height: 350px;
+	background: rgba(255, 255, 255, 0.642);
+	position: relative;
+	border-radius: 10px;
+	transform-style: preserve-3d;
+	transition: .7s ease;
+	-webkit-box-shadow: 0px 10px 15px -5px rgba(0,0,0,0.65);
+	-moz-box-shadow: 0px 10px 15px -5px rgba(0,0,0,0.65);
+	box-shadow: 0px 10px 15px -5px rgba(0,0,0,0.65);
+	 
+}
+
+.cardWrap:hover .card{
+    transform: rotateY(180deg);
+}
+
+
+.cardFront,
+.cardBack {
+    width: 100%;
+    height: 100%;
+	border-radius: 10px;
+    position: absolute;
+    top: 0;
+	left: 0;
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+
+.cardBack {
+	padding: 15px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	background-color: #29235C;
+	color: white;
+	font-family: 'Dosis', sans-serif;
+	transform: rotateY(180deg); 
+}
+
+.cardFront {
+	
+	width: 100%;
+	display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #fcd34d;
+  
+}
+
+  .cardImage {
+	max-width: 80%;
+	max-height: 60%;
+	border-radius: 10px;
+	
+  }
+  
+  .cardName {
+	font-weight: bold;
+	font-size: 1.5rem;
+	
+	color: white;
+	margin: 5px;
+  }
+  
+  .cardContinent {
+	font-size: 1rem;
+	color: white;
+  }
+
+  .imageContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .circularImage {
+    overflow: hidden;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+  }
+
+  @font-face {
+    font-family: 'LikeEat';
+    src: url('../../fonts/likeEat.ttf') format('truetype');
+  }

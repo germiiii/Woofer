@@ -1,11 +1,31 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import axios from "axios";
+import jwt from "jsonwebtoken";
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridToolbar,
+  GridToolbarContainer,
+  GridToolbarExportContainer,
+  GridCsvExportMenuItem,
+  GridToolbarColumnsButton,
+  GridToolbarFilterButton,
+  GridToolbarDensitySelector,
+  GridToolbarExport,
+  useGridApiContext,
+  gridFilteredSortedRowIdsSelector,
+  gridVisibleColumnFieldsSelector,
+} from "@mui/x-data-grid";
+import Navbar from "../Components/NavBar";
+import "tailwindcss/tailwind.css";
+import "../stylesLanding.css";
+import Link from "next/link.js";
 
 export default function DataGridDemo() {
+  const api = process.env.NEXT_PUBLIC_APIURL;
   const columns = [
     { field: "id", headerName: "ID", width: 300 },
     {
@@ -94,15 +114,21 @@ export default function DataGridDemo() {
     {
       field: "action",
       headerName: "Action",
-      width: 100,
+      width: 130,
       sortable: false,
       renderCell: (params) => {
         return (
-          <div className="action" style={actionContainer}>
-            <button onClick={() => handleDeactivate(params.row.id)}>
+          <div className="action flex flex-col" style={actionContainer}>
+            <button
+              onClick={() => handleDeactivate(params.row.id)}
+              className="w-30 px-4 py-1 rounded-full bg-[#29235c] text-[#F39200]"
+            >
               Deactivate
             </button>
-            <button onClick={() => handleActivate(params.row.id)}>
+            <button
+              onClick={() => handleActivate(params.row.id)}
+              className="w-30 px-4 py-1 rounded-full bg-[#29235c] text-green-500 mt-1"
+            >
               Activate
             </button>
           </div>
@@ -110,19 +136,46 @@ export default function DataGridDemo() {
       },
     },
   ];
+  const router = useRouter();
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const decodedToken = jwt.decode(token);
+  const userId = decodedToken?.userId;
   const [users, setUsers] = React.useState([]);
+  const [userRole, setUserRole] = React.useState(null);
+  const [loadingRole, setLoadingRole] = React.useState(true);
 
   const fetchAllUsers = async () => {
     try {
-      const response = await axios.get(
-        "https://woofer-server-nsjo.onrender.com/users?role=admin"
-      );
+      const response = await axios.get(`${api}/users?role=admin`);
       setUsers(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
+  const fetchUserRole = async (userId) => {
+    try {
+      const response = await axios.get(`${api}/users/${userId}`);
+      setUserRole(response.data.role);
+    } catch (error) {
+      console.error("Error fetching user role:", error);
+    } finally {
+      setLoadingRole(false);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchUserRole(userId);
+  }, [token]);
+
+  React.useEffect(() => {
+    if (!loadingRole) {
+      if (userRole !== "admin") {
+        router.push("/login");
+      }
+    }
+  }, [userRole, loadingRole, router]);
 
   React.useEffect(() => {
     fetchAllUsers();
@@ -130,7 +183,7 @@ export default function DataGridDemo() {
 
   const handleActivate = async (userId) => {
     try {
-      await axios.put(`https://woofer-server-nsjo.onrender.com/activate/users/${userId}`);
+      await axios.put(`${api}/activate/users/${userId}`);
       await fetchAllUsers();
     } catch (error) {
       console.error("Error activating user:", error);
@@ -139,11 +192,15 @@ export default function DataGridDemo() {
 
   const handleDeactivate = async (userId) => {
     try {
-      await axios.delete(`https://woofer-server-nsjo.onrender.com/activate/users/${userId}`);
+      await axios.delete(`${api}/activate/users/${userId}`);
       await fetchAllUsers();
     } catch (error) {
       console.error("Error deactivating user:", error);
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
   };
 
   const actionContainer = {
@@ -151,13 +208,46 @@ export default function DataGridDemo() {
     flexDirection: "column",
   };
 
-  return (
-    <div>
-      <div style={{ textAlign: "center", fontSize: "30px", margin: "20px 0" }}>
-        Woofer Panel
-      </div>
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarDensitySelector />
+        <GridToolbarExport
+          csvOptions={{
+            fileName: "wooferUsers",
+            delimiter: ";",
+          }}
+        />
+      </GridToolbarContainer>
+    );
+  }
 
-      <Box sx={{ height: 850, width: "100%" }}>
+  return (
+    <div className="flex flex-col h-full">
+      <div
+        className="flex items-center bg-[#29235c]"
+        style={{ minHeight: "100px" }}
+      >
+        <Link href={"/"}>
+          <button
+            className="ml-4 h-8 w-20 rounded-full bg-white text-[#29235c] hover:bg-[#F39200] transition-all duration-300 font-bold"
+            onClick={handleLogout}
+          >
+            log out
+          </button>
+        </Link>
+        <div className="flex-1 flex items-center justify-center">
+          <h1
+            style={{ fontFamily: "LikeEat" }}
+            className="font-bold text-[#F39200] mb-3 text-6xl"
+          >
+            Woofer Panel
+          </h1>
+        </div>
+      </div>
+      <Box sx={{ height: "100%", width: "100%" }}>
         <DataGrid
           rows={users}
           columns={columns}
@@ -172,7 +262,7 @@ export default function DataGridDemo() {
           ptypeSizeOptions={[5]}
           checkboxSelection
           disableRowSelectionOnClick
-          slots={{ toolbar: GridToolbar }}
+          slots={{ toolbar: CustomToolbar }}
           slotProps={{
             toolbar: {
               showQuickFilter: true,

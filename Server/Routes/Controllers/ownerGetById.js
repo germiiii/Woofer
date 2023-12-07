@@ -3,11 +3,17 @@ const { User, Owner, Dog } = require("../../Database/db");
 const ownerGetById = async (id) => {
   const owner = await User.findByPk(id, {
     where: { is_active: true, isOwner: true },
-    attributes: { exclude: ["password"] },
+    attributes: {
+      exclude: [
+        "password",
+        "verificationToken",
+        "resetPasswordToken",
+        "resetPasswordExpires",
+      ]},
     include: [
       {
         model: Owner,
-        attributes: ["dog_count"],
+        attributes: ["dog_count", "score"],
         include: [
           {
             model: Dog,

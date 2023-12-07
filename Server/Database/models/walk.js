@@ -13,11 +13,12 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      duration: {
-        type: DataTypes.DECIMAL(10, 2),
+      startTime: {
+        type: DataTypes.TIME,
         allowNull: false,
+        defaultValue: DataTypes.NOW,
       },
-      totalPrice: {
+      duration: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
       },
@@ -26,9 +27,27 @@ module.exports = (sequelize) => {
         allowNull: false,
         minvalue: 1,
       },
+      totalPrice: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
+      },
+      paymentMethod: {
+        type: DataTypes.ENUM("paypal", "mercadopago"),
+        allowNull: false,
+      },
       state: {
-        type: DataTypes.ENUM("toDo", "inProgress", "done"),
+        type: DataTypes.ENUM("toDo", "inProgress", "done", "rejected"),
         defaultValue: "toDo",
+        allowNull: false,
+      },
+      hasOwnerReview: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+      },
+      hasWalkerReview: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
       },
     },

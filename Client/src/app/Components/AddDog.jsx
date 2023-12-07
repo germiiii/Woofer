@@ -1,7 +1,10 @@
-import React, { useState, useRef } from "react";
-import Image from "next/image"; // Import the Image component from next/image
+import axios from "axios";
+import React from "react";
+import { useState, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
+import jwt from 'jsonwebtoken';
 
-export default function AddDogs(props) {
+export default function OwnerForm() {
   const fileInputRef = useRef(null);
   const [dogData, setDogData] = useState({
     name: "",
@@ -10,9 +13,20 @@ export default function AddDogs(props) {
     size: "",
     image: null,
   });
-
+  
   const [listOfDogs, setListOfDogs] = useState([]);
+  const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    // Check if the user is logged in
+    const token = localStorage.getItem("token");
+    if (token) {
+      // Decode the token to get user information
+      const decodedToken = jwt.decode(token);
+      setUser(decodedToken.userId);
+    }
+  }, []); // Run this effect only once on component mount
+  
   const handleChange = (e) => {
     const { name, value, type } = e.target;
 
@@ -32,15 +46,53 @@ export default function AddDogs(props) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    props.onSubmit();
+  
+    try {
+      // Create an array of dogs with the current dog data
+      const currentDog = {
+        name: dogData.name,
+        age: dogData.age,
+        breed: dogData.breed,
+        size: dogData.size,
+        image: dogData.image,
+      };
+  
+      // Send the data to the server using Axios
+      console.log("userId:", user,"dogs", currentDog);
+  
+      const response = await axios.post('http://localhost:3001/owner/dog', {
+        userId: user,
+        dogs: [
+          {
+            name: currentDog.name,
+            size: currentDog.size,
+            age: currentDog.age,
+            breed: currentDog.breed,
+            image: currentDog.image,
+          },
+        ],
+      });
+      console.log("Server response:", response.data);
+  
+      // Additional logic for handling the form submission, if needed
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
-
   const handleAddDog = (e) => {
     e.preventDefault();
     setDogData({ name: "", age: "", breed: "", size: "", image: null });
     setListOfDogs((prevListOfDogs) => [...prevListOfDogs, dogData]);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const handleFillFormAgain = (e) => {
+    e.preventDefault();
+    setDogData({ name: "", age: "", breed: "", size: "", image: null });
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -142,7 +194,12 @@ export default function AddDogs(props) {
           <br />
           <label style={labelStyle}>
             Size of your dog
-            <select name="size" onChange={handleChange} value={dogData.size}>
+            <select
+              name="size"
+              onChange={handleChange}
+              value={dogData.size}
+              style={selectStyle}
+            >
               <option value="Small">Small</option>
               <option value="Medium">Medium</option>
               <option value="Large">Large</option>
@@ -160,11 +217,11 @@ export default function AddDogs(props) {
             />
           </label>
           <br />
-          <button onClick={handleAddDog} style={buttonStyle}>
-            Add more dogs
+          <button onClick={handleFillFormAgain} style={buttonStyle}>
+            +
           </button>
           <button type="submit" style={buttonStyle}>
-            Confirm
+            Submit
           </button>
           <div>{renderDogs}</div>
         </form>

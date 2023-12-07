@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { useRouter } from 'next/navigation'
+import axios from 'axios'
 import "tailwindcss/tailwind.css";
 
 const PayPal = () => {
@@ -12,45 +13,50 @@ const PayPal = () => {
   const router = useRouter()
   const [accessToken, setAccessToken] = useState('');
 
+  
   useEffect(() => {
-    // Check if the access token exists in localStorage
     const storedAccessToken = localStorage.getItem('accessToken');
   
-    if (!storedAccessToken) {
-      // Fetch a new access token if not stored
-      async function fetchAccessToken() {
-        try {
-          const response = await fetch('https://api-m.sandbox.paypal.com/v1/oauth2/token', {
-            method: 'POST',
+    async function fetchAccessToken() {
+      try {
+        const { data } = await axios.post(
+          'https://api-m.sandbox.paypal.com/v1/oauth2/token',
+          'grant_type=client_credentials',
+          {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               Authorization: 'Basic ' + btoa(clientId + ':' + clientSecret),
             },
-            body: 'grant_type=client_credentials',
-          });
-          const data = await response.json();
-  
-          // Store access token in localStorage
-          localStorage.setItem('accessToken', data.access_token);
-  
-          console.log('Access token fetched and stored:', data.access_token);
-        } catch (error) {
-          console.error('Error fetching access token:', error);
-        }
+          }
+        );
+        const expiresIn = data.expires_in;
+        const expirationTime = Date.now() + expiresIn * 1000;
+        localStorage.setItem('accessToken', data.access_token);
+        localStorage.setItem('tokenExpiration', expirationTime);
+        setAccessToken(data.access_token);
+      } catch (error) {
+        console.error('Error fetching access token:', error);
       }
+    }
   
+    const tokenExpiration = localStorage.getItem('tokenExpiration');
+    if (!storedAccessToken || !tokenExpiration || Date.now() > tokenExpiration) {
       fetchAccessToken();
     } else {
-      // Use the existing token on refresh
-      console.log('Access token exists:', storedAccessToken);
+      setAccessToken(storedAccessToken);
     }
-  }, []);
+  }, [clientId, clientSecret, setAccessToken]); // Include 'id' in the dependency array
   
+  
+  
+  console.log(accessToken)
   
   
 
   return (
     <div className="flex justify-center items-center h-screen " >
+    
+    
    
         <PayPalScriptProvider
         options={{
@@ -73,7 +79,7 @@ const PayPal = () => {
                     headers: {
                       "Content-Type": "application/json",
                       //PayPal access token  after Bearer
-                      "Authorization": `Bearer A21AAI1HPNYh2QtbKqXwumBxrR-n1Q72BZ47G1aKe4Wauy70fITLsHkDc67PVEKCNeLPKfjDynnMAYuPM3WduRev044wxzxjw`,
+                      "Authorization": `Bearer ${accessToken}`,
                     },
                     body: JSON.stringify({
                       intent: "CAPTURE",
@@ -117,3 +123,4 @@ const PayPal = () => {
 };
 
 export default PayPal;
+

@@ -1,22 +1,36 @@
 import UserDetail from "../../Components/UserDetail"
 import "tailwindcss/tailwind.css";
 import Image from "next/image";
+import axios from "axios";
 
 async function generateStaticParams() {
-  const res = await fetch('https://woofer-server-nsjo.onrender.com/users')
-  const data = await res.json()
 
-  return data.users.map((u) => ({
-    params: {
-      id: u.id.toString(), //the file [id] expects a string
-    }
-  }))
+  const api = process.env.NEXT_PUBLIC_APIURL
+
+  try {
+    const response = await axios.get(`${api}/users`);
+    const data = response.data;
+
+    return data.users.map((u) => ({
+      params: {
+        id: u.id.toString(), //the file [id] expects a string
+      },
+    }));
+  } catch (error) {
+    console.error('Error generating static params:', error);
+    throw error;
+  }
 }
 
 async function getUser(id) {
-  const res = await fetch (`https://woofer-server-nsjo.onrender.com/users/${id}`)
-  const data = await res.json()
-  return data;
+  try {
+    const response = await axios.get(`${api}/users/${id}`);
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    throw error;
+  }
 }
 
 export default async function UserPage({params}) {

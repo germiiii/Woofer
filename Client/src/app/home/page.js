@@ -5,26 +5,18 @@ import Nav from "../Components/NavBarHome.jsx";
 import OwnerForm from "../Components/OwnerForm.jsx";
 import Map from "../Components/Map.jsx";
 import SelectWalkers from "../Components/SelectWalkers.jsx";
-import SwitchType from "../Components/SwitchType.jsx";
 import provinces from "../register/provinces.js";
+import jwt from "jsonwebtoken";
+import "tailwindcss/tailwind.css";
+import "../stylesLanding.css";
 
 const Home = () => {
+  const api = process.env.NEXT_PUBLIC_APIURL;
   const [formCompleted, setFormCompleted] = useState(true);
   const [addressInput, setAddressInput] = useState("");
   const [provinceInput, setProvinceInput] = useState("");
   const [userProvince, setUserProvince] = useState("");
   const [userAddress, setUserAddress] = useState("");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("https://woofer-server-nsjo.onrender.com/users");
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
 
   const handleFormSubmit = () => {
     setFormCompleted(true);
@@ -47,39 +39,15 @@ const Home = () => {
     setUserAddress(addressInput);
   };
 
-  const paginationButtonStyle = {
-    backgroundColor: "black",
-    color: "white",
-    padding: "10px 15px",
-    margin: "0 5px",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-  };
-
-  const switchContainerStyle = {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  };
-
-  const titleStyle = {
-    fontSize: "2em",
-    marginBottom: "16px",
-  };
-
   const inputStyle = "border p-4 rounded-lg mr-2";
   const buttonStyle = "border p-3 rounded-lg mr-2 bg-black text-white";
 
   return (
-    <div>
+    <div className="">
       {!formCompleted && <OwnerForm onSubmit={handleFormSubmit} />}
       {formCompleted && (
         <>
           <Nav />
-          {/* <div style={switchContainerStyle}>
-            <SwitchType />
-          </div> */}
           <div
             style={{
               display: "flex",

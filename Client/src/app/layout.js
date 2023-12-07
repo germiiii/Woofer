@@ -1,9 +1,8 @@
 import { Inter } from "next/font/google";
-import ProvidersWrapper from "./ProvidersWrapper"
-import Providers from "../redux/provider"
+import localFont from "next/font/local";
+import Providers from "../redux/provider";
 import { UserProvider } from "./UserContext";
-
-// import './globals.css'
+import ProtectedRoute from "./Components/ProtectedRoute";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,11 +16,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <UserProvider>
-          <ProvidersWrapper>
-            <Providers>
-              {children}
-            </Providers>
-          </ProvidersWrapper>
+          <Providers>
+            <ProtectedRoute>{children}</ProtectedRoute>
+          </Providers>
         </UserProvider>
       </body>
     </html>

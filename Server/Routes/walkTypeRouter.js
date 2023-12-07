@@ -14,6 +14,19 @@ walkTypeRouter.get("/", async (req, res) => {
   }
 });
 
+walkTypeRouter.get("/:id", async (req, res) => {
+  try {
+    const walkTypeData = await WalkType.findByPk(req.params.id);
+    if (!walkTypeData) {
+      res.status(404).json({ error: "Walk type not found" });
+    } else {
+      res.status(200).json({ walkTypeData });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to get walk type" });
+  }
+});
+
 // Create a new walkType
 walkTypeRouter.post('/', async (req, res) => {
   try {

@@ -11,56 +11,85 @@ cloudinary.config({
 const { uploadImage } = require("../../Routes/utils/uploadImage");
 
 const ownerPost = async (data, file) => {
-  const { username, name, size, age, breed } = data;
+  const { userID, name, size, age, breed } = data;
+  let newDog;
+  let newOwner;
 
   // validations
-  if (!username) {
-    throw new Error("Username is required");
+  if (!userID) {
+    throw new Error("userID is required");
   }
   if (!name || !size || !age || !breed) {
-    throw new Error("Dogs are required");
+    throw new Error("Dog info is required");
   }
-  const user = await User.findOne({ where: { username, is_active: true } });
+  const user = await User.findOne({ where: { id: userID, is_active: true } });
   if (!user) {
     throw new Error("User not found");
   }
-  if (user.isOwner) {
-    throw new Error("Owner already exists");
-  }
 
-  // upload image
+  // upload image and create
   if (file) {
     await uploadImage(file.path);
+
+    newDog = await Dog.create({
+      name,
+      breed,
+      size,
+      age,
+      img: file.path,
+    });
+  } else {
+    newDog = await Dog.create({
+      name,
+      breed,
+      size,
+      age,
+      img: "https://static.vecteezy.com/system/resources/previews/012/777/450/non_2x/cat-or-dog-paw-footprint-concept-silhouette-icon-vector.jpg",
+    });
   }
 
-  // create
-  const newOwner = await Owner.create({
-    dog_count: 1, // se inicializa en 1
-  });
+  if (!user.isOwner) {
+    // create
+    newOwner = await Owner.create({
+      dog_count: 1, // se inicializa en 1
+    });
 
-  const createdDog = await Dog.Create({
-    name,
-    breed,
-    size,
-    age,
-    img: file.path,
-  });
+    // asociation
+    await user.setOwner(newOwner);
 
-  // asociation
-  await newOwner.addDogs(createdDog);
+    await newOwner.addDogs(newDog);
 
-  await user.setOwner(newOwner);
-
-  await User.update(
-    { isOwner: true },
-    {
-      where: { username, is_active: true },
+    // update isOwner
+    await User.update(
+      { isOwner: true },
+      {
+        where: { id: userID, is_active: true },
+      }
+    );
+  } else if (user.isOwner) {
+    const owner = await Owner.findOne({
+      where: { userId: user.id, is_active: true },
+    });
+    if (!owner) {
+      throw new Error("Owner not found");
     }
-  );
+
+    // asociate the dogs with the owner
+    await owner.addDogs(newDog);
+
+    // update dog count
+    await owner.update({ dog_count: owner.dog_count + 1 });
+  }
 
   const userData = await User.findOne({
-    attributes: { exclude: ['password'] },
-    where: { username: username, is_active: true },
+    attributes: {
+      exclude: [
+        "password",
+        "verificationToken",
+        "resetPasswordToken",
+        "resetPasswordExpires",
+      ]},
+    where: { id: userID, is_active: true },
     include: [
       {
         model: Owner,

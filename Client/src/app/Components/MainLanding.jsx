@@ -14,8 +14,8 @@ const MainLanding = () => {
           <Image
             src='/ISOWoofer.png'
             alt="logo"
-            width={700}
-            height={600}
+            width={300}
+            height={200}
           />
           </div>
         </h1>
@@ -32,6 +32,7 @@ const MainLanding = () => {
             wrapper="h2"
             speed={30}
             repeat={Infinity}
+            style={{ fontFamily: 'Arial, sans-serif' }}
           />
         </div>
       </div>
@@ -40,3 +41,4 @@ const MainLanding = () => {
 };
 
 export default MainLanding;
+

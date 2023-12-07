@@ -11,16 +11,19 @@ const { ownerHandlerGetAll } = require("./ownerHandlerGetAll");
 const { ownerHandlerGetById } = require("./ownerHandlerGetById");
 const { ownerHandlerPost } = require("./ownerHandlerPost");
 const { dogHandlerGet } = require("./dogHandlerGet");
-const { dogHandlerPost } = require("./dogHandlerPost");
 const { walkerHandlerPost } = require("./walkerHandlerPost");
 const { walkerHandlerGetAvailable } = require("./walkerHandlerGetAvailable");
 const { walkerHandlerSetAvailable } = require("./walkerHandlerSetAvailable");
 const { walkerHandlerGetById } = require("./walkerHandlerGetById");
 const { walkerHandlerGetAll } = require("./walkerHandlerGetAll");
 const { walkHandlerPost } = require("./walkHandlerPost");
-const { walkHandlerGeAll } = require("./walkHandlerGeAll");
+const { walkHandlerGetAll } = require("./walkHandlerGetAll");
 const { walkHandlerGetByWalker } = require("./walkHandlerGetByWalker");
 const { walkHandlerGetByOwner } = require("./walkHandlerGetByOwner");
+const { paymentHandlerPost } = require("./paymentHandlerPost");
+const { userHandlerEdit } = require("./userHandlerEdit");
+const { reviewHandlerPost } = require("./reviewHandlerPost");
+const { reviewHandlerGet } = require("./reviewHandlerGet");
 
 module.exports = {
   userHandlerLogin,
@@ -28,7 +31,6 @@ module.exports = {
   ownerHandlerPost,
   walkerHandlerPost,
   userGetByIdHandler,
-  dogHandlerPost,
   dogHandlerGet,
   ownerHandlerGetAll,
   userHandlerActivate,
@@ -42,8 +44,12 @@ module.exports = {
   walkerHandlerGetById,
   walkerHandlerGetAll,
   walkHandlerPost,
-  walkHandlerGeAll,
+  walkHandlerGetAll,
   walkHandlerGetByWalker,
   walkHandlerGetByOwner,
   ownerHandlerGetById,
+  paymentHandlerPost,
+  userHandlerEdit,
+  reviewHandlerPost,
+  reviewHandlerGet,
 };

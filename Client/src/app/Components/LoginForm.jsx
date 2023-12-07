@@ -6,14 +6,35 @@ import Image from "next/image";
 import { auth } from "../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
+import jwt from "jsonwebtoken";
+import "tailwindcss/tailwind.css";
+import "../stylesLanding.css";
 
 const LoginForm = () => {
+  const api = process.env.NEXT_PUBLIC_APIURL;
+
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const googleAuth = new GoogleAuthProvider();
   const [user] = useAuthState(auth);
+  const [validationErrors, setValidationErrors] = useState({});
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!email.trim()) {
+      errors.email = "email cannot be empty";
+    }
+
+    if (!password.trim()) {
+      errors.password = "password cannot be empty";
+    }
+    console.log("Validation Errors:", errors);
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,137 +47,157 @@ const LoginForm = () => {
 
   const loginGoogle = async (e) => {
     e.preventDefault();
+  
     try {
       const result = await signInWithPopup(auth, googleAuth);
       const { user } = result;
-
       const email = user.email;
-
-      const response = await axios.post('https://woofer-server-nsjo.onrender.com/googleLogin', {
+      const googleToken = await user.getIdToken();
+  
+      const response = await axios.post(`${api}/googleLogin`, {
         email,
+        googleToken,
       });
-
-      const { token } = response.data;
+  
+      console.log(googleToken); // Verifica si obtienes el token de Google
 
       if (response.status === 201) {
+        localStorage.setItem("token", googleToken);
         router.push("/home");
       } else {
-        console.error("Authentication failed");
         console.error("Authentication failed");
       }
     } catch (error) {
       console.error(error);
     }
-  };
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     try {
-      const response = await axios.post('https://woofer-server-nsjo.onrender.com/login', {
+      const response = await axios.post(`${api}/login`, {
         email,
         password,
       });
 
       const { token } = response.data;
+      localStorage.setItem("token", token);
 
       if (token) {
-        // Login successful
-        alert("Welcome!");
+        if (email === "admin@admin.com" && password === "123") {
+          router.push("/admin");
+        } else {
+          router.push("/home");
+        }
         setIsLoggedIn(true);
-        router.push("/home");
       } else {
-        // Login failed
         alert("Invalid credentials.");
       }
     } catch (error) {
-      alert("An error occurred while trying to login. Please try again later.");
       console.error("Error:", error.message);
+      alert("Authentication error. Please try again.");
     }
   };
 
   if (isLoggedIn) {
-    return <p>Redirecting...</p>; // You can replace this with a loading indicator or something similar
+    return (
+      <div className="w-full h-full bg-[#29235c] flex flex-col items-center justify-center ">
+        <p className="text-[#F39200]">redirecting...</p>
+      </div>
+    );
   }
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-4 bg-indigo-200 rounded shadow-md">
-      <div className="flex justify-center">
-        <Image
-          src="/ISOWoofer.png"
-          alt="logo"
-          width={200}
-          height={90}
-          className="mx-auto"
-        />
-      </div>
-
-      <form onSubmit={handleSubmit} method="post">
-        <h1 className="text-2xl text-indigo-900 font-extrabold mb-4">
-          SIGN IN
+    <div className="w-full h-full bg-[#29235c] flex flex-col items-center justify-center  ">
+      <form
+        onSubmit={handleSubmit}
+        method="post"
+        className="flex flex-col items-center justify-center w-full"
+      >
+        <h1
+          className="text-6xl text-[#F39200] font-extrabold mb-12"
+          style={{ fontFamily: "LikeEat" }}
+        >
+          Sign in
         </h1>
-        <label className="block mb-2">
-          Email
+        <label className="mb-10" style={{ height: "64px" }}>
           <input
-            className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
+            className={`rounded-full px-10 py-2 w-full ${
+              validationErrors.email ? "border-[#F39200]" : ""
+            }`}
             type="email"
             name="email"
-            placeholder="Enter your email address"
+            placeholder="email"
             value={email}
             onChange={handleChange}
           />
+          {validationErrors.email && (
+            <p className="text-[#F39200] text-sm mt-1">
+              {validationErrors.email}
+            </p>
+          )}
         </label>
         <br />
-        <label className="block mb-2">
-          Password
+        <label className="mb-10" style={{ height: "64px" }}>
           <input
-            className="border border-gray-300 px-3 py-2 rounded w-full focus:outline-none focus:border-blue-500"
+            className={`rounded-full px-10 py-2 w-full ${
+              validationErrors.password ? "border-[#F39200]" : ""
+            }`}
             type="password"
             name="password"
-            placeholder="Enter your password"
+            placeholder="password"
             value={password}
             onChange={handleChange}
           />
+          {validationErrors.password && (
+            <p className="text-[#F39200] text-sm mt-1">
+              {validationErrors.password}
+            </p>
+          )}
         </label>
         <br />
-        <div>
+        <div className="flex items-center justify-center">
           <button
-            className="px-4 py-3 rounded-full bg-[#29235c] text-white hover:bg-amber-400 hover:text-black border mt-3 lg:mt-0 mr-5"
             type="submit"
+            className="px-8 py-2 rounded-full bg-white text-[#29235c] font-extrabold transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
           >
-            Sign In
+            sign in
           </button>
-        </div>
-
-        <div>
+          <div className="flex items-center justify-center ml-5 mr-5">
+            <h1 className="text-white">or</h1>
+          </div>
           <button
             onClick={loginGoogle}
-            className="bg-white text-indigo-900 px-4 py-3 rounded flex items-center justify-center focus:outline-none hover:bg-amber-400"
+            className="bg-white text-[#29235c] px-5 py-2 rounded-full flex items-center justify-center focus:outline-none transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
             type="button"
           >
             <Image
               src={"/google.png"}
               alt="Google Logo"
-              width={50}
-              height={50}
-              className="w-6 h-6 mr-2"
+              width={20}
+              height={20}
+              className="mr-2"
             />
-            <span>Login with Google</span>
+            <span>Google</span>
           </button>
         </div>
       </form>
 
-      <div className="mt-4">
-        <p className="text-sm">
-          &quot; Dont have an account yet? Register &quot;{" "}
-          <a href="/register" className="text-blue-500">
+      <div className="mt-10">
+        <p className="text-sm text-white">
+          Don&rsquo;t have an account yet? Create it{" "}
+          <a href="/register" className="text-[#F39200]">
             here.
           </a>
         </p>
       </div>
       <div className="mt-2">
-        <p className="text-sm">
-          &ldquo;Dont remember your password? Recover your password &ldquo;
-          <a href="/forget-password" className="text-blue-500">
+        <p className="text-sm text-white">
+          Don&rsquo;t remember your password? Recover your password {""}
+          <a href="/forget-password" className="text-[#F39200]">
             here.
           </a>
         </p>

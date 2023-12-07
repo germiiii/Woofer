@@ -1,14 +1,24 @@
-const { walkPost } = require("../Controllers/walkPost");
+const { walkPost } = require("../Controllers/");
 
 const walkHandlerPost = async (req, res) => {
   try {
-    const { ownerId, walkerId, dogs, duration, totalPrice } = req.body;
+    const {
+      ownerId,
+      walkerId,
+      walkTypes,
+      dogs,
+      duration,
+      totalPrice,
+      paymentMethod,
+    } = req.body;
     const newWalk = await walkPost(
       ownerId,
       walkerId,
+      walkTypes,
       dogs,
       duration,
-      totalPrice
+      totalPrice,
+      paymentMethod
     );
     res.json({ newWalk });
   } catch (error) {
