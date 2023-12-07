@@ -2,7 +2,6 @@ const { Router } = require("express");
 const ownerRouter = Router();
 const {
   ownerHandlerPost,
-  dogHandlerPost,
   dogHandlerGet,
   ownerHandlerGetAll,
   ownerHandlerGetById,
@@ -35,7 +34,6 @@ const upload = multer({ storage: storage });
 ownerRouter.get("/:id", ownerHandlerGetById);
 ownerRouter.get("/", ownerHandlerGetAll);
 ownerRouter.get("/dog/:username", dogHandlerGet);
-ownerRouter.post("/dog", upload.single("image"), dogHandlerPost);
 ownerRouter.post("/", upload.single("image"), ownerHandlerPost);
 
 module.exports = ownerRouter;

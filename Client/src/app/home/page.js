@@ -76,7 +76,7 @@ const Home = () => {
   const buttonStyle = "border p-3 rounded-lg mr-2 bg-black text-white";
 
   return (
-    <div className="bg-[#E4E2ED]">
+    <div className="">
       {!formCompleted && <OwnerForm onSubmit={handleFormSubmit} />}
       {formCompleted && (
         <>
