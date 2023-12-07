@@ -1,7 +1,7 @@
 require("dotenv").config();
 const { PORT } = process.env;
 const server = require("./app.js");
-const { conn, User, WalkType } = require("./Database/db.js");
+const { conn, User, WalkType, Walk, Review } = require("./Database/db.js");
 const bcrypt = require("bcrypt");
 const seed = require("./Database/seed.js");
 
@@ -41,8 +41,8 @@ try {
         } catch (error) {
           console.log("Error creating ADMIN user:", error);
         }
-        // Call the seed function   
-        seed(User, WalkType)          
+        // Call the seed function
+        seed(User, WalkType, Walk, Review);
       }
     });
 } catch (error) {

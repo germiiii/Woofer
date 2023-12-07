@@ -17,11 +17,13 @@ const { walkerHandlerSetAvailable } = require("./walkerHandlerSetAvailable");
 const { walkerHandlerGetById } = require("./walkerHandlerGetById");
 const { walkerHandlerGetAll } = require("./walkerHandlerGetAll");
 const { walkHandlerPost } = require("./walkHandlerPost");
-const { walkHandlerGeAll } = require("./walkHandlerGeAll");
+const { walkHandlerGetAll } = require("./walkHandlerGetAll");
 const { walkHandlerGetByWalker } = require("./walkHandlerGetByWalker");
 const { walkHandlerGetByOwner } = require("./walkHandlerGetByOwner");
 const { paymentHandlerPost } = require("./paymentHandlerPost");
 const { userHandlerEdit } = require("./userHandlerEdit");
+const { reviewHandlerPost } = require("./reviewHandlerPost");
+const { reviewHandlerGet } = require("./reviewHandlerGet");
 
 module.exports = {
   userHandlerLogin,
@@ -42,10 +44,12 @@ module.exports = {
   walkerHandlerGetById,
   walkerHandlerGetAll,
   walkHandlerPost,
-  walkHandlerGeAll,
+  walkHandlerGetAll,
   walkHandlerGetByWalker,
   walkHandlerGetByOwner,
   ownerHandlerGetById,
   paymentHandlerPost,
   userHandlerEdit,
+  reviewHandlerPost,
+  reviewHandlerGet,
 };
