@@ -3,23 +3,12 @@ const { userEdit } = require("../Controllers");
 const userHandlerEdit = async (req, res) => {
   try {
     const file = req.file;
-    const {
-      userID,
-      name,
-      lastName,
-      email,
-      password,
-      username,
-      address,
-      city,
-      province,
-    } = req.body;
+    const { userID, name, lastname, username, address, city, province } =
+      req.body;
     const data = {
       userID,
       name,
-      lastName,
-      email,
-      password,
+      lastname,
       username,
       address,
       city,
