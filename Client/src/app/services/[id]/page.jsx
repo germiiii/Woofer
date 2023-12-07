@@ -17,7 +17,7 @@ const Detail = () => {
 
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
   const clientSecret = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_SECRET;
-
+console.log("client id: ", clientId);
   useEffect(() => {
     const fetchServiceDetail = async () => {
       try {
