@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
 
-    if (pathname !== '/' && pathname !== '/register' && pathname !== '/aditionalForm' && pathname !=='/forget-password' && pathname !=='/forget-password' && !token) {
+    if (pathname !== '/' && pathname !== '/register' && pathname !== '/aditionalForm' && pathname !=='/forget-password' && pathname !=='/forget-password' && pathname !== '/changePassword/:token' && !token) {
       router.push('/login');
     } 
   }, [pathname, router]);
