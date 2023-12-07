@@ -63,6 +63,10 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: false,
       },
+      verificationToken: {
+        type: DataTypes.STRING,
+        allowNull: true, 
+      },
       is_active: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
@@ -77,7 +81,15 @@ module.exports = (sequelize) => {
         type: DataTypes.ENUM("admin", "user"),
         allowNull: true,
         defaultValue: "user",
-      }
+      },
+      resetPasswordToken: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      resetPasswordExpires: {
+        type: DataTypes.DATE,
+        allowNull: true
+      },
     },
     { timestamps: false }
   );
