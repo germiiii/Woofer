@@ -47,31 +47,30 @@ const LoginForm = () => {
 
   const loginGoogle = async (e) => {
     e.preventDefault();
-
+  
     try {
       const result = await signInWithPopup(auth, googleAuth);
       const { user } = result;
-
       const email = user.email;
-
+      const googleToken = await user.getIdToken();
+  
       const response = await axios.post(`${api}/googleLogin`, {
         email,
+        googleToken,
       });
-
-      const { token } = response.data;
-      localStorage.setItem("token", token);
+  
+      console.log(googleToken); // Verifica si obtienes el token de Google
 
       if (response.status === 201) {
+        localStorage.setItem("token", googleToken);
         router.push("/home");
       } else {
-        console.error("Authentication failed");
         console.error("Authentication failed");
       }
     } catch (error) {
       console.error(error);
-      alert("Authentication error. Please try again.");
     }
-  };
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
