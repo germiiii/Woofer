@@ -61,7 +61,7 @@ const userData = [
     is_active: true,
     score: 0,
   },
-  
+
   {
     name: "Martín",
     lastName: "Manrique",
@@ -78,7 +78,7 @@ const userData = [
     is_active: true,
     score: 0,
   },
-  
+
   {
     name: "Sofía",
     lastName: "Lugat",
@@ -95,7 +95,7 @@ const userData = [
     is_active: true,
     score: 0,
   },
-  
+
   {
     name: "Juan",
     lastName: "Lopez",
@@ -143,7 +143,7 @@ const userData = [
     isOwner: false,
     is_active: true,
     score: 0,
-  },  							
+  },
   {
     name: "Ana",
     lastName: "Pérez",
@@ -160,78 +160,97 @@ const userData = [
     is_active: true,
     score: 0,
   },
-							
-{
-  name: "Juan",
-  lastName: "García",
-  email: "juan.garcia@gmail.com",
-  password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
-  username: "juangarcia",
-  address: "Calle Belgrano 789",
-  city: "Salta",
-  province: "Salta",
-  image: "m5.jpg",
-  location: null,
-  isWalker: false,
-  isOwner: false,
-  is_active: false,
-  score: 0,
-},
-							
-{
-  name: "Sofía",
-  lastName: "Rodríguez",
-  email: "sofia.rodriguez@gmail.com",
-  password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
-  username: "sofiarodriguez",
-  address: "Calle San Luis 1011",
-  city: "San Luis",
-  province: "San Luis",
-  image: "f7.jpg",
-  location: null,
-  isWalker: false,
-  isOwner: false,
-  is_active: true,
-  score: 0,
-},
-							
-{
-  name: "Martín",
-  lastName: "Fernández",
-  email: "martin.fernandez@gmail.com",
-  password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
-  username: "martinfernandez",
-  address: "Calle San Juan 1212",
-  city: "Tucumán",
-  province: "Tucumán",
-  image: "m6.jpg",
-  location: null,
-  isWalker: false,
-  isOwner: false,
-  is_active: true,
-  score: 0,
-},
-							
-{
-  name: "Emma",
-  lastName: "Johnson",
-  email: "emma.johnson@gmail.com",
-  password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
-  username: "emmajohnson",
-  address: "123 Main Street",
-  city: "San Francisco",
-  province: "Estados Unidos",
-  image: "f8.jpg",
-  location: null,
-  isWalker: false,
-  isOwner: false,
-  is_active: true,
-  score: 0,
-},
-							
+
+  {
+    name: "Juan",
+    lastName: "García",
+    email: "juan.garcia@gmail.com",
+    password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
+    username: "juangarcia",
+    address: "Calle Belgrano 789",
+    city: "Salta",
+    province: "Salta",
+    image: "m5.jpg",
+    location: null,
+    isWalker: false,
+    isOwner: false,
+    is_active: false,
+    score: 0,
+  },
+
+  {
+    name: "Sofía",
+    lastName: "Rodríguez",
+    email: "sofia.rodriguez@gmail.com",
+    password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
+    username: "sofiarodriguez",
+    address: "Calle San Luis 1011",
+    city: "San Luis",
+    province: "San Luis",
+    image: "f7.jpg",
+    location: null,
+    isWalker: false,
+    isOwner: false,
+    is_active: true,
+    score: 0,
+  },
+
+  {
+    name: "Martín",
+    lastName: "Fernández",
+    email: "martin.fernandez@gmail.com",
+    password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
+    username: "martinfernandez",
+    address: "Calle San Juan 1212",
+    city: "Tucumán",
+    province: "Tucumán",
+    image: "m6.jpg",
+    location: null,
+    isWalker: false,
+    isOwner: false,
+    is_active: true,
+    score: 0,
+  },
+
+  {
+    name: "Emma",
+    lastName: "Johnson",
+    email: "emma.johnson@gmail.com",
+    password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
+    username: "emmajohnson",
+    address: "123 Main Street",
+    city: "San Francisco",
+    province: "Estados Unidos",
+    image: "f8.jpg",
+    location: null,
+    isWalker: false,
+    isOwner: false,
+    is_active: true,
+    score: 0,
+  },
 ];
 
 const seedUsers = async (User) => {
+  try {
+    //  agrego un admin por defecto
+    const imagePath = path.join(__dirname, "./userImages", "woofer.png");
+    const uploadedImage = await cloudinary.uploader.upload(imagePath);
+    User.create({
+      name: "ADMIN",
+      lastName: "",
+      email: "admin@woofer.com",
+      password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
+      username: "admin",
+      address: "",
+      province: "",
+      role: "admin",
+      image: uploadedImage.secure_url,
+    });
+
+    console.log("- ADMIN user successfully created");
+  } catch (error) {
+    console.log("Error creating ADMIN user:", error);
+  }
   try {
     await Promise.all(
       userData.map(async (user) => {
@@ -240,12 +259,12 @@ const seedUsers = async (User) => {
         user.image = uploadedImage.secure_url;
         await User.create(user);
       })
-      );
-      
-      console.log("- Users seeded successfully");
-    } catch (error) {
-      console.error("Error seeding users:", error);
-    }
-  };
-  
-  module.exports = seedUsers;
+    );
+
+    console.log("- Users seeded successfully");
+  } catch (error) {
+    console.error("Error seeding users:", error);
+  }
+};
+
+module.exports = seedUsers;
