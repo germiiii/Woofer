@@ -1,5 +1,6 @@
 const regexNotSpecialNorNumber = /^[a-zA-Z,'.\-\s]*$/i;
 const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const alphanumericNoSpaces = /^[A-Za-z0-9]+$/g;
 const alphanumeric = /^[A-Za-z0-9]+$/g;
 
 const validateSpecialAndNumber = str => {
@@ -18,6 +19,14 @@ const validateEmail = email => {
   }
 };
 
+const validateAlphanumericNoSpaces = str => {
+  if (alphanumericNoSpaces.test(str)) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 const validateAlphanumeric = str => {
   if (alphanumeric.test(str)) {
     return true;
@@ -29,5 +38,6 @@ const validateAlphanumeric = str => {
 module.exports = {
   validateSpecialAndNumber,
   validateEmail,
+  validateAlphanumericNoSpaces,
   validateAlphanumeric,
 };
