@@ -41,6 +41,11 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      score: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
       is_active: {
         type: DataTypes.BOOLEAN,
         allowNull: false,

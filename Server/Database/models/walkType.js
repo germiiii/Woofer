@@ -5,7 +5,7 @@ module.exports = (sequelize) => {
     "walkType",
     {
       id: {
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
