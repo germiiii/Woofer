@@ -14,9 +14,14 @@ const Detail = () => {
   const [service, setService] = useState({});
   const [orderCount, setOrderCount] = useState(0);
   const [accessToken, setAccessToken] = useState("");
-const api = process.env.NEXT_PUBLIC_APIURL;
+
+  const api = process.env.NEXT_PUBLIC_APIURL;
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
   const clientSecret = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_SECRET;
+
+  console.log("api : ", api)
+  console.log("clientId : ", clientId)
+  console.log("clientSecret : ", clientSecret)
 
   useEffect(() => {
     const fetchServiceDetail = async () => {
