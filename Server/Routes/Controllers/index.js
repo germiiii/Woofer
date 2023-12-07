@@ -8,7 +8,6 @@ const { ownerActivate } = require("./ownerActivate");
 const { ownerDeActivate } = require("./ownerDeActivate");
 const { userGetbyId } = require("./userGetbyId");
 const { ownerPost } = require("./ownerPost");
-const { dogPost } = require("./dogPost");
 const { getDogs } = require("./getDogs");
 const { ownerGetAll } = require("./ownerGetAll");
 const { ownerGetById } = require("./ownerGetById");
@@ -21,6 +20,7 @@ const { walkGetByWalker } = require("./walkGetByWalker");
 const { walkGetByOwner } = require("./walkGetByOwner");
 const { walkGetAll } = require("./walkGetAll");
 const { PaymentController } = require("./PaymentController");
+const { userEdit } = require("./userEdit");
 
 module.exports = {
   userLogin,
@@ -34,7 +34,6 @@ module.exports = {
   ownerPost,
   walkerPost,
   userGetbyId,
-  dogPost,
   getDogs,
   ownerGetAll,
   ownerGetById,
@@ -46,4 +45,5 @@ module.exports = {
   walkGetByWalker,
   walkGetByOwner,
   PaymentController,
+  userEdit,
 };

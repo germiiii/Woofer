@@ -19,21 +19,23 @@ const WalkerCard = (props) => {
     display: "flex",
     justifyContent: "start",
     alignItems: "center",
+    backgroundColor: "white",
   };
 
   const nameStyle = {
     fontSize: "1.5em",
     fontWeight: "bold",
+    color: "#29235c",
   };
 
   const addressStyle = {
     fontSize: "1.2em",
-    color: "#555",
+    color: "black",
   };
 
   const dogCapacityStyle = {
     fontSize: "1.0em",
-    color: "darkblue",
+    color: "#29235c",
   };
 
   const walkDurationStyle = {

@@ -35,7 +35,7 @@ const RegisterForm = () => {
   });
   const [formSent, setFormSent] = useState(false);
   const [image, setImage] = useState("");
-
+  const [buttonText, setButtonText] = useState("select your profile picture");
   const [validationErrors, setValidationErrors] = useState({});
 
   const validateForm = () => {
@@ -43,31 +43,34 @@ const RegisterForm = () => {
 
     if (!userData.name.trim()) {
       errors.name = "name cannot be empty";
-    } else if (userData.name.length > 255) {
-      errors.name = "name cannot exceed 255 characters";
+    } else if (userData.name.length > 40) {
+      errors.name = "name cannot exceed 40 characters";
+    } else if (!/^[a-zA-Z]+$/.test(userData.name)) {
+      errors.name = "name must contain only letters";
     }
 
     if (!userData.lastName.trim()) {
       errors.lastName = "last name cannot be empty";
-    } else if (userData.lastName.length > 255) {
-      errors.lastName = "last name cannot exceed 255 characters";
+    } else if (userData.lastName.length > 40) {
+      errors.lastName = "last name cannot exceed 40 characters";
+    } else if (!/^[a-zA-Z]+$/.test(userData.lastName)) {
+      errors.lastName = "last name must contain only letters";
     }
 
     const usernameRegex = /^[a-zA-Z0-9_]+$/;
     if (!userData.username.trim()) {
       errors.username = "username cannot be empty";
-    } else if (userData.username.length > 255) {
-      errors.username = "username cannot exceed 255 characters";
+    } else if (userData.username.length > 40) {
+      errors.username = "username cannot exceed 40 characters";
     } else if (!usernameRegex.test(userData.username)) {
-      errors.username =
-        "username can only contain alphanumeric characters and underscores";
+      errors.username = "username must be alphanumeric";
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!userData.email.trim()) {
       errors.email = "email cannot be empty";
-    } else if (userData.email.length > 255) {
-      errors.email = "email cannot exceed 255 characters";
+    } else if (userData.email.length > 40) {
+      errors.email = "email cannot exceed 40 characters";
     } else if (!emailRegex.test(userData.email)) {
       errors.email = "invalid email format";
     }
@@ -82,12 +85,14 @@ const RegisterForm = () => {
 
     if (!userData.address.trim()) {
       errors.address = "address cannot be empty";
-    } else if (userData.address.length > 255) {
-      errors.address = "address cannot exceed 255 characters";
+    } else if (userData.address.length > 40) {
+      errors.address = "address cannot exceed 40 characters";
+    } else if (!/^[a-zA-Z0-9\s]+$/.test(userData.address)) {
+      errors.address = "address must contain only alphanumeric characters";
     }
 
-    if (userData.password.length > 255) {
-      errors.password = "password cannot exceed 255 characters";
+    if (userData.password.length > 40) {
+      errors.password = "password cannot exceed 40 characters";
     } else if (!userData.password.trim()) {
       errors.password = "password cannot be empty";
     }
@@ -101,6 +106,7 @@ const RegisterForm = () => {
     try {
       const result = await signInWithPopup(auth, googleAuth);
       const { user } = result;
+      console.log(user);
 
       const [name, lastName] = user.displayName.split(" ");
 
@@ -108,13 +114,23 @@ const RegisterForm = () => {
       router.push("/aditionalForm");
     } catch (error) {
       console.error(error);
+      alert("Error registering. Please try again.");
     }
   };
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     if (type === "file") {
-      setImage(e.target.files[0]);
+      const selectedFile = e.target.files[0];
+      setImage(selectedFile);
+
+      const maxFileNameLength = 20;
+      const fileName = selectedFile
+        ? selectedFile.name.length > maxFileNameLength
+          ? selectedFile.name.substring(0, maxFileNameLength - 3) + "..."
+          : selectedFile.name
+        : "select your profile picture";
+      setButtonText(fileName);
     } else {
       setUserData((prevUserData) => {
         const updatedUserData = { ...prevUserData, [name]: value };
@@ -146,7 +162,7 @@ const RegisterForm = () => {
       console.log(axios.defaults.baseURL);
       setFormSent(true);
     } catch (e) {
-      window.alert("Registration failed.");
+      window.alert("Registration failed. Please try again.");
       console.log("register sin exito");
     }
   };
@@ -333,7 +349,7 @@ const RegisterForm = () => {
                     validationErrors.image ? "border-[#F39200]" : ""
                   }`}
                 >
-                  select your profile picture
+                  {buttonText}
                 </button>
               </label>
               <div className="flex items-center justify-center mb-6">

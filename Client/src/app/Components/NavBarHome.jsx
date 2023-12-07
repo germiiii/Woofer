@@ -1,57 +1,69 @@
+"use client";
 import Link from "next/link";
-import "../Styles/StyledNavHome.css";
-import Image from "next/image";
+import React from "react";
+import { usePathname } from "next/navigation";
+import "tailwindcss/tailwind.css";
+import "../stylesLanding.css";
 
-const NavBarHome = ({ onLogout }) => {
+const NavbarHome = () => {
+  const currentPath = usePathname();
+
+  const handleLogout = () => {
+    localStorage.removeItem("paypal_accessToken");
+    localStorage.removeItem("__paypal_storage__");
+    localStorage.removeItem("token");
+  };
+
   return (
-    <nav className="nav-main">
-      <div className="logo-container">
-        <Image
-                src="/LOGOWoofer.png"
-                alt="logo"
-                width={200}
-                height={90}
-                className="logo-image"
-              />
+    <div className="bg-[#F39200] py-6 flex justify-center px-2">
+      <div className="flex mr-10 items-center">
+        <Link href={"/home"}>
+          <button
+            className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
+              currentPath === "/home" ? "text-[#F39200]" : "text-white"
+            } mt-3 lg:mt-0 mr-7  transition transition-colors duration-300`}
+          >
+            home
+          </button>
+        </Link>
+        <Link href={"/add-dogs"}>
+          <button
+            className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
+              currentPath === "/add-dogs" ? "text-[#F39200]" : "text-white"
+            } mt-3 lg:mt-0 mr-7  transition transition-colors duration-300`}
+          >
+            add dogs
+          </button>
+        </Link>
+        <Link href={"/settings"}>
+          <button
+            className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
+              currentPath === "/settings" ? "text-[#F39200]" : "text-white"
+            } mt-3 lg:mt-0 mr-7 transition transition-colors duration-300`}
+          >
+            settings
+          </button>
+        </Link>
+        <Link href={"/safety"}>
+          <button
+            className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
+              currentPath === "/safety" ? "text-[#F39200]" : "text-white"
+            } mt-3 lg:mt-0 mr-7  transition transition-colors duration-300`}
+          >
+            safety
+          </button>
+        </Link>
+        <Link href={"/"}>
+          <button
+            onClick={handleLogout}
+            className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] text-white mt-3 lg:mt-0 mr-7 transition transition-colors duration-300`}
+          >
+            log out
+          </button>
+        </Link>
       </div>
-      <input
-        type="checkbox"
-        className="nav-main__btn-collapse"
-        id="nav-main__checkbox"
-      />
-      <label
-        htmlFor="nav-main__checkbox"
-        className="nav-main__btn-collapse-icon"
-      >
-        <span className="icon-nav"></span>
-        <span className="icon-nav"></span>
-        <span className="icon-nav"></span>
-      </label>
-
-      <div className="nav-main__btn-collaps-bg"></div>
-
-      <div className="nav-main__menu">
-        <a href="/home" className="nav-main__link-item">
-          Home
-        </a>
-        <a href="/" className="nav-main__link-item">
-          View Profile
-        </a>
-        <a href="/add-dogs" className="nav-main__link-item">
-         Add dogs
-        </a>
-        <a href="/safety" className="nav-main__link-item">
-         Safety
-        </a>
-        <a href="/settings" className="nav-main__link-item">
-          Settings
-        </a>
-        <a href="/" className="nav-main__link-item">
-          Log Out
-        </a>
-      </div>
-    </nav>
+    </div>
   );
-}
+};
 
-export default NavBarHome
+export default NavbarHome;

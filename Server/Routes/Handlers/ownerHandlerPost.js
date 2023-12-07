@@ -3,9 +3,9 @@ const { ownerPost } = require("../Controllers");
 const ownerHandlerPost = async (req, res) => {
   try {
     const file = req.file;
-    const { username, name, size, age, breed } = req.body;
+    const { userID, name, size, age, breed } = req.body;
     const data = {
-      username,
+      userID,
       name,
       size,
       age,

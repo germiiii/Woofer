@@ -1,8 +1,11 @@
 import React from 'react'
+import ForgotPassword from '../Components/ForgotPassword'
 
 const ChangePassword = () => {
   return (
-    <div>ChangePassword</div>
+    <div>
+      <ForgotPassword/>
+    </div>
   )
 }
 
