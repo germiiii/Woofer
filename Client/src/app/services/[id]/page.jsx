@@ -24,9 +24,6 @@ const Detail = () => {
   useEffect(() => {
     const fetchServiceDetail = async () => {
       try {
-          console.log("api : ", api)
-  console.log("clientId : ", clientId)
-  console.log("clientSecret : ", clientSecret)
         const response = await axios.get(`${api}/walkType/${id}`);
         const data = response.data;
 
@@ -55,6 +52,9 @@ const Detail = () => {
   useEffect(() => {
     async function fetchAccessToken() {
   try {
+              console.log("api : ", api)
+  console.log("clientId : ", clientId)
+  console.log("clientSecret : ", clientSecret)
     const credentials = `${clientId}:${clientSecret}`;
     const base64Credentials = btoa(credentials);
 
