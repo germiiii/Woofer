@@ -3,6 +3,7 @@ import React from "react";
 import { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import jwt from 'jsonwebtoken';
+import Image from "next/image";
 
 export default function OwnerForm() {
   const fileInputRef = useRef(null);
