@@ -1,7 +1,12 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import React, { useState } from 'react'
 import checkoutImage from "../../../public/checkout.png";
+import {
+  Popover
+} from '@chakra-ui/react'
+
 
 const WalkerCard = (props) => {
 
@@ -76,22 +81,27 @@ const WalkerCard = (props) => {
     } else if (props.walkDuration.includes("60") && props.dogCapacity > 3 && props.dogCapacity < 5) {
       serviceId = "0a2782b4-4abc-40a8-b0c3-3f9dc2d50fa0";
     } else if (props.walkDuration.includes("15") && props.dogCapacity > 5) {
-      serviceId = "e3b913f5-be37-42d3-8931-43b10f959a37";
+      serviceId = "67647912-27f6-45b7-9c00-2d65209c9ebd";
     } else if (props.walkDuration.includes("30") && props.dogCapacity > 5) {
-      serviceId = "eeaea7a1-042e-42cb-8f0e-fb70f47da459";
+      serviceId = "5567874b-b873-46a0-8109-c13d93161dcb";
     } else if (props.walkDuration.includes("60") && props.dogCapacity > 5) {
-      serviceId = "20389a0e-1fe3-4f5e-8b38-826fa7a1622b";
+      serviceId = "c311d641-c5ec-45cc-8ba4-19d7d1753d59";
     }
   
     if (serviceId) {
       router.push(`/services/${serviceId}`);
     } else {
-      console.error("No service found for this filter combination");
+    
+     alert('Please, select a duration and a number of dogs before checkout')
     }
   };
   
+  
+
+
   return (
-    <div style={cardStyle}>
+    <div>
+      <div style={cardStyle}>
       <Image style={imageStyle} src={props.image} width={100} height={100} alt="profile" />
       <div style={textStyle}>
         <h2 style={nameStyle}>{props.name + " " + props.lastName}</h2>
@@ -112,6 +122,10 @@ const WalkerCard = (props) => {
         />
       </div>
     </div>
+
+    </div>
+    
+   
   );
 };
 

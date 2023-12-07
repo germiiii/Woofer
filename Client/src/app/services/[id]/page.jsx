@@ -31,7 +31,8 @@ const Detail = () => {
           window.alert("No hay información para ese ID");
         }
       } catch (error) {
-        console.error('Error fetching service details:', error);
+        console.error("Error fetching service details:", error);
+        window.alert("Error al obtener detalles del servicio");
       }
     };
 
@@ -65,41 +66,52 @@ const Detail = () => {
       }
     }
 
-    const storedAccessToken = sessionStorage.getItem('accessToken');
-    if (!storedAccessToken) {
-      fetchAccessToken();
-    } else {
-      setAccessToken(storedAccessToken);
+    fetchAccessToken();
+
+    if (!accessToken) {
+      const token = localStorage.getItem("paypal_accessToken");
+      setAccessToken(token);
     }
   }, []);
-  
-  // console.log(accessToken)
-
 
   const createOrder = async (data, actions) => {
     try {
-      console.log('Creating order...');
+      console.log("Creating order...");
+      console.log(accessToken);
 
-      const res = await fetch('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          intent: 'CAPTURE',
-          purchase_units: [
-            {
-              amount: {
-                currency_code: 'USD',
-                value: service.walkTypeData.price,
+      if (!accessToken) {
+        console.log("Missing token");
+        return;
+      }
+
+      if (!service.walkTypeData) {
+        console.log("Service data not available");
+        return;
+      }
+
+      const res = await fetch(
+        "https://api-m.sandbox.paypal.com/v2/checkout/orders",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({
+            intent: "CAPTURE",
+            purchase_units: [
+              {
+                amount: {
+                  currency_code: "USD",
+                  value: service.walkTypeData.price,
+                },
+                description: service.walkTypeData.description,
+                reference_id: `order-${orderCount}`,
               },
-              description: service.walkTypeData.description,
-              reference_id: `order-${orderCount}` 
-            },
-          ],
-        }),
-      });
+            ],
+          }),
+        }
+      );
 
       if (!res.ok) {
         throw new Error("Failed to create order");
@@ -145,50 +157,63 @@ const Detail = () => {
         </div>
       </div>
       <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center relative">
-    <h1 className="text-4xl text-[#29235C] font-bold mb-2 mt-11"  style={{ fontFamily: "LikeEat" }}>Service Details</h1>
-    <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg flex flex-col items-center relative">
-      
-        <div className="w-1/2 p-4">
-          <Image 
-            src="/WalkTypeDetail.png" 
-            alt="Detail"
-            width={500} 
-            height={500}
-            className="rounded-full" 
-          />
-        </div>
-        <div className="w-1/2 p-4">
-          {service.walkTypeData ? (
-            <div>
-              <h1 className='font-bold text-2xl text-[#29235C] ' style={{ fontFamily: "LikeEat" }}>{service.walkTypeData.title}</h1>
-              <h2>{service.walkTypeData.description}</h2>
-              <h1 className='font-bold text-2xl'>Price: ${service.walkTypeData.price}</h1>
+        <h1
+          className="text-4xl text-[#29235C] font-bold mb-2 mt-11"
+          style={{ fontFamily: "LikeEat" }}
+        >
+          Service Details
+        </h1>
+        <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg flex flex-col items-center relative">
+          <div className="w-1/2 p-4">
+            <Image
+              src="/WalkTypeDetail.png"
+              alt="Detail"
+              width={500}
+              height={500}
+              className="rounded-full"
+            />
+          </div>
+          <div className="w-1/2 p-4">
+            {service.walkTypeData ? (
+              <div>
+                <h1
+                  className="font-bold text-2xl text-[#29235C] "
+                  style={{ fontFamily: "LikeEat" }}
+                >
+                  {service.walkTypeData.title}
+                </h1>
+                <h2>{service.walkTypeData.description}</h2>
+                <h1 className="font-bold text-2xl">
+                  Price: ${service.walkTypeData.price}
+                </h1>
+              </div>
+            ) : (
+              <p>No hay información disponible para ese servicio</p>
+            )}
+            <div className="mt-4">
+              {accessToken && service.walkTypeData && (
+                <PayPalScriptProvider
+                  options={{
+                    clientId: clientId,
+                  }}
+                >
+                  <PayPalButtons
+                    style={{
+                      layout: "horizontal",
+                      color: "gold",
+                      label: "pay",
+                      shape: "pill",
+                    }}
+                    createOrder={createOrder}
+                    onCancel={handleCancel}
+                    onApprove={handleApprove}
+                  />
+                </PayPalScriptProvider>
+              )}
             </div>
-          ) : (
-            <p>No hay información disponible para ese servicio</p>
-          )}
-          <div className="mt-4">
-            <PayPalScriptProvider
-              options={{
-                clientId: clientId
-              }}
-            >
-              <PayPalButtons
-                style={{ 
-                  layout: "horizontal", 
-                  color: "gold", 
-                  label: "pay",
-                  shape: "pill",
-                }}
-                createOrder={createOrder}
-                onCancel={handleCancel}
-                onApprove={handleApprove}
-              />
-            </PayPalScriptProvider>
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 };
