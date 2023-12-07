@@ -72,11 +72,7 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: true,
       },
-      score: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0,
-      },
+
       role: {
         type: DataTypes.ENUM("admin", "user"),
         allowNull: true,
