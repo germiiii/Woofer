@@ -11,6 +11,7 @@ cloudinary.config({
 const {
   validateSpecialAndNumber,
   validateAlphanumeric,
+  validateAlphanumericNoSpaces,
 } = require("../../Routes/utils/validations");
 const { uploadImage } = require("../../Routes/utils/uploadImage");
 
@@ -34,7 +35,7 @@ const userEdit = async (data, file) => {
     if (username.length > 40) {
       throw new Error("Username debe ser menor a 40 caracteres");
     }
-    if (!validateAlphanumeric(username)) {
+    if (await !validateAlphanumericNoSpaces(username)) {
       throw new Error("Username debe ser alfanumerico sin espacios");
     }
     User.update(
@@ -52,7 +53,7 @@ const userEdit = async (data, file) => {
     if (name.length > 40) {
       throw new Error("Name debe ser menor a 40 caracteres");
     }
-    if (!validateSpecialAndNumber(name)) {
+    if (await !validateSpecialAndNumber(name)) {
       throw new Error("Name no puede contener ni números ni símbolos");
     }
     await User.update(
@@ -70,7 +71,7 @@ const userEdit = async (data, file) => {
     if (lastname.length > 40) {
       throw new Error("Lastname debe ser menor a 40 caracteres");
     }
-    if (!validateSpecialAndNumber(lastname)) {
+    if (await !validateSpecialAndNumber(lastname)) {
       throw new Error("Lastname no puede contener ni números ni símbolos");
     }
     await User.update(
@@ -88,7 +89,7 @@ const userEdit = async (data, file) => {
     if (address.length > 40) {
       throw new Error("Address debe ser menor a 40 caracteres");
     }
-    if (!validateAlphanumeric(address)) {
+    if (await !validateAlphanumeric(address)) {
       throw new Error("Address debe ser alfanumerico sin espacios");
     }
     await User.update(
