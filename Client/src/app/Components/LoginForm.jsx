@@ -6,6 +6,7 @@ import Image from "next/image";
 import { auth } from "../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
+import jwt from "jsonwebtoken";
 import "tailwindcss/tailwind.css";
 import "../stylesLanding.css";
 
@@ -87,12 +88,13 @@ const LoginForm = () => {
       localStorage.setItem("token", token);
 
       if (token) {
-        // Login successful
-        alert("Welcome!");
+        if (email === "admin@admin.com" && password === "123") {
+          router.push("/admin");
+        } else {
+          router.push("/home");
+        }
         setIsLoggedIn(true);
-        router.push("/home");
       } else {
-        // Login failed
         alert("Invalid credentials.");
       }
     } catch (error) {
