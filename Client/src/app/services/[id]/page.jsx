@@ -48,23 +48,26 @@ const api = process.env.NEXT_PUBLIC_APIURL;
 
   useEffect(() => {
     async function fetchAccessToken() {
-      try {
-        const { data } = await axios.post(
-          "https://api-m.sandbox.paypal.com/v1/oauth2/token",
-          "grant_type=client_credentials",
-          {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              Authorization: `Basic ${btoa(clientId + ":" + clientSecret)}`,
-            },
-          }
-        );
-        localStorage.setItem("paypal_accessToken", data.access_token);
-      } catch (error) {
-        console.error("Error fetching/accessing token:", error);
-      }
-    }
+  try {
+    const credentials = `${clientId}:${clientSecret}`;
+    const base64Credentials = btoa(credentials);
 
+    const { data } = await axios.post(
+      "https://api-m.sandbox.paypal.com/v1/oauth2/token",
+      "grant_type=client_credentials",
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Basic ${base64Credentials}`,
+        },
+      }
+    );
+
+    localStorage.setItem("paypal_accessToken", data.access_token);
+  } catch (error) {
+    console.error("Error fetching/accessing token:", error);
+  }
+}
     fetchAccessToken();
 
     if (!accessToken) {
