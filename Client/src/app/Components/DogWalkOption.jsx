@@ -1,7 +1,7 @@
-"use client";
-import React from "react";
+// DogWalkOption.js
+import React from 'react';
 
-const DogWalkOption = ({ option, setOptionChosen }) => {
+const DogWalkOption = ({ option, onClick, selected }) => {
   const cardStyle = {
     border: "1px solid #ddd",
     padding: "15px",
@@ -9,17 +9,12 @@ const DogWalkOption = ({ option, setOptionChosen }) => {
     borderRadius: "5px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     cursor: "pointer", // Añadir un cursor indicando que es clickeable
-  };
-
-  const handleCardClick = () => {
-    // Ejecutar la función cuando se hace clic en la tarjeta
-    setOptionChosen(option);
+    backgroundColor: selected ? '#eee' : 'white', // Cambiar el color de fondo si está seleccionado
   };
 
   return (
-    <div style={cardStyle} onClick={handleCardClick}>
+    <div style={cardStyle} onClick={() => onClick(option)}>
       <h2>{option.title}</h2>
-      <p>{option.description}</p>
       <p>Price: ${option.price}</p>
       <p>Walk Duration: {option.walk_duration} minutes</p>
       <p>Walk Type: {option.walk_type}</p>

@@ -17,10 +17,13 @@ const WalkerHome = () => {
   const [user, setUser] = useState("");
   const [dogCapacityFilter, setDogCapacityFilter] = useState('');
   const [walkDurationFilter, setWalkDurationFilter] = useState('');
-  const [optionChosen, setOptionChosen] = useState('');   //me falta q de DogWalkOption me setee el optionChosen
+  const [optionChosen, setOptionChosen] = useState(null); 
   const [userProvince, setUserProvince] = useState('');
   const [userAddress, setUserAddress] = useState('');
   
+  const isSelected = (card) => {
+    return optionChosen && optionChosen.id === card.id;
+  };
   useEffect(() => {
       const obtenerDatos = async () => {
       const token = localStorage.getItem('token');
@@ -98,13 +101,26 @@ const WalkerHome = () => {
     })
 
     const renderList = filteredCards.map((card) => {
-      return (
-        <DogWalkOption
-          option={card}
-          onClick={setOptionChosen}
-        />
-      );
-    })
+      const handleOptionClick = (card) => {
+        // Si la card ya está seleccionada, la quitamos del estado
+        if (optionChosen && optionChosen.id === card.id) {
+          setOptionChosen(null);
+        } else {
+          // Si la card no está seleccionada, la agregamos al estado
+          setOptionChosen(card);
+        }
+      };
+
+  return (
+    <DogWalkOption
+    key={card.id}
+    option={card}
+    onClick={() => handleOptionClick(card)}
+    selected={isSelected(card)}
+  />
+  );
+});
+
 
   const handleResponderComentario = (index, respuesta) => {
     const updatedComentarios = [...comentarios];
@@ -129,7 +145,7 @@ const WalkerHome = () => {
       position: toast.POSITION.TOP_RIGHT,
     });
    };
-   
+   console.log("optionChosen",optionChosen)
   return (
     <div className="text-center m-20">
       <ToastContainer />
@@ -165,20 +181,9 @@ const WalkerHome = () => {
           <option value="high">6 or more</option>
         </select>
       )}
-
-      <div>
-        {dogCapacityFilter !== '' && walkDurationFilter !== '' ? (
-          renderList.length > 0 ? (
-            renderList
-          ) : (
-            <p>No hay paseos disponibles</p>
-          )
-        ) : (
-          <p>Selecciona ambos filtros para ver los paseos disponibles</p>
-        )}
-        
+      <div>    
+            {renderList}            
       </div>
-
       <form onSubmit={handleSubmit}>
         <div>
           <h3>Otros Detalles</h3>
@@ -222,14 +227,13 @@ const WalkerHome = () => {
           </button>
         </form> */}
       </div>
-
-      {/* Agrega el botón "Activo" habilitado solo si hay al menos una selección en contratacionCliente */}
+         {/* Agrega el botón "Activo" habilitado solo si hay al menos una selección en contratacionCliente */}
       <button
         onClick={handleActivoClick}
         disabled={renderList.length === 0}
-        className={`bg-black text-white px-4 py-2 ${optionChosen.length === 0 && 'opacity-50 cursor-not-allowed'}`}
+        className={`bg-black text-white px-4 py-2 ${optionChosen && optionChosen.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
       >
-        Activo
+       Activo
       </button>
     </div>
   );
