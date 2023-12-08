@@ -6,7 +6,20 @@ const userActivate = async (id) => {
     if(!user) throw Error("User doesnt exist")
     user.is_active = true
     await user.save()
-    return "User is now active!"
+
+    const owner = await user.getOwner();
+    if (owner) {
+      owner.is_active = true;
+      await owner.save();
+    }
+    
+    const walker = await user.getWalker();
+    if (walker) {
+      walker.is_active = true;
+      await walker.save();
+    }
+
+    return `User ${user.username} is now active!`
 
   };
 

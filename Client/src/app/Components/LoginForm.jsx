@@ -6,6 +6,7 @@ import Image from "next/image";
 import { auth } from "../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
+import jwt from "jsonwebtoken";
 import "tailwindcss/tailwind.css";
 import "../stylesLanding.css";
 
@@ -46,31 +47,30 @@ const LoginForm = () => {
 
   const loginGoogle = async (e) => {
     e.preventDefault();
-
+  
     try {
       const result = await signInWithPopup(auth, googleAuth);
       const { user } = result;
-
       const email = user.email;
-
+      const googleToken = await user.getIdToken();
+  
       const response = await axios.post(`${api}/googleLogin`, {
         email,
+        googleToken,
       });
-
-      const { token } = response.data;
-      localStorage.setItem("token", token);
+  
+      console.log(googleToken); // Verifica si obtienes el token de Google
 
       if (response.status === 201) {
+        localStorage.setItem("token", googleToken);
         router.push("/home");
       } else {
-        console.error("Authentication failed");
         console.error("Authentication failed");
       }
     } catch (error) {
       console.error(error);
-      alert("Authentication error. Please try again.");
     }
-  };
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,12 +87,13 @@ const LoginForm = () => {
       localStorage.setItem("token", token);
 
       if (token) {
-        // Login successful
-        alert("Welcome!");
+        if (email === "admin@admin.com" && password === "123") {
+          router.push("/admin");
+        } else {
+          router.push("/home");
+        }
         setIsLoggedIn(true);
-        router.push("/home");
       } else {
-        // Login failed
         alert("Invalid credentials.");
       }
     } catch (error) {

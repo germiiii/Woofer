@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import Providers from "../redux/provider";
 import { UserProvider } from "./UserContext";
+import ProtectedRoute from "./Components/ProtectedRoute";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,7 +16,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <UserProvider>
-          <Providers>{children}</Providers>
+          <Providers>
+            <ProtectedRoute>{children}</ProtectedRoute>
+          </Providers>
         </UserProvider>
       </body>
     </html>

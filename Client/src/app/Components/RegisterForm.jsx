@@ -87,7 +87,7 @@ const RegisterForm = () => {
       errors.address = "address cannot be empty";
     } else if (userData.address.length > 40) {
       errors.address = "address cannot exceed 40 characters";
-    } else if (!/^[a-zA-Z0-9\s]+$/.test(userData.address)) {
+    } else if (!/^[a-zA-Z0-9áéíóúÁÉÍÓÚüÜ\s]+$/.test(userData.address)) {
       errors.address = "address must contain only alphanumeric characters";
     }
 

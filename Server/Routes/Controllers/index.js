@@ -21,6 +21,8 @@ const { walkGetByOwner } = require("./walkGetByOwner");
 const { walkGetAll } = require("./walkGetAll");
 const { PaymentController } = require("./PaymentController");
 const { userEdit } = require("./userEdit");
+const { reviewPost } = require("./reviewPost");
+const { reviewGet } = require("./reviewGet");
 
 module.exports = {
   userLogin,
@@ -46,4 +48,6 @@ module.exports = {
   walkGetByOwner,
   PaymentController,
   userEdit,
+  reviewGet,
+  reviewPost
 };
