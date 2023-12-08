@@ -49,45 +49,38 @@ const Detail = () => {
 
   //! PayPal
 
-  const axiosInstance = axios.create({
-  baseURL: "https://api-m.sandbox.paypal.com",
-  headers: {
-    "Content-Type": "application/x-www-form-urlencoded",
-    "Access-Control-Allow-Origin": "*", // Allow requests from any origin (adjust as needed)
-  },
-});
-
-// Function to fetch access token
-async function fetchAccessToken(clientId, clientSecret) {
+  useEffect(() => {
+    async function fetchAccessToken() {
   try {
-    const encodedAuth = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
-    const response = await axiosInstance.post(
-      "/v1/oauth2/token",
+              console.log("api : ", api)
+  console.log("clientId : ", clientId)
+  console.log("clientSecret : ", clientSecret)
+    const credentials = `${clientId}:${clientSecret}`;
+    const base64Credentials = btoa(credentials);
+
+    const { data } = await axios.post(
+      "https://api-m.sandbox.paypal.com/v1/oauth2/token",
       "grant_type=client_credentials",
       {
         headers: {
-          Authorization: Basic ${encodedAuth},
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Basic ${base64Credentials}`,
         },
       }
     );
-    localStorage.setItem("paypal_accessToken", response.data.access_token);
-    return response.data.access_token;
+
+    localStorage.setItem("paypal_accessToken", data.access_token);
   } catch (error) {
     console.error("Error fetching/accessing token:", error);
-    return null;
   }
 }
+    fetchAccessToken();
 
-// Use this function in your useEffect hook
-useEffect(() => {
-  async function fetchToken() {
-    const token = await fetchAccessToken(clientId, clientSecret);
-    if (token) {
+    if (!accessToken) {
+      const token = localStorage.getItem("paypal_accessToken");
       setAccessToken(token);
     }
-  }
-  fetchToken();
-}, []);
+  }, []);
 
   const createOrder = async (data, actions) => {
     try {
