@@ -112,7 +112,7 @@ useEffect(() => {
       }
 
       const res = await fetch(
-        "https://api-m.sandbox.paypal.com/v2/checkout/orders",
+        "https://api-m.paypal.com/v2/checkout/orders",
         {
           method: "POST",
           headers: {
@@ -143,14 +143,14 @@ useEffect(() => {
 
       if (order.id) {
         console.log("Order ID:", order.id);
-        setOrderCount(orderCount + 1); // Increment order count for the next order
+        setOrderCount(orderCount + 1);
         return order.id;
       } else {
         throw new Error("Order ID not received");
       }
     } catch (error) {
       console.error("Error creating PayPal order:", error);
-      // Implement your error handling here
+     
     }
   };
 
