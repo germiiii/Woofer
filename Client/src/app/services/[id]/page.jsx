@@ -50,24 +50,23 @@ const Detail = () => {
   //! PayPal
 
   const axiosInstance = axios.create({
-    baseURL: "https://api-m.sandbox.paypal.com/",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Access-Control-Allow-Origin": "*", // Allow requests from any origin (you might adjust this based on your needs)
-    },
-  });
-
+  baseURL: "https://api-m.sandbox.paypal.com",
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Access-Control-Allow-Origin": "*", // Allow requests from any origin (adjust as needed)
+  },
+});
 
 // Function to fetch access token
 async function fetchAccessToken(clientId, clientSecret) {
   try {
+    const encodedAuth = Buffer.from(${clientId}:${clientSecret}).toString("base64");
     const response = await axiosInstance.post(
       "/v1/oauth2/token",
       "grant_type=client_credentials",
       {
-        auth: {
-          username: clientId,
-          password: clientSecret,
+        headers: {
+          Authorization: Basic ${encodedAuth},
         },
       }
     );
