@@ -15,13 +15,15 @@ const Detail = () => {
   const [orderCount, setOrderCount] = useState(0);
   const [accessToken, setAccessToken] = useState("");
 
+  const api = process.env.NEXT_PUBLIC_APIURL;
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
   const clientSecret = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_SECRET;
+
+
 
   useEffect(() => {
     const fetchServiceDetail = async () => {
       try {
-        const api = process.env.NEXT_PUBLIC_APIURL;
         const response = await axios.get(`${api}/walkType/${id}`);
         const data = response.data;
 
@@ -47,32 +49,52 @@ const Detail = () => {
 
   //! PayPal
 
-  useEffect(() => {
-    async function fetchAccessToken() {
-      try {
-        const { data } = await axios.post(
-          "https://api-m.sandbox.paypal.com/v1/oauth2/token",
-          "grant_type=client_credentials",
-          {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              Authorization: `Basic ${btoa(clientId + ":" + clientSecret)}`,
-            },
-          }
-        );
-        localStorage.setItem("paypal_accessToken", data.access_token);
-      } catch (error) {
-        console.error("Error fetching/accessing token:", error);
+  const axiosInstance = axios.create({
+    baseURL: "https://api-m.paypal.com", // Change to live PayPal API base URL
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Access-Control-Allow-Origin": "*", // Allow requests from any origin (you might adjust this based on your needs)
+    },
+  });
+  
+  // Function to fetch access token
+  async function fetchAccessToken(clientId, clientSecret) {
+    console.log('ClientID:', clientId)
+    console.log('Client Secret:', clientSecret)
+    try {
+      const credentials = `${clientId}:${clientSecret}`;
+    const base64Credentials = btoa(credentials);
+
+    const { data } = await axiosInstance.post(
+      "/v1/oauth2/token",
+      "grant_type=client_credentials",
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Basic ${base64Credentials}`,
+        },
       }
-    }
+    );
 
-    fetchAccessToken();
+    localStorage.setItem("paypal_accessToken", data.access_token);
+    console.log('PayPal Access Token:', data.access_token)
+    return data.access_token;
+  } catch (error) {
+    console.error("Error fetching/accessing token:", error);
+    return null;
+  }
+}
 
-    if (!accessToken) {
-      const token = localStorage.getItem("paypal_accessToken");
+// Use this function in your useEffect hook
+useEffect(() => {
+  async function fetchToken() {
+    const token = await fetchAccessToken(clientId, clientSecret);
+    if (token) {
       setAccessToken(token);
     }
-  }, []);
+  }
+  fetchToken();
+}, []);
 
   const createOrder = async (data, actions) => {
     try {
@@ -90,7 +112,7 @@ const Detail = () => {
       }
 
       const res = await fetch(
-        "https://api-m.sandbox.paypal.com/v2/checkout/orders",
+        "https://api-m.paypal.com/v2/checkout/orders",
         {
           method: "POST",
           headers: {
@@ -121,14 +143,14 @@ const Detail = () => {
 
       if (order.id) {
         console.log("Order ID:", order.id);
-        setOrderCount(orderCount + 1); // Increment order count for the next order
+        setOrderCount(orderCount + 1);
         return order.id;
       } else {
         throw new Error("Order ID not received");
       }
     } catch (error) {
       console.error("Error creating PayPal order:", error);
-      // Implement your error handling here
+     
     }
   };
 
