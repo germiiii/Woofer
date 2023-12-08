@@ -162,10 +162,12 @@ const seedWalkAndReviews = async (User, Walk, Review) => {
         newWalk.state = "done";
         if (type === "owner") {
           newWalk.hasOwnerReview = true;
+          ownerInstance.reviews_count += 1;
           ownerInstance.score += score;
           ownerInstance.save();
         } else {
           newWalk.hasWalkerReview = true;
+          walkerInstance.reviews_count += 1;
           walkerInstance.score += score;
           walkerInstance.save();
         }
@@ -179,9 +181,9 @@ const seedWalkAndReviews = async (User, Walk, Review) => {
         newWalk.save();
       }
     }
-    console.log("- Walks seeded successfully");
+    console.log("- Walks and reviews seeded successfully");
   } catch (error) {
-    console.error("Error seeding walks:", error);
+    console.error("Error seeding walks and reviews:", error);
   }
 };
 

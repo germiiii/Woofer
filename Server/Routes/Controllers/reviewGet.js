@@ -8,7 +8,7 @@ const reviewGet = async (id) => {
     where: whereId,
     include: {
       model: Walker,
-      attributes: ["score"],
+      attributes: ["score", "reviews_count"],
       where: { is_active: true },
       include: {
         model: Walk,
@@ -29,7 +29,7 @@ const reviewGet = async (id) => {
     where: whereId,
     include: {
       model: Owner,
-      attributes: ["score"],
+      attributes: ["score", "reviews_count"],
       where: { is_active: true },
       include: {
         model: Walk,

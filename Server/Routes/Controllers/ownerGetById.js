@@ -13,7 +13,7 @@ const ownerGetById = async (id) => {
     include: [
       {
         model: Owner,
-        attributes: ["dog_count", "score"],
+        attributes: ["dog_count", "score", "reviews_count"],
         include: [
           {
             model: Dog,

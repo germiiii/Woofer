@@ -1,19 +1,13 @@
 const { User, Walker, Owner, Walk, Review } = require("../../Database/db");
 
-const reviewPost = async ( idWalk, type, score, description) => {
+const reviewPost = async (idWalk, type, score, description) => {
   const walk = await Walk.findOne({
     where: { id: idWalk },
   });
-  if (!walk) {
-    throw new Error(`${user.username} don't have a walk to calificate`);
-  }
 
-  // const user = await User.findOne({
-  //   where: { id: idUser, is_active: true },
-  // });
-  // if (!user) {
-  //   throw new Error("User not found");
-  // }
+  if (!walk) {
+    throw new Error(`${idWalk} id walk not found`);
+  }
 
   const newReview = await Review.create({ type, score, description });
 
@@ -25,10 +19,12 @@ const reviewPost = async ( idWalk, type, score, description) => {
     instancedUser = await walk.getWalker();
     walk.hasWalkerReview = true;
   }
+
   if (!instancedUser) {
     throw new Error("Walker or Owner not found");
   }
 
+  instancedUser.reviews_count += 1;
   instancedUser.score += score;
   await instancedUser.save();
 
@@ -43,21 +39,21 @@ const reviewPost = async ( idWalk, type, score, description) => {
         include: [
           {
             model: Walker,
-            attributes: ["score"],
+            attributes: ["score", "reviews_count"],
             include: [
               {
                 model: User,
-                attributes: ["name", "lastName"],
+                attributes: ["name", "lastName", "email"],
               },
             ],
           },
           {
             model: Owner,
-            attributes: ["score"],
+            attributes: ["score", "reviews_count"],
             include: [
               {
                 model: User,
-                attributes: ["name", "lastName"],
+                attributes: ["name", "lastName", "email"],
               },
             ],
           },
@@ -65,6 +61,16 @@ const reviewPost = async ( idWalk, type, score, description) => {
       },
     ],
   });
+
+  // enviar notificacion
+  // let mensaje = "";
+  // if (type === "owner") {
+  //   mensaje = `Recibiste una calificacion de tu walker! ${reviewData.walker.name} ${reviewData.walker.lastName} te califico con ${score} y dejo este comentario: ${description}`;
+  //   enviarNotificacion(reviewData.walker.email, mensaje);
+  // } else if (type === "walker") {
+  //   mensaje = `Recibiste una calificacion de tu paseo! ${reviewData.owner.name} ${reviewData.owner.lastName} te califico con ${score} y dejo este comentario: ${description}`;
+  //   enviarNotificacion(reviewData.owner.email, mensaje);
+  // }
 
   return reviewData;
 };
