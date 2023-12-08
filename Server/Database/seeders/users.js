@@ -247,7 +247,7 @@ const seedUsers = async (User) => {
       image: uploadedImage.secure_url,
     });
 
-    console.log("- ADMIN user successfully created");
+    console.log("- ADMIN user (admin@woofer.com) successfully created");
   } catch (error) {
     console.log("Error creating ADMIN user:", error);
   }

@@ -18,7 +18,7 @@ const ownerGetAll = async (province) => {
     include: [
       {
         model: Owner,
-        attributes: ["dog_count", "score"],
+        attributes: ["dog_count", "score", "reviews_count"],
         include: [
           {
             model: Dog,
