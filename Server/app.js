@@ -26,8 +26,8 @@ server.use(morgan("dev"));
 
 server.use((req, res, next) => {
   res.header(
-    "Access-Control-Allow-Origin",
-    `${FRONTEND || "http://localhost:3000"}`
+    "Access-Control-Allow-Origin", "*"
+    // `${FRONTEND || "http://localhost:3000"}`
   );
   res.header("Access-Control-Allow-Credentials", "true");
   res.header(

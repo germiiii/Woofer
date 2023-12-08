@@ -11,7 +11,7 @@ const getAvailableWalkers = async () => {
         {
           model: Walker,
           where: { is_available: true, is_active: true },
-          attributes: ["dog_capacity", "dog_size", "walk_duration", "score", "sale_details", "is_available"],
+          attributes: ["dog_capacity", "dog_size", "walk_duration", "score", "reviews_count", "sale_details", "is_available"],
           include: [
             {
               model: WalkType,

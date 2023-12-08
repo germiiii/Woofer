@@ -41,7 +41,12 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      score: {
+      reviews_count: { //counter for the actual number of reviews
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      score: { //sum of all reviews
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,

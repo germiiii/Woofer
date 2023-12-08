@@ -1,4 +1,11 @@
-const { User, Walker, Owner, Dog, Walk, WalkType } = require("../../Database/db");
+const {
+  User,
+  Walker,
+  Owner,
+  Dog,
+  Walk,
+  WalkType,
+} = require("../../Database/db");
 
 const walkPost = async (
   ownerId,
@@ -10,23 +17,19 @@ const walkPost = async (
   paymentMethod
 ) => {
   const userOwner = await User.findByPk(ownerId);
-  const owner = await userOwner?.getOwner();
-
   const userWalker = await User.findByPk(walkerId);
+  const owner = await userOwner?.getOwner();
   const walker = await userWalker?.getWalker();
 
-  if (!owner || !walker || !owner.is_active || !walker.is_active) {
+  if (!owner?.is_active || !walker?.is_active) {
     throw new Error("Walker or Owner not found");
   }
 
-  let dogsCount = 0;
-  if (Array.isArray(dogs)) {
-    dogsCount = dogs.length;
-  } else if (typeof dogs === "number") {
-    dogsCount = dogs;
-  } else {
-    throw new Error("Dogs is neither an array nor a number");
-  }
+  const dogsCount = Array.isArray(dogs)
+    ? dogs.length
+    : typeof dogs === "number"
+    ? dogs
+    : 0;
 
   const newWalk = await Walk.create({
     date: new Date(),
@@ -37,42 +40,44 @@ const walkPost = async (
     paymentMethod,
   });
 
-  newWalk.addWalkTypes(walkTypes);
+  if (walkTypes) {
+    newWalk.addWalkTypes(walkTypes);
+  }
 
-  await owner.addWalk(newWalk, { through: Walk });
-  await walker.addWalk(newWalk, { through: Walk });
+  await owner?.addWalk(newWalk);
+  await walker?.addWalk(newWalk);
 
   if (Array.isArray(dogs)) {
-    const ownerDogs = await owner.getDogs();
+    const ownerDogs = await owner?.getDogs();
     await Promise.all(
-      ownerDogs.map(async (dog) => {
-        if (dogs.includes(dog.id)) {
-          await dog.addWalk(newWalk);
+      ownerDogs?.map(async (dog) => {
+        if (dogs.includes(dog?.id)) {
+          await dog?.addWalk(newWalk);
         }
       })
     );
   }
 
-  const walk = await Walk.findOne({
-    where: { id: newWalk.id },
+  const walkData = await Walk.findOne({
+    where: { id: newWalk?.id },
     include: [
       {
         model: Owner,
-        attributes: ["score"],
+        attributes: ["score", "reviews_count"],
         include: [
           {
             model: User,
-            attributes: ["name", "lastName"],
+            attributes: ["name", "lastName", "email"],
           },
         ],
       },
       {
         model: Walker,
-        attributes: ["score"],
+        attributes: ["score", "reviews_count"],
         include: [
           {
             model: User,
-            attributes: ["name", "lastName"],
+            attributes: ["name", "lastName", "email"],
           },
         ],
       },
@@ -90,7 +95,10 @@ const walkPost = async (
     ],
   });
 
-  return walk;
+  // const mensaje = `Recibimos un pago mediante ${paymentMethod} de $ ${totalPrice} por tu paseo!`;
+  // enviarNotificacion(walkData?.owner?.email, mensaje);
+
+  return walkData;
 };
 
 module.exports = { walkPost };

@@ -6,8 +6,8 @@ const seedWalkAndReviews = require("./seeders/walkAndReviews");
 const seed = async (User, WalkType, Walk, Review) => {
   console.log("Seeding database...");
   try {
-    await seedWalkTypes(WalkType);
     await userSeeder(User);
+    await seedWalkTypes(WalkType);
     await seedWalkers(User, WalkType);
     await seedOwners(User);
     await seedWalkAndReviews(User, Walk, Review);

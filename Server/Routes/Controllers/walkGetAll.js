@@ -18,7 +18,7 @@ const walkGetAll = async (date) => {
     include: [
       {
         model: Walker,
-        attributes: ["score"],
+        attributes: ["score", "reviews_count"],
         include: {
           model: User,
           attributes: ["id", "name", "lastName"],
@@ -26,7 +26,7 @@ const walkGetAll = async (date) => {
       },
       {
         model: Owner,
-        attributes: ["score"],
+        attributes: ["score", "reviews_count"],
         include: {
           model: User,
           attributes: ["id", "name", "lastName"],
