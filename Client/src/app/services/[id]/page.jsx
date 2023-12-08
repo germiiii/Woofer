@@ -60,7 +60,7 @@ const Detail = () => {
 // Function to fetch access token
 async function fetchAccessToken(clientId, clientSecret) {
   try {
-    const encodedAuth = Buffer.from(${clientId}:${clientSecret}).toString("base64");
+    const encodedAuth = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
     const response = await axiosInstance.post(
       "/v1/oauth2/token",
       "grant_type=client_credentials",
