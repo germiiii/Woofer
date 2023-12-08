@@ -3,14 +3,15 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from 'react'
 import checkoutImage from "../../../public/checkout.png";
-import {
-  Popover
-} from '@chakra-ui/react'
+import Checkout from '../checkout/page'
+import axios from "axios";
 
 
 const WalkerCard = (props) => {
 
-  const router = useRouter();
+  const api = process.env.NEXT_PUBLIC_APIURL;
+
+  const router = useRouter()
 
   const cardStyle = {
     border: "1px solid #ccc",
@@ -63,40 +64,28 @@ const WalkerCard = (props) => {
     marginRight: "50px",
   };
 
-  const handleCheckoutClick = () => {
-    console.log('Walk Duration:', props.walkDuration);
-    console.log('Dog Capacity:', props.dogCapacity);
-    let serviceId = "";
-  
-    if (props.walkDuration.includes("15") && props.dogCapacity === 1) {
-      serviceId = "1";
-    } else if (props.walkDuration.includes("30") && props.dogCapacity === 1) {
-      serviceId = "2";
-    } else if (props.walkDuration.includes("60") && props.dogCapacity === 1) {
-      serviceId = "3";
-    } else if (props.walkDuration.includes("15") && props.dogCapacity > 2 && props.dogCapacity < 5) {
-      serviceId = "4";
-    } else if (props.walkDuration.includes("30") && props.dogCapacity > 2 && props.dogCapacity < 5) {
-      serviceId = "5";
-    } else if (props.walkDuration.includes("60") && props.dogCapacity > 2 && props.dogCapacity < 5) {
-      serviceId = "6";
-    } else if (props.walkDuration.includes("15") && props.dogCapacity > 5) {
-      serviceId = "7";
-    } else if (props.walkDuration.includes("30") && props.dogCapacity > 5) {
-      serviceId = "8";
-    } else if (props.walkDuration.includes("60") && props.dogCapacity > 5) {
-      serviceId = "9";
-    }
-  
-    if (serviceId) {
-      router.push(`/services/${serviceId}`);
-    } else {
-    
-     alert('Please, select a duration and a number of dogs before checkout')
+  const handleClick = async () => {
+    console.log("Walker ID:", props.id);
+    try {
+      const response = await axios.get(`${api}/walker/${props.id}`);
+      if (response.status === 200) {
+        const walkerData = response.data;
+        console.log('Walker details:', response.data);
+
+        // Store only necessary walker details in localStorage
+        const selectedWalker = {
+          walker: walkerData, // Assuming walkerData has the necessary structure
+        };
+        localStorage.setItem('selectedWalker', JSON.stringify(selectedWalker));
+        
+        router.push('/checkout');
+      } else {
+        console.error('Failed to fetch walker data:', response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching walker data:', error);
     }
   };
-  
-  
 
 
   return (
@@ -105,11 +94,6 @@ const WalkerCard = (props) => {
       <Image style={imageStyle} src={props.image} width={100} height={100} alt="profile" />
       <div style={textStyle}>
         <h2 style={nameStyle}>{props.name + " " + props.lastName}</h2>
-        <h3 style={addressStyle}>{props.address}</h3>
-        <h4 style={dogCapacityStyle}>
-          Ready to walk {props.dogCapacity} {props.dogSize} dogs for{" "}
-          {props.walkDuration} minutes
-        </h4>
       </div>
       <div style={checkoutStyle} >
         <Image
@@ -117,7 +101,7 @@ const WalkerCard = (props) => {
           src={checkoutImage}
           width={40}
           height={40}
-          onClick={handleCheckoutClick}
+          onClick={() => handleClick(props.id)}
           style={{ cursor: "pointer" }}
         />
       </div>

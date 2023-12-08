@@ -108,6 +108,7 @@ const SelectWalkers = (props) => {
     .map((walker) => (
       <WalkerCard
         key={walker.id}
+        id={walker.id}
         name={walker.name}
         lastName={walker.lastName}
         address={walker.address}
