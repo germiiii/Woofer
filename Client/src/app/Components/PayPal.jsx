@@ -7,7 +7,7 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import "tailwindcss/tailwind.css";
 
 
-const PayPal = ({selectedWalkType}) => {
+const PayPal = ({totalAmount}) => {
   const router = useRouter();
   const { id } = useParams();
   const [service, setService] = useState({});
@@ -83,11 +83,6 @@ const PayPal = ({selectedWalkType}) => {
         return;
       }
 
-      if (!selectedWalkType) {
-        console.log('No walkType selected for payment');
-        return;
-      }
-
       const res = await fetch('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
         method: 'POST',
         headers: {
@@ -100,9 +95,9 @@ const PayPal = ({selectedWalkType}) => {
             {
               amount: {
                 currency_code: 'USD',
-                value: selectedWalkType.price,
+                value: totalAmount,
               },
-              description: selectedWalkType.description,
+              
               reference_id: `order-${orderCount}`,
             },
           ],
@@ -128,13 +123,20 @@ const PayPal = ({selectedWalkType}) => {
     }
   };
 
+  // const handleApprove = (data, actions) => {
+  //   console.log("Approved:", data);
+  //   actions.order.capture();
+  //   alert("Payment successful");
+  //   setTimeout(() => {
+  //     router.push("/home");
+  //   }, 3000);
+  // };
+
   const handleApprove = (data, actions) => {
-    console.log("Approved:", data);
-    actions.order.capture();
-    alert("Payment successful");
-    setTimeout(() => {
-      router.push("/home");
-    }, 3000);
+    return actions.order.capture().then(function (details) {
+      // Handle successful capture here
+      // For example: show success message, redirect, etc.
+    });
   };
 
   const handleCancel = (data) => {
