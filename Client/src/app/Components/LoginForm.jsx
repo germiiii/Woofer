@@ -47,18 +47,18 @@ const LoginForm = () => {
 
   const loginGoogle = async (e) => {
     e.preventDefault();
-  
+
     try {
       const result = await signInWithPopup(auth, googleAuth);
       const { user } = result;
       const email = user.email;
       const googleToken = await user.getIdToken();
-  
+
       const response = await axios.post(`${api}/googleLogin`, {
         email,
         googleToken,
       });
-  
+
       console.log(googleToken); // Verifica si obtienes el token de Google
 
       if (response.status === 201) {
@@ -70,7 +70,7 @@ const LoginForm = () => {
     } catch (error) {
       console.error(error);
     }
-};
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,7 +87,7 @@ const LoginForm = () => {
       localStorage.setItem("token", token);
 
       if (token) {
-        if (email === "admin@admin.com" && password === "123") {
+        if (email === "admin@woofer.com" && password === "123") {
           router.push("/admin");
         } else {
           router.push("/home");

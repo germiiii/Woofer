@@ -50,6 +50,7 @@ export default function DataGridDemo() {
           </div>
         );
       },
+      editable: false,
     },
     {
       field: "username",
@@ -57,24 +58,25 @@ export default function DataGridDemo() {
       description: "This column has a value getter and is not sortable.",
       sortable: false,
       width: 160,
+      editable: false,
     },
     {
       field: "name",
       headerName: "Name",
       width: 130,
-      editable: true,
+      editable: false,
     },
     {
       field: "lastName",
       headerName: "Last Name",
       width: 130,
-      editable: true,
+      editable: false,
     },
     {
       field: "isOwner",
       headerName: "Is Owner",
       width: 90,
-      editable: true,
+      editable: false,
     },
     {
       field: "isWalker",
@@ -82,6 +84,7 @@ export default function DataGridDemo() {
       description: "This column has a value getter and is not sortable.",
       sortable: false,
       width: 90,
+      editable: false,
     },
     {
       field: "province",
@@ -89,6 +92,7 @@ export default function DataGridDemo() {
       description: "This column has a value getter and is not sortable.",
       sortable: true,
       width: 160,
+      editable: false,
     },
     {
       field: "address",
@@ -96,6 +100,7 @@ export default function DataGridDemo() {
       description: "This column has a value getter and is not sortable.",
       sortable: false,
       width: 200,
+      editable: false,
     },
     {
       field: "email",
@@ -103,13 +108,15 @@ export default function DataGridDemo() {
       description: "This column has a value getter and is not sortable.",
       sortable: false,
       width: 200,
+      editable: false,
     },
     {
       field: "is_active",
       headerName: "Active",
       description: "This column has a value getter and is not sortable.",
       sortable: true,
-      width: 80,
+      width: 150,
+      editable: false,
     },
     {
       field: "action",
@@ -117,6 +124,10 @@ export default function DataGridDemo() {
       width: 130,
       sortable: false,
       renderCell: (params) => {
+        const isAdminUser = params.row.email === "admin@woofer.com";
+        if (isAdminUser) {
+          return null;
+        }
         return (
           <div className="action flex flex-col" style={actionContainer}>
             <button
@@ -134,6 +145,7 @@ export default function DataGridDemo() {
           </div>
         );
       },
+      editable: false,
     },
   ];
   const router = useRouter();
@@ -144,6 +156,10 @@ export default function DataGridDemo() {
   const [users, setUsers] = React.useState([]);
   const [userRole, setUserRole] = React.useState(null);
   const [loadingRole, setLoadingRole] = React.useState(true);
+  const actionContainer = {
+    display: "flex",
+    flexDirection: "column",
+  };
 
   const fetchAllUsers = async () => {
     try {
@@ -164,22 +180,6 @@ export default function DataGridDemo() {
       setLoadingRole(false);
     }
   };
-
-  React.useEffect(() => {
-    fetchUserRole(userId);
-  }, [token]);
-
-  React.useEffect(() => {
-    if (!loadingRole) {
-      if (userRole !== "admin") {
-        router.push("/login");
-      }
-    }
-  }, [userRole, loadingRole, router]);
-
-  React.useEffect(() => {
-    fetchAllUsers();
-  }, []);
 
   const handleActivate = async (userId) => {
     try {
@@ -203,11 +203,6 @@ export default function DataGridDemo() {
     localStorage.removeItem("token");
   };
 
-  const actionContainer = {
-    display: "flex",
-    flexDirection: "column",
-  };
-
   function CustomToolbar() {
     return (
       <GridToolbarContainer>
@@ -223,6 +218,22 @@ export default function DataGridDemo() {
       </GridToolbarContainer>
     );
   }
+
+  React.useEffect(() => {
+    fetchUserRole(userId);
+  }, [token]);
+
+  React.useEffect(() => {
+    if (!loadingRole) {
+      if (userRole !== "admin") {
+        router.push("/login");
+      }
+    }
+  }, [userRole, loadingRole, router]);
+
+  React.useEffect(() => {
+    fetchAllUsers();
+  }, []);
 
   return (
     <div className="flex flex-col h-full">
@@ -260,7 +271,7 @@ export default function DataGridDemo() {
             },
           }}
           ptypeSizeOptions={[5]}
-          checkboxSelection
+          checkboxSelection={false}
           disableRowSelectionOnClick
           slots={{ toolbar: CustomToolbar }}
           slotProps={{
