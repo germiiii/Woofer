@@ -18,11 +18,18 @@ const walkPost = async (
 ) => {
   const userOwner = await User.findByPk(ownerId);
   const userWalker = await User.findByPk(walkerId);
+  if (!userOwner) {
+    throw new Error(`Owner${ownerId} not found`);
+  }
+  if (!userWalker) {
+    throw new Error(`Walker ${walkerId} not found`);
+  }
+  
   const owner = await userOwner?.getOwner();
   const walker = await userWalker?.getWalker();
 
   if (!owner?.is_active || !walker?.is_active) {
-    throw new Error("Walker or Owner not found");
+    throw new Error("Walker or Owner not actives");
   }
 
   const dogsCount = Array.isArray(dogs)

@@ -33,6 +33,7 @@ const reviewPost = async (idWalk, type, score, description) => {
 
   const reviewData = await Review.findOne({
     where: { id: newReview.id },
+    attributes: ["type", "score", "description"],
     include: [
       {
         model: Walk,
@@ -43,7 +44,7 @@ const reviewPost = async (idWalk, type, score, description) => {
             include: [
               {
                 model: User,
-                attributes: ["name", "lastName", "email"],
+                attributes: ["id", "name", "lastName", "email"],
               },
             ],
           },
@@ -53,7 +54,7 @@ const reviewPost = async (idWalk, type, score, description) => {
             include: [
               {
                 model: User,
-                attributes: ["name", "lastName", "email"],
+                attributes: ["id", "name", "lastName", "email"],
               },
             ],
           },
