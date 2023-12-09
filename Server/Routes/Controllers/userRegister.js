@@ -13,6 +13,13 @@ cloudinary.config({
 const { uploadImage } = require("../../Routes/utils/uploadImage");
 const transporter = require('../../nodeMailer/transporter');
 
+const {
+  validateSpecialAndNumber,
+  validateAlphanumeric,
+  validateAlphanumericNoSpaces,
+  validateEmail,
+} = require("../../Routes/utils/validations");
+
 const generateVerificationToken = () => {
   return crypto.randomBytes(20).toString('hex');
 };
@@ -31,11 +38,69 @@ const userRegister = async (req, res) => {
     city,
     province
   } = req.body;
+
+  //validations
+  if (!name || !lastName || !email || !password || !username || !address || !city || !province) {
+    throw new Error("All fields are required");
+  }
+
+  // name validations
+  if (typeof name !== "string") {
+    throw new Error("Name debe ser un string");
+  }
+  if (name.length > 40) {
+    throw new Error("Name debe ser menor a 40 caracteres");
+  }
+  if (await !validateSpecialAndNumber(name)) {
+    throw new Error("Name no puede contener ni números ni símbolos");
+  }
+
+  // lastName validations
+  if (typeof lastName !== "string") {
+    throw new Error("Lastname debe ser un string");
+  }
+  if (lastName.length > 40) {
+    throw new Error("Lastname debe ser menor a 40 caracteres");
+  }
+  if (await !validateSpecialAndNumber(lastName)) {
+    throw new Error("Lastname no puede contener ni números ni símbolos");
+  }
+
+  // email validations
+  if (typeof email !== "string") {
+    throw new Error("Email debe ser un string");
+  }
+  if (!validateEmail(email)) {
+    throw new Error("Email no es válido");
+  }
+
+  // username validations
+  if (typeof username !== "string") {
+    throw new Error("Username debe ser string");
+  }
+  if (username.length > 40) {
+    throw new Error("Username debe ser menor a 40 caracteres");
+  }
+  if (await !validateAlphanumericNoSpaces(username)) {
+    throw new Error("Username debe ser alfanumerico sin espacios");
+  }
+
+  // address validations
+  if (typeof address !== "string") {
+    throw new Error("Address debe ser un string");
+  }
+  if (address.length > 40) {
+    throw new Error("Address debe ser menor a 40 caracteres");
+  }
+  if (await !validateAlphanumeric(address)) {
+    throw new Error("Address debe ser alfanumerico");
+  }
+
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const verificationToken = generateVerificationToken();
 
-  // upload image
+  // upload image and create
   if (req.file) {
     await uploadImage(req.file.path);
     const newUser = await User.create({
