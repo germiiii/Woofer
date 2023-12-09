@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -8,24 +9,19 @@ import "tailwindcss/tailwind.css";
 import Map from "../Components/Map";
 import jwt from 'jsonwebtoken';
 
-
 const WalkerHome = () => {
-  const [otrosDetalles, setOtrosDetalles] = useState('');
   const [comentarios, setComentarios] = useState([]);
   const [contratacionCliente, setContratacionCliente] = useState([]);
   const [priceList, setPriceList] = useState([]);
   const [user, setUser] = useState("");
   const [dogCapacityFilter, setDogCapacityFilter] = useState('');
   const [walkDurationFilter, setWalkDurationFilter] = useState('');
-  const [optionChosen, setOptionChosen] = useState(null); 
+  const [optionChosen, setOptionChosen] = useState([]);
   const [userProvince, setUserProvince] = useState('');
   const [userAddress, setUserAddress] = useState('');
-  
-  const isSelected = (card) => {
-    return optionChosen && optionChosen.id === card.id;
-  };
+
   useEffect(() => {
-      const obtenerDatos = async () => {
+    const obtenerDatos = async () => {
       const token = localStorage.getItem('token');
 
       if (token) {
@@ -37,14 +33,14 @@ const WalkerHome = () => {
           setUser(data);
           setUserProvince(data.province);
           setUserAddress(data.address);
-                } catch (error) {
+        } catch (error) {
           console.error('Error al obtener datos del servidor', error);
         }
       }
     };
     obtenerDatos();
   }, []);
-  console.log(userProvince);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -56,71 +52,53 @@ const WalkerHome = () => {
       }
     };
     fetchData();
-  }, []); 
- 
-    const handleSubmit = async(event) => {
-    event.preventDefault();
-    try {
-      const saleDetailsValue = otrosDetalles
-      const response = await axios.put(
-      "http://localhost:3001/walker",
-      {sale_detail: saleDetailsValue }
-    );
-      
-    } catch (error) {
-      console.error("Error en la solicitud POST:", error);
-    }
-     };
+  }, []);
+
 
   const handleDogCapacityFilterChange = (event) => {
     setDogCapacityFilter(event.target.value);
   };
-  
 
   const handleWalkDurationFilterChange = (event) => {
     setWalkDurationFilter(event.target.value);
-  }
+  };
 
-  const filteredCards = priceList.filter((card) => {
-    const dogCapacityFilterCondition =
-    !dogCapacityFilter ||
-    (dogCapacityFilter === "low" && card.dog_capacity === "low") ||
-    (dogCapacityFilter === "medium" && card.dog_capacity === "medium") ||
-    (dogCapacityFilter === "high" && card.dog_capacity === "high");
+  const handleOptionClick = (card) => {
+    const updatedOptions = [...optionChosen];
 
-    const walkDurationFilterCondition =
-    !walkDurationFilter ||
-    (walkDurationFilter === "15" && card.walk_duration.includes("15")) ||
-      (walkDurationFilter === "30" && card.walk_duration.includes("30")) ||
-      (walkDurationFilter === "60" && card.walk_duration.includes("60"));
-  
-    return (
-      dogCapacityFilterCondition &&
-      walkDurationFilterCondition
-    )
+      const index = updatedOptions.findIndex((selectedCard) => selectedCard.id === card.id);
+    if (index !== -1) {
+      updatedOptions.splice(index, 1);
+    } else {
+      updatedOptions.push(card);
+    }
+    setOptionChosen(updatedOptions);
+  };
+
+  const renderList = priceList
+    .filter((card) => {
+      const dogCapacityFilterCondition =
+        !dogCapacityFilter ||
+        (dogCapacityFilter === "low" && card.dog_capacity === "low") ||
+        (dogCapacityFilter === "medium" && card.dog_capacity === "medium") ||
+        (dogCapacityFilter === "high" && card.dog_capacity === "high");
+
+      const walkDurationFilterCondition =
+        !walkDurationFilter ||
+        (walkDurationFilter === "15" && card.walk_duration.includes("15")) ||
+        (walkDurationFilter === "30" && card.walk_duration.includes("30")) ||
+        (walkDurationFilter === "60" && card.walk_duration.includes("60"));
+
+      return dogCapacityFilterCondition && walkDurationFilterCondition;
     })
-
-    const renderList = filteredCards.map((card) => {
-      const handleOptionClick = (card) => {
-        // Si la card ya está seleccionada, la quitamos del estado
-        if (optionChosen && optionChosen.id === card.id) {
-          setOptionChosen(null);
-        } else {
-          // Si la card no está seleccionada, la agregamos al estado
-          setOptionChosen(card);
-        }
-      };
-
-  return (
-    <DogWalkOption
-    key={card.id}
-    option={card}
-    onClick={() => handleOptionClick(card)}
-    selected={isSelected(card)}
-  />
-  );
-});
-
+    .map((card) => (
+      <DogWalkOption
+        key={card.id}
+        option={card}
+        onClick={() => handleOptionClick(card)}
+        selected={optionChosen.some((selectedCard) => selectedCard.id === card.id)}
+      />
+    ));
 
   const handleResponderComentario = (index, respuesta) => {
     const updatedComentarios = [...comentarios];
@@ -130,22 +108,33 @@ const WalkerHome = () => {
 
   const handleActivoClick = async () => {
     try {
-      if (userId) {
+      if (user.id) {
         await axios.put(`http://localhost:3001/walker/${user.id}`, {
           is_available: true,
-        });   
+        });
       }
     } catch (error) {
       console.error('Error al actualizar el estado:', error);
     }
   };
 
+  const handleElegirOpciones = async () => {
+    try {
+      const response = await axios.put('http://tu-url', optionChosen);
+      console.log('Respuesta de la solicitud PUT:', response.data);
+    } catch (error) {
+      console.error('Error al realizar la solicitud PUT:', error);
+    }
+  };
   const prueba = () => {
     toast.success(`¡${contratacionCliente.join(', ')} han contratado tu servicio! (Prueba)`, {
       position: toast.POSITION.TOP_RIGHT,
     });
-   };
-   console.log("optionChosen",optionChosen)
+  };
+
+
+  console.log("optionChosen", optionChosen);
+
   return (
     <div className="text-center m-20">
       <ToastContainer />
@@ -154,7 +143,7 @@ const WalkerHome = () => {
       <button onClick={prueba} className="bg-black text-white px-4 py-2">
         Prueba para cuando llegue una solicitud de paseo
       </button>
-      <br></br>
+      <br />
       <select
         value={walkDurationFilter}
         onChange={handleWalkDurationFilterChange}
@@ -165,7 +154,7 @@ const WalkerHome = () => {
         <option value="30">30 minutes</option>
         <option value="60">60 minutes</option>
       </select>
-      <br></br>
+      <br />
       {walkDurationFilter && (
         <select
           value={dogCapacityFilter}
@@ -181,60 +170,49 @@ const WalkerHome = () => {
           <option value="high">6 or more</option>
         </select>
       )}
-      <div>    
-            {renderList}            
-      </div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <h3>Otros Detalles</h3>
-          <textarea
-            value={otrosDetalles}
-            onChange={(e) => setOtrosDetalles(e.target.value)}
-            placeholder="Información adicional sobre el paseo..."
-            className="border p-2 rounded"
-          />
-        </div>
-
-      </form>
-
+      <div>{renderList}</div>
       <div>
-        <h2>Comentarios de Clientes</h2>
-        {comentarios.map((comentario, index) => (
-          <div key={index}>
-            <p>{comentario.texto}</p>
-            {comentario.respuesta && <p>Respuesta: {comentario.respuesta}</p>}
-            {!comentario.respuesta && (
-              <input
-                type="text"
-                placeholder="Responder..."
-                value={comentario.respuesta || ''}
-                onChange={(e) => handleResponderComentario(index, e.target.value)}
-                className="border p-2 rounded"
-              />
-            )}
-          </div>
-        ))}
-        {/* <form onSubmit={handleComentarioSubmit}>
-          <input
-            type="text"
-            placeholder="Deja un comentario..."
-            value={nuevoComentario}
-            onChange={(e) => setNuevoComentario(e.target.value)}
-            className="border p-2 rounded mr-2"
-          />
-          <button type="submit" className="bg-black text-white px-4 py-2">
-            Comentar
-          </button>
-        </form> */}
-      </div>
-         {/* Agrega el botón "Activo" habilitado solo si hay al menos una selección en contratacionCliente */}
+  <h2>Opciones Seleccionadas</h2>
+  {optionChosen.length > 0 ? (
+    <ul>
+      {optionChosen.map((selectedOption) => (
+        <li key={selectedOption.id}>
+          {selectedOption.title} - {selectedOption.walk_duration} minutes
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p>No hay opciones seleccionadas</p>
+  )}
+  <button onClick={handleElegirOpciones}>Elegir opciones</button>
+</div> 
       <button
         onClick={handleActivoClick}
         disabled={renderList.length === 0}
-        className={`bg-black text-white px-4 py-2 ${optionChosen && optionChosen.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-      >
-       Activo
+        className={`bg-black text-white px-4 py-2 ${
+          optionChosen && optionChosen.length === 0 ? 'opacity-50 cursor-not-allowed' : ''
+        }`}
+        >
+        Activo
       </button>
+        <div>
+          <h2>Comentarios de Clientes</h2>
+          {comentarios.map((comentario, index) => (
+            <div key={index}>
+              <p>{comentario.texto}</p>
+              {comentario.respuesta && <p>Respuesta: {comentario.respuesta}</p>}
+              {!comentario.respuesta && (
+                <input
+                  type="text"
+                  placeholder="Responder..."
+                  value={comentario.respuesta || ''}
+                  onChange={(e) => handleResponderComentario(index, e.target.value)}
+                  className="border p-2 rounded"
+                />
+              )}
+            </div>
+          ))}
+        </div>
     </div>
   );
 };

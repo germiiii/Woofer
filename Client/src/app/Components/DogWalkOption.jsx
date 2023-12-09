@@ -1,4 +1,5 @@
 // DogWalkOption.js
+"use client";
 import React from 'react';
 
 const DogWalkOption = ({ option, onClick, selected }) => {
