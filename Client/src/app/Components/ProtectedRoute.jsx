@@ -1,21 +1,33 @@
-'use client';
-
-import { useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+"use client";
+import { useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 
 const ProtectedRoute = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
-    if (pathname !== '/' && pathname !== '/register' && pathname !== '/aditionalForm' && pathname !=='/forget-password' && pathname !=='/forget-password' && pathname !== '/changePassword/:token' && !token) {
-      router.push('/login');
-    } 
+    if (
+      pathname !== "/" &&
+      !isActivateRoute(pathname) &&
+      pathname !== "/register" &&
+      pathname !== "/aditionalForm" &&
+      pathname !== "/forget-password" &&
+      !isChangePasswordRoute(pathname) && // Comprobación para la ruta dinámica
+      !token
+    ) {
+      router.push("/login");
+    }
   }, [pathname, router]);
 
-  return <>{children}</>
+  // Función de utilidad para verificar si la ruta es "/changePassword/[token]"
+  const isChangePasswordRoute = (path) => path.startsWith("/changePassword/");
+  const isActivateRoute = (path) => path.startsWith("/activate/");
+
+  // Renderiza children independientemente de si hay un token o no
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;
