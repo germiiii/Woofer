@@ -4,18 +4,28 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import PayPal from '../Components/PayPal'
 import Image from "next/image";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 const CheckoutComponent = () => {
   
   const [walkerDetails, setWalkerDetails] = useState(null);
   const [selectedWalkType, setSelectedWalkType] = useState(null);
   const [extras, setExtras] = useState([]);
+  const [totalAmount, setTotalAmount] = useState("0.00"); 
+  const [orderCount, setOrderCount] = useState(0);
+  const [accessToken, setAccessToken] = useState("");
+  const [isTotalAmountValid, setIsTotalAmountValid] = useState(false);
+  
   const [walkTypeQuantity, setWalkTypeQuantity] = useState(1);
   const [extraQuantities, setExtraQuantities] = useState({
-    Leash: 0,
-    GarbageBag: 0,
-    WaterBowl: 0,
+    Leash: '0.00',
+    GarbageBag: '0.00',
+    WaterBowl: '0.00',
   });
+
+  const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+  const clientSecret = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_SECRET;
+
 
   useEffect(() => {
     const selectedWalker = localStorage.getItem('selectedWalker');
@@ -58,10 +68,9 @@ const CheckoutComponent = () => {
   const calculateTotalAmount = () => {
     let walkTypePrice = 0;
     if (selectedWalkType) {
-      // Use the selectedWalkType object directly to calculate price
       walkTypePrice = selectedWalkType.price * walkTypeQuantity;
     }
-
+  
     let extrasTotal = 0;
     for (const extra in extraQuantities) {
       const extraPrice = {
@@ -71,33 +80,153 @@ const CheckoutComponent = () => {
         // Add more extras with their corresponding prices
       }[extra];
       if (extraPrice) {
-        extrasTotal += extraPrice * extraQuantities[extra];
+        extrasTotal += extraPrice * parseInt(extraQuantities[extra]);
+      }
+    }
+  
+    // Calculate the total amount by adding walkTypePrice and extrasTotal
+    const totalAmountInCents = walkTypePrice + extrasTotal;
+  
+    // Convert total amount to a string with the correct format (e.g., "100.00")
+    const formattedTotalAmount = String(totalAmountInCents.toFixed(2));
+  
+    setTotalAmount(formattedTotalAmount); // Set the total amount using state
+    console.log('Total Amount:', `"${formattedTotalAmount}"`)
+    return formattedTotalAmount;
+  };
+  
+  
+  useEffect(() => {
+    const calculatedTotalAmount = calculateTotalAmount();
+    setTotalAmount(calculatedTotalAmount);
+  }, [selectedWalkType, extraQuantities, walkTypeQuantity]);
+
+
+  //! PayPal
+
+  useEffect(() => {
+    async function fetchAccessToken() {
+      try {
+        const { data } = await axios.post(
+          "https://api-m.sandbox.paypal.com/v1/oauth2/token",
+          "grant_type=client_credentials",
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              Authorization: `Basic ${btoa(clientId + ":" + clientSecret)}`,
+            },
+          }
+        );
+        localStorage.setItem("paypal_accessToken", data.access_token);
+        console.log('Paypal Access Token:', data.access_token)
+      } catch (error) {
+        console.error("Error fetching/accessing token:", error);
       }
     }
 
-    return walkTypePrice + extrasTotal;
+    fetchAccessToken();
+
+    if (!accessToken) {
+      const token = localStorage.getItem("paypal_accessToken");
+      setAccessToken(token);
+    }
+  }, []);
+
+  useEffect(() => {
+    setIsTotalAmountValid(totalAmount > 0);
+  }, [totalAmount]);
+  
+  const createOrder = async (data, actions) => {
+    try {
+      if (totalAmount === 0.00) {
+        setTimeout(() => createOrder(data, actions), 1000); // Retry after 1 second if totalAmount is 0
+        return;
+      }
+      console.log('Creating order....')
+      const res = await fetch('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          intent: 'CAPTURE',
+          purchase_units: [
+            {
+              amount: {
+                currency_code: 'USD',
+                value: "30.00"
+              },
+              description: 'Woofer Dog Walk',
+              reference_id: `order-${orderCount}`,
+            },
+          ],
+        }),
+      });
+  
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        console.error('Failed to create order:', errorResponse);
+        throw new Error('Failed to create order');
+      }
+  
+      const order = await res.json();
+  
+      if (order.id) {
+        console.log('Order ID:', order.id);
+        setOrderCount(orderCount + 1); // Increment order count for the next order
+        return order.id; // Return the order ID
+      } else {
+        throw new Error('Order ID not received');
+      }
+    } catch (error) {
+      console.error('Error creating PayPal order:', error);
+      // Implement your error handling here
+    }
+  };
+  
+
+  // const handleApprove = (data, actions) => {
+  //   console.log("Approved:", data);
+  //   actions.order.capture();
+  //   alert("Payment successful");
+  //   setTimeout(() => {
+  //     router.push("/home");
+  //   }, 3000);
+  // };
+
+  const handleApprove = (data, actions) => {
+    return actions.order.capture().then(function (details) {
+      // Handle successful capture here
+      // For example: show success message, redirect, etc.
+    });
   };
 
-  const totalAmount = calculateTotalAmount();
+  const handleCancel = (data) => {
+    console.log("Cancelled:", data);
+  };
 
-   return (
+  return (
     <div className="flex">
+      {/* Left Column: Walker Details */}
       <div className="w-1/2 pr-8">
         <h2 className="mb-4">Walker Details</h2>
         {walkerDetails && walkerData ? (
           <div>
             <p>{walkerData.name + " " + walkerData.lastName}</p>
             <Image 
-            src={walkerData.image}
-            alt='profile'
-            width={500}
-            height={500}
+              src={walkerData.image}
+              alt='profile'
+              width={500}
+              height={500}
             />
           </div>
         ) : (
           <p>Loading walker details...</p>
         )}
       </div>
+  
+      {/* Right Column: Walk Types, Extras, and PayPal Button */}
       <div className="w-1/2 pl-8">
         {walkerDetails && walkerData ? (
           <div>
@@ -121,8 +250,9 @@ const CheckoutComponent = () => {
             ) : (
               <p>No walk types available</p>
             )}
-             {/* Walk Type Quantity */}
-             <div className="mt-4">
+  
+            {/* Walk Type Quantity */}
+            <div className="mt-4">
               <label htmlFor="walkTypeQuantity">Quantity for Walk Type:</label>
               <input
                 type="number"
@@ -132,74 +262,82 @@ const CheckoutComponent = () => {
                 className="border p-1 rounded"
               />
             </div>
-             {/* Add Extras Section */}
-             <div className="mt-8">
+  
+            {/* Add Extras Section */}
+            <div className="mt-8">
               <h3 className="mb-4">Add Extras:</h3>
               <div>
-              <label htmlFor="waterBowl">
-    Leash - $5
-  </label>
-  <span>
-   
-    <input
-      type="number"
-      value={extraQuantities['Leash']}
-      onChange={(e) => handleQuantityChange(e, 'Leash')}
-      className="border p-1 rounded ml-2 w-12"
-      min="0"
-      max="15"
-    />
-  </span>
-</div>
-              
-            
-  <label htmlFor="waterBowl">
-    Garbage Bag - $2
-  </label>
-  <span>
-   
-    <input
-      type="number"
-      value={extraQuantities['Garbage Bag']}
-      onChange={(e) => handleQuantityChange(e, 'Garbage Bag')}
-      className="border p-1 rounded ml-2 w-12"
-      min="0"
-      max="15"
-    />
-  </span>
-</div>
-  <label htmlFor="waterBowl">
-    Water Bowl - $3
-  </label>
-  <span>
-   
-    <input
-      type="number"
-      value={extraQuantities['Water Bowl']}
-      onChange={(e) => handleQuantityChange(e, 'Water Bowl')}
-      className="border p-1 rounded ml-2 w-12"
-      min="0"
-      max="15"
-    />
-  </span>
-</div>
-           
-         
+                <label htmlFor="leash">Leash - $5</label>
+                <span>
+                  <input
+                    type="number"
+                    id="leash"
+                    value={extraQuantities['Leash']}
+                    onChange={(e) => handleQuantityChange(e, 'Leash')}
+                    className="border p-1 rounded ml-2 w-12"
+                    min="0"
+                    max="15"
+                  />
+                </span>
+  
+                <label htmlFor="garbagebag">Garbage Bag - $2</label>
+                <span>
+                  <input
+                    type="number"
+                    id="garbagebag"
+                    value={extraQuantities['Garbage Bag']}
+                    onChange={(e) => handleQuantityChange(e, 'Garbage Bag')}
+                    className="border p-1 rounded ml-2 w-12"
+                    min="0"
+                    max="15"
+                  />
+                </span>
+  
+                <label htmlFor="waterBowl">Water Bowl - $3</label>
+                <span>
+                  <input
+                    type="number"
+                    id="waterBowl"
+                    value={extraQuantities['Water Bowl']}
+                    onChange={(e) => handleQuantityChange(e, 'Water Bowl')}
+                    className="border p-1 rounded ml-2 w-12"
+                    min="0"
+                    max="15"
+                  />
+                </span>
+              </div>
+            </div>
+          </div>
         ) : (
           <p>Loading walker details...</p>
         )}
+  
+        {/* Summary and PayPal Button */}
+        <div>
+          <h1>Summary</h1>
+          <h2>Total: ${totalAmount}</h2>
+          <PayPalScriptProvider
+            options={{
+              clientId: clientId,
+            }}
+          >
+            <PayPalButtons
+              style={{
+                layout: "vertical",
+                color: "gold",
+                label: "pay",
+                shape: "pill",
+              }}
+              createOrder={createOrder}
+              onCancel={handleCancel}
+              onApprove={handleApprove}
+            />
+          </PayPalScriptProvider>
+        </div>
       </div>
-      <div>
-        <h1>Summary</h1>
-        <h2>Total: ${totalAmount}</h2>
-      </div>
-      <div>
-      <PayPal totalAmount={totalAmount} />
-      </div>
-      
-     
     </div>
   );
+  
   
 };
 
