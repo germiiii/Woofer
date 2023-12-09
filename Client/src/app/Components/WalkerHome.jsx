@@ -5,13 +5,14 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DogWalkOption from "../Components/DogWalkOption";
+import Reviews from "../Components/Reviews";
 import "tailwindcss/tailwind.css";
 import Map from "../Components/Map";
 import jwt from 'jsonwebtoken';
 
 const WalkerHome = () => {
-  const [comentarios, setComentarios] = useState([]);
-  const [contratacionCliente, setContratacionCliente] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [clientHiring, setClientHiring] = useState([]);
   const [priceList, setPriceList] = useState([]);
   const [user, setUser] = useState("");
   const [dogCapacityFilter, setDogCapacityFilter] = useState('');
@@ -19,9 +20,10 @@ const WalkerHome = () => {
   const [optionChosen, setOptionChosen] = useState([]);
   const [userProvince, setUserProvince] = useState('');
   const [userAddress, setUserAddress] = useState('');
+  const [isFilterResetVisible, setFilterResetVisible] = useState(false);
 
   useEffect(() => {
-    const obtenerDatos = async () => {
+    const fetchData = async () => {
       const token = localStorage.getItem('token');
 
       if (token) {
@@ -34,15 +36,15 @@ const WalkerHome = () => {
           setUserProvince(data.province);
           setUserAddress(data.address);
         } catch (error) {
-          console.error('Error al obtener datos del servidor', error);
+          console.error('Error fetching data from the server', error);
         }
       }
     };
-    obtenerDatos();
+    fetchData();
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchWalkerTypes = async () => {
       try {
         const response = await fetch(`http://localhost:3001/walkType`);
         const data = await response.json();
@@ -51,22 +53,28 @@ const WalkerHome = () => {
         console.error("Error fetching walker types:", error);
       }
     };
-    fetchData();
+    fetchWalkerTypes();
   }, []);
 
-
+  const handleFilterReset = () => {
+    setDogCapacityFilter('');
+    setWalkDurationFilter('');
+    setFilterResetVisible(false);
+  };
   const handleDogCapacityFilterChange = (event) => {
     setDogCapacityFilter(event.target.value);
+    setFilterResetVisible(true);
   };
 
   const handleWalkDurationFilterChange = (event) => {
     setWalkDurationFilter(event.target.value);
+    setFilterResetVisible(true);
   };
 
   const handleOptionClick = (card) => {
     const updatedOptions = [...optionChosen];
 
-      const index = updatedOptions.findIndex((selectedCard) => selectedCard.id === card.id);
+    const index = updatedOptions.findIndex((selectedCard) => selectedCard.id === card.id);
     if (index !== -1) {
       updatedOptions.splice(index, 1);
     } else {
@@ -100,13 +108,13 @@ const WalkerHome = () => {
       />
     ));
 
-  const handleResponderComentario = (index, respuesta) => {
-    const updatedComentarios = [...comentarios];
-    updatedComentarios[index].respuesta = respuesta;
-    setComentarios(updatedComentarios);
+  const handleRespondComment = (index, response) => {
+    const updatedComments = [...comments];
+    updatedComments[index].response = response;
+    setComments(updatedComments);
   };
 
-  const handleActivoClick = async () => {
+  const handleActiveClick = async () => {
     try {
       if (user.id) {
         await axios.put(`http://localhost:3001/walker/${user.id}`, {
@@ -114,24 +122,24 @@ const WalkerHome = () => {
         });
       }
     } catch (error) {
-      console.error('Error al actualizar el estado:', error);
+      console.error('Error updating status:', error);
     }
   };
 
-  const handleElegirOpciones = async () => {
+  const handleChooseOptions = async () => {
     try {
-      const response = await axios.put('http://tu-url', optionChosen);
-      console.log('Respuesta de la solicitud PUT:', response.data);
+      const response = await axios.put('http://your-url', optionChosen);
+      console.log('Response from the PUT request:', response.data);
     } catch (error) {
-      console.error('Error al realizar la solicitud PUT:', error);
+      console.error('Error making PUT request:', error);
     }
   };
-  const prueba = () => {
-    toast.success(`¡${contratacionCliente.join(', ')} han contratado tu servicio! (Prueba)`, {
+
+  const testFunction = () => {
+    toast.success(`¡${clientHiring.join(', ')} have hired your service! (Test)`, {
       position: toast.POSITION.TOP_RIGHT,
     });
   };
-
 
   console.log("optionChosen", optionChosen);
 
@@ -140,8 +148,8 @@ const WalkerHome = () => {
       <ToastContainer />
       <Map userProvince={userProvince} userAddress={userAddress} />
 
-      <button onClick={prueba} className="bg-black text-white px-4 py-2">
-        Prueba para cuando llegue una solicitud de paseo
+      <button onClick={testFunction} className="bg-black text-white px-4 py-2">
+        Test for when a walk request arrives
       </button>
       <br />
       <select
@@ -149,7 +157,7 @@ const WalkerHome = () => {
         onChange={handleWalkDurationFilterChange}
         className="border p-2 rounded mr-2"
       >
-        <option value="">Filtrar por Tiempo</option>
+        <option value="">Filter by Time</option>
         <option value="15">15 minutes</option>
         <option value="30">30 minutes</option>
         <option value="60">60 minutes</option>
@@ -161,7 +169,7 @@ const WalkerHome = () => {
           onChange={handleDogCapacityFilterChange}
           className="border p-2 rounded mr-2"
         >
-          <option value="">Filtrar por capacidad de perros</option>
+          <option value="">Filter by dog capacity</option>
           <option value="low">1</option>
           <option value="medium">2</option>
           <option value="medium">3</option>
@@ -170,49 +178,57 @@ const WalkerHome = () => {
           <option value="high">6 or more</option>
         </select>
       )}
+      <br />
+      {isFilterResetVisible && (
+        <button onClick={handleFilterReset} className="bg-gray-500 text-white px-4 py-2 mt-2">
+          Filter Reset
+        </button>
+      )}
+      
       <div>{renderList}</div>
       <div>
-  <h2>Opciones Seleccionadas</h2>
-  {optionChosen.length > 0 ? (
-    <ul>
-      {optionChosen.map((selectedOption) => (
-        <li key={selectedOption.id}>
-          {selectedOption.title} - {selectedOption.walk_duration} minutes
-        </li>
-      ))}
-    </ul>
-  ) : (
-    <p>No hay opciones seleccionadas</p>
-  )}
-  <button onClick={handleElegirOpciones}>Elegir opciones</button>
-</div> 
+        <h2>Selected Options</h2>
+        {optionChosen.length > 0 ? (
+          <ul>
+            {optionChosen.map((selectedOption) => (
+              <li key={selectedOption.id}>
+                {selectedOption.title} - {selectedOption.walk_duration} minutes
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No options selected</p>
+        )}
+        <button onClick={handleChooseOptions}>Choose options</button>
+      </div>
       <button
-        onClick={handleActivoClick}
+        onClick={handleActiveClick}
         disabled={renderList.length === 0}
         className={`bg-black text-white px-4 py-2 ${
           optionChosen && optionChosen.length === 0 ? 'opacity-50 cursor-not-allowed' : ''
         }`}
-        >
-        Activo
+      >
+        Active
       </button>
-        <div>
-          <h2>Comentarios de Clientes</h2>
-          {comentarios.map((comentario, index) => (
-            <div key={index}>
-              <p>{comentario.texto}</p>
-              {comentario.respuesta && <p>Respuesta: {comentario.respuesta}</p>}
-              {!comentario.respuesta && (
-                <input
-                  type="text"
-                  placeholder="Responder..."
-                  value={comentario.respuesta || ''}
-                  onChange={(e) => handleResponderComentario(index, e.target.value)}
-                  className="border p-2 rounded"
-                />
-              )}
-            </div>
-          ))}
-        </div>
+      <div>
+        <h2>Client Comments</h2>
+        {comments.map((comment, index) => (
+          <div key={index}>
+            <p>{comment.text}</p>
+            {comment.response && <p>Response: {comment.response}</p>}
+            {!comment.response && (
+              <input
+                type="text"
+                placeholder="Respond..."
+                value={comment.response || ''}
+                onChange={(e) => handleRespondComment(index, e.target.value)}
+                className="border p-2 rounded"
+              />
+            )}
+          </div>
+        ))}
+      </div>
+      <Reviews />
     </div>
   );
 };
