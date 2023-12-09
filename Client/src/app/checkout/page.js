@@ -37,7 +37,54 @@ const CheckoutComponent = () => {
   }, []);
 
   const walkerData = walkerDetails?.walker?.walkerData || {};
+ 
 
+  //!Reviews
+
+  const sortedReviews = (walkerDetails && walkerDetails.walker && walkerDetails.walker.reviewsData) ?
+  walkerDetails.walker.reviewsData.sort((a, b) => b.score - a.score) :
+  [];
+
+  const topTwoReviews = sortedReviews.slice(0, 2).map(review => review.description);
+
+
+  //!Stars
+
+    // Calculate median from scores
+    const calculateMedian = (arr) => {
+      const sortedArr = arr.slice().sort((a, b) => a - b);
+      const mid = Math.floor(sortedArr.length / 2);
+    
+      if (sortedArr.length % 2 === 0) {
+        return (sortedArr[mid - 1] + sortedArr[mid]) / 2;
+      } else {
+        return sortedArr[mid];
+      }
+    };
+  
+    // Function to generate stars based on the median score
+    const renderStarsFromMedian = (median) => {
+      const yellowStars = Array.from({ length: Math.round(median) }, (_, index) => (
+        <span key={index} className="text-yellow-500">&#9733;</span> // Yellow filled star
+      ));
+      const emptyStars = Array.from({ length: 5 - Math.round(median) }, (_, index) => (
+        <span key={index} className="text-gray-300">&#9734;</span> // Empty star in gray
+      ));
+      return (
+        <div className="flex items-center">
+          {yellowStars}
+          {emptyStars}
+        </div>
+      );
+    };
+  
+    // Calculate median and render stars
+    const scores = walkerDetails?.walker?.reviewsData.map(review => review.score) || [];
+    const medianScore = calculateMedian(scores);
+    const starsForMedian = renderStarsFromMedian(medianScore);
+
+    
+  //!WalkType Selection
   const handleWalkTypeSelection = (walkTypeTitle) => {
     // Find the selected walkType object based on the title
     const selectedType = walkerData.walker.walkTypes.find(
@@ -47,15 +94,8 @@ const CheckoutComponent = () => {
     console.log('Selected Walk:', selectedType)
   };
 
-  const handleExtrasSelection = (e) => {
-    const { value, checked } = e.target;
-    if (checked) {
-      setExtras([...extras, value]);
-    } else {
-      setExtras(extras.filter((extra) => extra !== value));
-    }
-  };
 
+  //!Quantity
   const handleQuantityChange = (e, item) => {
     let value = parseInt(e.target.value);
 
@@ -65,6 +105,7 @@ const CheckoutComponent = () => {
     setExtraQuantities({ ...extraQuantities, [item]: value });
   };
 
+  //!Total Amount Sum
   const calculateTotalAmount = () => {
     let walkTypePrice = 0;
     if (selectedWalkType) {
@@ -210,27 +251,42 @@ const CheckoutComponent = () => {
     <div className="flex">
       {/* Left Column: Walker Details */}
       <div className="w-1/2 pr-8">
-        <h2 className="mb-4">Walker Details</h2>
+        <h2 className="mb-4 font-bold text-2xl">Walker Details</h2>
         {walkerDetails && walkerData ? (
           <div>
-            <p>{walkerData.name + " " + walkerData.lastName}</p>
+            <p className="font-bold text-2xl">{walkerData.name + " " + walkerData.lastName}</p>
             <Image 
               src={walkerData.image}
               alt='profile'
               width={500}
               height={500}
             />
+    
+              <p>{starsForMedian}</p>
+        
+        <h3>Reviews</h3>
+          {topTwoReviews.length > 0 ? (
+            <div>
+              {topTwoReviews.map((description, index) => (
+                <div key={index}>
+                  <p><i>{index === 0 ? `"${description}"` : description}</i></p>
+                </div>
+              ))}
+            </div>
+            ) : (
+              <p>No reviews available</p>
+            )}
           </div>
-        ) : (
-          <p>Loading walker details...</p>
-        )}
-      </div>
-  
+                ) : (
+                  <p>Loading walker details...</p>
+                )}
+              </div>
+          
       {/* Right Column: Walk Types, Extras, and PayPal Button */}
       <div className="w-1/2 pl-8">
         {walkerDetails && walkerData ? (
           <div>
-            <h3 className="mb-4">Walk Services by {walkerData.name}:</h3>
+            <h2 className="mb-4 font-bold text-2xl">Walk Services by {walkerData.name}:</h2>
             {walkerData.walker?.walkTypes && walkerData.walker.walkTypes.length > 0 ? (
               <div>
                 <label htmlFor="walkTypeSelect">Select Walk Type:</label>

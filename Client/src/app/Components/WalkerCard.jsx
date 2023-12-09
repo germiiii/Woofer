@@ -86,6 +86,7 @@ const WalkerCard = (props) => {
       console.error('Error fetching walker data:', error);
     }
   };
+  
 
 
   return (
