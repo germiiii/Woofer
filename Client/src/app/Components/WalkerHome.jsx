@@ -21,6 +21,7 @@ const WalkerHome = () => {
   const [userProvince, setUserProvince] = useState('');
   const [userAddress, setUserAddress] = useState('');
   const [isFilterResetVisible, setFilterResetVisible] = useState(false);
+  const [userId, setUserId] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,13 +29,15 @@ const WalkerHome = () => {
 
       if (token) {
         const decodedToken = jwt.decode(token);
-        console.log(decodedToken.userId);
+
         try {
-          const response = await fetch(`http://localhost:3001/users/${decodedToken.userId}`);
+          const response = await fetch(`http://localhost:3001/walker/${decodedToken.userId}`);
           const data = await response.json();
           setUser(data);
           setUserProvince(data.province);
           setUserAddress(data.address);
+          setUserId(decodedToken.userId);
+          console.log(decodedToken.userId);
         } catch (error) {
           console.error('Error fetching data from the server', error);
         }
@@ -55,6 +58,8 @@ const WalkerHome = () => {
     };
     fetchWalkerTypes();
   }, []);
+
+  
 
   const handleFilterReset = () => {
     setDogCapacityFilter('');
@@ -141,7 +146,7 @@ const WalkerHome = () => {
     });
   };
 
-  console.log("optionChosen", optionChosen);
+
 
   return (
     <div className="text-center m-20">
@@ -228,7 +233,7 @@ const WalkerHome = () => {
           </div>
         ))}
       </div>
-      <Reviews />
+      <Reviews userId={userId} />
     </div>
   );
 };

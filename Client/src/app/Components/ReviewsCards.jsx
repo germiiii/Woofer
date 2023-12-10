@@ -2,14 +2,13 @@
 
 import React from 'react';
 
-const ReviewsCards = ({ reviews }) => {
+const ReviewsCards = ({ reviewData }) => {
     return (
         <ul style={{ listStyle: 'none', padding: 0, border: '2px solid #333', borderRadius: '8px' }}>
-            {reviews.map((review) => (
+            {reviewData.map((review) => (
                 <li key={review.id} style={{ borderBottom: '1px solid #ccc', padding: '10px 0' }}>
-                    <strong>{review.userName}</strong>
-                    <p>Rating: {review.rating}</p>
-                    <p>{review.comment}</p>
+                    <p>Rating: {review.score}</p>
+                    <p>{review.description}</p>
                 </li>
             ))}
         </ul>
@@ -17,4 +16,3 @@ const ReviewsCards = ({ reviews }) => {
 };
 
 export default ReviewsCards;
-
