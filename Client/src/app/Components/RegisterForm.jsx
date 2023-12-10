@@ -3,7 +3,7 @@ import "tailwindcss/tailwind.css";
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useState, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { auth } from "../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
@@ -19,8 +19,9 @@ const RegisterForm = () => {
   const googleAuth = new GoogleAuthProvider();
   const [user] = useAuthState(auth);
   const { updateUser } = useUser();
-
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
   const fileInputRef = useRef(null);
   const [userData, setUserData] = useState({
     name: "",
@@ -29,7 +30,7 @@ const RegisterForm = () => {
     username: "",
     email: "",
     password: "",
-    isWalker: "",
+    isWalker: type === "walker" ? true : type === "owner" ? false : "",
     image: "",
     province: "",
   });
@@ -48,7 +49,7 @@ const RegisterForm = () => {
     } else if (!/^[a-zA-Z\s]+$/.test(userData.name)) {
       errors.name = "name must contain only letters";
     }
-  
+
     if (!userData.lastName.trim()) {
       errors.lastName = "last name cannot be empty";
     } else if (userData.lastName.length > 40) {
@@ -120,12 +121,15 @@ const RegisterForm = () => {
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-  
+
     if (type === "file") {
       const selectedFile = e.target.files[0];
-  
+
       // Check if the selected file is a valid image type (JPG or PNG)
-      if (selectedFile && !["image/jpeg", "image/png"].includes(selectedFile.type)) {
+      if (
+        selectedFile &&
+        !["image/jpeg", "image/png"].includes(selectedFile.type)
+      ) {
         window.alert("Please select a valid image file (JPG or PNG).");
         // Clear the file input and reset the state
         fileInputRef.current.value = null;
@@ -133,7 +137,7 @@ const RegisterForm = () => {
         setButtonText("select your profile picture");
         return;
       }
-  
+
       // Check if the size of the image is within the limit (15MB)
       const maxSizeInBytes = 15 * 1024 * 1024; // 15MB
       if (selectedFile && selectedFile.size > maxSizeInBytes) {
@@ -144,9 +148,9 @@ const RegisterForm = () => {
         setButtonText("select your profile picture");
         return;
       }
-  
+
       setImage(selectedFile);
-  
+
       const maxFileNameLength = 20;
       const fileName = selectedFile
         ? selectedFile.name.length > maxFileNameLength
