@@ -1,17 +1,24 @@
 const { User, Walker, Owner, Dog } = require("../../Database/db");
 
 const userGetAll = async (role) => {
-  // Fetch all users from the database
-
+  let whereConditionUser = { is_active: true, role: "user" };
   let whereCondition = { is_active: true };
 
   if (role && role === "admin") {
-    whereCondition = {}; //admin has access to all users
+    whereCondition = {};
+    whereConditionUser = {};
   }
 
   const users = await User.findAll({
-    attributes: { exclude: ['password'] },
-    where: whereCondition,
+    attributes: {
+      exclude: [
+        "password",
+        "verificationToken",
+        "resetPasswordToken",
+        "resetPasswordExpires",
+      ],
+    },
+    where: whereConditionUser,
     include: [
       {
         model: Owner,
@@ -19,17 +26,18 @@ const userGetAll = async (role) => {
         include: [
           {
             model: Dog,
-            attributes: ["id", "name", "breed", "size", "age", "img"]           
+            attributes: ["id", "name", "breed", "size", "age", "img"],
           },
         ],
-        required: false, // Make Owner optional
+        required: false,
       },
       {
         model: Walker,
         where: whereCondition,
-        required: false, // Make Walker optional
+        required: false,
       },
     ],
+    order: [["username", "ASC"]],
   });
 
   return users;

@@ -6,12 +6,19 @@ const ownerGetAll = async (province) => {
     whereUser[["province"]] = province;
   }
   const userData = await User.findAll({
-    attributes: { exclude: ["password"] },
+    attributes: {
+      exclude: [
+        "password",
+        "verificationToken",
+        "resetPasswordToken",
+        "resetPasswordExpires",
+      ],
+    },
     where: whereUser,
     include: [
       {
         model: Owner,
-        attributes: ["dog_count"],
+        attributes: ["dog_count", "score", "reviews_count"],
         include: [
           {
             model: Dog,
