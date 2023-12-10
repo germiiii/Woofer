@@ -10,7 +10,7 @@ const seed = require("./Database/seed.js");
 // alter:true - ACTUALIZA LAS TABLAS DE BDD EN BASE A LOS MODELOS
 
 const syncOptions = {
-  alter: true, //alter: true or force: true
+  force: true, //alter: true or force: true
 };
 
 try {
