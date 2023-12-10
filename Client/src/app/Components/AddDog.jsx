@@ -53,6 +53,7 @@ export default function OwnerForm() {
     try {
       // Create an array of dogs with the current dog data
       const currentDog = {
+        userID: user,
         name: dogData.name,
         age: dogData.age,
         breed: dogData.breed,
@@ -61,20 +62,16 @@ export default function OwnerForm() {
       };
   
       // Send the data to the server using Axios
-      console.log("userId:", user,"dogs", currentDog);
+      console.log("current dog", currentDog);
   
-      const response = await axios.post('http://localhost:3001/owner/dog', {
-        userId: user,
-        dogs: [
-          {
+      const response = await axios.post('http://localhost:3001/owner', {
+            userID: user,
             name: currentDog.name,
             size: currentDog.size,
             age: currentDog.age,
             breed: currentDog.breed,
             image: currentDog.image,
-          },
-        ],
-      });
+          },)
       console.log("Server response:", response.data);
   
       // Additional logic for handling the form submission, if needed
