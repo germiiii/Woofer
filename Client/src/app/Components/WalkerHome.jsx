@@ -15,8 +15,6 @@ const WalkerHome = () => {
   const [clientHiring, setClientHiring] = useState([]);
   const [priceList, setPriceList] = useState([]);
   const [user, setUser] = useState("");
-  const [dogCapacityFilter, setDogCapacityFilter] = useState('');
-  const [walkDurationFilter, setWalkDurationFilter] = useState('');
   const [optionChosen, setOptionChosen] = useState([]);
   const [userProvince, setUserProvince] = useState('');
   const [userAddress, setUserAddress] = useState('');
@@ -61,21 +59,8 @@ const WalkerHome = () => {
     fetchWalkerTypes();
   }, []);
 
-  
-
   const handleFilterReset = () => {
-    setDogCapacityFilter('');
-    setWalkDurationFilter('');
     setFilterResetVisible(false);
-  };
-  const handleDogCapacityFilterChange = (event) => {
-    setDogCapacityFilter(event.target.value);
-    setFilterResetVisible(true);
-  };
-
-  const handleWalkDurationFilterChange = (event) => {
-    setWalkDurationFilter(event.target.value);
-    setFilterResetVisible(true);
   };
 
   const handleOptionClick = (card) => {
@@ -90,30 +75,18 @@ const WalkerHome = () => {
     setOptionChosen(updatedOptions);
   };
 
-  const renderList = priceList
-    .filter((card) => {
-      const dogCapacityFilterCondition =
-        !dogCapacityFilter ||
-        (dogCapacityFilter === "low" && card.dog_capacity === "low") ||
-        (dogCapacityFilter === "medium" && card.dog_capacity === "medium") ||
-        (dogCapacityFilter === "high" && card.dog_capacity === "high");
+  const renderList = user?.walkerData?.walker?.walkTypes?.map((walkerType) => {
+    const matchedCard = priceList.find((card) => card.id === walkerType.id);
 
-      const walkDurationFilterCondition =
-        !walkDurationFilter ||
-        (walkDurationFilter === "15" && card.walk_duration.includes("15")) ||
-        (walkDurationFilter === "30" && card.walk_duration.includes("30")) ||
-        (walkDurationFilter === "60" && card.walk_duration.includes("60"));
-
-      return dogCapacityFilterCondition && walkDurationFilterCondition;
-    })
-    .map((card) => (
+    return (
       <DogWalkOption
-        key={card.id}
-        option={card}
-        onClick={() => handleOptionClick(card)}
-        selected={optionChosen.some((selectedCard) => selectedCard.id === card.id)}
+        key={matchedCard.id}
+        option={matchedCard}
+        onClick={() => handleOptionClick(matchedCard)}
+        selected={optionChosen.some((selectedCard) => selectedCard.id === matchedCard.id)}
       />
-    ));
+    );
+  });
 
   const handleRespondComment = (index, response) => {
     const updatedComments = [...comments];
@@ -133,22 +106,11 @@ const WalkerHome = () => {
     }
   };
 
-  const handleChooseOptions = async () => {
-    try {
-      const response = await axios.put('http://your-url', optionChosen);
-      console.log('Response from the PUT request:', response.data);
-    } catch (error) {
-      console.error('Error making PUT request:', error);
-    }
-  };
-
   const testFunction = () => {
     toast.success(`¡${clientHiring.join(', ')} have hired your service! (Test)`, {
       position: toast.POSITION.TOP_RIGHT,
     });
   };
-
-
 
   return (
     <div className="text-center m-20">
@@ -158,62 +120,18 @@ const WalkerHome = () => {
       <button onClick={testFunction} className="bg-black text-white px-4 py-2">
         Test for when a walk request arrives
       </button>
+      <br>
+      <h2>Aca debe ir el div donde el walker pueda ver las solicitudes (notificaciones)</h2>
+      </br>
       <br />
-      <select
-        value={walkDurationFilter}
-        onChange={handleWalkDurationFilterChange}
-        className="border p-2 rounded mr-2"
-      >
-        <option value="">Filter by Time</option>
-        <option value="15">15 minutes</option>
-        <option value="30">30 minutes</option>
-        <option value="60">60 minutes</option>
-      </select>
-      <br />
-      {walkDurationFilter && (
-        <select
-          value={dogCapacityFilter}
-          onChange={handleDogCapacityFilterChange}
-          className="border p-2 rounded mr-2"
-        >
-          <option value="">Filter by dog capacity</option>
-          <option value="low">1</option>
-          <option value="medium">2</option>
-          <option value="medium">3</option>
-          <option value="medium">4</option>
-          <option value="high">5</option>
-          <option value="high">6 or more</option>
-        </select>
-      )}
-      <br />
-      {isFilterResetVisible && (
-        <button onClick={handleFilterReset} className="bg-gray-500 text-white px-4 py-2 mt-2">
-          Filter Reset
-        </button>
-      )}
-      
       <div>{renderList}</div>
       <div>
-        <h2>Selected Options</h2>
-        {optionChosen.length > 0 ? (
-          <ul>
-            {optionChosen.map((selectedOption) => (
-              <li key={selectedOption.id}>
-                {selectedOption.title} - {selectedOption.walk_duration} minutes
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No options selected</p>
-        )}
-        <button onClick={handleChooseOptions}>Choose options</button>
+        <h2>Sale Details</h2>
+        <p>{user?.walkerData?.walker?.sale_details}</p>
       </div>
       <button
         onClick={handleActiveClick}
-        disabled={renderList.length === 0}
-        className={`bg-black text-white px-4 py-2 ${
-          optionChosen && optionChosen.length === 0 ? 'opacity-50 cursor-not-allowed' : ''
-        }`}
+        className="bg-black text-white px-4 py-2"
       >
         Active
       </button>

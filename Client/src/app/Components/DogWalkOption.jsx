@@ -9,12 +9,11 @@ const DogWalkOption = ({ option, onClick, selected }) => {
     margin: "10px",
     borderRadius: "5px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    cursor: "pointer", // Añadir un cursor indicando que es clickeable
-    backgroundColor: selected ? '#eee' : 'white', // Cambiar el color de fondo si está seleccionado
+  
   };
 
   return (
-    <div style={cardStyle} onClick={() => onClick(option)}>
+    <div style={cardStyle}>
       <h2>{option.title}</h2>
       <p>Price: ${option.price}</p>
       <p>Walk Duration: {option.walk_duration} minutes</p>

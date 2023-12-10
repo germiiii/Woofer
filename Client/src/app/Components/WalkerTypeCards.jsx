@@ -10,7 +10,8 @@ const WalkerTypeCards = () => {
       console.log("Renderizando el componente");
       const fetchData = async () => {
         try {
-          const response = await fetch("http://localhost:3001/walkType");
+          const API = process.env.NEXT_PUBLIC_APIURL;
+          const response = await fetch(`${API}/walkType`);
           const data = await response.json();
           setWalkerTypes(data.walkTypeData);
         } catch (error) {
