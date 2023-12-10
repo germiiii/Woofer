@@ -54,8 +54,13 @@ export default function Home() {
                 dogs on-the-spot. Just activate your account and start receiving
                 walk requests!
               </p>
-              <Link href={"/register"}>
-                <button className="w-30 px-6 py-2 rounded-full bg-[#29235c] text-white mt-7 group-hover:bg-[#F39200] transition-all duration-300">
+              <Link
+                href={{
+                  pathname: "/register",
+                  query: { type: "walker" },
+                }}
+              >
+                <button className="w-30 px-6 py-2 md:mb-12 rounded-full bg-[#29235c] text-white mt-7 group-hover:bg-[#F39200] transition-all duration-300">
                   <span className="font-bold">register as a walker</span>
                 </button>
               </Link>
@@ -76,7 +81,12 @@ export default function Home() {
                 you&apos;re busy? Ease back and relax, Woofer walkers can do the
                 work for you.
               </p>
-              <Link href={"/register"}>
+              <Link
+                href={{
+                  pathname: "/register",
+                  query: { type: "owner" },
+                }}
+              >
                 <button className="w-30 px-6 py-2 rounded-full bg-[#29235c] text-white mt-7 group-hover:bg-[#F39200] transition-all duration-300">
                   <span className="font-bold">register your dog</span>
                 </button>
