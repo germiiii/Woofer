@@ -2,10 +2,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import PayPal from "../Components/PayPal";
 import Image from "next/image";
 import Nav from "../Components/NavBarHome";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import "tailwindcss/tailwind.css";
 
 const CheckoutComponent = () => {
   const [walkerDetails, setWalkerDetails] = useState(null);
@@ -15,16 +15,17 @@ const CheckoutComponent = () => {
   const [orderCount, setOrderCount] = useState(0);
   const [accessToken, setAccessToken] = useState("");
   const [isTotalAmountValid, setIsTotalAmountValid] = useState(false);
-
   const [walkTypeQuantity, setWalkTypeQuantity] = useState(1);
   const [extraQuantities, setExtraQuantities] = useState({
-    Leash: "0.00",
-    GarbageBag: "0.00",
-    WaterBowl: "0.00",
+    Leash: "0",
+    GarbageBag: "0",
+    WaterBowl: "0",
   });
 
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
   const clientSecret = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_SECRET;
+
+  const api = process.env.NEXT_PUBLIC_APIURL;
 
   useEffect(() => {
     const selectedWalker = localStorage.getItem("selectedWalker");
@@ -67,7 +68,7 @@ const CheckoutComponent = () => {
     const yellowStars = Array.from(
       { length: Math.round(median) },
       (_, index) => (
-        <span key={index} className="text-yellow-500">
+        <span key={index} className="text-yellow-500 text-2xl rounded-full">
           &#9733;
         </span> // Yellow filled star
       )
@@ -75,11 +76,12 @@ const CheckoutComponent = () => {
     const emptyStars = Array.from(
       { length: 5 - Math.round(median) },
       (_, index) => (
-        <span key={index} className="text-gray-300">
+        <span key={index} className="text-gray-300 text-2xl rounded-full">
           &#9734;
         </span> // Empty star in gray
       )
     );
+
     return (
       <div className="flex items-center">
         {yellowStars}
@@ -106,17 +108,44 @@ const CheckoutComponent = () => {
 
   //!Quantity
   const handleQuantityChange = (e, item) => {
-  let value = parseInt(e.target.value);
+    let value = parseInt(e.target.value);
 
-  // Validate and limit the value between 0 and 15
-  value = Math.min(Math.max(value, 0), 15);
+    // Validate and limit the value between 0 and 15
+    value = Math.min(Math.max(value, 0), 15);
 
-  setExtraQuantities((prevExtraQuantities) => ({
-    ...prevExtraQuantities,
-    [item]: value,
-  }));
-};
+    setExtraQuantities((prevExtraQuantities) => ({
+      ...prevExtraQuantities,
+      [item]: value,
+    }));
+  };
 
+  const incrementQuantity = (item) => {
+    setExtraQuantities((prevExtraQuantities) => ({
+      ...prevExtraQuantities,
+      [item]: Math.min(parseInt(prevExtraQuantities[item]) + 1, 15),
+    }));
+  };
+
+  const decrementQuantity = (item) => {
+    setExtraQuantities((prevExtraQuantities) => ({
+      ...prevExtraQuantities,
+      [item]: Math.max(parseInt(prevExtraQuantities[item]) - 1, 0),
+    }));
+  };
+
+  const handleWalkTypeQuantityChange = (value) => {
+    // Validate and limit the value between 0 and 15
+    value = Math.min(Math.max(value, 0), 15);
+    setWalkTypeQuantity(value);
+  };
+
+  const incrementWalkTypeQuantity = () => {
+    setWalkTypeQuantity((prevQuantity) => Math.min(prevQuantity + 1, 15));
+  };
+
+  const decrementWalkTypeQuantity = () => {
+    setWalkTypeQuantity((prevQuantity) => Math.max(prevQuantity - 1, 0));
+  };
 
   //!Total Amount Sum
   const calculateTotalAmount = () => {
@@ -145,7 +174,7 @@ const CheckoutComponent = () => {
     const formattedTotalAmount = String(totalAmountInCents.toFixed(2));
 
     setTotalAmount(formattedTotalAmount); // Set the total amount using state
-    localStorage.setItem('totalAmount', formattedTotalAmount);
+    localStorage.setItem("totalAmount", formattedTotalAmount);
     console.log("Total Amount:", `"${formattedTotalAmount}"`);
     return formattedTotalAmount;
   };
@@ -192,13 +221,13 @@ const CheckoutComponent = () => {
   //!Create Order
   const createOrder = async (data, actions) => {
     try {
-      const storedTotalAmount = localStorage.getItem('totalAmount');
-  
+      const storedTotalAmount = localStorage.getItem("totalAmount");
+
       if (!storedTotalAmount || storedTotalAmount === "0.00") {
         setTimeout(() => createOrder(data, actions), 1000); // Retry after 1 second if totalAmount is 0 or not present
         return;
       }
-  
+
       console.log("Creating order....");
       const res = await fetch(
         "https://api-m.sandbox.paypal.com/v2/checkout/orders",
@@ -223,15 +252,15 @@ const CheckoutComponent = () => {
           }),
         }
       );
-  
+
       if (!res.ok) {
         const errorResponse = await res.json();
         console.error("Failed to create order:", errorResponse);
         throw new Error("Failed to create order");
       }
-  
+
       const order = await res.json();
-  
+
       if (order.id) {
         console.log("Order ID:", order.id);
         setOrderCount(orderCount + 1); // Increment order count for the next order
@@ -244,7 +273,6 @@ const CheckoutComponent = () => {
       // Implement your error handling here
     }
   };
-  
 
   // const handleApprove = (data, actions) => {
   //   console.log("Approved:", data);
@@ -255,10 +283,36 @@ const CheckoutComponent = () => {
   //   }, 3000);
   // };
 
-  const handleApprove = (data, actions) => {
-    return actions.order.capture().then(function (details) {
+  //! Handle Approval and POST to /walk
+  const handleApprove = async (data, actions) => {
+    try {
+      await actions.order.capture();
       alert("Payment successful");
-    });
+
+      const paymentDetails = {
+        ownerId: null,
+        walkerId: walkerId,
+        duration: selectedWalkType?.duration || "",
+        totalPrice: parseInt(totalAmount),
+        paymentMethod: "paypal",
+        dogs: 1,
+        walkTypes: selectedWalkType?.id || "",
+      };
+
+      const response = await axios.post(`${api}/walk`, paymentDetails, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("POST request response:", response.data);
+
+      // setTimeout(() => {
+      //   router.push("/home");
+      // }, 3000);
+    } catch (error) {
+      console.error("Error capturing payment:", error);
+    }
   };
 
   const handleCancel = (data) => {
@@ -268,173 +322,254 @@ const CheckoutComponent = () => {
   return (
     <div className="">
       <>
-      <Nav/>
+        <Nav />
       </>
-    <div className="flex">
-   
-      {/* Left Column: Walker Details */}
-      <div className="w-1/2 pr-8">
-        <h2 className="mb-4 font-bold text-2xl">Walker Details</h2>
-        {walkerDetails && walkerData ? (
-          <div>
-            <p className="font-bold text-2xl">
-              {walkerData.name + " " + walkerData.lastName}
-            </p>
-            <Image
-              src={walkerData.image}
-              alt="profile"
-              width={400}
-              height={400}
-              className="rounded-lg"
-            />
-
-            <p>{starsForMedian}</p>
-
-            <h3>Reviews</h3>
-            {topTwoReviews.length > 0 ? (
-              <div>
-                {topTwoReviews.map((description, index) => (
-                  <div key={index}>
-                    <p>
-                      <i>{index === 0 ? `"${description}"` : description}</i>
+      <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center relative">
+        <h1
+          className="text-4xl text-[#29235C] font-bold mb-2 mt-11"
+          style={{ fontFamily: "LikeEat" }}
+        >
+          Payment Summary
+        </h1>
+        <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg flex flex-col items-center relative">
+          <div className="flex w-full">
+            <div className="w-1/2 p-4 border-r border-gray-300 bg-[#29235C] rounded-lg">
+              {/* Left Column: Walker Details */}
+              <div className="w-1/2 py-9 relative ">
+                {walkerDetails && walkerData ? (
+                  <div className="relative ">
+                    <p
+                      className="text-4xl text-[#F39200] font-bold absolute top-2 right-4 left-8"
+                      style={{ fontFamily: "LikeEat" }}
+                    >
+                      {walkerData.name + " " + walkerData.lastName}
                     </p>
+
+                    <div
+                      className="rounded-lg overflow-hidden"
+                      style={{
+                        backgroundImage: `url(${walkerData.image})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        paddingBottom: "100%",
+                        width: "500px",
+                        height: "550px",
+                      }}
+                    ></div>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <p>No reviews available</p>
-            )}
-          </div>
-        ) : (
-          <p>Loading walker details...</p>
-        )}
-      </div>
+                ) : null}
 
-      {/* Right Column: Walk Types, Extras, and PayPal Button */}
-      <div className="w-1/2 pl-8">
-        {walkerDetails && walkerData ? (
-          <div>
-            <h2 className="mb-4 font-bold text-2xl">
-              Walk Services by {walkerData.name}:
-            </h2>
-            {walkerData.walker?.walkTypes &&
-            walkerData.walker.walkTypes.length > 0 ? (
-              <div>
-                <label htmlFor="walkTypeSelect">Select Walk Type:</label>
-                <select
-                  id="walkTypeSelect"
-                  onChange={(e) => handleWalkTypeSelection(e.target.value)}
-                  className="border p-1 rounded"
-                >
-                  <option value="">Select a Walk Type</option>
-                  {walkerData.walker.walkTypes.map((walkType) => (
-                    <option key={walkType.id} value={walkType.title}>
-                      {walkType.title} - ${walkType.price}
-                    </option>
-                  ))}
-                </select>
-                 {/* Display walk type description */}
-              {selectedWalkType && (
-                <div className="mt-4">
-                  <p className="text-sm text-bold">{selectedWalkType.description}</p>
-                </div>
-              )}
-              </div>
-            ) : (
-              <p>No walk types available</p>
-            )}
+                <p>{starsForMedian}</p>
 
-            {/* Walk Type Quantity */}
-            <div className="mt-4">
-              <label htmlFor="walkTypeQuantity">Quantity for Walk Type:</label>
-              <input
-                type="number"
-                id="walkTypeQuantity"
-                value={walkTypeQuantity}
-                onChange={(e) => setWalkTypeQuantity(parseInt(e.target.value))}
-                className="border p-1 rounded"
-              />
+                <h3 className="text-white text-2xl" style={{ fontFamily: "LikeEat" }}>Reviews</h3>
+                {topTwoReviews.length > 0 ? (
+                  <div className="text-white">
+                    {topTwoReviews.map((description, index) => (
+                      <div key={index}>
+                        <p>
+                          <i>
+                            {index === 0 ? `"${description}"` : description}
+                          </i>
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p>No reviews available</p>
+                )}
+              </div>
             </div>
+            {/* Right Column: Walk Types, Extras, and PayPal Button */}
+            <div className="w-1/2 p-4">
+              {walkerDetails && walkerData ? (
+                <div>
+                  <h2
+                    className="text-3xl text-[#29235C] font-bold mb-2 mt-4"
+                    style={{ fontFamily: "LikeEat" }}
+                  >
+                    Walk Services by {walkerData.name}:
+                  </h2>
+                  {walkerData.walker?.walkTypes &&
+                  walkerData.walker.walkTypes.length > 0 ? (
+                    <div>
+                      <td className="py-4">
+                        {/* <label htmlFor="walkTypeSelect">Select Walk Type:</label> */}
+                        <select
+                          id="walkTypeSelect"
+                          onChange={(e) =>
+                            handleWalkTypeSelection(e.target.value)
+                          }
+                          className="border border-[#F39200] p-1 rounded "
+                        >
+                          <option value="">Select a Walk Type</option>
+                          {walkerData.walker.walkTypes.map((walkType) => (
+                            <option key={walkType.id} value={walkType.title}>
+                              {walkType.title} - ${walkType.price}
+                            </option>
+                          ))}
+                        </select>
+                      </td>
+                      <td className="py-4">
+                        <div className="flex items-center">
+                          <button
+                            onClick={() => decrementWalkTypeQuantity()}
+                            className="border rounded-md py-2 px-4 mr-2"
+                          >
+                            -
+                          </button>
+                          <span className="text-center w-8">
+                            {walkTypeQuantity}
+                          </span>
+                          <button
+                            onClick={() => incrementWalkTypeQuantity()}
+                            className="border rounded-md py-2 px-4 ml-2"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </td>
+                      {/* Display walk type description */}
+                      {selectedWalkType && (
+                        <div className="mt-4 relative">
+                          <div className="bg-[#F39200] rounded-lg p-4">
+                            <p className="text-sm text-bold text-white">
+                              {selectedWalkType.description}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <p>No walk types available</p>
+                  )}
 
-            {/* Add Extras Section */}
-            <div className="mt-8">
-  <h3 className="mb-4">Add Extras:</h3>
-  <div>
-    <label htmlFor="leash" className="block">Leash - $5</label>
-    <span className="border p-1 rounded w-12">
-      <input
-        type="number"
-        id="leash"
-        value={extraQuantities["Leash"]}
-        onFocus={(e) => e.target.setAttribute('type', 'number')}
-        onBlur={(e) => e.target.setAttribute('type', 'text')}
-        onChange={(e) => handleQuantityChange(e, "Leash")}
-        className="border-none w-sm"
-        min="0"
-        max="15"
-      />
-    </span>
+                  {/* Add Extras Section */}
+                  <div className="mt-8">
+                    <h3 className="mb-4 font-bold text-2xl text-[#29235C]" style={{ fontFamily: "LikeEat" }}>Add Extras:</h3>
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td className="py-4">
+                            <label htmlFor="leash" className="block">
+                              Leash
+                            </label>
+                            <span className="text-sm text-gray-500 ml-2">
+                              $5
+                            </span>
+                          </td>
+                          <td className="py-4">
+                            <div className="flex items-center">
+                              <button
+                                onClick={() => decrementQuantity("Leash")}
+                                className="border rounded-md py-2 px-4 mr-2"
+                              >
+                                -
+                              </button>
+                              <span className="text-center w-8">
+                                {extraQuantities["Leash"]}
+                              </span>
+                              <button
+                                onClick={() => incrementQuantity("Leash")}
+                                className="border rounded-md py-2 px-4 ml-2"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="py-4">
+                            <label htmlFor="garbagebag" className="block">
+                              Garbage Bag
+                            </label>
+                            <span className="text-sm text-gray-500 ml-2">
+                              $2
+                            </span>
+                          </td>
+                          <td className="py-4">
+                            <div className="flex items-center">
+                              <button
+                                onClick={() => decrementQuantity("GarbageBag")}
+                                className="border rounded-md py-2 px-4 mr-2"
+                              >
+                                -
+                              </button>
+                              <span className="text-center w-8">
+                                {extraQuantities["GarbageBag"]}
+                              </span>
+                              <button
+                                onClick={() => incrementQuantity("GarbageBag")}
+                                className="border rounded-md py-2 px-4 ml-2"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="py-4">
+                            <label htmlFor="waterBowl" className="block">
+                              Water Bowl
+                            </label>
+                            <span className="text-sm text-gray-500 ml-2">
+                              $3
+                            </span>
+                          </td>
+                          <td className="py-4">
+                            <div className="flex items-center">
+                              <button
+                                onClick={() => decrementQuantity("WaterBowl")}
+                                className="border rounded-md py-2 px-4 mr-2"
+                              >
+                                -
+                              </button>
+                              <span className="text-center w-8">
+                                {extraQuantities["WaterBowl"]}
+                              </span>
+                              <button
+                                onClick={() => incrementQuantity("WaterBowl")}
+                                className="border rounded-md py-2 px-4 ml-2"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ) : (
+                <p>Loading walker details...</p>
+              )}
 
-    <label htmlFor="garbagebag" className="block mt-2">Garbage Bag - $2</label>
-    <span className="border p-1 rounded w-12">
-      <input
-        type="number"
-        id="garbagebag"
-        value={extraQuantities["Garbage Bag"]}
-        onFocus={(e) => e.target.setAttribute('type', 'number')}
-        onBlur={(e) => e.target.setAttribute('type', 'text')}
-        onChange={(e) => handleQuantityChange(e, "Bag")}
-        className="border-none w-sm"
-        min="0"
-        max="15"
-      />
-    </span>
-
-    <label htmlFor="waterBowl" className="block mt-2">Water Bowl - $3</label>
-    <span className="border p-1 rounded w-12">
-      <input
-        type="number"
-        id="waterBowl"
-        value={extraQuantities["Water Bowl"]}
-        onFocus={(e) => e.target.setAttribute('type', 'number')}
-        onBlur={(e) => e.target.setAttribute('type', 'text')}
-        onChange={(e) => handleQuantityChange(e, "Water")}
-        className="border-none w-sm"
-        min="0"
-        max="15"
-      />
-    </span>
-  </div>
-</div>
+              {/* Summary and PayPal Button */}
+              <div className="border-t border-gray-300 pt-4 mt-8">
+                <h1 className="text-3xl text-[#29235C] font-bold mb-2 mt-4"
+                    style={{ fontFamily: "LikeEat" }}>Summary</h1>
+                <h2 className="font-bold text-2xl">Total: ${totalAmount}</h2>
+                <PayPalScriptProvider
+                  options={{
+                    clientId: clientId,
+                  }}
+                >
+                  <PayPalButtons
+                    style={{
+                      layout: "vertical",
+                      color: "gold",
+                      label: "pay",
+                      shape: "pill",
+                    }}
+                    createOrder={createOrder}
+                    onCancel={handleCancel}
+                    onApprove={handleApprove}
+                  />
+                </PayPalScriptProvider>
+              </div>
+            </div>
           </div>
-        ) : (
-          <p>Loading walker details...</p>
-        )}
-
-        {/* Summary and PayPal Button */}
-        <div>
-          <h1 className="font-bold text-2xl">Summary</h1>
-          <h2 className="font-bold text-2xl">Total: ${totalAmount}</h2>
-          <PayPalScriptProvider
-            options={{
-              clientId: clientId,
-            }}
-          >
-            <PayPalButtons
-              style={{
-                layout: "vertical",
-                color: "gold",
-                label: "pay",
-                shape: "pill",
-              }}
-              createOrder={createOrder}
-              onCancel={handleCancel}
-              onApprove={handleApprove}
-            />
-          </PayPalScriptProvider>
         </div>
       </div>
-    </div>
     </div>
   );
 };
