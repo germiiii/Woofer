@@ -31,7 +31,8 @@ const WalkerHome = () => {
         const decodedToken = jwt.decode(token);
 
         try {
-          const response = await fetch(`http://localhost:3001/walker/${decodedToken.userId}`);
+          const API= process.env.NEXT_PUBLIC_APIURL
+          const response = await fetch(`${API}/walker/${decodedToken.userId}`);
           const data = await response.json();
           setUser(data);
           setUserProvince(data.province);
@@ -49,7 +50,8 @@ const WalkerHome = () => {
   useEffect(() => {
     const fetchWalkerTypes = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/walkType`);
+        const API = process.env.NEXT_PUBLIC_APIURL
+        const response = await fetch(`${API}/walkType`);
         const data = await response.json();
         setPriceList(data.walkTypeData);
       } catch (error) {
