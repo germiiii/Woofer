@@ -27,6 +27,10 @@ const AditionalForm = () => {
     image: "",
     province: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   useEffect(() => {
     setFormData({
@@ -112,7 +116,7 @@ const AditionalForm = () => {
         <div className="w-full h-full flex flex-col justify-center">
           <div className="flex justify-center items-center">
             <h1
-              className="text-6xl text-[#F39200] font-extrabold"
+              className="text-7xl text-[#F39200] font-extrabold"
               style={{ fontFamily: "LikeEat" }}
             >
               Sign up with Google
@@ -137,23 +141,31 @@ const AditionalForm = () => {
               <label className="mb-10" style={{ height: "64px" }}>
                 <input
                   type="text"
-                  name="lastName"
-                  placeholder="last name"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  className="rounded-full px-10 py-2  w-full"
-                  disabled
-                />
-              </label>
-              <label className=" mb-10" style={{ height: "64px" }}>
-                <input
-                  type="text"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   disabled
                   className="rounded-full px-10 py-2  w-full"
                 />
+              </label>
+              <label className=" mb-10" style={{ height: "64px" }}>
+                <select
+                  name="isWalker"
+                  onChange={handleChange}
+                  value={formData.isWalker}
+                  className={`rounded-full px-3 py-2 w-full text-[#29235c] ${
+                    validationErrors.isWalker ? "border-[#F39200]" : ""
+                  }`}
+                >
+                  <option value="">select your woofer type</option>
+                  <option value="false">Owner</option>
+                  <option value="true">Walker</option>
+                </select>
+                {validationErrors.isWalker && (
+                  <p className="text-[#F39200] text-sm mt-1">
+                    {validationErrors.isWalker}
+                  </p>
+                )}
               </label>
               <label className="mb-10" style={{ height: "64px" }}>
                 <select
@@ -183,18 +195,13 @@ const AditionalForm = () => {
               <label className=" mb-10" style={{ height: "64px" }}>
                 <input
                   type="text"
-                  name="address"
-                  placeholder="address"
+                  name="lastName"
+                  placeholder="last name"
+                  value={formData.lastName}
                   onChange={handleChange}
-                  className={`rounded-full px-10 py-2  w-full ${
-                    validationErrors.address ? "border-[#F39200]" : ""
-                  }`}
+                  className="rounded-full px-10 py-2  w-full"
+                  disabled
                 />
-                {validationErrors.address && (
-                  <p className="text-[#F39200] text-sm mt-1">
-                    {validationErrors.address}
-                  </p>
-                )}
               </label>
               <label className=" mb-10" style={{ height: "64px" }}>
                 <input
@@ -213,15 +220,26 @@ const AditionalForm = () => {
                 )}
               </label>
               <label className=" mb-10" style={{ height: "64px" }}>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="password"
-                  onChange={handleChange}
-                  className={`rounded-full px-10 py-2  w-full ${
-                    validationErrors.password ? "border-[#F39200]" : ""
-                  }`}
-                />
+                <div className="flex items-center">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="password"
+                    onChange={handleChange}
+                    className={`rounded-full px-2 py-2 mr-2 w-full ${
+                      validationErrors.password ? "border-[#F39200]" : ""
+                    }`}
+                  />
+                  <div className="flex">
+                    <button
+                      type="button"
+                      onClick={handleTogglePassword}
+                      className="bg-white text-[#29235c] px-4 w-20 py-2 rounded-full flex items-center justify-center focus:outline-none transition-all duration-300 ease-in-out hover:text-[#F39200] text-[#29235c]"
+                    >
+                      {showPassword ? "hide" : "show"}
+                    </button>
+                  </div>
+                </div>
                 {validationErrors.password && (
                   <p className="text-[#F39200] text-sm mt-1">
                     {validationErrors.password}
@@ -229,21 +247,18 @@ const AditionalForm = () => {
                 )}
               </label>
               <label className="mb-10" style={{ height: "64px" }}>
-                <select
-                  name="isWalker"
+                <input
+                  type="text"
+                  name="address"
+                  placeholder="address"
                   onChange={handleChange}
-                  value={formData.isWalker}
-                  className={`rounded-full px-3 py-2 w-full text-[#29235c] ${
-                    validationErrors.isWalker ? "border-[#F39200]" : ""
+                  className={`rounded-full px-10 py-2  w-full ${
+                    validationErrors.address ? "border-[#F39200]" : ""
                   }`}
-                >
-                  <option value="">select your woofer type</option>
-                  <option value="false">Owner</option>
-                  <option value="true">Walker</option>
-                </select>
-                {validationErrors.isWalker && (
+                />
+                {validationErrors.address && (
                   <p className="text-[#F39200] text-sm mt-1">
-                    {validationErrors.isWalker}
+                    {validationErrors.address}
                   </p>
                 )}
               </label>
