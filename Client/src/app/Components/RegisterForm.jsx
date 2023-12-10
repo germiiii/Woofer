@@ -30,7 +30,7 @@ const RegisterForm = () => {
     username: "",
     email: "",
     password: "",
-    isWalker: type === "walker" ? true : type === "owner" ? false : "",
+    isWalker: type === "walker" ? "true" : type === "owner" ? "false" : "",
     image: "",
     province: "",
   });
@@ -38,6 +38,11 @@ const RegisterForm = () => {
   const [image, setImage] = useState("");
   const [buttonText, setButtonText] = useState("select your profile picture");
   const [validationErrors, setValidationErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const validateForm = () => {
     const errors = {};
@@ -125,24 +130,21 @@ const RegisterForm = () => {
     if (type === "file") {
       const selectedFile = e.target.files[0];
 
-      // Check if the selected file is a valid image type (JPG or PNG)
       if (
         selectedFile &&
         !["image/jpeg", "image/png"].includes(selectedFile.type)
       ) {
         window.alert("Please select a valid image file (JPG or PNG).");
-        // Clear the file input and reset the state
         fileInputRef.current.value = null;
         setImage("");
         setButtonText("select your profile picture");
         return;
       }
 
-      // Check if the size of the image is within the limit (15MB)
-      const maxSizeInBytes = 15 * 1024 * 1024; // 15MB
+      const maxSizeInBytes = 15 * 1024 * 1024;
       if (selectedFile && selectedFile.size > maxSizeInBytes) {
         window.alert("Please select an image file smaller than 15MB.");
-        // Clear the file input and reset the state
+
         fileInputRef.current.value = null;
         setImage("");
         setButtonText("select your profile picture");
@@ -237,6 +239,86 @@ const RegisterForm = () => {
               </label>
               <label className="mb-16" style={{ height: "64px" }}>
                 <input
+                  type="email"
+                  name="email"
+                  placeholder="email"
+                  onChange={handleChange}
+                  className={`rounded-full px-3 py-2  w-full ${
+                    validationErrors.email ? "border-[#F39200]" : ""
+                  }`}
+                />
+                {validationErrors.email && (
+                  <p className="text-[#F39200] text-sm mt-1">
+                    {validationErrors.email}
+                  </p>
+                )}
+              </label>
+              <label className=" mb-16" style={{ height: "64px" }}>
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  onChange={handleChange}
+                  ref={fileInputRef}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current.click()}
+                  className={`rounded-full px-3 py-2 bg-white w-full hover:text-[#F39200] text-[#29235c] transition-all duration-300 ease-in-out ${
+                    validationErrors.image ? "border-[#F39200]" : ""
+                  }`}
+                >
+                  {buttonText}
+                </button>
+              </label>
+              <label className=" mb-16" style={{ height: "64px" }}>
+                <select
+                  name="province"
+                  onChange={handleChange}
+                  value={userData.province}
+                  className={`rounded-full px-3 py-2 text-[#29235c] ${
+                    validationErrors.province ? "border-[#F39200]" : ""
+                  }`}
+                  style={{ width: "300px", height: "40px" }}
+                >
+                  <option value="">select your province</option>
+                  {provinces.map((province) => (
+                    <option key={province} value={province}>
+                      {province}
+                    </option>
+                  ))}
+                </select>
+                {validationErrors.province && (
+                  <p className="text-[#F39200] text-sm mt-1">
+                    {validationErrors.province}
+                  </p>
+                )}
+              </label>
+              <label className="" style={{ height: "64px" }}>
+                <select
+                  name="isWalker"
+                  onChange={handleChange}
+                  value={userData.isWalker}
+                  className={`rounded-full px-3 py-2 w-full text-[#29235c] ${
+                    validationErrors.isWalker ? "border-[#F39200]" : ""
+                  }`}
+                >
+                  <option value="">select your woofer type</option>
+                  <option value="false">Owner</option>
+                  <option value="true">Walker</option>
+                </select>
+                {validationErrors.isWalker && (
+                  <p className="text-[#F39200] text-sm mt-1">
+                    {validationErrors.isWalker}
+                  </p>
+                )}
+              </label>
+            </div>
+
+            <div className="flex flex-col">
+              <label className=" mb-16" style={{ height: "64px" }}>
+                <input
                   type="text"
                   name="lastName"
                   placeholder="last name"
@@ -268,63 +350,29 @@ const RegisterForm = () => {
                 )}
               </label>
               <label className=" mb-16" style={{ height: "64px" }}>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="email"
-                  onChange={handleChange}
-                  className={`rounded-full px-3 py-2  w-full ${
-                    validationErrors.email ? "border-[#F39200]" : ""
-                  }`}
-                />
-                {validationErrors.email && (
+                <div className="flex items-center">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="password"
+                    onChange={handleChange}
+                    className={`rounded-full px-2 py-2 w-full mr-2 ${
+                      validationErrors.password ? "border-[#F39200]" : ""
+                    }`}
+                  />
+                  <div className="flex">
+                    <button
+                      type="button"
+                      onClick={handleTogglePassword}
+                      className="bg-white text-[#29235c] px-4 w-20 py-2 rounded-full flex items-center justify-center focus:outline-none transition-all duration-300 ease-in-out hover:text-[#F39200] text-[#29235c]"
+                    >
+                      {showPassword ? "hide" : "show"}
+                    </button>
+                  </div>
+                </div>
+                {validationErrors.password && (
                   <p className="text-[#F39200] text-sm mt-1">
-                    {validationErrors.email}
-                  </p>
-                )}
-              </label>
-              <label className="" style={{ height: "64px" }}>
-                <select
-                  name="isWalker"
-                  onChange={handleChange}
-                  value={userData.isWalker}
-                  className={`rounded-full px-3 py-2 w-full text-[#29235c] ${
-                    validationErrors.isWalker ? "border-[#F39200]" : ""
-                  }`}
-                >
-                  <option value="">select your woofer type</option>
-                  <option value="false">Owner</option>
-                  <option value="true">Walker</option>
-                </select>
-                {validationErrors.isWalker && (
-                  <p className="text-[#F39200] text-sm mt-1">
-                    {validationErrors.isWalker}
-                  </p>
-                )}
-              </label>
-            </div>
-
-            <div className="flex flex-col">
-              <label className=" mb-16" style={{ height: "64px" }}>
-                <select
-                  name="province"
-                  onChange={handleChange}
-                  value={userData.province}
-                  className={`rounded-full px-3 py-2 text-[#29235c] ${
-                    validationErrors.province ? "border-[#F39200]" : ""
-                  }`}
-                  style={{ width: "300px", height: "40px" }}
-                >
-                  <option value="">select your province</option>
-                  {provinces.map((province) => (
-                    <option key={province} value={province}>
-                      {province}
-                    </option>
-                  ))}
-                </select>
-                {validationErrors.province && (
-                  <p className="text-[#F39200] text-sm mt-1">
-                    {validationErrors.province}
+                    {validationErrors.password}
                   </p>
                 )}
               </label>
@@ -343,41 +391,6 @@ const RegisterForm = () => {
                     {validationErrors.address}
                   </p>
                 )}
-              </label>
-              <label className=" mb-16" style={{ height: "64px" }}>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="password"
-                  onChange={handleChange}
-                  className={`rounded-full px-3 py-2 w-full ${
-                    validationErrors.password ? "border-[#F39200]" : ""
-                  }`}
-                />
-                {validationErrors.password && (
-                  <p className="text-[#F39200] text-sm mt-1">
-                    {validationErrors.password}
-                  </p>
-                )}
-              </label>
-              <label className=" mb-16" style={{ height: "64px" }}>
-                <input
-                  type="file"
-                  name="image"
-                  accept="image/*"
-                  onChange={handleChange}
-                  ref={fileInputRef}
-                  className="hidden"
-                />
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current.click()}
-                  className={`rounded-full px-3 py-2 bg-white w-full hover:text-[#F39200] text-[#29235c] ${
-                    validationErrors.image ? "border-[#F39200]" : ""
-                  }`}
-                >
-                  {buttonText}
-                </button>
               </label>
               <div className="flex items-center justify-center mb-6">
                 <button
