@@ -3,7 +3,7 @@ import "tailwindcss/tailwind.css";
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useState, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { auth } from "../firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
@@ -19,8 +19,9 @@ const RegisterForm = () => {
   const googleAuth = new GoogleAuthProvider();
   const [user] = useAuthState(auth);
   const { updateUser } = useUser();
-
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
   const fileInputRef = useRef(null);
   const [userData, setUserData] = useState({
     name: "",
@@ -29,7 +30,7 @@ const RegisterForm = () => {
     username: "",
     email: "",
     password: "",
-    isWalker: "",
+    isWalker: type === "walker" ? "true" : type === "owner" ? "false" : "",
     image: "",
     province: "",
   });
@@ -37,6 +38,11 @@ const RegisterForm = () => {
   const [image, setImage] = useState("");
   const [buttonText, setButtonText] = useState("select your profile picture");
   const [validationErrors, setValidationErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const validateForm = () => {
     const errors = {};
@@ -48,7 +54,7 @@ const RegisterForm = () => {
     } else if (!/^[a-zA-Z\s]+$/.test(userData.name)) {
       errors.name = "name must contain only letters";
     }
-  
+
     if (!userData.lastName.trim()) {
       errors.lastName = "last name cannot be empty";
     } else if (userData.lastName.length > 40) {
@@ -120,33 +126,33 @@ const RegisterForm = () => {
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-  
+
     if (type === "file") {
       const selectedFile = e.target.files[0];
-  
-      // Check if the selected file is a valid image type (JPG or PNG)
-      if (selectedFile && !["image/jpeg", "image/png"].includes(selectedFile.type)) {
+
+      if (
+        selectedFile &&
+        !["image/jpeg", "image/png"].includes(selectedFile.type)
+      ) {
         window.alert("Please select a valid image file (JPG or PNG).");
-        // Clear the file input and reset the state
         fileInputRef.current.value = null;
         setImage("");
         setButtonText("select your profile picture");
         return;
       }
-  
-      // Check if the size of the image is within the limit (15MB)
-      const maxSizeInBytes = 15 * 1024 * 1024; // 15MB
+
+      const maxSizeInBytes = 15 * 1024 * 1024;
       if (selectedFile && selectedFile.size > maxSizeInBytes) {
         window.alert("Please select an image file smaller than 15MB.");
-        // Clear the file input and reset the state
+
         fileInputRef.current.value = null;
         setImage("");
         setButtonText("select your profile picture");
         return;
       }
-  
+
       setImage(selectedFile);
-  
+
       const maxFileNameLength = 20;
       const fileName = selectedFile
         ? selectedFile.name.length > maxFileNameLength
@@ -200,19 +206,39 @@ const RegisterForm = () => {
         </div>
       ) : (
         <div className="w-full h-full flex flex-col justify-center">
-          <div className="flex justify-center mb-20">
+          <div className="flex justify-center mb-10">
             <h1
-              className="text-6xl text-[#F39200] font-extrabold"
+              className="text-7xl text-[#F39200] font-extrabold"
               style={{ fontFamily: "LikeEat" }}
             >
               Sign up
             </h1>
           </div>
+          <div className="flex flex-col items-center justify-center mr-6 mb-5">
+            {" "}
+            <button
+              onClick={loginGoogle}
+              className="bg-white text-[#29235c] px-5 py-2 rounded-full flex items-center justify-center focus:outline-none transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
+              type="button"
+            >
+              <Image
+                src={"/google.png"}
+                alt="Google Logo"
+                width={20}
+                height={20}
+                className="mr-2"
+              />
+              <span>Google</span>
+            </button>
+            <div className="mt-5">
+              <h1 className="text-white">or</h1>{" "}
+            </div>
+          </div>
 
           <form
             onSubmit={handleRegister}
             method="post"
-            className="flex items-center justify-center w-full"
+            className="flex items-center justify-center w-full mt-1"
           >
             <div className="flex flex-col justify-center mr-14 h-full">
               <label className="mb-16" style={{ height: "64px" }}>
@@ -232,6 +258,86 @@ const RegisterForm = () => {
                 )}
               </label>
               <label className="mb-16" style={{ height: "64px" }}>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="email"
+                  onChange={handleChange}
+                  className={`rounded-full px-3 py-2  w-full ${
+                    validationErrors.email ? "border-[#F39200]" : ""
+                  }`}
+                />
+                {validationErrors.email && (
+                  <p className="text-[#F39200] text-sm mt-1">
+                    {validationErrors.email}
+                  </p>
+                )}
+              </label>
+              <label className=" mb-16" style={{ height: "64px" }}>
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  onChange={handleChange}
+                  ref={fileInputRef}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current.click()}
+                  className={`rounded-full px-3 py-2 bg-white w-full hover:text-[#F39200] text-[#29235c] transition-all duration-300 ease-in-out ${
+                    validationErrors.image ? "border-[#F39200]" : ""
+                  }`}
+                >
+                  {buttonText}
+                </button>
+              </label>
+              <label className=" mb-16" style={{ height: "64px" }}>
+                <select
+                  name="province"
+                  onChange={handleChange}
+                  value={userData.province}
+                  className={`rounded-full px-3 py-2 text-[#29235c] ${
+                    validationErrors.province ? "border-[#F39200]" : ""
+                  }`}
+                  style={{ width: "300px", height: "40px" }}
+                >
+                  <option value="">select your province</option>
+                  {provinces.map((province) => (
+                    <option key={province} value={province}>
+                      {province}
+                    </option>
+                  ))}
+                </select>
+                {validationErrors.province && (
+                  <p className="text-[#F39200] text-sm mt-1">
+                    {validationErrors.province}
+                  </p>
+                )}
+              </label>
+              <label className="" style={{ height: "64px" }}>
+                <select
+                  name="isWalker"
+                  onChange={handleChange}
+                  value={userData.isWalker}
+                  className={`rounded-full px-3 py-2 w-full text-[#29235c] ${
+                    validationErrors.isWalker ? "border-[#F39200]" : ""
+                  }`}
+                >
+                  <option value="">select your woofer type</option>
+                  <option value="false">Owner</option>
+                  <option value="true">Walker</option>
+                </select>
+                {validationErrors.isWalker && (
+                  <p className="text-[#F39200] text-sm mt-1">
+                    {validationErrors.isWalker}
+                  </p>
+                )}
+              </label>
+            </div>
+
+            <div className="flex flex-col">
+              <label className=" mb-16" style={{ height: "64px" }}>
                 <input
                   type="text"
                   name="lastName"
@@ -264,63 +370,29 @@ const RegisterForm = () => {
                 )}
               </label>
               <label className=" mb-16" style={{ height: "64px" }}>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="email"
-                  onChange={handleChange}
-                  className={`rounded-full px-3 py-2  w-full ${
-                    validationErrors.email ? "border-[#F39200]" : ""
-                  }`}
-                />
-                {validationErrors.email && (
+                <div className="flex items-center">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="password"
+                    onChange={handleChange}
+                    className={`rounded-full px-2 py-2 w-full mr-2 ${
+                      validationErrors.password ? "border-[#F39200]" : ""
+                    }`}
+                  />
+                  <div className="flex">
+                    <button
+                      type="button"
+                      onClick={handleTogglePassword}
+                      className="bg-white text-[#29235c] px-4 w-20 py-2 rounded-full flex items-center justify-center focus:outline-none transition-all duration-300 ease-in-out hover:text-[#F39200] text-[#29235c]"
+                    >
+                      {showPassword ? "hide" : "show"}
+                    </button>
+                  </div>
+                </div>
+                {validationErrors.password && (
                   <p className="text-[#F39200] text-sm mt-1">
-                    {validationErrors.email}
-                  </p>
-                )}
-              </label>
-              <label className="" style={{ height: "64px" }}>
-                <select
-                  name="isWalker"
-                  onChange={handleChange}
-                  value={userData.isWalker}
-                  className={`rounded-full px-3 py-2 w-full text-[#29235c] ${
-                    validationErrors.isWalker ? "border-[#F39200]" : ""
-                  }`}
-                >
-                  <option value="">select your woofer type</option>
-                  <option value="false">Owner</option>
-                  <option value="true">Walker</option>
-                </select>
-                {validationErrors.isWalker && (
-                  <p className="text-[#F39200] text-sm mt-1">
-                    {validationErrors.isWalker}
-                  </p>
-                )}
-              </label>
-            </div>
-
-            <div className="flex flex-col">
-              <label className=" mb-16" style={{ height: "64px" }}>
-                <select
-                  name="province"
-                  onChange={handleChange}
-                  value={userData.province}
-                  className={`rounded-full px-3 py-2 text-[#29235c] ${
-                    validationErrors.province ? "border-[#F39200]" : ""
-                  }`}
-                  style={{ width: "300px", height: "40px" }}
-                >
-                  <option value="">select your province</option>
-                  {provinces.map((province) => (
-                    <option key={province} value={province}>
-                      {province}
-                    </option>
-                  ))}
-                </select>
-                {validationErrors.province && (
-                  <p className="text-[#F39200] text-sm mt-1">
-                    {validationErrors.province}
+                    {validationErrors.password}
                   </p>
                 )}
               </label>
@@ -340,49 +412,14 @@ const RegisterForm = () => {
                   </p>
                 )}
               </label>
-              <label className=" mb-16" style={{ height: "64px" }}>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="password"
-                  onChange={handleChange}
-                  className={`rounded-full px-3 py-2 w-full ${
-                    validationErrors.password ? "border-[#F39200]" : ""
-                  }`}
-                />
-                {validationErrors.password && (
-                  <p className="text-[#F39200] text-sm mt-1">
-                    {validationErrors.password}
-                  </p>
-                )}
-              </label>
-              <label className=" mb-16" style={{ height: "64px" }}>
-                <input
-                  type="file"
-                  name="image"
-                  accept="image/*"
-                  onChange={handleChange}
-                  ref={fileInputRef}
-                  className="hidden"
-                />
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current.click()}
-                  className={`rounded-full px-3 py-2 bg-white w-full hover:text-[#F39200] text-[#29235c] ${
-                    validationErrors.image ? "border-[#F39200]" : ""
-                  }`}
-                >
-                  {buttonText}
-                </button>
-              </label>
               <div className="flex items-center justify-center mb-6">
                 <button
                   type="submit"
-                  className="px-8 py-2 rounded-full bg-white text-[#29235c] font-extrabold transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
+                  className="w-full py-2 rounded-full bg-white text-[#29235c] font-extrabold transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
                 >
                   Sign up
                 </button>
-                <div className="flex items-center justify-center ml-5 mr-5">
+                {/* <div className="flex items-center justify-center ml-5 mr-5">
                   <h1 className="text-white">or</h1>
                 </div>
                 <button
@@ -398,7 +435,7 @@ const RegisterForm = () => {
                     className="mr-2"
                   />
                   <span>Google</span>
-                </button>
+                </button> */}
               </div>
             </div>
           </form>

@@ -11,6 +11,9 @@ const walkerHandlerPost = async (req, res) => {
       is_available,
       walkTypes,
     } = req.body;
+
+    console.log(req.body)
+    
     const newWalker = await walkerPost(
       id,
       dog_capacity,
