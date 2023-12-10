@@ -51,7 +51,6 @@ const CheckoutComponent = () => {
 
   //!Stars
 
-  // Calculate median from scores
   const calculateMedian = (arr) => {
     const sortedArr = arr.slice().sort((a, b) => a - b);
     const mid = Math.floor(sortedArr.length / 2);
@@ -70,7 +69,7 @@ const CheckoutComponent = () => {
       (_, index) => (
         <span key={index} className="text-yellow-500 text-2xl rounded-full">
           &#9733;
-        </span> // Yellow filled star
+        </span> 
       )
     );
     const emptyStars = Array.from(
@@ -78,7 +77,7 @@ const CheckoutComponent = () => {
       (_, index) => (
         <span key={index} className="text-gray-300 text-2xl rounded-full">
           &#9734;
-        </span> // Empty star in gray
+        </span> 
       )
     );
 
@@ -90,7 +89,6 @@ const CheckoutComponent = () => {
     );
   };
 
-  // Calculate median and render stars
   const scores =
     walkerDetails?.walker?.reviewsData.map((review) => review.score) || [];
   const medianScore = calculateMedian(scores);
@@ -98,7 +96,7 @@ const CheckoutComponent = () => {
 
   //!WalkType Selection
   const handleWalkTypeSelection = (walkTypeTitle) => {
-    // Find the selected walkType object based on the title
+  
     const selectedType = walkerData.walker.walkTypes.find(
       (walkType) => walkType.title === walkTypeTitle
     );
@@ -110,7 +108,6 @@ const CheckoutComponent = () => {
   const handleQuantityChange = (e, item) => {
     let value = parseInt(e.target.value);
 
-    // Validate and limit the value between 0 and 15
     value = Math.min(Math.max(value, 0), 15);
 
     setExtraQuantities((prevExtraQuantities) => ({
@@ -134,7 +131,7 @@ const CheckoutComponent = () => {
   };
 
   const handleWalkTypeQuantityChange = (value) => {
-    // Validate and limit the value between 0 and 15
+  
     value = Math.min(Math.max(value, 0), 15);
     setWalkTypeQuantity(value);
   };
@@ -160,20 +157,18 @@ const CheckoutComponent = () => {
         Leash: 5,
         GarbageBag: 2,
         WaterBowl: 3,
-        // Add more extras with their corresponding prices
+        
       }[extra];
       if (extraPrice) {
         extrasTotal += extraPrice * parseInt(extraQuantities[extra]);
       }
     }
 
-    // Calculate the total amount by adding walkTypePrice and extrasTotal
     const totalAmountInCents = walkTypePrice + extrasTotal;
 
-    // Convert total amount to a string with the correct format (e.g., "100.00")
     const formattedTotalAmount = String(totalAmountInCents.toFixed(2));
 
-    setTotalAmount(formattedTotalAmount); // Set the total amount using state
+    setTotalAmount(formattedTotalAmount); 
     localStorage.setItem("totalAmount", formattedTotalAmount);
     console.log("Total Amount:", `"${formattedTotalAmount}"`);
     return formattedTotalAmount;
@@ -183,6 +178,7 @@ const CheckoutComponent = () => {
     const calculatedTotalAmount = calculateTotalAmount();
     setTotalAmount(calculatedTotalAmount);
   }, [selectedWalkType, extraQuantities, walkTypeQuantity]);
+
 
   //! PayPal
   //!Access Token Fetching
@@ -264,24 +260,15 @@ const CheckoutComponent = () => {
       if (order.id) {
         console.log("Order ID:", order.id);
         setOrderCount(orderCount + 1); // Increment order count for the next order
-        return order.id; // Return the order ID
+        return order.id; 
       } else {
         throw new Error("Order ID not received");
       }
     } catch (error) {
       console.error("Error creating PayPal order:", error);
-      // Implement your error handling here
+     
     }
   };
-
-  // const handleApprove = (data, actions) => {
-  //   console.log("Approved:", data);
-  //   actions.order.capture();
-  //   alert("Payment successful");
-  //   setTimeout(() => {
-  //     router.push("/home");
-  //   }, 3000);
-  // };
 
   //! Handle Approval and POST to /walk
   const handleApprove = async (data, actions) => {
@@ -315,6 +302,7 @@ const CheckoutComponent = () => {
     }
   };
 
+  //! Handle Cancel
   const handleCancel = (data) => {
     console.log("Cancelled:", data);
   };
@@ -428,7 +416,7 @@ const CheckoutComponent = () => {
                           </button>
                         </div>
                       </td>
-                      {/* Display walk type description */}
+                  
                       {selectedWalkType && (
                         <div className="mt-4 relative">
                           <div className="bg-[#F39200] rounded-lg p-4">
