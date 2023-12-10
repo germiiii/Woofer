@@ -206,19 +206,39 @@ const RegisterForm = () => {
         </div>
       ) : (
         <div className="w-full h-full flex flex-col justify-center">
-          <div className="flex justify-center mb-20">
+          <div className="flex justify-center mb-10">
             <h1
-              className="text-6xl text-[#F39200] font-extrabold"
+              className="text-7xl text-[#F39200] font-extrabold"
               style={{ fontFamily: "LikeEat" }}
             >
               Sign up
             </h1>
           </div>
+          <div className="flex flex-col items-center justify-center mr-6 mb-5">
+            {" "}
+            <button
+              onClick={loginGoogle}
+              className="bg-white text-[#29235c] px-5 py-2 rounded-full flex items-center justify-center focus:outline-none transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
+              type="button"
+            >
+              <Image
+                src={"/google.png"}
+                alt="Google Logo"
+                width={20}
+                height={20}
+                className="mr-2"
+              />
+              <span>Google</span>
+            </button>
+            <div className="mt-5">
+              <h1 className="text-white">or</h1>{" "}
+            </div>
+          </div>
 
           <form
             onSubmit={handleRegister}
             method="post"
-            className="flex items-center justify-center w-full"
+            className="flex items-center justify-center w-full mt-1"
           >
             <div className="flex flex-col justify-center mr-14 h-full">
               <label className="mb-16" style={{ height: "64px" }}>
@@ -395,11 +415,11 @@ const RegisterForm = () => {
               <div className="flex items-center justify-center mb-6">
                 <button
                   type="submit"
-                  className="px-8 py-2 rounded-full bg-white text-[#29235c] font-extrabold transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
+                  className="w-full py-2 rounded-full bg-white text-[#29235c] font-extrabold transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
                 >
                   Sign up
                 </button>
-                <div className="flex items-center justify-center ml-5 mr-5">
+                {/* <div className="flex items-center justify-center ml-5 mr-5">
                   <h1 className="text-white">or</h1>
                 </div>
                 <button
@@ -415,7 +435,7 @@ const RegisterForm = () => {
                     className="mr-2"
                   />
                   <span>Google</span>
-                </button>
+                </button> */}
               </div>
             </div>
           </form>
