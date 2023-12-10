@@ -31,47 +31,61 @@ export default function OwnerForm() {
   const handleChange = (e) => {
     const { name, value, type } = e.target;
 
-    // Validation
-    switch (name) {
-      case "name":
-        if (/^[a-zA-Z0-9 ]{0,20}$/.test(value)) {
-          setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
-        }
-        break;
-      case "age":
-        if (/^\d{0,2}$/.test(value) && parseInt(value, 10) <= 25) {
-          setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
-        }
-        break;
-      case "breed":
-        if (/^[a-zA-Z0-9 ]{0,20}$/.test(value)) {
-          setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
-        }
-        break;
-      case "image":
-        // Additional check for file size
-        const file = e.target.files[0];
-        if (file && file.size <= 15 * 1024 * 1024) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            setDogData((prevDogData) => ({
-              ...prevDogData,
-              [name]: reader.result,
-            }));
-          };
-          reader.readAsDataURL(file);
-        }
-        break;
-      default:
-        setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
-        break;
+ // Validation
+ switch (name) {
+  case "name":
+    if (/^[a-zA-Z0-9 ]{0,20}$/.test(value)) {
+      setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
     }
-  };
+    break;
+  case "age":
+    if (/^\d{0,2}$/.test(value) && parseInt(value, 10) <= 25) {
+      setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
+    }
+    break;
+  case "breed":
+    if (/^[a-zA-Z0-9 ]{0,20}$/.test(value)) {
+      setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
+    }
+    break;
+  case "image":
+    // Additional check for file size and format
+    const file = e.target.files[0];
+    if (file && file.size <= 15 * 1024 * 1024) {
+      const allowedFormats = ["image/jpeg", "image/png"];
+      if (allowedFormats.includes(file.type)) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setDogData((prevDogData) => ({
+            ...prevDogData,
+            [name]: reader.result,
+          }));
+        };
+        reader.readAsDataURL(file);
+      } else {
+        e.target.value = null;
+        alert("Only JPG and PNG formats are allowed.");
+      }
+    }
+    break;
+  default:
+    setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
+    break;
+}
+};
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
+  try {
+    // Check if the form is completed
+    if (
+      dogData.name &&
+      dogData.age &&
+      dogData.breed &&
+      dogData.size &&
+      dogData.image
+    ) {
       // Create an array of dogs with the current dog data
       const currentDog = {
         userID: user,
@@ -96,10 +110,14 @@ export default function OwnerForm() {
       console.log("Server response:", response.data);
 
       // Additional logic for handling the form submission, if needed
-    } catch (error) {
-      console.error("Error submitting form:", error);
+    } else {
+      console.error("Please complete the form before submitting.");
     }
-  };
+  } catch (error) {
+    console.error("Error submitting form:", error);
+    // Handle the error appropriately (e.g., display an error message to the user)
+  }
+};
 
   const handleAddDog = (e) => {
     e.preventDefault();
@@ -207,22 +225,29 @@ export default function OwnerForm() {
             />
           </div>
           <div className="flex justify-end">
-            <button
-              onClick={handleFillFormAgain}
-              className="mr-4 p-3 rounded-md bg-black text-white cursor-pointer"
-            >
-              Clean
-            </button>
+          <button
+            onClick={handleFillFormAgain}
+            className="mr-4 p-3 rounded-md bg-black text-white cursor-pointer"
+          >
+            Clean
+          </button>
+          {/* Conditionally render the submit button */}
+          {dogData.name &&
+          dogData.age &&
+          dogData.breed &&
+          dogData.size &&
+          dogData.image ? (
             <button
               type="submit"
               className="p-3 rounded-md bg-black text-white cursor-pointer"
             >
               Submit
             </button>
-          </div>
-          {renderDogs}
-        </form>
-      </div>
+          ) : null}
+        </div>
+        {renderDogs}
+      </form>
     </div>
-  );
+  </div>
+);
 }
