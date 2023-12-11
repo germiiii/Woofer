@@ -12,19 +12,18 @@ import "../stylesLanding.css";
 
 const Home = () => {
   const api = process.env.NEXT_PUBLIC_APIURL;
-  const [formCompleted, setFormCompleted] = useState(true);
-  const [addressInput, setAddressInput] = useState("");
-  const [provinceInput, setProvinceInput] = useState("");
-  const [userProvince, setUserProvince] = useState("");
-  const [userAddress, setUserAddress] = useState("");
-
-  const handleFormSubmit = () => {
-    setFormCompleted(true);
-  };
-
-  const handleAddMoreDogs = () => {
-    setFormCompleted(false);
-  };
+  const [addressInput, setAddressInput] = useState(
+    localStorage.getItem("userAddress")
+  );
+  const [provinceInput, setProvinceInput] = useState(
+    localStorage.getItem("userProvince")
+  );
+  const [userProvince, setUserProvince] = useState(
+    localStorage.getItem("userProvince")
+  );
+  const [userAddress, setUserAddress] = useState(
+    localStorage.getItem("userAddress")
+  );
 
   const handleAddressInputChange = (event) => {
     setAddressInput(event.target.value);
@@ -37,6 +36,8 @@ const Home = () => {
   const handleInputSubmit = () => {
     setUserProvince(provinceInput);
     setUserAddress(addressInput);
+    localStorage.setItem("userProvince", provinceInput);
+    localStorage.setItem("userAddress", addressInput);
   };
 
   const inputStyle = "border p-4 rounded-lg mr-2";
@@ -44,49 +45,44 @@ const Home = () => {
 
   return (
     <div className="">
-      {!formCompleted && <OwnerForm onSubmit={handleFormSubmit} />}
-      {formCompleted && (
-        <>
-          <Nav />
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
-              height: "1400px",
-            }}
+      <Nav />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          textAlign: "center",
+          height: "1400px",
+        }}
+      >
+        <div style={{ marginTop: "20px", marginBottom: "20px" }}>
+          <select
+            name="province"
+            onChange={handleProvinceInputChange}
+            value={provinceInput}
+            className={inputStyle}
           >
-            <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-              <select
-                name="province"
-                onChange={handleProvinceInputChange}
-                value={provinceInput}
-                className={inputStyle}
-              >
-                <option value="">Select your province</option>
-                {provinces.map((province) => (
-                  <option key={province} value={province}>
-                    {province}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="text"
-                placeholder="Enter your address"
-                value={addressInput}
-                onChange={handleAddressInputChange}
-                className={inputStyle}
-              />
-            </div>
-            <button onClick={handleInputSubmit} className={buttonStyle}>
-              Set Your Location
-            </button>
-            <Map userProvince={userProvince} userAddress={userAddress} />
-            <SelectWalkers userProvince={userProvince} />
-          </div>
-        </>
-      )}
+            <option value="">Select your province</option>
+            {provinces.map((province) => (
+              <option key={province} value={province}>
+                {province}
+              </option>
+            ))}
+          </select>
+          <input
+            type="text"
+            placeholder="Enter your address"
+            value={addressInput}
+            onChange={handleAddressInputChange}
+            className={inputStyle}
+          />
+        </div>
+        <button onClick={handleInputSubmit} className={buttonStyle}>
+          Set Your Location
+        </button>
+        <Map userProvince={userProvince} userAddress={userAddress} />
+        <SelectWalkers userProvince={userProvince} />
+      </div>
     </div>
   );
 };

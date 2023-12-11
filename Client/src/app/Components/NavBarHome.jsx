@@ -11,6 +11,10 @@ const NavbarHome = () => {
   const handleLogout = () => {
     localStorage.removeItem("paypal_accessToken");
     localStorage.removeItem("__paypal_storage__");
+    localStorage.removeItem("provinceInput");
+    localStorage.removeItem("userProvince");
+    localStorage.removeItem("userAddress");
+    localStorage.removeItem("addressInput");
     localStorage.removeItem("token");
   };
 
