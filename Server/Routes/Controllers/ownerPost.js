@@ -35,9 +35,9 @@ const ownerPost = async (data, file) => {
     }
 
     // age validations
-    if (typeof age !== "number") {
-      throw new Error("Age debe ser string");
-    }
+    // if (typeof age !== "number") {
+    //   throw new Error("Age debe ser string");
+    // } COMENTADA PORQUE LA EDAD SE MANDA COMO STRING
     if (age < 0 || age > 25) {
       throw new Error("Age debe ser entre 0 y 25");
     }
@@ -119,7 +119,8 @@ const ownerPost = async (data, file) => {
         "verificationToken",
         "resetPasswordToken",
         "resetPasswordExpires",
-      ]},
+      ],
+    },
     where: { id: userID, is_active: true },
     include: [
       {

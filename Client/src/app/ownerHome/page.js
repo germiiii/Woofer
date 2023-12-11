@@ -12,6 +12,7 @@ import "../stylesLanding.css";
 
 const Home = () => {
   const api = process.env.NEXT_PUBLIC_APIURL;
+  const userId = localStorage.getItem("userId");
   const [addressInput, setAddressInput] = useState(
     localStorage.getItem("userAddress")
   );
@@ -33,11 +34,17 @@ const Home = () => {
     setProvinceInput(event.target.value);
   };
 
-  const handleInputSubmit = () => {
+  const handleInputSubmit = async () => {
     setUserProvince(provinceInput);
     setUserAddress(addressInput);
     localStorage.setItem("userProvince", provinceInput);
     localStorage.setItem("userAddress", addressInput);
+
+    const response = await axios.put(`${api}/editUser`, {
+      userID: userId,
+      province: provinceInput,
+      address: addressInput,
+    });
   };
 
   const inputStyle = "border p-4 rounded-lg mr-2";
