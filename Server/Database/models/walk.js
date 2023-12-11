@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
       },
       duration: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
+        allowNull: true,
       },
       dogNumber: {
         type: DataTypes.INTEGER,
