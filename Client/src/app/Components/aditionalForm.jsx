@@ -23,7 +23,7 @@ const AditionalForm = () => {
     address: "",
     username: "",
     password: "",
-    isWalker: "",
+    selectedType: "",
     image: "",
     province: "",
   });
@@ -40,7 +40,7 @@ const AditionalForm = () => {
       address: "",
       username: "",
       password: "",
-      isWalker: "",
+      selectedType: "",
       image: "",
       province: "",
     });
@@ -73,8 +73,8 @@ const AditionalForm = () => {
       errors.password = "password cannot be empty";
     }
 
-    if (!formData.isWalker) {
-      errors.isWalker = "select your woofer type";
+    if (!formData.selectedType) {
+      errors.selectedType = "select your woofer type";
     }
 
     setValidationErrors(errors);
@@ -150,20 +150,20 @@ const AditionalForm = () => {
               </label>
               <label className=" mb-10" style={{ height: "64px" }}>
                 <select
-                  name="isWalker"
+                  name="selectedType"
                   onChange={handleChange}
-                  value={formData.isWalker}
+                  value={formData.selectedType}
                   className={`rounded-full px-3 py-2 w-full text-[#29235c] ${
-                    validationErrors.isWalker ? "border-[#F39200]" : ""
+                    validationErrors.selectedType ? "border-[#F39200]" : ""
                   }`}
                 >
                   <option value="">select your woofer type</option>
-                  <option value="false">Owner</option>
-                  <option value="true">Walker</option>
+                  <option value="owner">Owner</option>
+                  <option value="walker">Walker</option>
                 </select>
-                {validationErrors.isWalker && (
+                {validationErrors.selectedType && (
                   <p className="text-[#F39200] text-sm mt-1">
-                    {validationErrors.isWalker}
+                    {validationErrors.selectedType}
                   </p>
                 )}
               </label>

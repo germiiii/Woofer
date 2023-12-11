@@ -59,11 +59,9 @@ const LoginForm = () => {
         googleToken,
       });
 
-      console.log(googleToken); // Verifica si obtienes el token de Google
-
       if (response.status === 201) {
         localStorage.setItem("token", googleToken);
-        router.push("/home");
+        router.push("/ownerHome");
       } else {
         console.error("Authentication failed");
       }
@@ -87,12 +85,30 @@ const LoginForm = () => {
       localStorage.setItem("token", token);
 
       if (token) {
-        if (email === "admin@woofer.com" && password === "123") {
-          router.push("/admin");
-        } else {
-          router.push("/home");
-        }
         setIsLoggedIn(true);
+        const decodedToken = jwt.decode(token);
+        const userResponse = await axios.get(
+          `${api}/users/${decodedToken.userId}`
+        );
+        const userData = userResponse.data;
+
+        localStorage.setItem("userId", userData.id);
+        localStorage.setItem("userProvince", userData.province);
+        localStorage.setItem("userAddress", userData.address);
+        localStorage.setItem("selectedType", userData.selectedType);
+        localStorage.setItem("isOwner", userData.isOwner);
+
+        if (userData.role === "admin") {
+          router.push("/admin");
+        } else if (userData.selectedType === "owner") {
+          if (userData.isOwner === false) {
+            router.push("/add-dogs");
+          } else {
+            router.push("/ownerHome");
+          }
+        } else if (userData.selectedType === "walker") {
+          router.push("/ownerHome");
+        }
       } else {
         alert("Invalid credentials.");
       }

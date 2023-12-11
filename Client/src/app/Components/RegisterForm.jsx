@@ -30,7 +30,8 @@ const RegisterForm = () => {
     username: "",
     email: "",
     password: "",
-    isWalker: type === "walker" ? "true" : type === "owner" ? "false" : "",
+    selectedType:
+      type === "walker" ? "walker" : type === "owner" ? "owner" : "",
     image: "",
     province: "",
   });
@@ -81,8 +82,8 @@ const RegisterForm = () => {
       errors.email = "invalid email format";
     }
 
-    if (!userData.isWalker) {
-      errors.isWalker = "select your woofer type";
+    if (!userData.selectedType) {
+      errors.selectedType = "select your woofer type";
     }
 
     if (!userData.province) {
@@ -182,7 +183,7 @@ const RegisterForm = () => {
     userFormData.append("username", userData.username);
     userFormData.append("email", userData.email);
     userFormData.append("password", userData.password);
-    userFormData.append("isWalker", userData.isWalker);
+    userFormData.append("selectedType", userData.selectedType);
     userFormData.append("image", image);
     userFormData.append("province", userData.province);
 
@@ -317,20 +318,20 @@ const RegisterForm = () => {
               </label>
               <label className="" style={{ height: "64px" }}>
                 <select
-                  name="isWalker"
+                  name="selectedType"
                   onChange={handleChange}
-                  value={userData.isWalker}
+                  value={userData.selectedType}
                   className={`rounded-full px-3 py-2 w-full text-[#29235c] ${
-                    validationErrors.isWalker ? "border-[#F39200]" : ""
+                    validationErrors.selectedType ? "border-[#F39200]" : ""
                   }`}
                 >
                   <option value="">select your woofer type</option>
-                  <option value="false">Owner</option>
-                  <option value="true">Walker</option>
+                  <option value="owner">Owner</option>
+                  <option value="walker">Walker</option>
                 </select>
-                {validationErrors.isWalker && (
+                {validationErrors.selectedType && (
                   <p className="text-[#F39200] text-sm mt-1">
-                    {validationErrors.isWalker}
+                    {validationErrors.selectedType}
                   </p>
                 )}
               </label>

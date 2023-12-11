@@ -13,6 +13,7 @@ const walkGetByOwner = async (ownerId, date) => {
       include: {
         model: Walk,
         attributes: [
+          "id",
           "date",
           "startTime",
           "duration",
