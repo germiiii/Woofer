@@ -16,9 +16,10 @@ const HomeWalker = () => {
 
         try {
           const API = process.env.NEXT_PUBLIC_APIURL;
-          const response = await axios.get(`${API}/walker/${decodedToken}`);
+          const response = await axios.get(`${API}/walker/${decodedToken.userId}`);
           const data = response.data;
-          setWalkerPass(data?.walkerData?.isWalker || false);
+          setWalkerPass(data.walkerData.isWalker || false);
+          console.log("walkerdata", data.walkerData.isWalker)
         } catch (error) {
           console.error('Error fetching data from the server', error);
         }

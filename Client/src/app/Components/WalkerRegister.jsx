@@ -1,6 +1,9 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import jwt from "jsonwebtoken";
+import { useRouter } from "next/navigation";
 
 const WalkerRegister = () => {
     const [priceList, setPriceList] = useState([]);
@@ -21,7 +24,7 @@ const WalkerRegister = () => {
 
         fetchWalkerTypes();
     }, []);
-
+    const router = useRouter();
     const handleCheckboxChange = (option) => {
         const isSelected = selectedOptions.includes(option);
 
@@ -46,32 +49,42 @@ const WalkerRegister = () => {
             const token = localStorage.getItem('token');
 
             if (!token) {
-                // Handle the case where there is no token
                 return;
             }
 
             const decodedToken = jwt.decode(token);
-            const walkerId = decodedToken.id;
+            const walkerId = decodedToken.userId;
+            const dogCapacityOptions = selectedOptions.map((option) => option.dog_capacity);
 
-            const dogSizes = Array.from(new Set(selectedOptions.flatMap((option) => option.dog_capacity.toLowerCase())));
+            let dogCapacity;
+
+            if (dogCapacityOptions.includes("high")) {
+                dogCapacity = "5";
+            } else if (dogCapacityOptions.includes("medium")) {
+                dogCapacity = "3";
+            } else if (dogCapacityOptions.includes("low")) {
+                dogCapacity = "1";
+            } else {
+                dogCapacity = "1";
+            }
+
             const walkDurations = Array.from(new Set(selectedOptions.flatMap((option) => option.walk_duration)));
-            
+
             const requestBody = {
-                id: "285f357e-69d5-4cbe-8289-3168d71972cd",
-                dog_capacity: dogSizes.join(", "), // Combine dog sizes into a comma-separated string
-                dog_size: dogSizes,
+                id: walkerId,
+                dog_capacity: dogCapacity, 
+                dog_size: null,
                 walk_duration: walkDurations,
                 sale_details: saleDetails,
                 is_available: "false",
                 walkTypes: selectedOptions.map((option) => option.id),
             };
             console.log(requestBody);
-            const response = await axios.post(`${API}/walker/${walkerId}`, requestBody);
-
-            // Handle the response as needed (e.g., show a success message)
-            console.log("Formulario enviado con éxito:", response.data);
+            const response = await axios.post(`${API}/walker`, requestBody);
+            console.log("Form submitted successfully:", response.data);
+            router.push("/walkerHome");
         } catch (error) {
-            setFormSubmissionError("Error al enviar el formulario");
+            setFormSubmissionError("Error submitting the form");
             console.error("Error submitting form:", error);
         }
     };
@@ -81,7 +94,7 @@ const WalkerRegister = () => {
             <h2>Walker Registration</h2>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Seleccione los tipos de paseo:</label>
+                    <label>Select walk types:</label>
                     {priceList.map((option) => (
                         <div
                             key={option.id}
@@ -101,7 +114,7 @@ const WalkerRegister = () => {
                     ))}
                 </div>
                 <div>
-                    <label htmlFor="saleDetails">Detalles de la oferta (máximo 100 caracteres):</label>
+                    <label htmlFor="saleDetails">Offer details (maximum 100 characters):</label>
                     <input
                         type="text"
                         id="saleDetails"
@@ -110,7 +123,7 @@ const WalkerRegister = () => {
                         maxLength={100}
                     />
                 </div>
-                <button type="submit">Enviar</button>
+                <button type="submit">Submit</button>
             </form>
             {formSubmissionError && <p style={{ color: "red" }}>{formSubmissionError}</p>}
             <style jsx>{`
@@ -124,7 +137,7 @@ const WalkerRegister = () => {
                 }
 
                 .selected-card {
-                    background-color: gray; /* Cambia el color de fondo a gris cuando está seleccionado */
+                    background-color: gray; /* Changes the background color to gray when selected */
                 }
             `}</style>
         </div>
