@@ -28,7 +28,7 @@ const Safety = () => {
             >
               Love Dogs and Feel Safe
             </h1>
-            <p className="text-[#E4E2ED] text-2xl">
+            <p className="text-[#E4E2ED] text-2xl text-center">
               We want you to move safely and be connected to other dog lovers
               and places that matter most to you. Hence, we are devoted to
               safety standards so that you and your furry companion can freely
