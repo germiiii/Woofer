@@ -89,9 +89,6 @@ const userEdit = async (data, file) => {
     if (address.length > 40) {
       throw new Error("Address debe ser menor a 40 caracteres");
     }
-    if (await !validateAlphanumeric(address)) {
-      throw new Error("Address debe ser alfanumerico");
-    }
     await User.update(
       { address: address },
       {
