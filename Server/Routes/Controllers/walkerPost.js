@@ -49,6 +49,9 @@ const walkerPost = async (
           "dog_capacity",
           "dog_size",
           "walk_duration",
+          "score",
+          "reviews_count",
+          "sale_details",
           "is_available",
         ],
         include: [

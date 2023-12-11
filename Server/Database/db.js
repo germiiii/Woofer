@@ -53,7 +53,7 @@ sequelize.models = Object.fromEntries(capsEntries);
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
 
-const { User, Owner, Dog, Walker, Walk, WalkType, Review } = sequelize.models;
+const { User, Owner, Dog, Walker, Walk, WalkType, Review, Notification } = sequelize.models;
 
 //relacion de herencia de user a owner y walker
 User.hasOne(Owner);
@@ -93,11 +93,9 @@ Walk.belongsToMany(WalkType, { through: "walkTypeWalk" });
 Walk.hasMany(Review);
 Review.belongsTo(Walk);
 
-// Owner.hasMany(Review);
-// Review.belongsTo(Owner);
-
-// Walker.hasMany(Review);
-// Review.belongsTo(Walker);
+//relaciones entre user y notificacion
+User.hasMany(Notification);
+Notification.belongsTo(User);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

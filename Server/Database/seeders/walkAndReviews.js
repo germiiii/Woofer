@@ -123,7 +123,7 @@ const walkAndReviewsData = [
 //   username: "sofiarodriguez",
 //   username: "martinfernandez",
 
-const seedWalkAndReviews = async (User, Walk, Review) => {
+const seedWalkAndReviews = async (User, Walk, Review, Notification) => {
   try {
     for (const walk of walkAndReviewsData) {
       const { walkerUserName, ownerUserName, walkTypes, ...walkAttributes } =
@@ -153,9 +153,27 @@ const seedWalkAndReviews = async (User, Walk, Review) => {
       const dogCapacity = walkerInstance.dog_capacity || 0;
       const dogsCount = walkAttributes.dogNumber || 0;
 
-      await walkerInstance.update({
-        dog_capacity_actual: dogCapacity - dogsCount,
+      //notificaciones
+      //al owner
+      let mensaje = `Recibimos tu pago mediante ${walkAttributes.paymentMethod} de $ ${walkAttributes.totalPrice} por tu paseo!`;
+      let notification = await Notification.create({
+        message: mensaje,
+        type: "payment",
       });
+      ownerUser.addNotification(notification);
+      ownerUser.hasNotifications = true;
+      await ownerUser.save();
+
+      //al walker
+      mensaje = `Tenes un nuevo paseo para realizar del usuario ${walkerUser.name} ${walkerUser.lastName}!`;
+      notification = await Notification.create({
+        message: mensaje,
+        type: "walk",
+      });
+      walkerUser.addNotification(notification);
+      walkerUser.hasNotifications = true;
+      walkerUser.dog_capacity_actual = dogCapacity - dogsCount;
+      await walkerUser.save();
 
       if (walkAttributes.review) {
         const { type, score, description, date } = walkAttributes.review;

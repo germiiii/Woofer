@@ -1,9 +1,9 @@
-const { walkerPost } = require("../Controllers/walkerPost");
+const { walkerPut } = require("../Controllers");
 
-const walkerHandlerPost = async (req, res) => {
+const walkerHandlerPut = async (req, res) => {
   try {
+    const { id } = req.params;
     const {
-      id,
       dog_capacity,
       dog_size,
       walk_duration,
@@ -11,21 +11,21 @@ const walkerHandlerPost = async (req, res) => {
       is_available,
       walkTypes,
     } = req.body;
-    const newWalker = await walkerPost(
+    const response = await walkerPut(
       id,
       dog_capacity,
       dog_size,
       walk_duration,
       sale_details,
       is_available,
-      walkTypes,
+      walkTypes
     );
-    res.json({ newWalker });
+    res.json(response);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
 };
 
 module.exports = {
-  walkerHandlerPost,
+  walkerHandlerPut,
 };
