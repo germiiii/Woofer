@@ -13,7 +13,6 @@ const { ownerHandlerPost } = require("./ownerHandlerPost");
 const { dogHandlerGet } = require("./dogHandlerGet");
 const { walkerHandlerPost } = require("./walkerHandlerPost");
 const { walkerHandlerGetAvailable } = require("./walkerHandlerGetAvailable");
-const { walkerHandlerSetAvailable } = require("./walkerHandlerSetAvailable");
 const { walkerHandlerGetById } = require("./walkerHandlerGetById");
 const { walkerHandlerGetAll } = require("./walkerHandlerGetAll");
 const { walkHandlerPost } = require("./walkHandlerPost");
@@ -24,6 +23,7 @@ const { paymentHandlerPost } = require("./paymentHandlerPost");
 const { userHandlerEdit } = require("./userHandlerEdit");
 const { reviewHandlerPost } = require("./reviewHandlerPost");
 const { reviewHandlerGet } = require("./reviewHandlerGet");
+const { walkerHandlerPut } = require("./walkerHandlerPut");
 
 module.exports = {
   userHandlerLogin,
@@ -40,7 +40,7 @@ module.exports = {
   walkerHandlerActivate,
   walkerHandlerDeActivate,
   walkerHandlerGetAvailable,
-  walkerHandlerSetAvailable,
+  walkerHandlerPut,
   walkerHandlerGetById,
   walkerHandlerGetAll,
   walkHandlerPost,
