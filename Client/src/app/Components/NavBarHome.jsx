@@ -11,13 +11,23 @@ const NavbarHome = () => {
   const handleLogout = () => {
     localStorage.removeItem("paypal_accessToken");
     localStorage.removeItem("__paypal_storage__");
+    localStorage.removeItem("provinceInput");
+    localStorage.removeItem("userProvince");
+    localStorage.removeItem("userAddress");
+    localStorage.removeItem("addressInput");
+    localStorage.removeItem("selectedType");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("selectedWalker");
+    localStorage.removeItem("totalAmount");
+    localStorage.removeItem("isOwner");
+    localStorage.removeItem("isWalker");
     localStorage.removeItem("token");
   };
 
   return (
-    <div className="bg-[#F39200] py-6 flex justify-center px-2">
-      <div className="flex mr-10 items-center">
-        <Link href={"/home"}>
+    <div className="bg-[#F39200] py-6 flex items-center justify-center px-2">
+      <div className="flex  items-center justify-center">
+        <Link href={"/ownerHome"}>
           <button
             className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
               currentPath === "/home" ? "text-[#F39200]" : "text-white"

@@ -9,6 +9,7 @@ cloudinary.config({
   secure: true,
 });
 const { uploadImage } = require("../../Routes/utils/uploadImage");
+const { validateSpecialAndNumber } = require("../../Routes/utils/validations");
 
 const ownerPost = async (data, file) => {
   const { userID, name, size, age, breed } = data;
@@ -21,6 +22,36 @@ const ownerPost = async (data, file) => {
   }
   if (!name || !size || !age || !breed) {
     throw new Error("Dog info is required");
+  } else {
+    // name validations
+    if (typeof name !== "string") {
+      throw new Error("Name debe ser string");
+    }
+    if (name.length > 40) {
+      throw new Error("Name debe ser menor a 40 caracteres");
+    }
+    if (!validateSpecialAndNumber(name)) {
+      throw new Error("Name no puede contener ni números ni símbolos");
+    }
+
+    // age validations
+    if (typeof age !== "number") {
+      throw new Error("Age debe ser string");
+    }
+    if (age < 0 || age > 25) {
+      throw new Error("Age debe ser entre 0 y 25");
+    }
+
+    // breed validations
+    if (typeof breed !== "string") {
+      throw new Error("Breed debe ser string");
+    }
+    if (breed.length > 40) {
+      throw new Error("Breed debe ser menor a 40 caracteres");
+    }
+    if (!validateSpecialAndNumber(breed)) {
+      throw new Error("Breed no puede contener ni números ni símbolos");
+    }
   }
   const user = await User.findOne({ where: { id: userID, is_active: true } });
   if (!user) {

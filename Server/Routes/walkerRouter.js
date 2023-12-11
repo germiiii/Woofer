@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const {
   walkerHandlerPost,
-  walkerHandlerSetAvailable,
+  walkerHandlerPut,
   walkerHandlerGetById,
   walkerHandlerGetAll,
   walkerHandlerGetAvailable,   
@@ -15,6 +15,6 @@ walkerRouter.get("/", walkerHandlerGetAll);
 walkerRouter.get("/available", walkerHandlerGetAvailable);
 walkerRouter.get("/:id", walkerHandlerGetById);
 walkerRouter.post("/", walkerHandlerPost);
-walkerRouter.put("/:id", walkerHandlerSetAvailable);
+walkerRouter.put("/:id", walkerHandlerPut);
 
 module.exports = walkerRouter;

@@ -13,6 +13,7 @@ const walkGetByWalker = async (walkerId, date) => {
       include: {
         model: Walk,
         attributes: [
+          "id",
           "date",
           "startTime",
           "duration",

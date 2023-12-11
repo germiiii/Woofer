@@ -1,17 +1,15 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import checkoutImage from "../../../public/checkout.png";
-import Checkout from '../checkout/page'
+import Checkout from "../checkout/page";
 import axios from "axios";
 
-
 const WalkerCard = (props) => {
-
   const api = process.env.NEXT_PUBLIC_APIURL;
-
-  const router = useRouter()
+  const isOwner = localStorage.getItem("isOwner");
+  const router = useRouter();
 
   const cardStyle = {
     border: "1px solid #ccc",
@@ -65,52 +63,57 @@ const WalkerCard = (props) => {
   };
 
   const handleClick = async () => {
-    console.log("Walker ID:", props.id);
+    if (isOwner === "false") {
+      router.push("/add-dogs");
+      window.alert("You must add a dog first");
+      return;
+    }
     try {
       const response = await axios.get(`${api}/walker/${props.id}`);
       if (response.status === 200) {
         const walkerData = response.data;
-        console.log('Walker details:', response.data);
+        console.log("Walker details:", response.data);
 
         // Store only necessary walker details in localStorage
         const selectedWalker = {
           walker: walkerData, // Assuming walkerData has the necessary structure
         };
-        localStorage.setItem('selectedWalker', JSON.stringify(selectedWalker));
-        
-        router.push('/checkout');
+        localStorage.setItem("selectedWalker", JSON.stringify(selectedWalker));
+
+        router.push("/checkout");
       } else {
-        console.error('Failed to fetch walker data:', response.data);
+        console.error("Failed to fetch walker data:", response.data);
       }
     } catch (error) {
-      console.error('Error fetching walker data:', error);
+      console.error("Error fetching walker data:", error);
     }
   };
-  
-
 
   return (
     <div>
       <div style={cardStyle}>
-      <Image style={imageStyle} src={props.image} width={100} height={100} alt="profile" />
-      <div style={textStyle}>
-        <h2 style={nameStyle}>{props.name + " " + props.lastName}</h2>
-      </div>
-      <div style={checkoutStyle} >
         <Image
-          alt="Checkout"
-          src={checkoutImage}
-          width={40}
-          height={40}
-          onClick={() => handleClick(props.id)}
-          style={{ cursor: "pointer" }}
+          style={imageStyle}
+          src={props.image}
+          width={100}
+          height={100}
+          alt="profile"
         />
+        <div style={textStyle}>
+          <h2 style={nameStyle}>{props.name + " " + props.lastName}</h2>
+        </div>
+        <div style={checkoutStyle}>
+          <Image
+            alt="Checkout"
+            src={checkoutImage}
+            width={40}
+            height={40}
+            onClick={() => handleClick(props.id)}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
       </div>
     </div>
-
-    </div>
-    
-   
   );
 };
 
