@@ -1,3 +1,4 @@
+"use client";
 import axios from "axios";
 import React from "react";
 import { useState, useRef, useEffect } from "react";
@@ -5,6 +6,7 @@ import jwt from "jsonwebtoken";
 import Image from "next/image";
 
 export default function OwnerForm() {
+  const api = process.env.NEXT_PUBLIC_APIURL;
   const fileInputRef = useRef(null);
   const [dogData, setDogData] = useState({
     name: "",
@@ -99,7 +101,7 @@ export default function OwnerForm() {
         // Send the data to the server using Axios
         console.log("current dog", currentDog);
 
-        const response = await axios.post("http://localhost:3001/owner", {
+        const response = await axios.post(`${api}/owner`, {
           userID: user,
           name: currentDog.name,
           size: currentDog.size,
@@ -107,6 +109,7 @@ export default function OwnerForm() {
           breed: currentDog.breed,
           image: currentDog.image,
         });
+        localStorage.setItem("isOwner", response.data.UserWithNewOwner.isOwner);
         console.log("Server response:", response.data);
 
         // Additional logic for handling the form submission, if needed
