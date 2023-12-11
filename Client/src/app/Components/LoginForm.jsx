@@ -84,7 +84,8 @@ const LoginForm = () => {
       });
 
       const { token } = response.data;
-      localStorage.setItem("token", token);
+      console.log("At Login", response.data)
+      localStorage.setItem("Login token", token);
 
       if (token) {
         if (email === "admin@woofer.com" && password === "123") {
@@ -105,7 +106,7 @@ const LoginForm = () => {
   if (isLoggedIn) {
     return (
       <div className="w-full h-full bg-[#29235c] flex flex-col items-center justify-center ">
-        <p className="text-[#F39200]">redirecting...</p>
+        <p className="text-[#F39200]">Redirecting...</p>
       </div>
     );
   }

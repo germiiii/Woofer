@@ -6,9 +6,11 @@ import Image from "next/image";
 import Nav from "../Components/NavBarHome";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import "tailwindcss/tailwind.css";
+import local from "next/font/local";
 
 const CheckoutComponent = () => {
   const [walkerDetails, setWalkerDetails] = useState(null);
+  const [walkerId, setWalkerId] = useState('')
   const [selectedWalkType, setSelectedWalkType] = useState(null);
   const [extras, setExtras] = useState([]);
   const [totalAmount, setTotalAmount] = useState("0.00");
@@ -27,16 +29,20 @@ const CheckoutComponent = () => {
 
   const api = process.env.NEXT_PUBLIC_APIURL;
 
+  //!Fetch Walker
+
   useEffect(() => {
     const selectedWalker = localStorage.getItem("selectedWalker");
-    //console.log('Selected Walker:', selectedWalker)
     if (selectedWalker) {
       const parsedWalker = JSON.parse(selectedWalker);
+      const id = parsedWalker?.walker?.walkerData?.id;
+      console.log('Walker ID', id);
+      setWalkerId(id);
       setWalkerDetails(parsedWalker);
     }
   }, []);
 
-  const walkerData = walkerDetails?.walker?.walkerData || {};
+  const walkerData = walkerDetails?.walker?.walkerData || {};  
 
   //!Reviews
 
@@ -96,14 +102,20 @@ const CheckoutComponent = () => {
 
   //!WalkType Selection
   const handleWalkTypeSelection = (walkTypeTitle) => {
-  
     const selectedType = walkerData.walker.walkTypes.find(
       (walkType) => walkType.title === walkTypeTitle
     );
-    setSelectedWalkType(selectedType);
-    console.log("Selected Walk:", selectedType);
+  
+    if (selectedType) {
+      setSelectedWalkType(selectedType); // Update the selected type
+      console.log("Selected Walk ID:", selectedType.id);
+    } else {
+      // Handle the case where the selected walk type is not found
+      console.log("Walk type not found");
+    }
   };
-
+  
+  
   //!Quantity
   const handleQuantityChange = (e, item) => {
     let value = parseInt(e.target.value);
@@ -275,15 +287,20 @@ const CheckoutComponent = () => {
     try {
       await actions.order.capture();
       alert("Payment successful");
+    
+    const ownerId = localStorage.getItem()
+
+    const formattedTotalAmount = localStorage.getItem("totalAmount");
+    const totalAmountInCents = Math.round(parseFloat(formattedTotalAmount));
 
       const paymentDetails = {
-        ownerId: null,
+        ownerId: "6c64e2a1-29b0-434f-9db7-bab84ae98fc3",
         walkerId: walkerId,
-        duration: selectedWalkType?.duration || "",
-        totalPrice: parseInt(totalAmount),
+        duration: selectedWalkType?.duration || 0, 
+        totalPrice: totalAmountInCents,
         paymentMethod: "paypal",
         dogs: 1,
-        walkTypes: selectedWalkType?.id || "",
+        walkTypes: [9],
       };
 
       const response = await axios.post(`${api}/walk`, paymentDetails, {
