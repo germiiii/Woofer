@@ -72,7 +72,6 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: true,
       },
-
       role: {
         type: DataTypes.ENUM("admin", "user"),
         allowNull: true,
@@ -85,6 +84,15 @@ module.exports = (sequelize) => {
       resetPasswordExpires: {
         type: DataTypes.DATE,
         allowNull: true
+      },
+      selectedType: {
+        type: DataTypes.ENUM("admin", "owner", "walker"),
+        allowNull: false        
+      },
+      hasNotifications: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
       },
     },
     { timestamps: false }
