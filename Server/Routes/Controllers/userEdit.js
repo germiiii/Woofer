@@ -8,11 +8,15 @@ cloudinary.config({
   api_secret: CLOUDINARY_API_SECRET,
   secure: true,
 });
-const { validateSpecialAndNumber } = require("../../Routes/utils/validations");
+const {
+  validateSpecialAndNumber,
+  validateAlphanumeric,
+  validateAlphanumericNoSpaces,
+} = require("../../Routes/utils/validations");
 const { uploadImage } = require("../../Routes/utils/uploadImage");
 
 const userEdit = async (data, file) => {
-  const { userID, name, lastname, username, address, city, province } = data;
+  const { userID, name, lastname, username, address, province } = data;
 
   // validations
   if (!userID) {
@@ -25,104 +29,97 @@ const userEdit = async (data, file) => {
 
   //changes
   if (username) {
-    if (typeof username === "string" && username.length < 20) {
-      User.update(
-        { username: username },
-        {
-          where: { id: userID, is_active: true },
-        }
-      );
-    } else {
-      throw new Error("Error en el username");
+    if (typeof username !== "string") {
+      throw new Error("Username debe ser string");
     }
+    if (username.length > 40) {
+      throw new Error("Username debe ser menor a 40 caracteres");
+    }
+    if (await !validateAlphanumericNoSpaces(username)) {
+      throw new Error("Username debe ser alfanumerico sin espacios");
+    }
+    User.update(
+      { username: username },
+      {
+        where: { id: userID, is_active: true },
+      }
+    );
   }
 
   if (name) {
-    if (
-      typeof name === "string" &&
-      name.length < 20 &&
-      validateSpecialAndNumber(name)
-    ) {
-      await User.update(
-        { name: name },
-        {
-          where: { id: userID, is_active: true },
-        }
-      );
-    } else {
-      throw new Error("Error en el nombre");
+    if (typeof name !== "string") {
+      throw new Error("Name debe ser un string");
     }
+    if (name.length > 40) {
+      throw new Error("Name debe ser menor a 40 caracteres");
+    }
+    if (await !validateSpecialAndNumber(name)) {
+      throw new Error("Name no puede contener ni números ni símbolos");
+    }
+    await User.update(
+      { name: name },
+      {
+        where: { id: userID, is_active: true },
+      }
+    );
   }
 
   if (lastname) {
-    if (
-      typeof lastname === "string" &&
-      lastname.length < 35 &&
-      validateSpecialAndNumber(lastname)
-    ) {
-      await User.update(
-        { lastName: lastname },
-        {
-          where: { id: userID, is_active: true },
-        }
-      );
-    } else {
-      throw new Error("Error en el apellido");
+    if (typeof lastname !== "string") {
+      throw new Error("Lastname debe ser un string");
     }
+    if (lastname.length > 40) {
+      throw new Error("Lastname debe ser menor a 40 caracteres");
+    }
+    if (await !validateSpecialAndNumber(lastname)) {
+      throw new Error("Lastname no puede contener ni números ni símbolos");
+    }
+    await User.update(
+      { lastName: lastname },
+      {
+        where: { id: userID, is_active: true },
+      }
+    );
   }
 
   if (address) {
-    if (typeof address === "string" && address.length < 25) {
-      await User.update(
-        { address: address },
-        {
-          where: { id: userID, is_active: true },
-        }
-      );
-    } else {
-      throw new Error("Error en la dirección");
+    if (typeof address !== "string") {
+      throw new Error("Address debe ser un string");
     }
-  }
-
-  if (city) {
-    if (
-      typeof city === "string" &&
-      city.length < 40 &&
-      validateSpecialAndNumber(city)
-    ) {
-      await User.update(
-        { city: city },
-        {
-          where: { id: userID, is_active: true },
-        }
-      );
-    } else {
-      throw new Error("Error en la ciudad");
+    if (address.length > 40) {
+      throw new Error("Address debe ser menor a 40 caracteres");
     }
+    if (await !validateAlphanumeric(address)) {
+      throw new Error("Address debe ser alfanumerico");
+    }
+    await User.update(
+      { address: address },
+      {
+        where: { id: userID, is_active: true },
+      }
+    );
   }
 
   if (province) {
-    if (
-      typeof province === "string" &&
-      province.length < 30 &&
-      validateSpecialAndNumber(province)
-    ) {
-      await User.update(
-        { province: province },
-        {
-          where: { id: userID, is_active: true },
-        }
-      );
-    } else {
-      throw new Error("Error en la provincia");
-    }
+    await User.update(
+      { province: province },
+      {
+        where: { id: userID, is_active: true },
+      }
+    );
   }
 
   if (file) {
     await uploadImage(file.path);
-    await User.update({ image: file.path });
+    await User.update(
+      { image: file.path },
+      {
+        where: { id: userID, is_active: true },
+      }
+    );
   }
 
+  // data to return
   const userData = await User.findOne({
     attributes: {
       exclude: [
