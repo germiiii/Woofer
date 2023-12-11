@@ -3,7 +3,7 @@ const walkerData = [
     username: "janesmith",
     dog_capacity: 1,
     walk_duration: ["60"],
-    dog_size: ["medium", "large"],
+    dog_size: ["medium"],
     is_available: true,
     schedule_availability: "",
     is_active: true,
@@ -14,7 +14,7 @@ const walkerData = [
     username: "martinmanrique",
     dog_capacity: 5,
     walk_duration: ["30"],
-    dog_size: ["small", "medium", "large"],
+    dog_size: ["small", "medium"],
     is_available: false,
     schedule_availability: "",
     is_active: true,
@@ -31,19 +31,19 @@ const walkerData = [
     schedule_availability: "",
     is_active: true,
     sale_details:
-    "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!"
+      "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
 
   {
     username: "carlosgonzalez",
     dog_capacity: 4,
     walk_duration: ["60"],
-    dog_size: ["large"],
+    dog_size: ["medium"],
     is_available: true,
     schedule_availability: "",
     is_active: true,
     sale_details:
-    "Do you need help taking care of your dog? I’m here to help! As a dog walker, I can assure you that your dog will receive the exercise and attention they need. Call me today to schedule a walk!"
+      "Do you need help taking care of your dog? I’m here to help! As a dog walker, I can assure you that your dog will receive the exercise and attention they need. Call me today to schedule a walk!",
   },
 
   {
@@ -55,7 +55,7 @@ const walkerData = [
     schedule_availability: "",
     is_active: true,
     sale_details:
-    "Are you tired of worrying about your dog’s exercise? Don’t worry anymore! As a dog walker, I can help keep your dog active and healthy. Contact me today to schedule a walk!"
+      "Are you tired of worrying about your dog’s exercise? Don’t worry anymore! As a dog walker, I can help keep your dog active and healthy. Contact me today to schedule a walk!",
   },
 
   {
@@ -67,30 +67,30 @@ const walkerData = [
     schedule_availability: "",
     is_active: false,
     sale_details:
-    "Are you looking for a dog walker who can take care of your dog? Look no further! As a dog walker, I can help keep your dog healthy and happy. Contact me today to schedule a walk!"
+      "Are you looking for a dog walker who can take care of your dog? Look no further! As a dog walker, I can help keep your dog healthy and happy. Contact me today to schedule a walk!",
   },
 
   {
     username: "martinfernandez",
     dog_capacity: 1,
     walk_duration: ["15"],
-    dog_size: ["large"],
+    dog_size: ["medium"],
     is_available: true,
     schedule_availability: "",
     is_active: false,
     sale_details:
-    "Does your dog need more exercise? Look no further! As a dog walker, I can help keep your dog active and healthy. Call me today to schedule a walk!"
+      "Does your dog need more exercise? Look no further! As a dog walker, I can help keep your dog active and healthy. Call me today to schedule a walk!",
   },
   {
     username: "emmajohnson",
     dog_capacity: 3,
     walk_duration: ["60"],
-    dog_size: ["large"],
+    dog_size: ["small", "medium"],
     is_available: true,
     schedule_availability: "",
     is_active: true,
     sale_details:
-    "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Contact me today to schedule a walk!"
+      "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Contact me today to schedule a walk!",
   },
 ];
 
@@ -102,8 +102,9 @@ const seedWalkers = async (User, WalkType) => {
 
       if (user) {
         const createdWalker = await user.createWalker(walkerAttributes);
-        await user.update({ isWalker: true });
-
+        user.isWalker = true;
+        user.selectedType = "walker";
+        await user.save(); // Save the updated user
         for (const duration of walkerAttributes.walk_duration) {
           const walkType = await WalkType.findAll({
             where: { walk_duration: duration },

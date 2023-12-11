@@ -9,11 +9,13 @@ const ownerGetById = async (id) => {
         "verificationToken",
         "resetPasswordToken",
         "resetPasswordExpires",
-      ]},
+      ],
+    },
     include: [
       {
         model: Owner,
         attributes: ["dog_count", "score", "reviews_count"],
+        where: { userId: id },
         include: [
           {
             model: Dog,

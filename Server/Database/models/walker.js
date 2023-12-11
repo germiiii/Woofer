@@ -25,7 +25,7 @@ module.exports = (sequelize) => {
         allowNull: true,
       },
       dog_size: {
-        type: DataTypes.ARRAY(DataTypes.ENUM("small", "medium", "large")),
+        type: DataTypes.ARRAY(DataTypes.ENUM("small", "medium", "high")),
         allowNull: true,
       },
       sale_details: {
