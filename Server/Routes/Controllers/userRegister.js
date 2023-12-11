@@ -1,6 +1,6 @@
 const { User } = require("../../Database/db");
 const bcrypt = require("bcrypt");
-const crypto = require('crypto');
+const crypto = require("crypto");
 const cloudinary = require("cloudinary").v2;
 const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
   process.env;
@@ -11,7 +11,7 @@ cloudinary.config({
   secure: true,
 });
 const { uploadImage } = require("../../Routes/utils/uploadImage");
-const transporter = require('../../nodeMailer/transporter');
+const transporter = require("../../nodeMailer/transporter");
 
 const {
   validateSpecialAndNumber,
@@ -21,7 +21,7 @@ const {
 } = require("../../Routes/utils/validations");
 
 const generateVerificationToken = () => {
-  return crypto.randomBytes(20).toString('hex');
+  return crypto.randomBytes(20).toString("hex");
 };
 
 const userRegister = async (req, res) => {
@@ -34,11 +34,19 @@ const userRegister = async (req, res) => {
     address,
     city,
     province,
-    selectedType
+    selectedType,
   } = req.body;
 
   //validations
-  if (!name || !lastName || !email || !password || !username || !address || !city || !province) {
+  if (
+    !name ||
+    !lastName ||
+    !email ||
+    !password ||
+    !username ||
+    !address ||
+    !province
+  ) {
     throw new Error("All fields are required");
   }
 
@@ -112,21 +120,21 @@ const userRegister = async (req, res) => {
       city,
       province,
       verificationToken,
-      selectedType
-    })
+      selectedType,
+    });
 
     const mailOptions = {
-      from: 'woofer@gmail.com',
+      from: "woofer@gmail.com",
       to: email,
-      subject: 'Confirmación de Registro',
+      subject: "Confirmación de Registro",
       text: `¡Gracias por registrarte en Woofer! Haz clic en el siguiente enlace para activar tu cuenta: https://woofer-taupe.vercel.app/activate/${verificationToken}`,
     };
-    
+
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.error('Error al enviar el correo de confirmación:', error);
+        console.error("Error al enviar el correo de confirmación:", error);
       } else {
-        console.log('Correo de confirmación enviado:', info.response);
+        console.log("Correo de confirmación enviado:", info.response);
       }
     });
     return newUser;
@@ -143,22 +151,22 @@ const userRegister = async (req, res) => {
       city,
       province,
       verificationToken,
-      selectedType
-    })
+      selectedType,
+    });
 
     const mailOptions = {
-      from: 'woofer@gmail.com',
+      from: "woofer@gmail.com",
       to: email,
-      subject: 'Confirmación de Registro',
+      subject: "Confirmación de Registro",
       text: `¡Gracias por registrarte en Woofer! Haz clic en el siguiente enlace para activar tu cuenta: https://woofer-taupe.vercel.app/activate/${verificationToken}`,
     };
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.error('Error al enviar el correo de confirmación:', error);
+        console.error("Error al enviar el correo de confirmación:", error);
       } else {
-        console.log('Correo de confirmación enviado:', info.response);
+        console.log("Correo de confirmación enviado:", info.response);
       }
-    });;
+    });
     return newUser;
   }
 };

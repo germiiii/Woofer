@@ -61,7 +61,7 @@ const LoginForm = () => {
 
       if (response.status === 201) {
         localStorage.setItem("token", googleToken);
-        router.push("/home");
+        router.push("/ownerHome");
       } else {
         console.error("Authentication failed");
       }
