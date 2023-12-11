@@ -12,19 +12,18 @@ import "../stylesLanding.css";
 
 const OwnerHome = () => {
   const api = process.env.NEXT_PUBLIC_APIURL;
-  const userId = localStorage.getItem("userId");
-  const [addressInput, setAddressInput] = useState(
-    localStorage.getItem("userAddress")
-  );
-  const [provinceInput, setProvinceInput] = useState(
-    localStorage.getItem("userProvince")
-  );
-  const [userProvince, setUserProvince] = useState(
-    localStorage.getItem("userProvince")
-  );
-  const [userAddress, setUserAddress] = useState(
-    localStorage.getItem("userAddress")
-  );
+
+  const [addressInput, setAddressInput] = useState("");
+  const [provinceInput, setProvinceInput] = useState("");
+  const [userProvince, setUserProvince] = useState("");
+  const [userAddress, setUserAddress] = useState("");
+
+  useEffect(() => {
+    setAddressInput(localStorage.getItem("userAddress") || "");
+    setProvinceInput(localStorage.getItem("userProvince") || "");
+    setUserProvince(localStorage.getItem("userProvince") || "");
+    setUserAddress(localStorage.getItem("userAddress") || "");
+  }, []);
 
   const handleAddressInputChange = (event) => {
     setAddressInput(event.target.value);
@@ -41,7 +40,7 @@ const OwnerHome = () => {
     localStorage.setItem("userAddress", addressInput);
 
     const response = await axios.put(`${api}/editUser`, {
-      userID: userId,
+      userID: localStorage.getItem("userId"),
       province: provinceInput,
       address: addressInput,
     });
