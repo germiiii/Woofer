@@ -25,9 +25,6 @@ const generateVerificationToken = () => {
 };
 
 const userRegister = async (req, res) => {
-  console.log("Entrando en userRegister");
-  console.log(User);
-
   const {
     name,
     lastName,
@@ -36,7 +33,8 @@ const userRegister = async (req, res) => {
     username,
     address,
     city,
-    province
+    province,
+    selectedType
   } = req.body;
 
   //validations
@@ -113,7 +111,8 @@ const userRegister = async (req, res) => {
       address,
       city,
       province,
-      verificationToken
+      verificationToken,
+      selectedType
     })
 
     const mailOptions = {
@@ -143,7 +142,8 @@ const userRegister = async (req, res) => {
       address,
       city,
       province,
-      verificationToken
+      verificationToken,
+      selectedType
     })
 
     const mailOptions = {

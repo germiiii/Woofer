@@ -59,8 +59,6 @@ const LoginForm = () => {
         googleToken,
       });
 
-      console.log(googleToken); // Verifica si obtienes el token de Google
-
       if (response.status === 201) {
         localStorage.setItem("token", googleToken);
         router.push("/home");
@@ -87,6 +85,17 @@ const LoginForm = () => {
       localStorage.setItem("token", token);
 
       if (token) {
+        const decodedToken = jwt.decode(token);
+
+        const userResponse = await axios.get(
+          `${api}/users/${decodedToken.userId}`
+        );
+        const userData = userResponse.data;
+
+        localStorage.setItem("userId", userData.id);
+        localStorage.setItem("userProvince", userData.province);
+        localStorage.setItem("userAddress", userData.address);
+
         if (email === "admin@woofer.com" && password === "123") {
           router.push("/admin");
         } else {
@@ -118,7 +127,7 @@ const LoginForm = () => {
         className="flex flex-col items-center justify-center w-full"
       >
         <h1
-          className="text-6xl text-[#F39200] font-extrabold mb-12"
+          className="text-7xl text-[#F39200] font-extrabold mb-12"
           style={{ fontFamily: "LikeEat" }}
         >
           Sign in

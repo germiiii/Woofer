@@ -5,6 +5,7 @@ const {
   Dog,
   Walk,
   WalkType,
+  Notification,
 } = require("../../Database/db");
 
 const walkPost = async (
@@ -18,11 +19,18 @@ const walkPost = async (
 ) => {
   const userOwner = await User.findByPk(ownerId);
   const userWalker = await User.findByPk(walkerId);
+  if (!userOwner) {
+    throw new Error(`Owner${ownerId} not found`);
+  }
+  if (!userWalker) {
+    throw new Error(`Walker ${walkerId} not found`);
+  }
+  
   const owner = await userOwner?.getOwner();
   const walker = await userWalker?.getWalker();
 
   if (!owner?.is_active || !walker?.is_active) {
-    throw new Error("Walker or Owner not found");
+    throw new Error("Walker or Owner not active");
   }
 
   const dogsCount = Array.isArray(dogs)
@@ -94,9 +102,26 @@ const walkPost = async (
       },
     ],
   });
-
-  // const mensaje = `Recibimos un pago mediante ${paymentMethod} de $ ${totalPrice} por tu paseo!`;
+  //notificaciones
+  //al owner
+  let mensaje = `Recibimos tu pago mediante ${paymentMethod} de $ ${totalPrice} por tu paseo!`;
+  let notification = await Notification.create({
+    message: mensaje,
+    type: "payment",
+  });
+  userOwner.addNotification(notification);
+  userOwner.hasNotifications = true;
+  await userOwner.save();
   // enviarNotificacion(walkData?.owner?.email, mensaje);
+  //al walker
+  mensaje = `Tenes un nuevo paseo para realizar del usuario ${walkData?.owner.user.name} ${walkData?.owner.user.lastName}!`;
+  notification = await Notification.create({
+    message: mensaje,
+    type: "walk",
+  });
+  userWalker.addNotification(notification);
+  userWalker.hasNotifications = true;
+  await userWalker.save();
 
   return walkData;
 };
