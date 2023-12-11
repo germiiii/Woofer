@@ -25,12 +25,12 @@ const walkPost = async (
   if (!userWalker) {
     throw new Error(`Walker ${walkerId} not found`);
   }
-
+  
   const owner = await userOwner?.getOwner();
   const walker = await userWalker?.getWalker();
 
   if (!owner?.is_active || !walker?.is_active) {
-    throw new Error("Walker or Owner not actives");
+    throw new Error("Walker or Owner not active");
   }
 
   const dogsCount = Array.isArray(dogs)
