@@ -1,4 +1,4 @@
-const { User, Walker, Owner, Walk, Review } = require("../../Database/db");
+const { User, Walker, Owner, Walk, Review, Notification } = require("../../Database/db");
 
 const reviewPost = async (idWalk, type, score, description) => {
   const walk = await Walk.findOne({
@@ -64,14 +64,22 @@ const reviewPost = async (idWalk, type, score, description) => {
   });
 
   // enviar notificacion
-  // let mensaje = "";
-  // if (type === "owner") {
-  //   mensaje = `Recibiste una calificacion de tu walker! ${reviewData.walker.name} ${reviewData.walker.lastName} te califico con ${score} y dejo este comentario: ${description}`;
-  //   enviarNotificacion(reviewData.walker.email, mensaje);
-  // } else if (type === "walker") {
-  //   mensaje = `Recibiste una calificacion de tu paseo! ${reviewData.owner.name} ${reviewData.owner.lastName} te califico con ${score} y dejo este comentario: ${description}`;
-  //   enviarNotificacion(reviewData.owner.email, mensaje);
-  // }
+  const user = await User.findByPk(instancedUser.userId);
+  let mensaje = "";
+  if (type === "owner") {
+    mensaje = `Recibiste una calificacion de tu walker! ${reviewData.walk.walker.user.name} ${reviewData.walk.walker.user.lastName} te califico con ${score} y dejo este comentario: ${description}`;
+    // enviarNotificacion(reviewData.walker.email, mensaje);
+  } else if (type === "walker") {
+    mensaje = `Recibiste una calificacion de tu paseo! ${reviewData.walk.owner.user.name} ${reviewData.walk.owner.user.lastName} te califico con ${score} y dejo este comentario: ${description}`;
+    // enviarNotificacion(reviewData.owner.email, mensaje);
+  }
+  const notification = await Notification.create({
+    message: mensaje,
+    type: "review",
+  });
+  user.addNotification(notification);
+  user.hasNotifications = true;
+  await user.save();
 
   return reviewData;
 };
