@@ -94,4 +94,4 @@ const ownerHome = () => {
   );
 };
 
-export default Home;
+export default ownerHome;
