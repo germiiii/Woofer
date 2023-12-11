@@ -47,30 +47,28 @@ const LoginForm = () => {
 
   const loginGoogle = async (e) => {
     e.preventDefault();
-  
+
     try {
       const result = await signInWithPopup(auth, googleAuth);
       const { user } = result;
       const email = user.email;
       const googleToken = await user.getIdToken();
-  
+
       const response = await axios.post(`${api}/googleLogin`, {
         email,
         googleToken,
       });
-  
-      console.log(googleToken); // Verifica si obtienes el token de Google
 
       if (response.status === 201) {
         localStorage.setItem("token", googleToken);
-        router.push("/home");
+        router.push("/ownerHome");
       } else {
         console.error("Authentication failed");
       }
     } catch (error) {
       console.error(error);
     }
-};
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,12 +85,30 @@ const LoginForm = () => {
       localStorage.setItem("token", token);
 
       if (token) {
-        if (email === "admin@admin.com" && password === "123") {
-          router.push("/admin");
-        } else {
-          router.push("/home");
-        }
         setIsLoggedIn(true);
+        const decodedToken = jwt.decode(token);
+        const userResponse = await axios.get(
+          `${api}/users/${decodedToken.userId}`
+        );
+        const userData = userResponse.data;
+
+        localStorage.setItem("userId", userData.id);
+        localStorage.setItem("userProvince", userData.province);
+        localStorage.setItem("userAddress", userData.address);
+        localStorage.setItem("selectedType", userData.selectedType);
+        localStorage.setItem("isOwner", userData.isOwner);
+
+        if (userData.role === "admin") {
+          router.push("/admin");
+        } else if (userData.selectedType === "owner") {
+          if (userData.isOwner === false) {
+            router.push("/add-dogs");
+          } else {
+            router.push("/ownerHome");
+          }
+        } else if (userData.selectedType === "walker") {
+          router.push("/ownerHome");
+        }
       } else {
         alert("Invalid credentials.");
       }
@@ -118,7 +134,7 @@ const LoginForm = () => {
         className="flex flex-col items-center justify-center w-full"
       >
         <h1
-          className="text-6xl text-[#F39200] font-extrabold mb-12"
+          className="text-7xl text-[#F39200] font-extrabold mb-12"
           style={{ fontFamily: "LikeEat" }}
         >
           Sign in

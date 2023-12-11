@@ -1,4 +1,12 @@
-const { User, Walker, Owner, Dog, Walk, WalkType } = require("../../Database/db");
+const {
+  User,
+  Walker,
+  Owner,
+  Dog,
+  Walk,
+  WalkType,
+  Notification,
+} = require("../../Database/db");
 
 const walkPost = async (
   ownerId,
@@ -10,23 +18,26 @@ const walkPost = async (
   paymentMethod
 ) => {
   const userOwner = await User.findByPk(ownerId);
-  const owner = await userOwner?.getOwner();
-
   const userWalker = await User.findByPk(walkerId);
+  if (!userOwner) {
+    throw new Error(`Owner${ownerId} not found`);
+  }
+  if (!userWalker) {
+    throw new Error(`Walker ${walkerId} not found`);
+  }
+  
+  const owner = await userOwner?.getOwner();
   const walker = await userWalker?.getWalker();
 
-  if (!owner || !walker || !owner.is_active || !walker.is_active) {
-    throw new Error("Walker or Owner not found");
+  if (!owner?.is_active || !walker?.is_active) {
+    throw new Error("Walker or Owner not active");
   }
 
-  let dogsCount = 0;
-  if (Array.isArray(dogs)) {
-    dogsCount = dogs.length;
-  } else if (typeof dogs === "number") {
-    dogsCount = dogs;
-  } else {
-    throw new Error("Dogs is neither an array nor a number");
-  }
+  const dogsCount = Array.isArray(dogs)
+    ? dogs.length
+    : typeof dogs === "number"
+    ? dogs
+    : 0;
 
   const newWalk = await Walk.create({
     date: new Date(),
@@ -37,42 +48,44 @@ const walkPost = async (
     paymentMethod,
   });
 
-  newWalk.addWalkTypes(walkTypes);
+  if (walkTypes) {
+    newWalk.addWalkTypes(walkTypes);
+  }
 
-  await owner.addWalk(newWalk, { through: Walk });
-  await walker.addWalk(newWalk, { through: Walk });
+  await owner?.addWalk(newWalk);
+  await walker?.addWalk(newWalk);
 
   if (Array.isArray(dogs)) {
-    const ownerDogs = await owner.getDogs();
+    const ownerDogs = await owner?.getDogs();
     await Promise.all(
-      ownerDogs.map(async (dog) => {
-        if (dogs.includes(dog.id)) {
-          await dog.addWalk(newWalk);
+      ownerDogs?.map(async (dog) => {
+        if (dogs.includes(dog?.id)) {
+          await dog?.addWalk(newWalk);
         }
       })
     );
   }
 
-  const walk = await Walk.findOne({
-    where: { id: newWalk.id },
+  const walkData = await Walk.findOne({
+    where: { id: newWalk?.id },
     include: [
       {
         model: Owner,
-        attributes: ["score"],
+        attributes: ["score", "reviews_count"],
         include: [
           {
             model: User,
-            attributes: ["name", "lastName"],
+            attributes: ["name", "lastName", "email"],
           },
         ],
       },
       {
         model: Walker,
-        attributes: ["score"],
+        attributes: ["score", "reviews_count"],
         include: [
           {
             model: User,
-            attributes: ["name", "lastName"],
+            attributes: ["name", "lastName", "email"],
           },
         ],
       },
@@ -89,8 +102,28 @@ const walkPost = async (
       },
     ],
   });
+  //notificaciones
+  //al owner
+  let mensaje = `Recibimos tu pago mediante ${paymentMethod} de $ ${totalPrice} por tu paseo!`;
+  let notification = await Notification.create({
+    message: mensaje,
+    type: "payment",
+  });
+  userOwner.addNotification(notification);
+  userOwner.hasNotifications = true;
+  await userOwner.save();
+  // enviarNotificacion(walkData?.owner?.email, mensaje);
+  //al walker
+  mensaje = `Tenes un nuevo paseo para realizar del usuario ${walkData?.owner.user.name} ${walkData?.owner.user.lastName}!`;
+  notification = await Notification.create({
+    message: mensaje,
+    type: "walk",
+  });
+  userWalker.addNotification(notification);
+  userWalker.hasNotifications = true;
+  await userWalker.save();
 
-  return walk;
+  return walkData;
 };
 
 module.exports = { walkPost };

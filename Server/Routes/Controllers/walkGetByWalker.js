@@ -9,10 +9,11 @@ const walkGetByWalker = async (walkerId, date) => {
     where : { id: walkerId, is_active: true },
     include: {
       model: Walker,
-      attributes: ["score"],
+      attributes: ["score", "reviews_count"],
       include: {
         model: Walk,
         attributes: [
+          "id",
           "date",
           "startTime",
           "duration",

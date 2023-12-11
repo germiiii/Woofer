@@ -27,13 +27,9 @@ const Map = (props) => {
           latitude: parseFloat(lat),
           longitude: parseFloat(lon),
         });
-      } else {
-        window.alert(
-          "No se encontraron coordenadas para la dirección ingresada"
-        );
       }
     } catch (error) {
-      window.alert("Error al buscar la dirección:", error.message);
+      console.error("Error al buscar la dirección:", error.message);
     }
   };
 

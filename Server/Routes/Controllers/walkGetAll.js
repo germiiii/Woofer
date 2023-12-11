@@ -6,6 +6,7 @@ const walkGetAll = async (date) => {
 
   const walkData = await Walk.findAll({
     attributes: [
+      "id",
       "date",
       "startTime",
       "duration",
@@ -18,7 +19,7 @@ const walkGetAll = async (date) => {
     include: [
       {
         model: Walker,
-        attributes: ["score"],
+        attributes: ["score", "reviews_count"],
         include: {
           model: User,
           attributes: ["id", "name", "lastName"],
@@ -26,7 +27,7 @@ const walkGetAll = async (date) => {
       },
       {
         model: Owner,
-        attributes: ["score"],
+        attributes: ["score", "reviews_count"],
         include: {
           model: User,
           attributes: ["id", "name", "lastName"],

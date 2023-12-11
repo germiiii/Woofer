@@ -9,10 +9,11 @@ const walkGetByOwner = async (ownerId, date) => {
     where : { id: ownerId, is_active: true },
     include: {
       model: Owner,
-      attributes: ["score"],
+      attributes: ["score", "reviews_count"],
       include: {
         model: Walk,
         attributes: [
+          "id",
           "date",
           "startTime",
           "duration",

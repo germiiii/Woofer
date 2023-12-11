@@ -7,7 +7,6 @@ import "../stylesLanding.css";
 
 const Navbar = () => {
   const currentPath = usePathname();
-  console.log(currentPath);
   return (
     <div className="bg-[#F39200] py-6 flex justify-end px-2">
       <div className="flex mr-10">

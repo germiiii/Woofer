@@ -22,6 +22,7 @@ const walkerGetById = async (id, date) => {
           // "dog_size",
           // "walk_duration",
           "score",
+          "reviews_count",
           "sale_details",
           "is_available",
         ],
@@ -45,6 +46,7 @@ const walkerGetById = async (id, date) => {
       include: {
         model: Walker,
         attributes: [],
+        where : { userId: id },
       },
     },
   });

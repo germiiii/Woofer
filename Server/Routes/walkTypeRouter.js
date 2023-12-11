@@ -1,5 +1,4 @@
 const { Router } = require("express");
-const { walkTypeHandlerGetAll } = require("./Handlers");
 
 const walkTypeRouter = Router();
 const { WalkType } = require("../Database/db");

@@ -3,25 +3,7 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
-// const seed = require("./seed.js");
 
-////postgres://fl0user:KdQaqVxu9h1N@ep-polished-haze-56223027.us-east-2.aws.neon.fl0.io:5432/pokemon?sslmode=require
-// const sequelize = new Sequelize(
-//   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
-//   // `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/pokemon`,
-//   {
-//     dialectOptions: {
-//       ssl: {
-//         require: true, //habilitar certificado de seguridad
-//         rejectUnauthorized: false, //para evitar errores de certificado
-//       },
-//     },
-//     logging: false, // set to console.log to see the raw SQL queries
-//     native: false, // lets Sequelize know we can use pg-native for ~30% more speed
-//   }
-// );
-
-//// servidor local
 const sequelize = new Sequelize(
   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
   { logging: false, native: false }
@@ -35,13 +17,13 @@ sequelize
   .then(() => {
     console.log(
       "Database connection has been established successfully." +
-        `${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`
+        `${DB_USER}:password@${DB_HOST}:${DB_PORT}/${DB_NAME}`
     );
   })
   .catch((error) => {
     console.error(
       "Unable to connect to the database:" +
-        `${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
+        `${DB_USER}:password@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
       error
     );
   });
@@ -71,8 +53,7 @@ sequelize.models = Object.fromEntries(capsEntries);
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
 
-const { User, Owner, Dog, Walker, Walk, WalkType, Review } = sequelize.models;
-
+const { User, Owner, Dog, Walker, Walk, WalkType, Review, Notification } = sequelize.models;
 
 //relacion de herencia de user a owner y walker
 User.hasOne(Owner);
@@ -112,11 +93,9 @@ Walk.belongsToMany(WalkType, { through: "walkTypeWalk" });
 Walk.hasMany(Review);
 Review.belongsTo(Walk);
 
-// Owner.hasMany(Review);
-// Review.belongsTo(Owner);
-
-// Walker.hasMany(Review);
-// Review.belongsTo(Walker);
+//relaciones entre user y notificacion
+User.hasMany(Notification);
+Notification.belongsTo(User);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
