@@ -10,7 +10,7 @@ import jwt from "jsonwebtoken";
 import "tailwindcss/tailwind.css";
 import "../stylesLanding.css";
 
-const Home = () => {
+const ownerHome = () => {
   const api = process.env.NEXT_PUBLIC_APIURL;
   const userId = localStorage.getItem("userId");
   const [addressInput, setAddressInput] = useState(
