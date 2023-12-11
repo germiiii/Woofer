@@ -11,11 +11,11 @@ const { ownerPost } = require("./ownerPost");
 const { getDogs } = require("./getDogs");
 const { ownerGetAll } = require("./ownerGetAll");
 const { ownerGetById } = require("./ownerGetById");
-const { walkerSetAvailable } = require("./walkerSetAvailable");
 const { walkerPost } = require("./walkerPost");
 const { walkerGetById } = require("./walkerGetById");
 const { walkerGetAll } = require("./walkerGetAll");
 const { walkPost } = require("./walkPost");
+const { walkerPut } = require("./walkerPut");
 const { walkGetByWalker } = require("./walkGetByWalker");
 const { walkGetByOwner } = require("./walkGetByOwner");
 const { walkGetAll } = require("./walkGetAll");
@@ -35,11 +35,11 @@ module.exports = {
   ownerDeActivate,
   ownerPost,
   walkerPost,
+  walkerPut,
   userGetbyId,
   getDogs,
   ownerGetAll,
   ownerGetById,
-  walkerSetAvailable,
   walkerGetAll,
   walkerGetById,
   walkPost,

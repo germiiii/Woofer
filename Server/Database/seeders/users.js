@@ -27,7 +27,8 @@ const userData = [
     isWalker: false,
     isOwner: false,
     is_active: true,
-    score: 0,
+    score: 0,  
+    selectedType: "walker",
   },
   {
     name: "Ana",
@@ -44,6 +45,7 @@ const userData = [
     isOwner: false,
     is_active: true,
     score: 0,
+    selectedType: "walker",
   },
   {
     name: "Lucía",
@@ -60,6 +62,7 @@ const userData = [
     isOwner: false,
     is_active: true,
     score: 0,
+    selectedType: "walker",
   },
 
   {
@@ -77,6 +80,7 @@ const userData = [
     isOwner: false,
     is_active: true,
     score: 0,
+    selectedType: "walker",
   },
 
   {
@@ -94,6 +98,7 @@ const userData = [
     isOwner: false,
     is_active: true,
     score: 0,
+    selectedType: "walker",
   },
 
   {
@@ -111,6 +116,7 @@ const userData = [
     isOwner: false,
     is_active: true,
     score: 0,
+    selectedType: "walker",
   },
   {
     name: "Juan",
@@ -127,6 +133,7 @@ const userData = [
     isOwner: false,
     is_active: true,
     score: 0,
+    selectedType: "walker",
   },
   {
     name: "Carlos",
@@ -143,6 +150,7 @@ const userData = [
     isOwner: false,
     is_active: true,
     score: 0,
+    selectedType: "walker",
   },
   {
     name: "Ana",
@@ -159,6 +167,7 @@ const userData = [
     isOwner: false,
     is_active: true,
     score: 0,
+    selectedType: "walker",
   },
 
   {
@@ -176,6 +185,7 @@ const userData = [
     isOwner: false,
     is_active: false,
     score: 0,
+    selectedType: "walker",
   },
 
   {
@@ -193,6 +203,7 @@ const userData = [
     isOwner: false,
     is_active: true,
     score: 0,
+    selectedType: "walker",
   },
 
   {
@@ -210,6 +221,7 @@ const userData = [
     isOwner: false,
     is_active: true,
     score: 0,
+    selectedType: "walker",
   },
 
   {
@@ -227,6 +239,7 @@ const userData = [
     isOwner: false,
     is_active: true,
     score: 0,
+    selectedType: "walker",
   },
 ];
 
@@ -245,6 +258,7 @@ const seedUsers = async (User) => {
       province: "",
       role: "admin",
       image: uploadedImage.secure_url,
+      selectedType: "walker",
     });
 
     console.log("- ADMIN user (admin@woofer.com) successfully created");

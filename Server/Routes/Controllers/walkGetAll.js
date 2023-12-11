@@ -6,6 +6,7 @@ const walkGetAll = async (date) => {
 
   const walkData = await Walk.findAll({
     attributes: [
+      "id",
       "date",
       "startTime",
       "duration",

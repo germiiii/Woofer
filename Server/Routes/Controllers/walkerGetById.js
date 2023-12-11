@@ -46,6 +46,7 @@ const walkerGetById = async (id, date) => {
       include: {
         model: Walker,
         attributes: [],
+        where : { userId: id },
       },
     },
   });
