@@ -45,7 +45,8 @@ const userRegister = async (req, res) => {
     !password ||
     !username ||
     !address ||
-    !province
+    !province ||
+    !selectedType
   ) {
     throw new Error("All fields are required");
   }
@@ -79,6 +80,9 @@ const userRegister = async (req, res) => {
   if (!validateEmail(email)) {
     throw new Error("Email no es válido");
   }
+  if (await User.findOne({ where: { email } })) {
+    throw new Error("Email ya está en uso");
+  }
 
   // username validations
   if (typeof username !== "string") {
@@ -89,6 +93,9 @@ const userRegister = async (req, res) => {
   }
   if (await !validateAlphanumericNoSpaces(username)) {
     throw new Error("Username debe ser alfanumerico sin espacios");
+  }
+  if (await User.findOne({ where: { username } })) {
+    throw new Error("Username ya está en uso");
   }
 
   // address validations

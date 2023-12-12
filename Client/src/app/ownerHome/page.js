@@ -51,50 +51,58 @@ const OwnerHome = () => {
     });
   };
 
-  const inputStyle = "border p-4 rounded-lg mr-2";
-  const buttonStyle = "border p-3 rounded-lg mr-2 bg-black text-white";
-
   return (
-    <div className="">
+    <div className="flex flex-col">
       {selectedType === "owner" ? (
         <div>
           <Nav />
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
-              height: "1400px",
-            }}
-          >
-            <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-              <select
-                name="province"
-                onChange={handleProvinceInputChange}
-                value={provinceInput}
-                className={inputStyle}
-              >
-                <option value="">Select your province</option>
-                {provinces.map((province) => (
-                  <option key={province} value={province}>
-                    {province}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="text"
-                placeholder="Enter your address"
-                value={addressInput}
-                onChange={handleAddressInputChange}
-                className={inputStyle}
-              />
+          <div className="flex flex-grow h-screen">
+            <div className="bg-[#29235c] w-1/2 flex flex-col items-center">
+              <div className="flex flex-col mt-15">
+                <div className="mt-10 mb-12">
+                  <h1
+                    className=" text-5xl text-[#F39200]"
+                    style={{ fontFamily: "LikeEat" }}
+                  >
+                    Location
+                  </h1>
+                </div>
+                <div className="flex mt-10 mb-10">
+                  <select
+                    name="province"
+                    onChange={handleProvinceInputChange}
+                    value={provinceInput}
+                    className="py-2 mr-5"
+                  >
+                    <option value="">Select your province</option>
+                    {provinces.map((province) => (
+                      <option key={province} value={province}>
+                        {province}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="text"
+                    placeholder="Enter your address"
+                    value={addressInput}
+                    onChange={handleAddressInputChange}
+                    className="py-2 px-6"
+                  />
+                </div>
+                <div className="flex justify-start">
+                  <button
+                    onClick={handleInputSubmit}
+                    className="w-30 px-6 py-1 rounded-full bg-[#F39200] text-white font-bold"
+                  >
+                    set your location
+                  </button>
+                </div>
+              </div>
+              <Map userProvince={userProvince} userAddress={userAddress} />
             </div>
-            <button onClick={handleInputSubmit} className={buttonStyle}>
-              Set Your Location
-            </button>
-            <Map userProvince={userProvince} userAddress={userAddress} />
-            <SelectWalkers userProvince={userProvince} />
+            <div className="w-1/2 bg-[#E4E2ED]">
+              <SelectWalkers userProvince={userProvince} />
+            </div>
           </div>
         </div>
       ) : (

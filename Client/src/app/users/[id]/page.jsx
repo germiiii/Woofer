@@ -5,10 +5,9 @@ import axios from "axios";
 
 async function generateStaticParams() {
 
-  const api = process.env.NEXT_PUBLIC_APIURL
 
   try {
-    const response = await axios.get(`${api}/users`);
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/users`);
     const data = response.data;
 
     return data.users.map((u) => ({
@@ -24,7 +23,7 @@ async function generateStaticParams() {
 
 async function getUser(id) {
   try {
-    const response = await axios.get(`${api}/users/${id}`);
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/users/${id}`);
     const data = response.data;
     return data;
   } catch (error) {
