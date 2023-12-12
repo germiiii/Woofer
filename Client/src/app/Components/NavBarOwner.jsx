@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import "tailwindcss/tailwind.css";
 import "../stylesLanding.css";
 
-const NavbarHome = () => {
+const NavbarHomeOwner = () => {
   const currentPath = usePathname();
 
   const handleLogout = () => {
@@ -80,4 +80,4 @@ const NavbarHome = () => {
   );
 };
 
-export default NavbarHome;
+export default NavbarHomeOwner;
