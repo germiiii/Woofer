@@ -47,18 +47,21 @@ const LoginForm = () => {
 
   const loginGoogle = async (e) => {
     e.preventDefault();
-  
+
     try {
       const result = await signInWithPopup(auth, googleAuth);
       const { user } = result;
       const email = user.email;
-  
-      const response = await axios.post(`${api}/googleLogin`, { email });
-  
+      const googleToken = await user.getIdToken();
+
+      const response = await axios.post(`${api}/googleLogin`, {
+        email,
+        googleToken,
+      });
+
       if (response.status === 201) {
-        const { token } = response.data;
-        localStorage.setItem("token", token);
-        router.push("/home");
+        localStorage.setItem("token", googleToken);
+        router.push("/ownerHome");
       } else {
         console.error("Authentication failed");
       }

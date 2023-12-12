@@ -598,7 +598,7 @@ const CheckoutComponent = () => {
         </div>
       )}
     </div>
-  )
+  );
 };
 
-export default CheckoutPage;
+export default CheckoutComponent;
