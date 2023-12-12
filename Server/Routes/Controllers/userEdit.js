@@ -38,6 +38,9 @@ const userEdit = async (data, file) => {
     if (await !validateAlphanumericNoSpaces(username)) {
       throw new Error("Username debe ser alfanumerico sin espacios");
     }
+    if (await User.findOne({ where: { username } })) {
+      throw new Error("Username ya está en uso");
+    }
     User.update(
       { username: username },
       {
