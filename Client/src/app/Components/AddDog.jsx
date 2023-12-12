@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { useState, useRef, useEffect } from "react";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -28,10 +28,10 @@ export default function OwnerForm() {
     }
   }, []); // Run this effect only once on component mount
   console.log("user", user);
-  const router=useRouter();
+  const router = useRouter();
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-  
+
     // Validation
     switch (name) {
       case "name":
@@ -84,53 +84,50 @@ export default function OwnerForm() {
     }
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    // Check if the form is completed
-    if (
-      dogData.name &&
-      dogData.age &&
-      dogData.breed &&
-      dogData.size ||
-      dogData.image
-    ) {
-      // Create an array of dogs with the current dog data
-      const currentDog = {
-        userID: user,
-        name: dogData.name,
-        age: dogData.age,
-        breed: dogData.breed,
-        size: dogData.size,
-        image: dogData.image,
-      };
+    try {
+      // Check if the form is completed
+      if (
+        (dogData.name && dogData.age && dogData.breed && dogData.size) ||
+        dogData.image
+      ) {
+        // Create an array of dogs with the current dog data
+        const currentDog = {
+          userID: user,
+          name: dogData.name,
+          age: dogData.age,
+          breed: dogData.breed,
+          size: dogData.size,
+          image: dogData.image,
+        };
 
-      // Send the data to the server using Axios
-      console.log("current dog", currentDog);
+        // Send the data to the server using Axios
+        console.log("current dog", currentDog);
 
-      const response = await axios.post('http://localhost:3001/owner', {
-        userID: user,
-        name: currentDog.name,
-        size: currentDog.size,
-        age: currentDog.age,
-        breed: currentDog.breed,
-        image: currentDog.image,
-      });
-      console.log("Server response:", response.data);
-      alert("Dog added successfully!");
-      router.push("/ownerHome");
+        const response = await axios.post("http://localhost:3001/owner", {
+          userID: user,
+          name: currentDog.name,
+          size: currentDog.size,
+          age: currentDog.age,
+          breed: currentDog.breed,
+          image: currentDog.image,
+        });
+        localStorage.setItem("isOwner", response.data.UserWithNewOwner.isOwner);
+        console.log("Server response:", response.data);
+        alert("Dog added successfully!");
+        router.push("/ownerHome");
 
-
-      // Additional logic for handling the form submission, if needed
-    } else {
-      console.error("Please complete the form before submitting.");
+        // Additional logic for handling the form submission, if needed
+      } else {
+        console.error("Please complete the form before submitting.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      // Handle the error appropriately (e.g., display an error message to the user)
     }
-  } catch (error) {
-    console.error("Error submitting form:", error);
-    // Handle the error appropriately (e.g., display an error message to the user)
-  }
-};
+  };
 
   const handleAddDog = (e) => {
     e.preventDefault();
@@ -238,28 +235,25 @@ const handleSubmit = async (e) => {
             />
           </div>
           <div className="flex justify-end">
-          <button
-            onClick={handleFillFormAgain}
-            className="mr-4 p-3 rounded-md bg-black text-white cursor-pointer"
-          >
-            Clean
-          </button>
-          {/* Conditionally render the submit button */}
-          {dogData.name &&
-          dogData.age &&
-          dogData.breed &&
-          dogData.size? (
             <button
-              type="submit"
-              className="p-3 rounded-md bg-black text-white cursor-pointer"
+              onClick={handleFillFormAgain}
+              className="mr-4 p-3 rounded-md bg-black text-white cursor-pointer"
             >
-              Submit
+              Clean
             </button>
-          ) : null}
-        </div>
-        {renderDogs}
-      </form>
+            {/* Conditionally render the submit button */}
+            {dogData.name && dogData.age && dogData.breed && dogData.size ? (
+              <button
+                type="submit"
+                className="p-3 rounded-md bg-black text-white cursor-pointer"
+              >
+                Submit
+              </button>
+            ) : null}
+          </div>
+          {renderDogs}
+        </form>
+      </div>
     </div>
-  </div>
-);
+  );
 }
