@@ -53,22 +53,21 @@ export default function OwnerForm() {
       case "image":
         // Additional check for file size and format
         const file = e.target.files[0];
-        if (file && file.size <= 15 * 1024 * 1024) {
-          const allowedFormats = ["image/jpeg", "image/png"];
-          if (allowedFormats.includes(file.type)) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              setDogData((prevDogData) => ({
-                ...prevDogData,
-                [name]: reader.result,
-              }));
-            };
-            reader.readAsDataURL(file);
-          } else {
-            e.target.value = null;
-            alert("Only JPG and PNG formats are allowed.");
-          }
+        const allowedFormats = ["image/jpeg", "image/png"];
+        if (allowedFormats.includes(file.type)) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setDogData((prevDogData) => ({
+              ...prevDogData,
+              [name]: reader.result,
+            }));
+          };
+          reader.readAsDataURL(file);
+        } else {
+          e.target.value = null;
+          alert("Only JPG and PNG formats are allowed.");
         }
+
         break;
       default:
         setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
@@ -113,6 +112,7 @@ export default function OwnerForm() {
         localStorage.setItem("Owner ID", response.data.UserWithNewOwner.id);
         localStorage.setItem('Dog Count', response.data.UserWithNewOwner.owner.dog_count)
         console.log("Server response:", response.data);
+        window.alert("Dog added successfully");
 
         // Additional logic for handling the form submission, if needed
       } else {
