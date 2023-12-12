@@ -38,6 +38,9 @@ const userEdit = async (data, file) => {
     if (await !validateAlphanumericNoSpaces(username)) {
       throw new Error("Username debe ser alfanumerico sin espacios");
     }
+    if (await User.findOne({ where: { username } })) {
+      throw new Error("Username ya está en uso");
+    }
     User.update(
       { username: username },
       {
@@ -89,9 +92,6 @@ const userEdit = async (data, file) => {
     if (address.length > 40) {
       throw new Error("Address debe ser menor a 40 caracteres");
     }
-    if (await !validateAlphanumeric(address)) {
-      throw new Error("Address debe ser alfanumerico");
-    }
     await User.update(
       { address: address },
       {
@@ -127,7 +127,8 @@ const userEdit = async (data, file) => {
         "verificationToken",
         "resetPasswordToken",
         "resetPasswordExpires",
-      ]},
+      ],
+    },
     where: { id: userID, is_active: true },
   });
 

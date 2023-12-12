@@ -1,9 +1,9 @@
-"use client";
 import axios from "axios";
 import React from "react";
 import { useState, useRef, useEffect } from "react";
 import jwt from "jsonwebtoken";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function OwnerForm() {
   const api = process.env.NEXT_PUBLIC_APIURL;
@@ -29,7 +29,7 @@ export default function OwnerForm() {
     }
   }, []); // Run this effect only once on component mount
   console.log("user", user);
-
+  const router = useRouter();
   const handleChange = (e) => {
     const { name, value, type } = e.target;
 
@@ -51,23 +51,33 @@ export default function OwnerForm() {
         }
         break;
       case "image":
-        // Additional check for file size and format
         const file = e.target.files[0];
-        const allowedFormats = ["image/jpeg", "image/png"];
-        if (allowedFormats.includes(file.type)) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            setDogData((prevDogData) => ({
-              ...prevDogData,
-              [name]: reader.result,
-            }));
-          };
-          reader.readAsDataURL(file);
+        if (file) {
+          if (file.size <= 15 * 1024 * 1024) {
+            // Valid file size, proceed with handling the file
+            const allowedFormats = ["image/jpeg", "image/png"];
+            if (allowedFormats.includes(file.type)) {
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                setDogData((prevDogData) => ({
+                  ...prevDogData,
+                  [name]: reader.result,
+                }));
+              };
+              reader.readAsDataURL(file);
+            } else {
+              e.target.value = null;
+              alert("Only JPG and PNG formats are allowed.");
+            }
+          } else {
+            // File size exceeds the limit, show alert and clear the input
+            e.target.value = null;
+            alert("Please select an image file smaller than 15MB.");
+          }
         } else {
-          e.target.value = null;
-          alert("Only JPG and PNG formats are allowed.");
+          // No image selected, clear the existing image in dogData
+          setDogData((prevDogData) => ({ ...prevDogData, [name]: null }));
         }
-
         break;
       default:
         setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
@@ -81,10 +91,7 @@ export default function OwnerForm() {
     try {
       // Check if the form is completed
       if (
-        dogData.name &&
-        dogData.age &&
-        dogData.breed &&
-        dogData.size &&
+        (dogData.name && dogData.age && dogData.breed && dogData.size) ||
         dogData.image
       ) {
         // Create an array of dogs with the current dog data
@@ -110,7 +117,8 @@ export default function OwnerForm() {
         });
         localStorage.setItem("isOwner", response.data.UserWithNewOwner.isOwner);
         console.log("Server response:", response.data);
-        window.alert("Dog added successfully");
+        alert("Dog added successfully!");
+        router.push("/ownerHome");
 
         // Additional logic for handling the form submission, if needed
       } else {
@@ -154,104 +162,98 @@ export default function OwnerForm() {
   ));
 
   return (
-    <div className="h-screen">
-      <div className="flex justify-center mt-20 ">
-        <div className="bg-white shadow-md rounded-md p-8 w-full lg:w-1/2">
-          <form onSubmit={handleSubmit}>
-            <h1 className="text-2xl font-bold mb-8">Add your dogs!</h1>
-            <div className="mb-4">
-              <label htmlFor="name" className="text-lg block mb-2">
-                Name of your dog
-              </label>
-              <input
-                id="name"
-                type="text"
-                name="name"
-                onChange={handleChange}
-                value={dogData.name}
-                className="w-full p-3 rounded-md border border-gray-300 focus:border-black"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="age" className="text-lg block mb-2">
-                Age of your dog
-              </label>
-              <input
-                id="age"
-                type="text"
-                name="age"
-                onChange={handleChange}
-                value={dogData.age}
-                className="w-full p-3 rounded-md border border-gray-300 focus:border-black"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="breed" className="text-lg block mb-2">
-                Breed of your dog
-              </label>
-              <input
-                id="breed"
-                type="text"
-                name="breed"
-                onChange={handleChange}
-                value={dogData.breed}
-                className="w-full p-3 rounded-md border border-gray-300 focus:border-black"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="size" className="text-lg block mb-2">
-                Size of your dog
-              </label>
-              <select
-                id="size"
-                name="size"
-                onChange={handleChange}
-                value={dogData.size}
-                className="w-full p-3 rounded-md border border-gray-300 focus:border-black"
-              >
-                <option value="small">Small</option>
-                <option value="medium">Medium</option>
-                <option value="large">Large</option>
-              </select>
-            </div>
-            <div className="mb-4">
-              <label htmlFor="image" className="text-lg block mb-2">
-                Image of your dog (Max 15MB)
-              </label>
-              <input
-                id="image"
-                type="file"
-                name="image"
-                accept="image/*"
-                onChange={handleChange}
-                ref={fileInputRef}
-                className="w-full p-3 rounded-md border border-gray-300 focus:border-black"
-              />
-            </div>
-            <div className="flex justify-end">
+    <div className="flex justify-center mt-20">
+      <div className="bg-white shadow-md rounded-md p-8 w-full lg:w-1/2">
+        <form onSubmit={handleSubmit}>
+          <h1 className="text-2xl font-bold mb-8">Add your dogs!</h1>
+          <div className="mb-4">
+            <label htmlFor="name" className="text-lg block mb-2">
+              Name of your dog
+            </label>
+            <input
+              id="name"
+              type="text"
+              name="name"
+              onChange={handleChange}
+              value={dogData.name}
+              className="w-full p-3 rounded-md border border-gray-300 focus:border-black"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="age" className="text-lg block mb-2">
+              Age of your dog
+            </label>
+            <input
+              id="age"
+              type="text"
+              name="age"
+              onChange={handleChange}
+              value={dogData.age}
+              className="w-full p-3 rounded-md border border-gray-300 focus:border-black"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="breed" className="text-lg block mb-2">
+              Breed of your dog
+            </label>
+            <input
+              id="breed"
+              type="text"
+              name="breed"
+              onChange={handleChange}
+              value={dogData.breed}
+              className="w-full p-3 rounded-md border border-gray-300 focus:border-black"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="size" className="text-lg block mb-2">
+              Size of your dog
+            </label>
+            <select
+              id="size"
+              name="size"
+              onChange={handleChange}
+              value={dogData.size}
+              className="w-full p-3 rounded-md border border-gray-300 focus:border-black"
+            >
+              <option value="small">Small</option>
+              <option value="medium">Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
+          <div className="mb-4">
+            <label htmlFor="image" className="text-lg block mb-2">
+              Image of your dog (Max 15MB)
+            </label>
+            <input
+              id="image"
+              type="file"
+              name="image"
+              accept="image/*"
+              onChange={handleChange}
+              ref={fileInputRef}
+              className="w-full p-3 rounded-md border border-gray-300 focus:border-black"
+            />
+          </div>
+          <div className="flex justify-end">
+            <button
+              onClick={handleFillFormAgain}
+              className="mr-4 p-3 rounded-md bg-black text-white cursor-pointer"
+            >
+              Clean
+            </button>
+            {/* Conditionally render the submit button */}
+            {dogData.name && dogData.age && dogData.breed && dogData.size ? (
               <button
-                onClick={handleFillFormAgain}
-                className="mr-4 p-3 rounded-md bg-black text-white cursor-pointer"
+                type="submit"
+                className="p-3 rounded-md bg-black text-white cursor-pointer"
               >
-                Clean
+                Submit
               </button>
-              {/* Conditionally render the submit button */}
-              {dogData.name &&
-              dogData.age &&
-              dogData.breed &&
-              dogData.size &&
-              dogData.image ? (
-                <button
-                  type="submit"
-                  className="p-3 rounded-md bg-black text-white cursor-pointer"
-                >
-                  Submit
-                </button>
-              ) : null}
-            </div>
-            {renderDogs}
-          </form>
-        </div>
+            ) : null}
+          </div>
+          {renderDogs}
+        </form>
       </div>
     </div>
   );

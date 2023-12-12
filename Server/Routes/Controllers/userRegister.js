@@ -45,7 +45,8 @@ const userRegister = async (req, res) => {
     !password ||
     !username ||
     !address ||
-    !province
+    !province ||
+    !selectedType
   ) {
     throw new Error("All fields are required");
   }
@@ -79,6 +80,9 @@ const userRegister = async (req, res) => {
   if (!validateEmail(email)) {
     throw new Error("Email no es válido");
   }
+  if (await User.findOne({ where: { email } })) {
+    throw new Error("Email ya está en uso");
+  }
 
   // username validations
   if (typeof username !== "string") {
@@ -90,6 +94,9 @@ const userRegister = async (req, res) => {
   if (await !validateAlphanumericNoSpaces(username)) {
     throw new Error("Username debe ser alfanumerico sin espacios");
   }
+  if (await User.findOne({ where: { username } })) {
+    throw new Error("Username ya está en uso");
+  }
 
   // address validations
   if (typeof address !== "string") {
@@ -97,9 +104,6 @@ const userRegister = async (req, res) => {
   }
   if (address.length > 40) {
     throw new Error("Address debe ser menor a 40 caracteres");
-  }
-  if (await !validateAlphanumeric(address)) {
-    throw new Error("Address debe ser alfanumerico");
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
