@@ -97,6 +97,7 @@ const LoginForm = () => {
         localStorage.setItem("userAddress", userData.address);
         localStorage.setItem("selectedType", userData.selectedType);
         localStorage.setItem("isOwner", userData.isOwner);
+        localStorage.setItem("isWalker", userData.isWalker);
 
         if (userData.role === "admin") {
           router.push("/admin");
@@ -107,7 +108,11 @@ const LoginForm = () => {
             router.push("/ownerHome");
           }
         } else if (userData.selectedType === "walker") {
-          router.push("/ownerHome");
+          if (userData.isWalker === false) {
+            router.push("/walkerHome/TestWalkerRegister");
+          } else {
+            router.push("/walkerHome");
+          }
         }
       } else {
         alert("Invalid credentials.");
