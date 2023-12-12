@@ -98,9 +98,6 @@ const userRegister = async (req, res) => {
   if (address.length > 40) {
     throw new Error("Address debe ser menor a 40 caracteres");
   }
-  if (await !validateAlphanumeric(address)) {
-    throw new Error("Address debe ser alfanumerico");
-  }
 
   const hashedPassword = await bcrypt.hash(password, 10);
 

@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Import axios
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios"; // Import axios
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import DogWalkOption from "../Components/DogWalkOption";
 import Reviews from "../Components/Reviews";
 import "tailwindcss/tailwind.css";
 import Map from "../Components/Map";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 import { useRouter } from "next/navigation";
 
 const WalkerHome = () => {
@@ -18,13 +18,16 @@ const WalkerHome = () => {
   const [user, setUser] = useState("");
   const [userWalker, setUserWalker] = useState({});
   const [optionChosen, setOptionChosen] = useState([]);
-  const [userProvince, setUserProvince] = useState('');
-  const [userAddress, setUserAddress] = useState('');
-  const [userId, setUserId] = useState('');
+  const [userProvince, setUserProvince] = useState("");
+  const [userAddress, setUserAddress] = useState("");
+  const [userId, setUserId] = useState("");
   const router = useRouter();
+  const isWalker = localStorage.getItem("isWalker");
+  console.log(isWalker);
+
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
 
       if (token) {
         const decodedToken = jwt.decode(token);
@@ -32,14 +35,16 @@ const WalkerHome = () => {
 
         try {
           const API = process.env.NEXT_PUBLIC_APIURL;
-          const response = await axios.get(`${API}/users/${decodedToken.userId}`);
+          const response = await axios.get(
+            `${API}/users/${decodedToken.userId}`
+          );
           setUser(response.data);
           setUserProvince(response.data.province);
           setUserAddress(response.data.address);
           setUserId(decodedToken.userId);
           console.log(decodedToken.userId);
         } catch (error) {
-          console.error('Error fetching data from the server', error);
+          console.error("Error fetching data from the server", error);
         }
       }
     };
@@ -61,28 +66,31 @@ const WalkerHome = () => {
 
   useEffect(() => {
     const fetchWalkerData = async () => {
-      const token = localStorage.getItem('token');
-  
+      const token = localStorage.getItem("token");
+
       if (token) {
         const decodedToken = jwt.decode(token);
-  
+
         try {
           const API = process.env.NEXT_PUBLIC_APIURL;
-          const response = await axios.get(`${API}/walker/${decodedToken.userId}`);
+          const response = await axios.get(
+            `${API}/walker/${decodedToken.userId}`
+          );
           setUserWalker(response.data);
         } catch (error) {
-          console.error('Error fetching walker data from the server', error);
+          console.error("Error fetching walker data from the server", error);
         }
       }
     };
     fetchWalkerData();
   }, []);
-  
 
   const handleOptionClick = (card) => {
     const updatedOptions = [...optionChosen];
 
-    const index = updatedOptions.findIndex((selectedCard) => selectedCard.id === card.id);
+    const index = updatedOptions.findIndex(
+      (selectedCard) => selectedCard.id === card.id
+    );
     if (index !== -1) {
       updatedOptions.splice(index, 1);
     } else {
@@ -91,18 +99,22 @@ const WalkerHome = () => {
     setOptionChosen(updatedOptions);
   };
 
-  const renderList = userWalker?.walkerData?.walker?.walkTypes?.map((walkerType) => {
-  const matchedCard = priceList.find((card) => card.id === walkerType.id);
-  
-    return (
-      <DogWalkOption
-        key={matchedCard?.id}
-        option={matchedCard}
-        onClick={() => handleOptionClick(matchedCard)}
-        selected={optionChosen.some((selectedCard) => selectedCard.id === matchedCard.id)}
-      />
-    );
-  });
+  const renderList = userWalker?.walkerData?.walker?.walkTypes?.map(
+    (walkerType) => {
+      const matchedCard = priceList.find((card) => card.id === walkerType.id);
+
+      return (
+        <DogWalkOption
+          key={matchedCard?.id}
+          option={matchedCard}
+          onClick={() => handleOptionClick(matchedCard)}
+          selected={optionChosen.some(
+            (selectedCard) => selectedCard.id === matchedCard.id
+          )}
+        />
+      );
+    }
+  );
 
   const handleRespondComment = (index, response) => {
     const updatedComments = [...comments];
@@ -111,6 +123,11 @@ const WalkerHome = () => {
   };
 
   const handleActiveClick = async () => {
+    if (isWalker === "false") {
+      router.push("/walkerHome/TestWalkerRegister");
+      window.alert("You must select a walk type");
+      return;
+    }
     try {
       if (user.id) {
         const API = process.env.NEXT_PUBLIC_APIURL;
@@ -118,16 +135,19 @@ const WalkerHome = () => {
           is_available: true,
         });
       }
-      alert('You are ready for a walk a dog! Enjoy!');
+      alert("You are ready for a walk a dog! Enjoy!");
     } catch (error) {
-      console.error('Error updating status:', error);
+      console.error("Error updating status:", error);
     }
   };
 
   const testFunction = () => {
-    toast.success(`¡${clientHiring.join(', ')} have hired your service! (Test)`, {
-      position: toast.POSITION.TOP_RIGHT,
-    });
+    toast.success(
+      `¡${clientHiring.join(", ")} have hired your service! (Test)`,
+      {
+        position: toast.POSITION.TOP_RIGHT,
+      }
+    );
   };
 
   return (
@@ -153,9 +173,14 @@ const WalkerHome = () => {
         Active
       </button>
       <br />
-      <button onClick={() => router.push('/walkerHome/TestWalkerRegister')} className="bg-black text-white px-4 py-2">Change your sell details</button>
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Client Comments</h2>
+      <button
+        onClick={() => router.push("/walkerHome/TestWalkerRegister")}
+        className="bg-black text-white px-4 py-2"
+      >
+        Chage your sell details
+      </button>
+      <div>
+        <h2>Client Comments</h2>
         {comments.map((comment, index) => (
           <div key={index} className="mb-4">
             <p className="text-base">{comment.text}</p>
@@ -164,7 +189,7 @@ const WalkerHome = () => {
               <input
                 type="text"
                 placeholder="Respond..."
-                value={comment.response || ''}
+                value={comment.response || ""}
                 onChange={(e) => handleRespondComment(index, e.target.value)}
                 className="border p-2 rounded"
               />

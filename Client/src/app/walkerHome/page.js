@@ -1,38 +1,34 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Nav from "../Components/NavBarWalker.jsx";
 import WalkerHome from "../Components/WalkerHome";
-import jwt from 'jsonwebtoken';
+import Link from "next/link.js";
+import jwt from "jsonwebtoken";
 
 const HomeWalker = () => {
-  const [walkerPass, setWalkerPass] = useState(false);
+  const [selectedType, setSelectedType] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      const token = localStorage.getItem('token');
-
-      if (token) {
-        const decodedToken = jwt.decode(token);
-
-        try {
-          const API = process.env.NEXT_PUBLIC_APIURL;
-          const response = await axios.get(`${API}/walker/${decodedToken.userId}`);
-          const data = response.data;
-          setWalkerPass(data.walkerData.isWalker || false);
-          console.log("walkerdata", data.walkerData.isWalker)
-        } catch (error) {
-          console.error('Error fetching data from the server', error);
-        }
-      }
-    };
-
-    fetchData();
+    setSelectedType(localStorage.getItem("selectedType") || "");
   }, []);
 
   return (
-    <div>
-      {walkerPass ? <WalkerHome /> : <p>You are not a walker.</p>}
-    </div>
+    <>
+      {selectedType === "walker" ? (
+        <>
+          <Nav />
+          <WalkerHome />
+        </>
+      ) : (
+        <div>
+          <h1>You are not a walker.</h1>
+          <Link href={"/ownerHome"}>
+            <button>back to owner home</button>
+          </Link>
+        </div>
+      )}
+    </>
   );
 };
 

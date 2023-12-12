@@ -45,13 +45,6 @@ const WalkerRegister = () => {
     event.preventDefault();
 
     try {
-      // Validar que al menos una opción esté seleccionada
-      if (selectedOptions.length === 0) {
-        setFormSubmissionError("Please select at least one walk type.");
-
-        return;
-      }
-
       const API = process.env.NEXT_PUBLIC_APIURL;
       const token = localStorage.getItem("token");
 
@@ -93,6 +86,7 @@ const WalkerRegister = () => {
       console.log(requestBody);
       const response = await axios.post(`${API}/walker`, requestBody);
       console.log("Form submitted successfully:", response.data);
+      localStorage.setItem("isWalker", "true");
       router.push("/walkerHome");
     } catch (error) {
       setFormSubmissionError("Error submitting the form");
@@ -101,25 +95,15 @@ const WalkerRegister = () => {
   };
 
   return (
-    <div style={{ textAlign: "center", margin: "20px" }}>
-      <div
-        style={{
-          display: "inline-block",
-          textAlign: "left",
-          padding: "20px",
-          border: "1px solid #ccc",
-          borderRadius: "8px",
-        }}
-      >
-        <form onSubmit={handleSubmit}>
-          <h2>Walker Registration</h2>
+    <div>
+      <h2>Walker Registration</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
           <label>Select walk types:</label>
           {priceList.map((option) => (
             <div
               key={option.id}
-              className={`card ${
-                isSelected(option) ? "selected-card" : ""
-              }`}
+              className={`card ${isSelected(option) ? "selected-card" : ""}`}
               onClick={() => handleCardClick(option)}
             >
               <input
@@ -135,59 +119,38 @@ const WalkerRegister = () => {
               Capacity: {option.dog_capacity}
             </div>
           ))}
-          <div>
-            <h3>Offer Details</h3>
-            <label htmlFor="saleDetails">Maximum 100 characters:</label>
-            <textarea
-              id="saleDetails"
-              value={saleDetails}
-              onChange={(e) => setSaleDetails(e.target.value)}
-              maxLength={100}
-              style={{
-                width: "100%",
-                padding: "8px",
-                height: "calc(8 * 16px)", // Ajusta el valor según tus necesidades
-                marginBottom: "16px",
-                borderRadius: "4px",
-                border: "1px solid #ccc",
-                resize: "none", // Desactiva la capacidad de redimensionar
-                fontSize: "1,5em", // Duplica el tamaño de la letra
-              }}
-            />
-          </div>
-          <button
-            type="submit"
-            style={{
-              padding: "8px 16px",
-              borderRadius: "8px",
-              border: "none",
-              background: "black",
-              color: "#fff",
-              cursor: "pointer",
-              marginRight: "8px",
-            }}
-          >
-            Submit
-          </button>
-        </form>
-        {formSubmissionError && (
-          <p style={{ color: "red" }}>{formSubmissionError}</p>
-        )}
-        <style jsx>{`
-          .card {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            margin: 5px;
-            padding: 10px;
-            display: block;
-            cursor: pointer;
-          }
+        </div>
+        <div>
+          <label htmlFor="saleDetails">
+            Offer details (maximum 100 characters):
+          </label>
+          <input
+            type="text"
+            id="saleDetails"
+            value={saleDetails}
+            onChange={(e) => setSaleDetails(e.target.value)}
+            maxLength={100}
+          />
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+      {formSubmissionError && (
+        <p style={{ color: "red" }}>{formSubmissionError}</p>
+      )}
+      <style jsx>{`
+        .card {
+          border: 1px solid #ccc;
+          border-radius: 8px;
+          margin: 5px;
+          padding: 10px;
+          display: block;
+          cursor: pointer;
+        }
 
-          .selected-card {
-            background-color: gray;
-          }
-        `}</style>
-      </div>
+        .selected-card {
+          background-color: gray; /* Changes the background color to gray when selected */
+        }
+      `}</style>
     </div>
   );
 };
