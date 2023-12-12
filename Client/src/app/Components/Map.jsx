@@ -80,16 +80,12 @@ const Map = (props) => {
     }
   }, [userAddress, userProvince]);
 
-  const titleStyle = {
-    fontSize: "2em",
-    marginBottom: "16px",
-  };
-
   const mapContainerStyle = {
-    width: "1000px",
-    height: "300px",
-    borderRadius: "8px",
-    marginTop: "25px",
+    width: "800px",
+    height: "400px",
+    marginTop: "40px",
+    maxHeight: "70vh",
+    maxWidth: "90vh",
   };
 
   const loadingMessageStyle = {
@@ -99,9 +95,8 @@ const Map = (props) => {
 
   const loadingMessageContainerStyle = {
     display: "flex",
-    width: "1000px",
-    height: "300px",
-    borderRadius: "8px",
+    width: "800px",
+    height: "400px",
     border: "solid grey 1px",
     justifyContent: "center",
     alignItems: "center",
