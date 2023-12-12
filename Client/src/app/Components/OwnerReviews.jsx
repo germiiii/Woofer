@@ -2,11 +2,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const ReviewForm = ({ userId, onReviewSubmit }) => {
+const ReviewForm = ({ onReviewSubmit, id }) => {
+
   const [userReview, setUserReview] = useState({
     score: 1,
     description: ""
   });
+  const walkId = id.id;
+  const userId = "aef5e923-cb7a-425e-9477-c02ea8038f8d";
+  const walkerId = "70176c93-9373-43c9-8394-5a1403c386c5";
 
   const handleScoreChange = (newScore) => {
     setUserReview({ ...userReview, score: newScore });
@@ -19,16 +23,23 @@ const ReviewForm = ({ userId, onReviewSubmit }) => {
   const submitReview = async () => {
     try {
       const API = process.env.NEXT_PUBLIC_APIURL;
-      const response = await axios.post(`${API}/review/${userId}`, userReview);
-      
+        const reviewUrl = `${API}/review`;
+       const reviewData = {
+        idWalk: walkId,
+        type: 'walker', 
+        score: userReview.score,
+        description: userReview.description
+      };
+      console.log(reviewData)
+      // Realiza la solicitud POST a la URL con la información del review
+      const response = await axios.post(reviewUrl, reviewData);
 
+      // Restablece el estado de userReview después de enviar la revisión con éxito
       setUserReview({
         score: 1,
         description: ""
       });
-
-
-      onReviewSubmit(response.data.reviews);
+      
     } catch (error) {
       console.error('Error submitting review:', error);
     }
@@ -65,7 +76,7 @@ const ReviewForm = ({ userId, onReviewSubmit }) => {
             padding: '8px',
             borderRadius: '5px',
             border: '1px solid #ccc',
-            resize: 'none' // Esto evita que el textarea sea redimensionable por el usuario
+            resize: 'none'
           }}
         />
       </div>
