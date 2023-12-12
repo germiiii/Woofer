@@ -1,17 +1,35 @@
+"use client";
 import Safety from "../Components/Safety";
-import NavBarHome from '../Components/NavBarHome'
-import React from 'react'
+import NavBarHome from "../Components/NavBarOwner";
+import React from "react";
+import Link from "next/link.js";
 
 const SafetyPage = () => {
+  const [selectedType, setSelectedType] = React.useState("");
+
+  React.useEffect(() => {
+    setSelectedType(localStorage.getItem("selectedType") || "");
+  }, []);
+
   return (
     <div>
-        <NavBarHome />
+      {selectedType === "owner" ? (
         <div>
-        <Safety/>
+          <NavBarHome />
+          <div>
+            <Safety />
+          </div>
         </div>
-        
+      ) : (
+        <div>
+          <h1>You are not an owner.</h1>
+          <Link href={"/walkerHome"}>
+            <button>back to walker home</button>
+          </Link>
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default SafetyPage
+export default SafetyPage;

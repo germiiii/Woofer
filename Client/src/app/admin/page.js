@@ -73,16 +73,8 @@ export default function DataGridDemo() {
       editable: false,
     },
     {
-      field: "isOwner",
-      headerName: "Is Owner",
-      width: 90,
-      editable: false,
-    },
-    {
-      field: "isWalker",
-      headerName: "Is Walker",
-      description: "This column has a value getter and is not sortable.",
-      sortable: false,
+      field: "selectedType",
+      headerName: "Type",
       width: 90,
       editable: false,
     },
@@ -91,7 +83,7 @@ export default function DataGridDemo() {
       headerName: "Province",
       description: "This column has a value getter and is not sortable.",
       sortable: true,
-      width: 160,
+      width: 250,
       editable: false,
     },
     {

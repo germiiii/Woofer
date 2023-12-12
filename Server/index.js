@@ -24,6 +24,7 @@ try {
     .then(() => {
       const shouldRunSeeder = syncOptions.force === true;
       if (shouldRunSeeder) {
+ 
         seed(User, WalkType, Walk, Review, Notification);
       }
     });
