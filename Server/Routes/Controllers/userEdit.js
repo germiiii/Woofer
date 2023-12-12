@@ -16,7 +16,7 @@ const {
 const { uploadImage } = require("../../Routes/utils/uploadImage");
 
 const userEdit = async (data, file) => {
-  const { userID, name, lastname, username, address, province } = data;
+  const { userID, name, lastName, username, address, province } = data;
 
   // validations
   if (!userID) {
@@ -38,9 +38,9 @@ const userEdit = async (data, file) => {
     if (await !validateAlphanumericNoSpaces(username)) {
       throw new Error("Username debe ser alfanumerico sin espacios");
     }
-    if (await User.findOne({ where: { username } })) {
-      throw new Error("Username ya está en uso");
-    }
+    // if (await User.findOne({ where: { username } })) {
+    //   throw new Error("Username ya está en uso");
+    // }
     User.update(
       { username: username },
       {
@@ -67,18 +67,18 @@ const userEdit = async (data, file) => {
     );
   }
 
-  if (lastname) {
-    if (typeof lastname !== "string") {
+  if (lastName) {
+    if (typeof lastName !== "string") {
       throw new Error("Lastname debe ser un string");
     }
-    if (lastname.length > 40) {
+    if (lastName.length > 40) {
       throw new Error("Lastname debe ser menor a 40 caracteres");
     }
-    if (await !validateSpecialAndNumber(lastname)) {
+    if (await !validateSpecialAndNumber(lastName)) {
       throw new Error("Lastname no puede contener ni números ni símbolos");
     }
     await User.update(
-      { lastName: lastname },
+      { lastName: lastName },
       {
         where: { id: userID, is_active: true },
       }
