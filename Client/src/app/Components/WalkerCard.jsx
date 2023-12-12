@@ -39,9 +39,17 @@ const WalkerCard = (props) => {
   };
 
   return (
-    <div className=" flex border border-[#29235c] border-solid border-2 mt-5 w-[650px]">
+    <div
+      className={`flex border border-[#29235c] border-solid border-2 mt-5 w-[700px] bg-white hover:shadow-lg`}
+    >
       <div className="flex items-center mr-10">
-        <Image src={props.image} width={100} height={100} alt="profile" />
+        <Image
+          src={props.image}
+          width={100}
+          height={100}
+          alt="profile"
+          className="border-r-2  border-solid border-[#29235c]"
+        />
       </div>
       <div className="flex flex-col justify-center items-start w-[450px]">
         <h2 className="text-[#29235c] font-bold text-2xl">

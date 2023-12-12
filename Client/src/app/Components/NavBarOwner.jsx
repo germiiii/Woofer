@@ -31,7 +31,7 @@ const NavbarHomeOwner = () => {
         <Link href={"/ownerHome"}>
           <button
             className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
-              currentPath === "/home" ? "text-[#F39200]" : "text-white"
+              currentPath === "/ownerHome" ? "text-[#F39200]" : "text-white"
             } mt-3 lg:mt-0 mr-7  transition transition-colors duration-300`}
           >
             home
