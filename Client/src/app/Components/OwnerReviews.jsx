@@ -39,6 +39,7 @@ const ReviewForm = ({ onReviewSubmit, id }) => {
         score: 1,
         description: ""
       });
+      
     } catch (error) {
       console.error('Error submitting review:', error);
     }

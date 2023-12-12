@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+
 const WalkList = (props) => {
   const [walks, setWalks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -12,13 +13,18 @@ const WalkList = (props) => {
         const API = process.env.NEXT_PUBLIC_APIURL;
         const response = await axios.get(`${API}/walk/walker/${props.userId}`);
         setWalks(response.data.walksFromWalker[0].walker.walks);
-        console.log(response.data);
+
       } catch (error) {
         console.error('Error al obtener los datos de la caminata:', error);
       }
     };
 
+    // Llamar a fetchData inmediatamente
     fetchData();
+
+   const intervalId = setInterval(fetchData, 30000);
+
+    return () => clearInterval(intervalId);
   }, [props.userId]);
 
   const handleStatusChange = async (walkId, newStatus) => {
