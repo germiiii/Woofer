@@ -4,6 +4,7 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import "tailwindcss/tailwind.css";
 import "../stylesLanding.css";
+import UserDetailButton from "./UserDetailButton";
 
 const NavbarHomeOwner = () => {
   const currentPath = usePathname();
@@ -45,15 +46,8 @@ const NavbarHomeOwner = () => {
             add dogs
           </button>
         </Link>
-        {/* <Link href={"/settings"}>
-          <button
-            className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
-              currentPath === "/settings" ? "text-[#F39200]" : "text-white"
-            } mt-3 lg:mt-0 mr-7 transition transition-colors duration-300`}
-          >
-            settings
-          </button>
-        </Link> */}
+        {/* Replace the My Woof button with the UserDetailButton */}
+        <UserDetailButton />
         <Link href={"/safety"}>
           <button
             className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
