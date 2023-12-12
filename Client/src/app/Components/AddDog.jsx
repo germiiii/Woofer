@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function OwnerForm() {
+  const api = process.env.NEXT_PUBLIC_APIURL;
   const fileInputRef = useRef(null);
   const [dogData, setDogData] = useState({
     name: "",
@@ -106,7 +107,7 @@ export default function OwnerForm() {
         // Send the data to the server using Axios
         console.log("current dog", currentDog);
 
-        const response = await axios.post("http://localhost:3001/owner", {
+        const response = await axios.post(`${api}/owner`, {
           userID: user,
           name: currentDog.name,
           size: currentDog.size,
