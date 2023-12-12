@@ -7,6 +7,7 @@ import Nav from "../Components/NavBarHome";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import "tailwindcss/tailwind.css";
 import local from "next/font/local";
+import { browserLocalPersistence } from "firebase/auth";
 
 const CheckoutComponent = () => {
   const [walkerDetails, setWalkerDetails] = useState(null);
@@ -75,7 +76,7 @@ const CheckoutComponent = () => {
       (_, index) => (
         <span key={index} className="text-yellow-500 text-2xl rounded-full">
           &#9733;
-        </span>
+        </span> 
       )
     );
     const emptyStars = Array.from(
@@ -83,7 +84,7 @@ const CheckoutComponent = () => {
       (_, index) => (
         <span key={index} className="text-gray-300 text-2xl rounded-full">
           &#9734;
-        </span>
+        </span> 
       )
     );
 
@@ -109,6 +110,9 @@ const CheckoutComponent = () => {
     if (selectedType) {
       setSelectedWalkType(selectedType); // Update the selected type
       console.log("Selected Walk ID:", selectedType.id);
+      console.log("Walk Duration", selectedType.walk_duration)
+      localStorage.setItem('Walk ID', selectedType.id)
+      localStorage.setItem('Walk Duration', selectedType.walk_duration)
     } else {
       // Handle the case where the selected walk type is not found
       console.log("Walk type not found");
@@ -143,6 +147,7 @@ const CheckoutComponent = () => {
   };
 
   const handleWalkTypeQuantityChange = (value) => {
+  
     value = Math.min(Math.max(value, 0), 15);
     setWalkTypeQuantity(value);
   };
@@ -168,6 +173,7 @@ const CheckoutComponent = () => {
         Leash: 5,
         GarbageBag: 2,
         WaterBowl: 3,
+        
       }[extra];
       if (extraPrice) {
         extrasTotal += extraPrice * parseInt(extraQuantities[extra]);
@@ -178,7 +184,7 @@ const CheckoutComponent = () => {
 
     const formattedTotalAmount = String(totalAmountInCents.toFixed(2));
 
-    setTotalAmount(formattedTotalAmount);
+    setTotalAmount(formattedTotalAmount); 
     localStorage.setItem("totalAmount", formattedTotalAmount);
     console.log("Total Amount:", `"${formattedTotalAmount}"`);
     return formattedTotalAmount;
@@ -189,12 +195,11 @@ const CheckoutComponent = () => {
     setTotalAmount(calculatedTotalAmount);
   }, [selectedWalkType, extraQuantities, walkTypeQuantity]);
 
+
   //! PayPal
   //!Access Token Fetching
   useEffect(() => {
     async function fetchAccessToken() {
-      console.log(clientId);
-      console.log(clientSecret);
       try {
         const { data } = await axios.post(
           "https://api-m.sandbox.paypal.com/v1/oauth2/token",
@@ -271,12 +276,13 @@ const CheckoutComponent = () => {
       if (order.id) {
         console.log("Order ID:", order.id);
         setOrderCount(orderCount + 1); // Increment order count for the next order
-        return order.id;
+        return order.id; 
       } else {
         throw new Error("Order ID not received");
       }
     } catch (error) {
       console.error("Error creating PayPal order:", error);
+     
     }
   };
 
@@ -286,19 +292,23 @@ const CheckoutComponent = () => {
       await actions.order.capture();
       alert("Payment successful");
     
-    const ownerId = localStorage.getItem()
+    const ownerId = localStorage.getItem('Owner ID')
+    const userId = localStorage.getItem('userId')
+    const walkDuration = localStorage.getItem('Walk Duration')
+    const totalAmount = localStorage.getItem("totalAmount");
+    const dogCount = localStorage.getItem('Dog Count')
+    const walkType = localStorage.getItem('Walk ID')
+    
 
-    const formattedTotalAmount = localStorage.getItem("totalAmount");
-    const totalAmountInCents = Math.round(parseFloat(formattedTotalAmount));
 
       const paymentDetails = {
-        ownerId: "6c64e2a1-29b0-434f-9db7-bab84ae98fc3",
+        ownerId: ownerId ? ownerId : userId,
         walkerId: walkerId,
-        duration: selectedWalkType?.duration || 0, 
-        totalPrice: totalAmountInCents,
+        duration: walkDuration, 
+        totalPrice: totalAmount,
         paymentMethod: "paypal",
-        dogs: 1,
-        walkTypes: [9],
+        dogs: dogCount || 1,
+        walkTypes: [walkType],
       };
 
       const response = await axios.post(`${api}/walk`, paymentDetails, {
@@ -364,12 +374,7 @@ const CheckoutComponent = () => {
 
                 <p>{starsForMedian}</p>
 
-                <h3
-                  className="text-white text-2xl"
-                  style={{ fontFamily: "LikeEat" }}
-                >
-                  Reviews
-                </h3>
+                <h3 className="text-white text-2xl" style={{ fontFamily: "LikeEat" }}>Reviews</h3>
                 {topTwoReviews.length > 0 ? (
                   <div className="text-white">
                     {topTwoReviews.map((description, index) => (
@@ -436,7 +441,7 @@ const CheckoutComponent = () => {
                           </button>
                         </div>
                       </td>
-
+                  
                       {selectedWalkType && (
                         <div className="mt-4 relative">
                           <div className="bg-[#F39200] rounded-lg p-4">
@@ -453,12 +458,7 @@ const CheckoutComponent = () => {
 
                   {/* Add Extras Section */}
                   <div className="mt-8">
-                    <h3
-                      className="mb-4 font-bold text-2xl text-[#29235C]"
-                      style={{ fontFamily: "LikeEat" }}
-                    >
-                      Add Extras:
-                    </h3>
+                    <h3 className="mb-4 font-bold text-2xl text-[#29235C]" style={{ fontFamily: "LikeEat" }}>Add Extras:</h3>
                     <table>
                       <tbody>
                         <tr>
@@ -558,12 +558,8 @@ const CheckoutComponent = () => {
 
               {/* Summary and PayPal Button */}
               <div className="border-t border-gray-300 pt-4 mt-8">
-                <h1
-                  className="text-3xl text-[#29235C] font-bold mb-2 mt-4"
-                  style={{ fontFamily: "LikeEat" }}
-                >
-                  Summary
-                </h1>
+                <h1 className="text-3xl text-[#29235C] font-bold mb-2 mt-4"
+                    style={{ fontFamily: "LikeEat" }}>Summary</h1>
                 <h2 className="font-bold text-2xl">Total: ${totalAmount}</h2>
                 <PayPalScriptProvider
                   options={{

@@ -110,6 +110,8 @@ export default function OwnerForm() {
           image: currentDog.image,
         });
         localStorage.setItem("isOwner", response.data.UserWithNewOwner.isOwner);
+        localStorage.setItem("Owner ID", response.data.UserWithNewOwner.id);
+        localStorage.setItem('Dog Count', response.data.UserWithNewOwner.owner.dog_count)
         console.log("Server response:", response.data);
 
         // Additional logic for handling the form submission, if needed

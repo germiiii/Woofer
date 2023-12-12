@@ -83,7 +83,7 @@ const LoginForm = () => {
 
       const { token } = response.data;
       console.log("At Login", response.data)
-      localStorage.setItem("Login token", token);
+      localStorage.setItem("token", token);
 
       if (token) {
         setIsLoggedIn(true);
@@ -98,6 +98,8 @@ const LoginForm = () => {
         localStorage.setItem("userAddress", userData.address);
         localStorage.setItem("selectedType", userData.selectedType);
         localStorage.setItem("isOwner", userData.isOwner);
+        // localStorage.setItem("Owner ID", response.data.UserWithNewOwner.id);
+        // localStorage.setItem('Dog Count', response.data.UserWithNewOwner.owner.dog_count)
 
         if (userData.role === "admin") {
           router.push("/admin");

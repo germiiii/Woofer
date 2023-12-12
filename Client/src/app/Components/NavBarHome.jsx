@@ -22,6 +22,10 @@ const NavbarHome = () => {
     localStorage.removeItem("isOwner");
     localStorage.removeItem("isWalker");
     localStorage.removeItem("token");
+    localStorage.removeItem("Owner ID");
+    localStorage.removeItem("Walk ID");
+    localStorage.removeItem("Dog Count");
+    localStorage.removeItem('Walk Duration')
   };
 
   return (
