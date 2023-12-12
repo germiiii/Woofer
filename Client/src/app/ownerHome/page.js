@@ -45,7 +45,7 @@ const OwnerHome = () => {
     localStorage.setItem("userAddress", addressInput);
 
     const response = await axios.put(`${api}/editUser`, {
-      userID: localStorage.getItem("userId"),
+      id: localStorage.getItem("userId"),
       province: provinceInput,
       address: addressInput,
     });
