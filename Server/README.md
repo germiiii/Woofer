@@ -9,8 +9,8 @@
   This route will create a user in the users' table
 
 - POST /googleLogin
-- POST /activateAccount/:verificationToken
-- POST /changePassword/:token
+
+- POST /changePassword
 
 - GET /users/:id
   This route will return data for a user ID. In addition to the user data, it returns a walker object and an owner object.
@@ -23,27 +23,26 @@
 - GET /users?role=admin
   This route will return data for all users. Adding the role=admin query parameter will return data for all users, including soft deleted users.
 
-- PUT /editUser
-  This route will update a user.
-
 **OWNERS**
-
-- GET /owner/:id
-  -This route will bring all the data of the owner "id".
 
 - GET /owner/?province=
   -This route will bring all the owners, if province is provided it will bring all the owners from that province. Important: if province name is separated by a space, replace it with %20. Example: GET /owner/?province=buenos%20aires
 
-- GET /owner/dog/:username
-  This route will bring all the dogs of the owner "username".
+- GET /owner/:id
+  -This route will bring all the data of the owner "id".
 
 - POST /owner
   This route will create a new owner, it will require a "userName" and dog properties (name, size, breed, age, img)
 
+- POST /owner/dog
+  -This route will create new dogs for an owner. It will require a user "id" and dog properties (name, size, breed, age, img)
+
+- GET /owner/dog/:username
+  This route will bring all the dogs of the owner "username".
 
 **WALKERS**
 
-- GET /walker?is_available= & province=
+- GET /walker/?is_available= & province=
   This route will bring all the active walkers. If is_available is provided, it will bring all the active walkers. If province is provided, it will bring all the active walkers from that province. Important: if province name is separated by a space, replace it with %20. Example: GET /walker?is_available=true&province=Buenos%20Aires
 
 - GET /walker/available
@@ -75,35 +74,6 @@
 - DELETE /walkType/:id
   This route will delete a walk type.
 
-**WALKS**
-- POST /walk/
-  This route will create a new walk, it will require a body with the data of the walk: ownerId, walkerId, walkTypesId(can be an array of ids), dogs(can be a number of dogs or can be an array of dogs ids) , duration, totalPrice, paymentMethod.
-
-- GET /walk/walker/:walkerId?date=
-  This route will bring all walks from a walker. If date is provided, it will bring all walks taken after that date
-
-- GET /walk/owner/:ownerId?date=
-  This route will bring all walks from an owner. If date is provided, it will bring all walks taken after that date
-
-- GET /walk/all?date=
-  This route will bring all walks from an owner.  If date is provided, it will bring all walks taken after that date
-
-**REVIEWS**
-- POST /review/
-  This route will create a new review, it will require a body with the data of the review: idWalk, type, score, description.
-
-- GET /review/
-  This route will bring all reviews.
-
-- GET /review/:id
-  This route will bring all the data of the review "id".
-
-**PAYMENT**
-
-- POST /payment
-  This route will create a new payment.
-
-
 **ACTIVATE (Soft DELETE)**
 //users
 
@@ -125,6 +95,20 @@
   This route will deactivate the walker.
 - PUT /activate/walker/:id
   This route will activate the walker.
+
+**WALK TYPES**
+- GET /walkType
+  This route will bring all walk types.
+
+- POST /walkType
+  This route will create a new walk type, it will require a body with the characteristics of the walk type.
+
+- PUT /walkType/:id
+  This route will update a walk type.
+
+- DELETE /walkType/:id
+  This route will delete a walk type.
+
   
 ## **⚠️ IMPORTANTE**
 
