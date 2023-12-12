@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DogWalkOption from "../Components/DogWalkOption";
 import Reviews from "../Components/Reviews";
+import WalkList from "./WalkWalkers";
 import "tailwindcss/tailwind.css";
 import Map from "../Components/Map";
 import jwt from "jsonwebtoken";
@@ -23,7 +24,7 @@ const WalkerHome = () => {
   const [userId, setUserId] = useState("");
   const router = useRouter();
   const isWalker = localStorage.getItem("isWalker");
-  console.log(isWalker);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,8 +32,6 @@ const WalkerHome = () => {
 
       if (token) {
         const decodedToken = jwt.decode(token);
-        console.log(decodedToken.userId);
-
         try {
           const API = process.env.NEXT_PUBLIC_APIURL;
           const response = await axios.get(
@@ -42,7 +41,6 @@ const WalkerHome = () => {
           setUserProvince(response.data.province);
           setUserAddress(response.data.address);
           setUserId(decodedToken.userId);
-          console.log(decodedToken.userId);
         } catch (error) {
           console.error("Error fetching data from the server", error);
         }
@@ -141,23 +139,12 @@ const WalkerHome = () => {
     }
   };
 
-  const testFunction = () => {
-    toast.success(
-      `¡${clientHiring.join(", ")} have hired your service! (Test)`,
-      {
-        position: toast.POSITION.TOP_RIGHT,
-      }
-    );
-  };
-
   return (
     <div className="text-center m-20">
       <ToastContainer />
       <Map userProvince={userProvince} userAddress={userAddress} />
-
-      <button onClick={testFunction} className="bg-black text-white px-4 py-2">
-        Test for when a walk request arrives
-      </button>
+      <br />
+      <WalkList userId={userId}/>
       <br />
       <div className="mb-8">
         {renderList}
