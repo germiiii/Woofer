@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const ReviewForm = ({ userId, onReviewSubmit }) => {
@@ -7,6 +7,32 @@ const ReviewForm = ({ userId, onReviewSubmit }) => {
     score: 1,
     description: ""
   });
+
+  const [ownerWalkInfo, setOwnerWalkInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchOwnerWalkInfo = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          return;
+        }
+
+        const decodedToken = jwt.decode(token);
+        const ownerId = decodedToken.userId;
+        console.log(decodedToken)
+        const API = process.env.NEXT_PUBLIC_APIURL;
+        const response = await axios.get(`${API}/walk/owner/${ownerId}`);
+        
+        setOwnerWalkInfo(response.data); // Ajusta esto según la estructura de tu respuesta
+      } catch (error) {
+        console.error('Error fetching owner walk info:', error);
+      }
+    };
+
+    fetchOwnerWalkInfo();
+  }, []); // Se ejecuta solo una vez al montar el componente
 
   const handleScoreChange = (newScore) => {
     setUserReview({ ...userReview, score: newScore });
@@ -20,13 +46,11 @@ const ReviewForm = ({ userId, onReviewSubmit }) => {
     try {
       const API = process.env.NEXT_PUBLIC_APIURL;
       const response = await axios.post(`${API}/review/${userId}`, userReview);
-      
 
       setUserReview({
         score: 1,
         description: ""
       });
-
 
       onReviewSubmit(response.data.reviews);
     } catch (error) {

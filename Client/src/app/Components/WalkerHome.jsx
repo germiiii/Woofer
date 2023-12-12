@@ -139,10 +139,12 @@ const WalkerHome = () => {
         Test for when a walk request arrives
       </button>
       <br />
-      <div>{renderList}</div>
-      <div>
-        <h2>Sale Details</h2>
-        <p>{userWalker?.walkerData?.walker?.sale_details}</p>
+      <div className="mb-8">
+        {renderList}
+      </div>
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold mb-4">Sale Details</h2>
+        <p className="text-base">{userWalker?.walkerData?.walker?.sale_details}</p>
       </div>
       <button
         onClick={handleActiveClick}
@@ -151,13 +153,13 @@ const WalkerHome = () => {
         Active
       </button>
       <br />
-      <button onClick= {() => router.push('/walkerHome/TestWalkerRegister')} className="bg-black text-white px-4 py-2">Chage your sell details</button>
-      <div>
-        <h2>Client Comments</h2>
+      <button onClick={() => router.push('/walkerHome/TestWalkerRegister')} className="bg-black text-white px-4 py-2">Change your sell details</button>
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold mb-4">Client Comments</h2>
         {comments.map((comment, index) => (
-          <div key={index}>
-            <p>{comment.text}</p>
-            {comment.response && <p>Response: {comment.response}</p>}
+          <div key={index} className="mb-4">
+            <p className="text-base">{comment.text}</p>
+            {comment.response && <p className="text-base">Response: {comment.response}</p>}
             {!comment.response && (
               <input
                 type="text"
