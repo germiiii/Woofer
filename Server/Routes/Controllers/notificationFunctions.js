@@ -5,7 +5,7 @@ require
 const sendNotification = async (user, type, subject, message, sendEmail) => {
   try {
     const notification = await Notification.create({
-      message,
+      message: subject,
       type,
       email: user.email,
     });
