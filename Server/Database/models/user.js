@@ -70,7 +70,7 @@ module.exports = (sequelize) => {
       is_active: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: true,
+        defaultValue: true
       },
       role: {
         type: DataTypes.ENUM("admin", "user"),

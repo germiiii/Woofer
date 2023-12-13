@@ -14,15 +14,18 @@ import "../stylesLanding.css";
 
 const OwnerHome = () => {
   const api = process.env.NEXT_PUBLIC_APIURL;
+
   const [addressInput, setAddressInput] = useState("");
   const [provinceInput, setProvinceInput] = useState("");
   const [userProvince, setUserProvince] = useState("");
   const [userAddress, setUserAddress] = useState("");
+
   const [selectedType, setSelectedType] = useState("");
 
   useEffect(() => {
     setSelectedType(localStorage.getItem("selectedType") || "");
   }, []);
+
 
   useEffect(() => {
     setAddressInput(localStorage.getItem("userAddress") || "");
