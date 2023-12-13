@@ -92,15 +92,21 @@ const LoginForm = () => {
           `${api}/users/${decodedToken.userId}`
         );
         const userData = userResponse.data;
+        console.log('Userdata', userData)
 
         localStorage.setItem("userId", userData.id);
         localStorage.setItem("userProvince", userData.province);
         localStorage.setItem("userAddress", userData.address);
         localStorage.setItem("selectedType", userData.selectedType);
         localStorage.setItem("isOwner", userData.isOwner);
+        localStorage.setItem("isWalker", userData.isWalker);
         // localStorage.setItem("Owner ID", response.data.UserWithNewOwner.id);
         // localStorage.setItem('Dog Count', response.data.UserWithNewOwner.owner.dog_count)
-        localStorage.setItem("isWalker", userData.isWalker);
+
+        // userData.isOwner ? localStorage.setItem('Dog Count', userData.isOwner)
+
+      
+
 
         if (userData.role === "admin") {
           router.push("/admin");
