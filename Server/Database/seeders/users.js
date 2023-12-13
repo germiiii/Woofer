@@ -259,6 +259,7 @@ const seedUsers = async () => {
       address: "",
       province: "",
       role: "admin",
+      is_active: true,
       image: uploadedImage.secure_url,
       selectedType: "walker",
     });
