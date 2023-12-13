@@ -4,11 +4,15 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import "tailwindcss/tailwind.css";
 import "../stylesLanding.css";
-import UserDetailButton from "./UserDetailButton";
 import Image from "next/image";
 
 const NavbarHomeOwner = () => {
   const currentPath = usePathname();
+  const [userId, setUserId] = React.useState("");
+
+  React.useEffect(() => {
+    setUserId(localStorage.getItem("userId"));
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("paypal_accessToken");
@@ -55,8 +59,16 @@ const NavbarHomeOwner = () => {
             add dogs
           </button>
         </Link>
-        {/* Replace the My Woof button with the UserDetailButton */}
-        <UserDetailButton />
+        <Link href={`/users/${userId}`}>
+          <button
+            className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
+              currentPath.startsWith("/users") ? "text-[#F39200]" : "text-white"
+            } mt-3 lg:mt-0 mr-7  transition transition-colors duration-300`}
+          >
+            my woofer
+          </button>
+        </Link>
+
         <Link href={"/safety"}>
           <button
             className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
