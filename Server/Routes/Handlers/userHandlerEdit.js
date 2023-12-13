@@ -3,7 +3,16 @@ const { userEdit } = require("../Controllers");
 const userHandlerEdit = async (req, res) => {
   try {
     const file = req.file;
-    const { id, name, lastName, username, address, city, province } = req.body;
+    const {
+      id,
+      name,
+      lastName,
+      username,
+      address,
+      city,
+      province,
+      selectedType,
+    } = req.body;
     const data = {
       userID: id,
       name,
@@ -12,6 +21,7 @@ const userHandlerEdit = async (req, res) => {
       address,
       city,
       province,
+      selectedType,
     };
     const editedUser = await userEdit(data, file);
     res.json({ editedUser });
