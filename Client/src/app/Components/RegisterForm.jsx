@@ -53,16 +53,16 @@ const RegisterForm = () => {
       errors.name = "name cannot be empty";
     } else if (userData.name.length > 40) {
       errors.name = "name cannot exceed 40 characters";
-    } else if (!/^[a-zA-Z\s]+$/.test(userData.name)) {
-      errors.name = "name must contain only letters";
+    } else if (!/^[a-zA-Z0-9áéíóúÁÉÍÓÚüÜ\s]+$/.test(userData.name)) {
+      errors.address = "name must contain only alphanumeric characters";
     }
 
     if (!userData.lastName.trim()) {
       errors.lastName = "last name cannot be empty";
     } else if (userData.lastName.length > 40) {
       errors.lastName = "last name cannot exceed 40 characters";
-    } else if (!/^[a-zA-Z\s]+$/.test(userData.lastName)) {
-      errors.lastName = "last name must contain only letters";
+    } else if (!/^[a-zA-Z0-9áéíóúÁÉÍÓÚüÜ\s]+$/.test(userData.lastName)) {
+      errors.address = "last name must contain only alphanumeric characters";
     }
 
     const usernameRegex = /^[a-zA-Z0-9_]+$/;
@@ -118,7 +118,12 @@ const RegisterForm = () => {
 
       const [name, lastName] = user.displayName.split(" ");
 
-      updateUser({ name, lastName, email: user.email, googleImage: user.photoURL });
+      updateUser({
+        name,
+        lastName,
+        email: user.email,
+        googleImage: user.photoURL,
+      });
       router.push("/aditionalForm");
     } catch (error) {
       console.error(error);
