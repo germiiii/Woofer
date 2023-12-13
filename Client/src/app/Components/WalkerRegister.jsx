@@ -121,18 +121,21 @@ const WalkerRegister = () => {
           ))}
         </div>
         <div>
-          <label htmlFor="saleDetails">
-            Offer details (maximum 100 characters):
-          </label>
-          <input
-            type="text"
-            id="saleDetails"
-            value={saleDetails}
-            onChange={(e) => setSaleDetails(e.target.value)}
-            maxLength={100}
-          />
-        </div>
-        <button type="submit">Submit</button>
+          <h3>Sale Details</h3>
+  <label htmlFor="saleDetails"></label>
+  <input
+    type="text"
+    id="saleDetails"
+    value={saleDetails}
+    onChange={(e) => setSaleDetails(e.target.value)}
+    maxLength={100}
+    className="border border-black border-5 p-9 mt-1 w-1/2 break-all"
+  />
+  <p style={{ color: saleDetails.length > 100 ? 'red' : 'inherit' }}>
+    {saleDetails.length} / 100 characters
+  </p>
+</div>
+        <button type="submit" className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] text-white mt-3 lg:mt-0 mr-7 transition transition-colors duration-300`}>Submit</button>
       </form>
       {formSubmissionError && (
         <p style={{ color: "red" }}>{formSubmissionError}</p>
