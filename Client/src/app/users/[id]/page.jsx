@@ -126,8 +126,8 @@ export default function UserPage({ params }) {
           </div>
         </div>
       ) : (
-        <div>
-          <h1>loading...</h1>
+        <div className="flex h-screen items-center justify-center flex-col bg-[#F39200]">
+          <h1 className="text-[#29235c] text-3xl">loading...</h1>
         </div>
       )}
     </div>
