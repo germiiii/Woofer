@@ -48,7 +48,7 @@ const WalkerHome = () => {
     };
     fetchData();
   }, []);
-
+  
   useEffect(() => {
     const fetchWalkerTypes = async () => {
       try {
@@ -143,9 +143,9 @@ const WalkerHome = () => {
     <div className="text-center m-20">
       <ToastContainer />
       <Map userProvince={userProvince} userAddress={userAddress} />
-      {/* <br />
+      <br />
       <WalkList userId={userId}/>
-      <br /> */}
+      <br />
       <div className="mb-8">
         {renderList}
       </div>
