@@ -28,12 +28,17 @@ const NavbarHomeOwner = () => {
     localStorage.removeItem("isOwner");
     localStorage.removeItem("isWalker");
     localStorage.removeItem("token");
+    localStorage.removeItem("ownerId");
+    localStorage.removeItem("walkId");
+    localStorage.removeItem("walkerId");
+    // localStorage.removeItem("dog_count");
+    localStorage.removeItem('walkDuration')
   };
 
   return (
     <div className="bg-[#F39200] py-6 flex items-center justify-center justify-around">
       <div className="flex items-center mr-20">
-        <Image src="/ISOWoofer2.png" width={200} height={200} />
+        <Image src="/ISOWoofer2.png" alt='' width={200} height={200} />
       </div>
       <div className="flex items-center ml-40 mr-40">
         <Link href={"/ownerHome"}>
