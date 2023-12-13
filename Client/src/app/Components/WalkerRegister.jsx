@@ -45,6 +45,11 @@ const WalkerRegister = () => {
     event.preventDefault();
 
     try {
+      if (selectedOptions.length === 0) {
+        alert("Please select at least one option.");
+        return;
+      }
+
       const API = process.env.NEXT_PUBLIC_APIURL;
       const token = localStorage.getItem("token");
 
@@ -95,11 +100,15 @@ const WalkerRegister = () => {
   };
 
   return (
-    <div>
-      <h2>Walker Registration</h2>
+    <div className="h-full w-full flex flex-col items-center">
       <form onSubmit={handleSubmit}>
+        <h1
+          className="mt-10 mb-5 text-5xl text-[#29235c]"
+          style={{ fontFamily: "LikeEat" }}
+        >
+          Select walk types
+        </h1>
         <div>
-          <label>Select walk types:</label>
           {priceList.map((option) => (
             <div
               key={option.id}
@@ -120,22 +129,24 @@ const WalkerRegister = () => {
             </div>
           ))}
         </div>
-        <div>
-          <h3>Sale Details</h3>
-  <label htmlFor="saleDetails"></label>
-  <input
-    type="text"
-    id="saleDetails"
-    value={saleDetails}
-    onChange={(e) => setSaleDetails(e.target.value)}
-    maxLength={100}
-    className="border border-black border-5 p-9 mt-1 w-1/2 break-all"
-  />
-  <p style={{ color: saleDetails.length > 100 ? 'red' : 'inherit' }}>
-    {saleDetails.length} / 100 characters
-  </p>
-</div>
-        <button type="submit" className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] text-white mt-3 lg:mt-0 mr-7 transition transition-colors duration-300`}>Submit</button>
+        <div className="mt-5 flex flex-col items-center justify-center">
+          <input
+            placeholder="your sale details..."
+            type="text"
+            id="saleDetails"
+            value={saleDetails}
+            onChange={(e) => setSaleDetails(e.target.value)}
+            maxLength={100}
+            className="border border-black border-5 p-9 mt-1 w-1/2 break-all"
+          />
+          <p className="mb-3 mt-3">{saleDetails.length} / 100 characters</p>
+          <button
+            type="submit"
+            className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] text-white mt-3 lg:mt-0 mr-7 transition transition-colors duration-300`}
+          >
+            submit
+          </button>
+        </div>
       </form>
       {formSubmissionError && (
         <p style={{ color: "red" }}>{formSubmissionError}</p>
@@ -151,7 +162,8 @@ const WalkerRegister = () => {
         }
 
         .selected-card {
-          background-color: gray; /* Changes the background color to gray when selected */
+          background-color: #29235c;
+          color: #f39200;
         }
       `}</style>
     </div>
