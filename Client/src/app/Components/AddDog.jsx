@@ -302,7 +302,7 @@ export default function OwnerForm() {
           {dogData.name &&
           dogData.age &&
           dogData.breed &&
-          dogData.size &&
+          dogData.size ||
           dogData.image ? (
             <button
               type="submit"
