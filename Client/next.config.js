@@ -2,6 +2,6 @@
 
 module.exports = {
   images: {
-    domains: ["res.cloudinary.com", "cvhrma.org"],
+    domains: ["res.cloudinary.com", "cvhrma.org", "lh3.googleusercontent.com"],
   },
 };
