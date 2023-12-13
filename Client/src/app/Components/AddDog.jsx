@@ -163,6 +163,8 @@ export default function OwnerForm() {
         });
 
         localStorage.setItem("isOwner", response.data.UserWithNewOwner.isOwner);
+        // localStorage.setItem("ownerId", response.data.UserWithNewOwner.id);
+        localStorage.setItem('dog_count', response.data.UserWithNewOwner.owner.dog_count)
         console.log("Server response:", response.data);
         alert("Dog added successfully!");
         router.push("/ownerHome");

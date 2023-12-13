@@ -5,6 +5,7 @@ import Nav from "../Components/NavBarOwner.jsx";
 import OwnerForm from "../Components/OwnerForm.jsx";
 import Map from "../Components/Map.jsx";
 import SelectWalkers from "../Components/SelectWalkers.jsx";
+import YouAreNotAnOwner from "../Components/YouAreNotAnOwner.jsx";
 import provinces from "../register/provinces.js";
 import jwt from "jsonwebtoken";
 import Link from "next/link";
@@ -106,12 +107,7 @@ const OwnerHome = () => {
           </div>
         </div>
       ) : (
-        <div>
-          <h1>You are not an owner.</h1>
-          <Link href={"/walkerHome"}>
-            <button>back to walker home</button>
-          </Link>
-        </div>
+        <YouAreNotAnOwner />
       )}
     </div>
   );
