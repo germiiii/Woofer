@@ -7,7 +7,9 @@ const {
   WalkType,
   Notification,
 } = require("../../Database/db");
+const { sendEmailNotification } = require("../utils/sendEmailNotification");
 const { sendNotification } = require("./notificationFunctions");
+const { walkGet } = require("./walkGet");
 
 const walkPost = async (
   ownerId,
@@ -69,51 +71,30 @@ const walkPost = async (
     );
   }
 
-  const walkData = await Walk.findOne({
-    where: { id: newWalk?.id },
-    include: [
-      {
-        model: Owner,
-        attributes: ["score", "reviews_count"],
-        include: [
-          {
-            model: User,
-            attributes: ["name", "lastName", "email"],
-          },
-        ],
-      },
-      {
-        model: Walker,
-        attributes: ["score", "reviews_count"],
-        include: [
-          {
-            model: User,
-            attributes: ["name", "lastName", "email"],
-          },
-        ],
-      },
-      {
-        model: WalkType,
-        attributes: ["title"],
-        through: { attributes: [] },
-      },
-      {
-        model: Dog,
-        attributes: ["id", "name"],
-        through: { attributes: [] },
-        required: false,
-      },
-    ],
-  });
+  const walkData = await walkGet(null, newWalk?.id, null);
 
-  let message = `We've received a payment via ${paymentMethod} of $ ${totalPrice} for your walk request!`;
+  let message = `Hi ${userOwner.name} \n 
+  We've received a payment via ${paymentMethod} of $ ${totalPrice} for your walk request!`;
   let type = "walk";
   let subject = "Payment received";
   let email = userOwner.email;
 
   await sendNotification(userOwner, type, subject, message, true);
 
-  message = `You have a new walk request from ${walkData?.owner.user.name} ${walkData?.owner.user.lastName}!`;
+  message = `WOOFER has received a payment from ${walkData[0]?.owner.name} for a walk request!\n
+  Walk id: ${walkData[0]?.id},\n
+  Walker: ${walkData[0]?.walker.name},\n
+  The total amount is $ ${totalPrice}\n
+  Payment method: ${paymentMethod}`;
+
+  sendEmailNotification(subject, "admin@woofer.com", message);
+
+  message = `You have a new walk request from ${walkData[0]?.owner.name}!\n
+  Date: ${walkData[0]?.date},\n
+  Time: ${walkData[0]?.startTime},\n
+  Duration: ${walkData[0]?.duration} minutes,\n
+  Dogs: ${walkData[0]?.dogNumber},\n
+ `;
   type = "walk";
   subject = "You've got a ride to do";
   email = userWalker.email;

@@ -1,9 +1,11 @@
 const { Op } = require("sequelize");
 const { User, Walker, Owner, Review, Walk } = require("../../Database/db");
 
-const walkGet = async (id, date) => {
+const walkGet = async (id, idWalk, date) => {
   const whereDate = date ? { [Op.gte]: date } : {};
   let whereId = {};
+  let whereIdWalk = {};
+
 
   if (id) {
     whereId = {
@@ -14,11 +16,16 @@ const walkGet = async (id, date) => {
     };
   }
 
+  if (idWalk) {
+    whereIdWalk = { id: idWalk };
+  }
+
   const allWalks = await Walk.findAll({
-    where: {
+    where: JSON.parse(JSON.stringify({
       ...whereDate,
-      ...whereId
-    },
+      ...whereId,
+      ...whereIdWalk
+    })),
     include: [
       {
         model: Owner,
@@ -40,6 +47,7 @@ const walkGet = async (id, date) => {
       },
     ],
     order: [["date", "ASC"]],
+
   });
 
   const allWalkData = allWalks.map((walk) => {
@@ -73,7 +81,7 @@ const walkGet = async (id, date) => {
   return allWalkData;
 };
 
-module.exports = { walkGet };
+module.exports = { walkGet }
 
 // const walkData = await Walk.findAll({
 //   attributes: [
