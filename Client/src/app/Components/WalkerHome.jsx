@@ -48,7 +48,7 @@ const WalkerHome = () => {
     };
     fetchData();
   }, []);
-
+  
   useEffect(() => {
     const fetchWalkerTypes = async () => {
       try {
@@ -143,16 +143,19 @@ const WalkerHome = () => {
     <div className="text-center m-20">
       <ToastContainer />
       <Map userProvince={userProvince} userAddress={userAddress} />
-      {/* <br />
+      <br />
       <WalkList userId={userId}/>
-      <br /> */}
+      <br />
       <div className="mb-8">
         {renderList}
       </div>
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Sale Details</h2>
-        <p className="text-base">{userWalker?.walkerData?.walker?.sale_details}</p>
-      </div>
+      <h2 className="text-2xl font-bold mb-4">Sale Details</h2>
+      <p className="text-base">
+        {userWalker?.walkerData?.walker?.sale_details ||
+          "Woofer offers you dog walking services"}
+      </p>
+    </div>
       <button
         onClick={handleActiveClick}
         className="bg-black text-white px-4 py-2"

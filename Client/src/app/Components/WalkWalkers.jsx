@@ -11,7 +11,9 @@ const WalkList = (props) => {
       try {
         const API = process.env.NEXT_PUBLIC_APIURL;
         const response = await axios.get(`${API}/walk/walker/${props.userId}`);
-        const walkss = response.data.walksFromWalker[0].walker.owners;
+        const walkss = response.data.walksFromWalker;
+        console.log(walkss)
+        setWalks(walkss);
 
       } catch (error) {
         console.error('Error al obtener los datos de la caminata:', error);
