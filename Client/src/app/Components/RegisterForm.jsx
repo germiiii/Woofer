@@ -33,6 +33,7 @@ const RegisterForm = () => {
     selectedType:
       type === "walker" ? "walker" : type === "owner" ? "owner" : "",
     image: "",
+    googleImage: "",
     province: "",
   });
   const [formSent, setFormSent] = useState(false);
@@ -117,7 +118,7 @@ const RegisterForm = () => {
 
       const [name, lastName] = user.displayName.split(" ");
 
-      updateUser({ name, lastName, email: user.email });
+      updateUser({ name, lastName, email: user.email, googleImage: user.photoURL });
       router.push("/aditionalForm");
     } catch (error) {
       console.error(error);
@@ -186,6 +187,7 @@ const RegisterForm = () => {
     userFormData.append("selectedType", userData.selectedType);
     userFormData.append("image", image);
     userFormData.append("province", userData.province);
+    userFormData.append("googleImage", userData.googleImage);
 
     try {
       const response = await axios.post(`${api}/register`, userFormData);
