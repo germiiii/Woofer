@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DogWalkOption from "../Components/DogWalkOption";
 import Reviews from "../Components/Reviews";
+import WalkList from "./WalkWalkers";
 import "tailwindcss/tailwind.css";
 import Map from "../Components/Map";
 import jwt from "jsonwebtoken";
@@ -23,7 +24,7 @@ const WalkerHome = () => {
   const [userId, setUserId] = useState("");
   const router = useRouter();
   const isWalker = localStorage.getItem("isWalker");
-  console.log(isWalker);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,8 +32,6 @@ const WalkerHome = () => {
 
       if (token) {
         const decodedToken = jwt.decode(token);
-        console.log(decodedToken.userId);
-
         try {
           const API = process.env.NEXT_PUBLIC_APIURL;
           const response = await axios.get(
@@ -42,7 +41,6 @@ const WalkerHome = () => {
           setUserProvince(response.data.province);
           setUserAddress(response.data.address);
           setUserId(decodedToken.userId);
-          console.log(decodedToken.userId);
         } catch (error) {
           console.error("Error fetching data from the server", error);
         }
@@ -141,28 +139,19 @@ const WalkerHome = () => {
     }
   };
 
-  const testFunction = () => {
-    toast.success(
-      `¡${clientHiring.join(", ")} have hired your service! (Test)`,
-      {
-        position: toast.POSITION.TOP_RIGHT,
-      }
-    );
-  };
-
   return (
     <div className="text-center m-20">
       <ToastContainer />
       <Map userProvince={userProvince} userAddress={userAddress} />
-
-      <button onClick={testFunction} className="bg-black text-white px-4 py-2">
-        Test for when a walk request arrives
-      </button>
       <br />
-      <div>{renderList}</div>
-      <div>
-        <h2>Sale Details</h2>
-        <p>{userWalker?.walkerData?.walker?.sale_details}</p>
+      <WalkList userId={userId}/>
+      <br />
+      <div className="mb-8">
+        {renderList}
+      </div>
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold mb-4">Sale Details</h2>
+        <p className="text-base">{userWalker?.walkerData?.walker?.sale_details}</p>
       </div>
       <button
         onClick={handleActiveClick}
@@ -180,9 +169,9 @@ const WalkerHome = () => {
       <div>
         <h2>Client Comments</h2>
         {comments.map((comment, index) => (
-          <div key={index}>
-            <p>{comment.text}</p>
-            {comment.response && <p>Response: {comment.response}</p>}
+          <div key={index} className="mb-4">
+            <p className="text-base">{comment.text}</p>
+            {comment.response && <p className="text-base">Response: {comment.response}</p>}
             {!comment.response && (
               <input
                 type="text"
