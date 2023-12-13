@@ -4,6 +4,7 @@ import Nav from "../../Components/NavBarWalker.jsx";
 import React from "react";
 import Link from "next/link.js";
 import Image from "next/image";
+import YouAreNotAWalker from "../../Components/YouAreNotAWalker.jsx";
 
 export default function HomeWalker() {
   const [selectedType, setSelectedType] = React.useState("");
@@ -45,12 +46,7 @@ export default function HomeWalker() {
           </div>
         </div>
       ) : (
-        <div>
-          <h1>You are not a walker.</h1>
-          <Link href={"/ownerHome"}>
-            <button>back to owner home</button>
-          </Link>
-        </div>
+        <YouAreNotAWalker />
       )}
     </div>
   );
