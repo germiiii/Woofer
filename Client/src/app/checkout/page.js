@@ -10,6 +10,7 @@ import local from "next/font/local";
 import { browserLocalPersistence } from "firebase/auth";
 
 const CheckoutComponent = () => {
+  const router = useRouter()
   const [walkerDetails, setWalkerDetails] = useState(null);
   const [walkerId, setWalkerId] = useState('')
   const [selectedWalkType, setSelectedWalkType] = useState(null);
@@ -122,7 +123,14 @@ const CheckoutComponent = () => {
   
   
   //!Quantity
+  
+  const isWalkTypeSelected = selectedWalkType !== null;
+
   const handleQuantityChange = (e, item) => {
+    if (!isWalkTypeSelected) {
+      alert("Please select a walk type first");
+      return;
+    }
     let value = parseInt(e.target.value);
 
     value = Math.min(Math.max(value, 0), 15);
@@ -134,6 +142,10 @@ const CheckoutComponent = () => {
   };
 
   const incrementQuantity = (item) => {
+    if (!isWalkTypeSelected) {
+      alert("Please select a walk type first");
+      return;
+    }
     setExtraQuantities((prevExtraQuantities) => ({
       ...prevExtraQuantities,
       [item]: Math.min(parseInt(prevExtraQuantities[item]) + 1, 15),
@@ -141,6 +153,10 @@ const CheckoutComponent = () => {
   };
 
   const decrementQuantity = (item) => {
+    if (!isWalkTypeSelected) {
+      alert("Please select a walk type first");
+      return;
+    }
     setExtraQuantities((prevExtraQuantities) => ({
       ...prevExtraQuantities,
       [item]: Math.max(parseInt(prevExtraQuantities[item]) - 1, 0),
@@ -148,16 +164,27 @@ const CheckoutComponent = () => {
   };
 
   const handleWalkTypeQuantityChange = (value) => {
-  
+    if (!isWalkTypeSelected) {
+      alert("Please select a walk type first");
+      return;
+    }
     value = Math.min(Math.max(value, 0), 15);
     setWalkTypeQuantity(value);
   };
 
   const incrementWalkTypeQuantity = () => {
+    if (!isWalkTypeSelected) {
+      alert("Please select a walk type first");
+      return;
+    }
     setWalkTypeQuantity((prevQuantity) => Math.min(prevQuantity + 1, 15));
   };
 
   const decrementWalkTypeQuantity = () => {
+    if (!isWalkTypeSelected) {
+      alert("Please select a walk type first");
+      return;
+    }
     setWalkTypeQuantity((prevQuantity) => Math.max(prevQuantity - 1, 0));
   };
 
@@ -293,26 +320,26 @@ const CheckoutComponent = () => {
       await actions.order.capture();
       alert("Payment successful");
     
-    const ownerId = localStorage.getItem('Owner ID')
+   
     const userId = localStorage.getItem('userId')
     const walkerId = localStorage.getItem('walkerId')
     const walkDuration = localStorage.getItem('walkDuration')
     const totalAmount = localStorage.getItem("totalAmount");
-    const dogCount = localStorage.getItem('dog_count')
+    const dogCount = localStorage.getItem('dog_count');
     const walkType = localStorage.getItem('walkId')
     
 
 
       const paymentDetails = {
-        ownerId: ownerId ? ownerId : userId,
+        ownerId: userId,
         walkerId: walkerId,
         duration: walkDuration, 
         totalPrice: totalAmount,
         paymentMethod: "paypal",
-        dogs: dogCount,
+        dogs: parseInt(dogCount),
         walkTypes: [walkType],
       };
-      console.log('Dogs', dogCount)
+      console.log('payment details', paymentDetails)
 
       const response = await axios.post(`${api}/walk`, paymentDetails, {
         headers: {
@@ -323,7 +350,7 @@ const CheckoutComponent = () => {
       console.log("POST request response:", response.data);
 
       // setTimeout(() => {
-      //   router.push("/home");
+      //   router.push("/ownerHome");
       // }, 3000);
     } catch (error) {
       console.error("Error capturing payment:", error);
@@ -336,22 +363,18 @@ const CheckoutComponent = () => {
   };
 
   return (
-    <div className="">
-      <>
-        <Nav />
-      </>
-      <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center relative">
-        <h1
-          className="text-4xl text-[#29235C] font-bold mb-2 mt-11"
-          style={{ fontFamily: "LikeEat" }}
-        >
-          Payment Summary
-        </h1>
-        <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg flex flex-col items-center relative">
-          <div className="flex w-full">
-            <div className="w-1/2 p-4 border-r border-gray-300 bg-[#29235C] rounded-lg">
-              {/* Left Column: Walker Details */}
-              <div className="w-1/2 py-9 relative ">
+<div className="">
+  <>
+    <Nav />
+  </>
+  <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center relative">
+    <h1 className="text-4xl text-[#29235C] font-bold mb-2 mt-11" style={{ fontFamily: "LikeEat" }}>
+      Payment Summary
+    </h1>
+    <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg flex flex-col items-center relative">
+      <div className="flex w-full">
+        <div className="w-1/2 p-4 border-r border-gray-300 bg-[#29235C] rounded-lg">
+          <div className="w-1/2 py-9 relative ">
                 {walkerDetails && walkerData ? (
                   <div className="relative ">
                     <p
@@ -363,6 +386,7 @@ const CheckoutComponent = () => {
 
                     <div
                       className="rounded-lg overflow-hidden"
+                      alt=''
                       style={{
                         backgroundImage: `url(${walkerData.image})`,
                         backgroundSize: "cover",
@@ -395,36 +419,28 @@ const CheckoutComponent = () => {
                 )}
               </div>
             </div>
-            {/* Right Column: Walk Types, Extras, and PayPal Button */}
+           
             <div className="w-1/2 p-4">
-              {walkerDetails && walkerData ? (
+          {walkerDetails && walkerData ? (
+            <div>
+              <h2 className="text-3xl text-[#29235C] font-bold mb-2 mt-4" style={{ fontFamily: "LikeEat" }}>
+                Walk Services by {walkerData.name}:
+              </h2>
+              {walkerData.walker?.walkTypes && walkerData.walker.walkTypes.length > 0 ? (
                 <div>
-                  <h2
-                    className="text-3xl text-[#29235C] font-bold mb-2 mt-4"
-                    style={{ fontFamily: "LikeEat" }}
-                  >
-                    Walk Services by {walkerData.name}:
-                  </h2>
-                  {walkerData.walker?.walkTypes &&
-                  walkerData.walker.walkTypes.length > 0 ? (
-                    <div>
-                      <td className="py-4">
-                        {/* <label htmlFor="walkTypeSelect">Select Walk Type:</label> */}
-                        <select
-                          id="walkTypeSelect"
-                          onChange={(e) =>
-                            handleWalkTypeSelection(e.target.value)
-                          }
-                          className="border border-[#F39200] p-1 rounded "
-                        >
-                          <option value="">Select a Walk Type</option>
-                          {walkerData.walker.walkTypes.map((walkType) => (
-                            <option key={walkType.id} value={walkType.title}>
-                              {walkType.title} - ${walkType.price}
-                            </option>
-                          ))}
-                        </select>
-                      </td>
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <select id="walkTypeSelect" onChange={(e) => handleWalkTypeSelection(e.target.value)} className="border border-[#F39200] p-1 rounded ">
+                            <option value="">Select a Walk Type</option>
+                            {walkerData.walker.walkTypes.map((walkType) => (
+                              <option key={walkType.id} value={walkType.title}>
+                                {walkType.title} - ${walkType.price}
+                              </option>
+                            ))}
+                          </select>
+                        </td>
                       <td className="py-4">
                         <div className="flex items-center">
                           <button
@@ -444,6 +460,9 @@ const CheckoutComponent = () => {
                           </button>
                         </div>
                       </td>
+                      </tr>
+                      </tbody>
+                      </table>
                   
                       {selectedWalkType && (
                         <div className="mt-4 relative">
@@ -459,7 +478,7 @@ const CheckoutComponent = () => {
                     <p>No walk types available</p>
                   )}
 
-                  {/* Add Extras Section */}
+                
                   <div className="mt-8">
                     <h3 className="mb-4 font-bold text-2xl text-[#29235C]" style={{ fontFamily: "LikeEat" }}>Add Extras:</h3>
                     <table>
@@ -559,7 +578,7 @@ const CheckoutComponent = () => {
                 <p>Loading walker details...</p>
               )}
 
-              {/* Summary and PayPal Button */}
+             
               <div className="border-t border-gray-300 pt-4 mt-8">
                 <h1 className="text-3xl text-[#29235C] font-bold mb-2 mt-4"
                     style={{ fontFamily: "LikeEat" }}>Summary</h1>

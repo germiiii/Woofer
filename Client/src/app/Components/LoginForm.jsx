@@ -74,7 +74,7 @@ const LoginForm = () => {
           localStorage.setItem("selectedType", userData.selectedType);
           localStorage.setItem("isOwner", userData.isOwner);
           localStorage.setItem("isWalker", userData.isWalker);
-          localStorage.setItem("dog_count", userData.owner.dog_count);
+          // localStorage.setItem("dog_count", userData.owner.dog_count);
 
           if (userData.selectedType === "owner") {
             if (userData.isOwner === false) {
@@ -129,7 +129,9 @@ const LoginForm = () => {
         localStorage.setItem("selectedType", userData.selectedType);
         localStorage.setItem("isOwner", userData.isOwner);
         localStorage.setItem("isWalker", userData.isWalker);
-        localStorage.setItem('dog_count', userData.owner.dog_count)
+        
+
+        userData.isOwner ? localStorage.setItem('dog_count', userData.owner.dog_count) : null
 
         // userData.isOwner ? localStorage.setItem('Dog Count', userData.isOwner)
 
