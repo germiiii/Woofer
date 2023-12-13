@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
 import Nav from "../Components/NavBarOwner";
+import PayPal from '../../api/checkout'
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import "tailwindcss/tailwind.css";
 import local from "next/font/local";
@@ -224,8 +225,9 @@ const CheckoutComponent = () => {
   }, [selectedWalkType, extraQuantities, walkTypeQuantity]);
 
 
-  //! PayPal
-  //!Access Token Fetching
+
+  // //! PayPal
+  // //!Access Token Fetching
   useEffect(() => {
     async function fetchAccessToken() {
       try {
@@ -591,7 +593,7 @@ const CheckoutComponent = () => {
                   <PayPalButtons
                     style={{
                       layout: "vertical",
-                      color: "gold",
+                      color: "white",
                       label: "pay",
                       shape: "pill",
                     }}
@@ -600,12 +602,20 @@ const CheckoutComponent = () => {
                     onApprove={handleApprove}
                   />
                 </PayPalScriptProvider>
+{/* 
+              <PayPal
+                createOrder={createOrder}
+                onCancel={handleCancel}
+                onApprove={handleApprove}
+                clientId={clientId}
+                
+              /> */}
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    // </div>
   );
 };
 
