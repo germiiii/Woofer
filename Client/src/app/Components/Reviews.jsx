@@ -36,6 +36,9 @@ const Reviews = ({ userId }) => {
                     }, []);
 
                     setReviewData(accumulatedData);
+                    // const intervalId = setInterval(fetchData, 30000);
+
+                    // return () => clearInterval(intervalId);
                 }
             } catch (error) {
                 console.error('Error fetching reviews:', error);

@@ -16,7 +16,8 @@ const { walkerHandlerGetAvailable } = require("./walkerHandlerGetAvailable");
 const { walkerHandlerGetById } = require("./walkerHandlerGetById");
 const { walkerHandlerGetAll } = require("./walkerHandlerGetAll");
 const { walkHandlerPost } = require("./walkHandlerPost");
-const { walkHandlerGetAll } = require("./walkHandlerGetAll");
+const { walkHandlerPut } = require("./walkHandlerPut");
+const { walkHandlerGet } = require("./walkHandlerGet");
 const { walkHandlerGetByWalker } = require("./walkHandlerGetByWalker");
 const { walkHandlerGetByOwner } = require("./walkHandlerGetByOwner");
 const { paymentHandlerPost } = require("./paymentHandlerPost");
@@ -44,7 +45,8 @@ module.exports = {
   walkerHandlerGetById,
   walkerHandlerGetAll,
   walkHandlerPost,
-  walkHandlerGetAll,
+  walkHandlerPut,
+  walkHandlerGet,
   walkHandlerGetByWalker,
   walkHandlerGetByOwner,
   ownerHandlerGetById,

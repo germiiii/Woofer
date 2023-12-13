@@ -29,7 +29,7 @@ const walkerGetById = async (id, date) => {
         include: [
           {
             model: WalkType,
-            attributes: ["id", "title", "price", "description", "walk_duration"],
+            attributes: ["id", "title", "walk_duration", "price", "description"],
             through: { attributes: [] },
           },
         ],

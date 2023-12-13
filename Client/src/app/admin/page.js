@@ -18,16 +18,19 @@ import {
   useGridApiContext,
   gridFilteredSortedRowIdsSelector,
   gridVisibleColumnFieldsSelector,
+  GridCellEditStopParams,
+  MuiEvent,
 } from "@mui/x-data-grid";
 import Navbar from "../Components/NavBar";
 import "tailwindcss/tailwind.css";
 import "../stylesLanding.css";
 import Link from "next/link.js";
+import { PathParamsContext } from "next/dist/shared/lib/hooks-client-context.shared-runtime";
 
 export default function DataGridDemo() {
   const api = process.env.NEXT_PUBLIC_APIURL;
   const columns = [
-    { field: "id", headerName: "ID", width: 300 },
+    { field: "id", headerName: "ID", width: 300, editable: false },
     {
       field: "image",
       headerName: "Image",
@@ -58,25 +61,25 @@ export default function DataGridDemo() {
       description: "This column has a value getter and is not sortable.",
       sortable: false,
       width: 160,
-      editable: false,
+      editable: true,
     },
     {
       field: "name",
       headerName: "Name",
       width: 130,
-      editable: false,
+      editable: true,
     },
     {
       field: "lastName",
       headerName: "Last Name",
       width: 130,
-      editable: false,
+      editable: true,
     },
     {
       field: "selectedType",
       headerName: "Type",
       width: 90,
-      editable: false,
+      editable: true,
     },
     {
       field: "province",
@@ -84,7 +87,7 @@ export default function DataGridDemo() {
       description: "This column has a value getter and is not sortable.",
       sortable: true,
       width: 250,
-      editable: false,
+      editable: true,
     },
     {
       field: "address",
@@ -92,7 +95,7 @@ export default function DataGridDemo() {
       description: "This column has a value getter and is not sortable.",
       sortable: false,
       width: 200,
-      editable: false,
+      editable: true,
     },
     {
       field: "email",
@@ -157,6 +160,7 @@ export default function DataGridDemo() {
     try {
       const response = await axios.get(`${api}/users?role=admin`);
       setUsers(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -271,6 +275,32 @@ export default function DataGridDemo() {
               showQuickFilter: true,
               quickFilterProps: { debounceMs: 500 },
             },
+          }}
+          processRowUpdate={(updatedRow, originalRow) => {
+            // Send the updated values to the server
+            return axios
+              .put(`${api}/editUser`, updatedRow)
+              .then((response) => {
+                // You can handle the server response if needed
+                console.log(response.data);
+                return updatedRow; // Update the Data Grid internal state
+              })
+              .catch((error) => {
+                // Handle errors appropriately
+                console.error("Error updating row on the server:", error);
+                // You may want to throw an error or return originalRow
+                return originalRow; // Keep the original state in case of an error
+              });
+          }}
+          onProcessRowUpdateError={(
+            error,
+            updatedRows,
+            updatedRowsById,
+            previousRowState,
+            apiRef
+          ) => {
+            // Handle the error appropriately
+            console.error("Error updating rows:", error);
           }}
         />
       </Box>

@@ -52,16 +52,42 @@ const LoginForm = () => {
       const result = await signInWithPopup(auth, googleAuth);
       const { user } = result;
       const email = user.email;
-      const googleToken = await user.getIdToken();
 
-      const response = await axios.post(`${api}/googleLogin`, {
-        email,
-        googleToken,
-      });
+      const response = await axios.post(`${api}/googleLogin`, { email });
 
       if (response.status === 201) {
-        localStorage.setItem("token", googleToken);
-        router.push("/ownerHome");
+        const { token } = response.data;
+        localStorage.setItem("token", token);
+
+        if (token) {
+          setIsLoggedIn(true);
+          const decodedToken = jwt.decode(token);
+          const userResponse = await axios.get(
+            `${api}/users/${decodedToken.userId}`
+          );
+          const userData = userResponse.data;
+
+          localStorage.setItem("userId", userData.id);
+          localStorage.setItem("userProvince", userData.province);
+          localStorage.setItem("userAddress", userData.address);
+          localStorage.setItem("selectedType", userData.selectedType);
+          localStorage.setItem("isOwner", userData.isOwner);
+          localStorage.setItem("isWalker", userData.isWalker);
+
+          if (userData.selectedType === "owner") {
+            if (userData.isOwner === false) {
+              router.push("/add-dogs");
+            } else {
+              router.push("/ownerHome");
+            }
+          } else if (userData.selectedType === "walker") {
+            if (userData.isWalker === false) {
+              router.push("/walkerHome/TestWalkerRegister");
+            } else {
+              router.push("/walkerHome");
+            }
+          }
+        }
       } else {
         console.error("Authentication failed");
       }

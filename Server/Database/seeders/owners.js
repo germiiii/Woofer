@@ -1,3 +1,5 @@
+const { User } = require("../../Database/db");
+
 const fs = require("fs");
 const path = require("path");
 
@@ -161,7 +163,7 @@ const ownerData = [
   // },
 ];
 
-const seedOwners = async (User) => {
+const seedOwners = async () => {
   try {
     for (const owner of ownerData) {
       const { username, dogs, ...ownerAttributes } = owner;

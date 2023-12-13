@@ -36,8 +36,8 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       state: {
-        type: DataTypes.ENUM("toDo", "inProgress", "done", "rejected"),
-        defaultValue: "toDo",
+        type: DataTypes.ENUM("Pending", "In progress", "Done", "Rejected"),
+        defaultValue: "Pending",
         allowNull: false,
       },
       hasOwnerReview: {

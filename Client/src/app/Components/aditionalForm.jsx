@@ -25,6 +25,7 @@ const AditionalForm = () => {
     password: "",
     selectedType: "",
     image: "",
+    googleImage: userData.googleImage || "",
     province: "",
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -42,6 +43,7 @@ const AditionalForm = () => {
       password: "",
       selectedType: "",
       image: "",
+      googleImage: userData.googleImage || "",
       province: "",
     });
   }, [userData]);

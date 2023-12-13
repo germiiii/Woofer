@@ -11,57 +11,6 @@ const WalkerCard = (props) => {
   const isOwner = localStorage.getItem("isOwner");
   const router = useRouter();
 
-  const cardStyle = {
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    padding: "16px",
-    margin: "16px",
-    textAlign: "left",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    width: "900px",
-    height: "150px",
-    display: "flex",
-    justifyContent: "start",
-    alignItems: "center",
-    backgroundColor: "white",
-  };
-
-  const nameStyle = {
-    fontSize: "1.5em",
-    fontWeight: "bold",
-    color: "#29235c",
-  };
-
-  const addressStyle = {
-    fontSize: "1.2em",
-    color: "black",
-  };
-
-  const dogCapacityStyle = {
-    fontSize: "1.0em",
-    color: "#29235c",
-  };
-
-  const walkDurationStyle = {
-    fontSize: "1.0em",
-    color: "darkblue",
-  };
-
-  const imageStyle = {
-    borderRadius: "8px",
-  };
-
-  const textStyle = {
-    display: "flex",
-    flexDirection: "column",
-    marginLeft: "30px",
-    width: "700px",
-  };
-
-  const checkoutStyle = {
-    marginRight: "50px",
-  };
-
   const handleClick = async () => {
     if (isOwner === "false") {
       router.push("/add-dogs");
@@ -90,28 +39,34 @@ const WalkerCard = (props) => {
   };
 
   return (
-    <div>
-      <div style={cardStyle}>
+    <div
+      className={`flex border border-[#29235c] border-solid border-2 mt-5 w-[700px] bg-white hover:shadow-lg`}
+    >
+      <div className="flex items-center mr-10">
         <Image
-          style={imageStyle}
           src={props.image}
           width={100}
           height={100}
           alt="profile"
+          className="border-r-2  border-solid border-[#29235c]"
         />
-        <div style={textStyle}>
-          <h2 style={nameStyle}>{props.name + " " + props.lastName}</h2>
-        </div>
-        <div style={checkoutStyle}>
-          <Image
-            alt="Checkout"
-            src={checkoutImage}
-            width={40}
-            height={40}
-            onClick={() => handleClick(props.id)}
-            style={{ cursor: "pointer" }}
-          />
-        </div>
+      </div>
+      <div className="flex flex-col justify-center items-start w-[450px]">
+        <h2 className="text-[#29235c] font-bold text-2xl">
+          {props.name + " " + props.lastName}
+        </h2>
+        <h2 className="text-[#F39200] font-bold">{props.address}</h2>
+      </div>
+      <div className="flex items-center justify-center mr-10">
+        <Image
+          alt="Checkout"
+          src={checkoutImage}
+          width={40}
+          height={40}
+          onClick={() => handleClick(props.id)}
+          style={{ cursor: "pointer" }}
+          className="mr-5 ml-5 transition-transform transform-gpu hover:scale-110"
+        />
       </div>
     </div>
   );
