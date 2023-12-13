@@ -18,11 +18,12 @@ const { walkPost } = require("./walkPost");
 const { walkerPut } = require("./walkerPut");
 const { walkGetByWalker } = require("./walkGetByWalker");
 const { walkGetByOwner } = require("./walkGetByOwner");
-const { walkGetAll } = require("./walkGetAll");
+const { walkGet } = require("./walkGet");
 const { PaymentController } = require("./PaymentController");
 const { userEdit } = require("./userEdit");
 const { reviewPost } = require("./reviewPost");
 const { reviewGet } = require("./reviewGet");
+const { walkUpdateState } = require("./walkUpdateState");
 
 module.exports = {
   userLogin,
@@ -43,11 +44,12 @@ module.exports = {
   walkerGetAll,
   walkerGetById,
   walkPost,
-  walkGetAll,
+  walkGet,
   walkGetByWalker,
   walkGetByOwner,
   PaymentController,
   userEdit,
   reviewGet,
-  reviewPost
+  reviewPost,
+  walkUpdateState
 };

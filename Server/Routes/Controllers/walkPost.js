@@ -7,6 +7,7 @@ const {
   WalkType,
   Notification,
 } = require("../../Database/db");
+const { sendNotification } = require("./notificationFunctions");
 
 const walkPost = async (
   ownerId,
@@ -19,13 +20,14 @@ const walkPost = async (
 ) => {
   const userOwner = await User.findByPk(ownerId);
   const userWalker = await User.findByPk(walkerId);
+
   if (!userOwner) {
-    throw new Error(`Owner${ownerId} not found`);
+    throw new Error(`Owner ${ownerId} not found`);
   }
   if (!userWalker) {
     throw new Error(`Walker ${walkerId} not found`);
   }
-  
+
   const owner = await userOwner?.getOwner();
   const walker = await userWalker?.getWalker();
 
@@ -56,6 +58,7 @@ const walkPost = async (
   await walker?.addWalk(newWalk);
 
   if (Array.isArray(dogs)) {
+    //si hay detalle de perros los agrego
     const ownerDogs = await owner?.getDogs();
     await Promise.all(
       ownerDogs?.map(async (dog) => {
@@ -102,26 +105,20 @@ const walkPost = async (
       },
     ],
   });
-  //notificaciones
-  //al owner
-  let mensaje = `Recibimos tu pago mediante ${paymentMethod} de $ ${totalPrice} por tu paseo!`;
-  let notification = await Notification.create({
-    message: mensaje,
-    type: "payment",
-  });
-  userOwner.addNotification(notification);
-  userOwner.hasNotifications = true;
-  await userOwner.save();
-  // enviarNotificacion(walkData?.owner?.email, mensaje);
-  //al walker
-  mensaje = `Tenes un nuevo paseo para realizar del usuario ${walkData?.owner.user.name} ${walkData?.owner.user.lastName}!`;
-  notification = await Notification.create({
-    message: mensaje,
-    type: "walk",
-  });
-  userWalker.addNotification(notification);
-  userWalker.hasNotifications = true;
-  await userWalker.save();
+
+  let message = `We've received a payment via ${paymentMethod} of $ ${totalPrice} for your walk request!`;
+  let type = "walk";
+  let subject = "Payment received";
+  let email = userOwner.email;
+
+  await sendNotification(userOwner, type, subject, message, true);
+
+  message = `You have a new walk request from ${walkData?.owner.user.name} ${walkData?.owner.user.lastName}!`;
+  type = "walk";
+  subject = "You've got a ride to do";
+  email = userWalker.email;
+
+  await sendNotification(userWalker, type, subject, message, true);
 
   return walkData;
 };
