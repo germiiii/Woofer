@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React from "react";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import "tailwindcss/tailwind.css";
 import "../stylesLanding.css";
 
@@ -25,12 +26,15 @@ const NavbarHomeWalker = () => {
   };
 
   return (
-    <div className="bg-[#F39200] py-6 flex items-center justify-center px-2">
-      <div className="flex  items-center justify-center">
+    <div className="bg-[#F39200] py-6 flex items-center justify-center justify-around">
+      <div className="flex items-center mr-20">
+        <Image src="/ISOWoofer2.png" width={200} height={200} />
+      </div>
+      <div className="flex items-center ml-40 mr-40">
         <Link href={"/walkerHome"}>
           <button
             className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
-              currentPath === "/home" ? "text-[#F39200]" : "text-white"
+              currentPath === "/walkerHome" ? "text-[#F39200]" : "text-white"
             } mt-3 lg:mt-0 mr-7  transition transition-colors duration-300`}
           >
             home
@@ -39,25 +43,20 @@ const NavbarHomeWalker = () => {
         <Link href={"/walkerHome/TestWalkerRegister"}>
           <button
             className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
-              currentPath === "/add-dogs" ? "text-[#F39200]" : "text-white"
+              currentPath === "/walkerHome/TestWalkerRegister"
+                ? "text-[#F39200]"
+                : "text-white"
             } mt-3 lg:mt-0 mr-7  transition transition-colors duration-300`}
           >
             walker form
           </button>
         </Link>
-        {/* <Link href={"/settings"}>
-          <button
-            className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
-              currentPath === "/settings" ? "text-[#F39200]" : "text-white"
-            } mt-3 lg:mt-0 mr-7 transition transition-colors duration-300`}
-          >
-            settings
-          </button>
-        </Link> */}
+      </div>
+      <div className="ml-20">
         <Link href={"/"}>
           <button
             onClick={handleLogout}
-            className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] text-white mt-3 lg:mt-0 mr-7 transition transition-colors duration-300`}
+            className={`w-30 px-5 py-2 rounded-full text-[#29235c] hover:bg-[#29235c] hover:text-[#F39200] bg-white font-bold mt-3 lg:mt-0 mr-7 transition transition-colors duration-300`}
           >
             log out
           </button>

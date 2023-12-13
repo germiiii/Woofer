@@ -4,7 +4,6 @@ import Image from "next/image";
 import "../stylesLanding.css";
 
 const Safety = () => {
-  
   return (
     <div className="bg-[#29235c] h-screen">
       <div className="flex items-center flex-col justify-center">

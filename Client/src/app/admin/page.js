@@ -79,6 +79,7 @@ export default function DataGridDemo() {
       field: "selectedType",
       headerName: "Type",
       width: 90,
+      editable: true,
     },
     {
       field: "province",

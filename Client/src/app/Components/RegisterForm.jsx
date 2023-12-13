@@ -33,6 +33,7 @@ const RegisterForm = () => {
     selectedType:
       type === "walker" ? "walker" : type === "owner" ? "owner" : "",
     image: "",
+    googleImage: "",
     province: "",
   });
   const [formSent, setFormSent] = useState(false);
@@ -52,16 +53,16 @@ const RegisterForm = () => {
       errors.name = "name cannot be empty";
     } else if (userData.name.length > 40) {
       errors.name = "name cannot exceed 40 characters";
-    } else if (!/^[a-zA-Z\s]+$/.test(userData.name)) {
-      errors.name = "name must contain only letters";
+    } else if (!/^[a-zA-Z0-9áéíóúÁÉÍÓÚüÜ\s]+$/.test(userData.name)) {
+      errors.address = "name must contain only alphanumeric characters";
     }
 
     if (!userData.lastName.trim()) {
       errors.lastName = "last name cannot be empty";
     } else if (userData.lastName.length > 40) {
       errors.lastName = "last name cannot exceed 40 characters";
-    } else if (!/^[a-zA-Z\s]+$/.test(userData.lastName)) {
-      errors.lastName = "last name must contain only letters";
+    } else if (!/^[a-zA-Z0-9áéíóúÁÉÍÓÚüÜ\s]+$/.test(userData.lastName)) {
+      errors.address = "last name must contain only alphanumeric characters";
     }
 
     const usernameRegex = /^[a-zA-Z0-9_]+$/;
@@ -117,7 +118,12 @@ const RegisterForm = () => {
 
       const [name, lastName] = user.displayName.split(" ");
 
-      updateUser({ name, lastName, email: user.email });
+      updateUser({
+        name,
+        lastName,
+        email: user.email,
+        googleImage: user.photoURL,
+      });
       router.push("/aditionalForm");
     } catch (error) {
       console.error(error);
@@ -186,6 +192,7 @@ const RegisterForm = () => {
     userFormData.append("selectedType", userData.selectedType);
     userFormData.append("image", image);
     userFormData.append("province", userData.province);
+    userFormData.append("googleImage", userData.googleImage);
 
     try {
       const response = await axios.post(`${api}/register`, userFormData);
@@ -420,23 +427,6 @@ const RegisterForm = () => {
                 >
                   Sign up
                 </button>
-                {/* <div className="flex items-center justify-center ml-5 mr-5">
-                  <h1 className="text-white">or</h1>
-                </div>
-                <button
-                  onClick={loginGoogle}
-                  className="bg-white text-[#29235c] px-5 py-2 rounded-full flex items-center justify-center focus:outline-none transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
-                  type="button"
-                >
-                  <Image
-                    src={"/google.png"}
-                    alt="Google Logo"
-                    width={20}
-                    height={20}
-                    className="mr-2"
-                  />
-                  <span>Google</span>
-                </button> */}
               </div>
             </div>
           </form>
