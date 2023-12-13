@@ -82,7 +82,7 @@ export default function UserPage({ params }) {
 
   return (
     <div className="flex flex-col">
-      {user && selectedType === "owner" ? (
+      {user ? (
         <div>
           <NavBarHome />
           <div>
@@ -126,11 +126,8 @@ export default function UserPage({ params }) {
           </div>
         </div>
       ) : (
-        <div>
-          <h1>You are not an owner.</h1>
-          <Link href={"/walkerHome"}>
-            <button>back to walker home</button>
-          </Link>
+        <div className="flex h-screen items-center justify-center flex-col bg-[#F39200]">
+          <h1 className="text-[#29235c] text-3xl">loading...</h1>
         </div>
       )}
     </div>
