@@ -6,6 +6,7 @@ import Link from "next/link.js";
 import "tailwindcss/tailwind.css";
 import "../stylesLanding.css";
 import Image from "next/image";
+import YouAreNotAnOwner from "../Components/YouAreNotAnOwner.jsx";
 
 export default function AddDogsPage() {
   const [selectedType, setSelectedType] = React.useState("");
@@ -46,12 +47,7 @@ export default function AddDogsPage() {
           </div>
         </div>
       ) : (
-        <div>
-          <h1>You are not an owner.</h1>
-          <Link href={"/walkerHome"}>
-            <button>back to walker home</button>
-          </Link>
-        </div>
+        <YouAreNotAnOwner />
       )}
     </div>
   );

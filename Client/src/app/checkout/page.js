@@ -7,6 +7,7 @@ import Nav from "../Components/NavBarOwner";
 import Link from "next/link.js";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import "tailwindcss/tailwind.css";
+import YouAreNotAnOwner from "../Components/YouAreNotAnOwner.jsx";
 
 const CheckoutComponent = () => {
   const [walkerDetails, setWalkerDetails] = useState(null);
@@ -590,12 +591,7 @@ const CheckoutComponent = () => {
           </div>
         </div>
       ) : (
-        <div>
-          <h1>You are not an owner.</h1>
-          <Link href={"/walkerHome"}>
-            <button>back to walker home</button>
-          </Link>
-        </div>
+        <YouAreNotAnOwner />
       )}
     </div>
   );
