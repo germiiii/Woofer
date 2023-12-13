@@ -9,7 +9,7 @@ export default function OwnerForm() {
   const fileInputRef = useRef(null);
   const [dogData, setDogData] = useState({
     name: "",
-    age: "",
+    age: "0",
     breed: "",
     size: "small",
     image: null,
@@ -43,11 +43,13 @@ export default function OwnerForm() {
           setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
         }
         break;
-      case "age":
-        if (/^\d{0,2}$/.test(value) && parseInt(value, 10) <= 25) {
-          setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
-        }
-        break;
+        case "age":
+          if (value === "" || (/^\d{0,2}$/.test(value) && parseInt(value, 10) >= 0 && parseInt(value, 10) <= 25)) {
+            setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
+          }
+          break;
+        
+        
       case "breed":
         if (/^[a-zA-Z0-9 ]{0,20}$/.test(value)) {
           setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
