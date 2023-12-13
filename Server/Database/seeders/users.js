@@ -1,3 +1,5 @@
+const { User } = require("../../Database/db");
+
 const fs = require("fs");
 const path = require("path");
 
@@ -243,7 +245,7 @@ const userData = [
   },
 ];
 
-const seedUsers = async (User) => {
+const seedUsers = async () => {
   try {
     //  agrego un admin por defecto
     const imagePath = path.join(__dirname, "./userImages", "woofer.png");
