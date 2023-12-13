@@ -61,9 +61,9 @@ const userRegister = async (req, res) => {
   if (name.length > 40) {
     throw new Error("Name debe ser menor a 40 caracteres");
   }
-  if (await !validateSpecialAndNumber(name)) {
-    throw new Error("Name no puede contener ni números ni símbolos");
-  }
+  // if (await !validateSpecialAndNumber(name)) {
+  //   throw new Error("Name no puede contener ni números ni símbolos");
+  // }
 
   // lastName validations
   if (typeof lastName !== "string") {
@@ -72,9 +72,9 @@ const userRegister = async (req, res) => {
   if (lastName.length > 40) {
     throw new Error("Lastname debe ser menor a 40 caracteres");
   }
-  if (await !validateSpecialAndNumber(lastName)) {
-    throw new Error("Lastname no puede contener ni números ni símbolos");
-  }
+  // if (await !validateSpecialAndNumber(lastName)) {
+  //   throw new Error("Lastname no puede contener ni números ni símbolos");
+  // }
 
   // email validations
   if (typeof email !== "string") {

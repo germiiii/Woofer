@@ -36,67 +36,70 @@ export default function OwnerForm() {
     // Validation
     switch (name) {
       case "size":
-  setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
-  break;
+        setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
+        break;
       case "name":
         if (/^[a-zA-Z0-9 ]{0,20}$/.test(value)) {
           setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
         }
         break;
-        case "age":
-          if (value === "" || (/^\d{0,2}$/.test(value) && parseInt(value, 10) >= 0 && parseInt(value, 10) <= 25)) {
-            setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
-          }
-          break;
-        
-        
+      case "age":
+        if (
+          value === "" ||
+          (/^\d{0,2}$/.test(value) &&
+            parseInt(value, 10) >= 0 &&
+            parseInt(value, 10) <= 25)
+        ) {
+          setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
+        }
+        break;
+
       case "breed":
         if (/^[a-zA-Z0-9 ]{0,20}$/.test(value)) {
           setDogData((prevDogData) => ({ ...prevDogData, [name]: value }));
         }
         break;
-        case "image":
-          const file = e.target.files[0];
-          if (file) {
-            if (file.size <= 10 * 1024 * 1024) {
-              // Valid file size, proceed with handling the file
-              const allowedFormats = ["image/jpeg", "image/png"];
-              if (allowedFormats.includes(file.type)) {
-                const reader = new FileReader();
-                reader.onloadend = async () => {
-                  // Compress the image
-                  const compressedImage = await compressImage(reader.result);
-        
-                  setDogData((prevDogData) => ({
-                    ...prevDogData,
-                    [name]: file, // Update this line
-                  }));
-            
-        
-                  // Set the image preview
-                  setImagePreview(compressedImage);
-                };
-                reader.readAsDataURL(file);
-              } else {
-                e.target.value = null;
-                alert("Only JPG and PNG formats are allowed.");
-              }
+      case "image":
+        const file = e.target.files[0];
+        if (file) {
+          if (file.size <= 10 * 1024 * 1024) {
+            // Valid file size, proceed with handling the file
+            const allowedFormats = ["image/jpeg", "image/png"];
+            if (allowedFormats.includes(file.type)) {
+              const reader = new FileReader();
+              reader.onloadend = async () => {
+                // Compress the image
+                const compressedImage = await compressImage(reader.result);
+
+                setDogData((prevDogData) => ({
+                  ...prevDogData,
+                  [name]: file, // Update this line
+                }));
+
+                // Set the image preview
+                setImagePreview(compressedImage);
+              };
+              reader.readAsDataURL(file);
             } else {
-              // File size exceeds the limit, show alert and clear the input
               e.target.value = null;
-              alert("Please select an image file smaller than 10MB.");
+              alert("Only JPG and PNG formats are allowed.");
             }
           } else {
-            // No image selected, clear the existing image in dogData and preview
-            setDogData((prevDogData) => ({ ...prevDogData, [name]: null }));
-            setImagePreview(null);
+            // File size exceeds the limit, show alert and clear the input
+            e.target.value = null;
+            alert("Please select an image file smaller than 10MB.");
           }
-          break;
-      }
-    };
+        } else {
+          // No image selected, clear the existing image in dogData and preview
+          setDogData((prevDogData) => ({ ...prevDogData, [name]: null }));
+          setImagePreview(null);
+        }
+        break;
+    }
+  };
   const compressImage = async (imageDataUrl) => {
     // Check if the code is running in a browser environment
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       // Create an offscreen image element
       const img = document.createElement("img");
 
@@ -121,16 +124,18 @@ export default function OwnerForm() {
       return canvas.toDataURL("image/jpeg", 0.1);
     } else {
       // Handle the case where the code is running in a non-browser environment
-      console.error('compressImage function is running in a non-browser environment.');
+      console.error(
+        "compressImage function is running in a non-browser environment."
+      );
       return imageDataUrl;
     }
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       console.log("Form data before validation:", dogData);
-  
+
       // Check if the form is completed
       if (dogData.name && dogData.age && dogData.breed && dogData.size) {
         // Create FormData and append dog data
@@ -141,21 +146,21 @@ export default function OwnerForm() {
         formData.append("breed", dogData.breed);
         formData.append("size", dogData.size);
         formData.append("image", dogData.image);
-  
+
         // Send the data to the server using Axios
         console.log("current dog", dogData);
-  
+
         const response = await axios.post(`${api}/owner`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-  
+
         localStorage.setItem("isOwner", response.data.UserWithNewOwner.isOwner);
         console.log("Server response:", response.data);
         alert("Dog added successfully!");
         router.push("/ownerHome");
-  
+
         // Additional logic for handling the form submission, if needed
       } else {
         console.error("Please complete the form before submitting.");
@@ -188,7 +193,7 @@ export default function OwnerForm() {
   ));
 
   return (
-    <div className="flex justify-center mt-20">
+    <div className="flex justify-center mt-20 h-screen">
       <div className="bg-white shadow-md rounded-md p-8 w-full lg:w-1/2">
         <form onSubmit={handleSubmit}>
           <h1 className="text-2xl font-bold mb-8">Add your dogs!</h1>
@@ -236,16 +241,16 @@ export default function OwnerForm() {
               Size of your dog
             </label>
             <select
-  id="size"
-  name="size"
-  onChange={handleChange}
-  value={dogData.size}
-  className="w-full p-3 rounded-md border border-gray-300 focus:border-black"
->
-  <option value="small">Small</option>
-  <option value="medium">Medium</option>
-  <option value="large">Large</option>
-</select>
+              id="size"
+              name="size"
+              onChange={handleChange}
+              value={dogData.size}
+              className="w-full p-3 rounded-md border border-gray-300 focus:border-black"
+            >
+              <option value="small">Small</option>
+              <option value="medium">Medium</option>
+              <option value="large">Large</option>
+            </select>
           </div>
           <div className="mb-4">
             <label htmlFor="image" className="text-lg block mb-2">
@@ -266,7 +271,12 @@ export default function OwnerForm() {
           {imagePreview && (
             <div className="mb-4">
               <label className="text-lg block mb-2">Image Preview</label>
-              <Image src={imagePreview} alt="Image Preview" height={100} width={100} />
+              <Image
+                src={imagePreview}
+                alt="Image Preview"
+                height={100}
+                width={100}
+              />
             </div>
           )}
 
@@ -278,15 +288,19 @@ export default function OwnerForm() {
               Clean
             </button>
             {/* Conditionally render the submit button */}
-            {dogData.name && dogData.age && dogData.breed && dogData.size && dogData.image ? (
-  <button
-    type="submit"
-    className="p-3 rounded-md bg-black text-white cursor-pointer"
-  >
-    Submit
-  </button>
-) : null}
-           </div>
+            {dogData.name &&
+            dogData.age &&
+            dogData.breed &&
+            dogData.size &&
+            dogData.image ? (
+              <button
+                type="submit"
+                className="p-3 rounded-md bg-black text-white cursor-pointer"
+              >
+                Submit
+              </button>
+            ) : null}
+          </div>
           {renderDogs}
         </form>
       </div>

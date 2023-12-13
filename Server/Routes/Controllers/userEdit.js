@@ -57,9 +57,9 @@ const userEdit = async (data, file) => {
     if (name.length > 40) {
       throw new Error("Name debe ser menor a 40 caracteres");
     }
-    if (await !validateSpecialAndNumber(name)) {
-      throw new Error("Name no puede contener ni números ni símbolos");
-    }
+    // if (await !validateSpecialAndNumber(name)) {
+    //   throw new Error("Name no puede contener ni números ni símbolos");
+    // }
     await User.update(
       { name: name },
       {
@@ -75,9 +75,9 @@ const userEdit = async (data, file) => {
     if (lastName.length > 40) {
       throw new Error("Lastname debe ser menor a 40 caracteres");
     }
-    if (await !validateSpecialAndNumber(lastName)) {
-      throw new Error("Lastname no puede contener ni números ni símbolos");
-    }
+    // if (await !validateSpecialAndNumber(lastName)) {
+    //   throw new Error("Lastname no puede contener ni números ni símbolos");
+    // }
     await User.update(
       { lastName: lastName },
       {
