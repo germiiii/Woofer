@@ -35,7 +35,10 @@ const userRegister = async (req, res) => {
     city,
     province,
     selectedType,
+    googleImage,
   } = req.body;
+  let image =
+    "https://cvhrma.org/wp-content/uploads/2015/07/default-profile-photo.jpg";
 
   //validations
   if (
@@ -106,6 +109,11 @@ const userRegister = async (req, res) => {
     throw new Error("Address debe ser menor a 40 caracteres");
   }
 
+  // image with google
+  if (googleImage) {
+    image = googleImage;
+  }
+
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const verificationToken = generateVerificationToken();
@@ -144,8 +152,7 @@ const userRegister = async (req, res) => {
     return newUser;
   } else {
     const newUser = await User.create({
-      image:
-        "https://cvhrma.org/wp-content/uploads/2015/07/default-profile-photo.jpg",
+      image,
       name,
       lastName,
       email,
