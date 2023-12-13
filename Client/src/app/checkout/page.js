@@ -7,7 +7,9 @@ import Nav from "../Components/NavBarOwner";
 import PayPal from '../../api/checkout'
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import "tailwindcss/tailwind.css";
-import YouAreNotAnOwner from "../Components/YouAreNotAnOwner.jsx";
+import local from "next/font/local";
+import { browserLocalPersistence } from "firebase/auth";
+
 
 const CheckoutComponent = () => {
   const router = useRouter()
@@ -613,15 +615,8 @@ const CheckoutComponent = () => {
             </div>
           </div>
         </div>
-      ) : (
-        <div>
-          <h1>You are not an owner.</h1>
-          <Link href={"/walkerHome"}>
-            <button>back to walker home</button>
-          </Link>
-        </div>
-      )}
-    </div>
+      </div>
+     </div>
   );
 };
 
