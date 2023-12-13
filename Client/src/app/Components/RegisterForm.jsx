@@ -427,23 +427,6 @@ const RegisterForm = () => {
                 >
                   Sign up
                 </button>
-                {/* <div className="flex items-center justify-center ml-5 mr-5">
-                  <h1 className="text-white">or</h1>
-                </div>
-                <button
-                  onClick={loginGoogle}
-                  className="bg-white text-[#29235c] px-5 py-2 rounded-full flex items-center justify-center focus:outline-none transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
-                  type="button"
-                >
-                  <Image
-                    src={"/google.png"}
-                    alt="Google Logo"
-                    width={20}
-                    height={20}
-                    className="mr-2"
-                  />
-                  <span>Google</span>
-                </button> */}
               </div>
             </div>
           </form>
