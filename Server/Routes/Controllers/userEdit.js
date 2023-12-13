@@ -16,7 +16,8 @@ const {
 const { uploadImage } = require("../../Routes/utils/uploadImage");
 
 const userEdit = async (data, file) => {
-  const { userID, name, lastName, username, address, province } = data;
+  const { userID, name, lastName, username, address, province, selectedType } =
+    data;
 
   // validations
   if (!userID) {
@@ -103,6 +104,15 @@ const userEdit = async (data, file) => {
   if (province) {
     await User.update(
       { province: province },
+      {
+        where: { id: userID, is_active: true },
+      }
+    );
+  }
+
+  if (selectedType) {
+    await User.update(
+      { selectedType: selectedType },
       {
         where: { id: userID, is_active: true },
       }
