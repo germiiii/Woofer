@@ -82,7 +82,7 @@ export default function UserPage({ params }) {
 
   return (
     <div className="flex flex-col">
-      {user && selectedType === "owner" ? (
+      {user ? (
         <div>
           <NavBarHome />
           <div>
@@ -127,10 +127,7 @@ export default function UserPage({ params }) {
         </div>
       ) : (
         <div>
-          <h1>You are not an owner.</h1>
-          <Link href={"/walkerHome"}>
-            <button>back to walker home</button>
-          </Link>
+          <h1>loading...</h1>
         </div>
       )}
     </div>
