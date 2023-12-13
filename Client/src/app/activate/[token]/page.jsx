@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import ActivationConfirmation from "../../Components/activateAccount";
+import ActivateAccount from "../../Components/activateAccount";
 import Navbar from "../../Components/NavBar.jsx";
 import Link from "next/link.js";
 import Image from "next/image";
@@ -28,7 +28,7 @@ const ActivatePage = () => {
         </div>
 
         <div className="w-1/2 h-full">
-          <ActivationConfirmation />
+          <ActivateAccount />
         </div>
       </div>
     </div>
