@@ -112,8 +112,8 @@ const CheckoutComponent = () => {
       setSelectedWalkType(selectedType); // Update the selected type
       console.log("Selected Walk ID:", selectedType.id);
       console.log("Walk Duration", selectedType.walk_duration)
-      localStorage.setItem('Walk ID', selectedType.id)
-      localStorage.setItem('Walk Duration', selectedType.walk_duration)
+      localStorage.setItem('walkId', selectedType.id)
+      localStorage.setItem('walkDuration', selectedType.walk_duration)
     } else {
       // Handle the case where the selected walk type is not found
       console.log("Walk type not found");
@@ -296,10 +296,10 @@ const CheckoutComponent = () => {
     const ownerId = localStorage.getItem('Owner ID')
     const userId = localStorage.getItem('userId')
     const walkerId = localStorage.getItem('walkerId')
-    const walkDuration = localStorage.getItem('Walk Duration')
+    const walkDuration = localStorage.getItem('walkDuration')
     const totalAmount = localStorage.getItem("totalAmount");
-    const dogCount = localStorage.getItem('Dog Count')
-    const walkType = localStorage.getItem('Walk ID')
+    const dogCount = localStorage.getItem('dog_count')
+    const walkType = localStorage.getItem('walkId')
     
 
 
@@ -309,7 +309,7 @@ const CheckoutComponent = () => {
         duration: walkDuration, 
         totalPrice: totalAmount,
         paymentMethod: "paypal",
-        dogs: dogCount || 1,
+        dogs: dogCount,
         walkTypes: [walkType],
       };
       console.log('Dogs', dogCount)

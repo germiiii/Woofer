@@ -66,6 +66,7 @@ const LoginForm = () => {
             `${api}/users/${decodedToken.userId}`
           );
           const userData = userResponse.data;
+         
 
           localStorage.setItem("userId", userData.id);
           localStorage.setItem("userProvince", userData.province);
@@ -73,6 +74,7 @@ const LoginForm = () => {
           localStorage.setItem("selectedType", userData.selectedType);
           localStorage.setItem("isOwner", userData.isOwner);
           localStorage.setItem("isWalker", userData.isWalker);
+          localStorage.setItem("dog_count", userData.owner.dog_count);
 
           if (userData.selectedType === "owner") {
             if (userData.isOwner === false) {
@@ -120,14 +122,14 @@ const LoginForm = () => {
         const userData = userResponse.data;
         console.log('Userdata', userData)
 
+
         localStorage.setItem("userId", userData.id);
         localStorage.setItem("userProvince", userData.province);
         localStorage.setItem("userAddress", userData.address);
         localStorage.setItem("selectedType", userData.selectedType);
         localStorage.setItem("isOwner", userData.isOwner);
         localStorage.setItem("isWalker", userData.isWalker);
-        // localStorage.setItem("Owner ID", response.data.UserWithNewOwner.id);
-        // localStorage.setItem('Dog Count', response.data.UserWithNewOwner.owner.dog_count)
+        localStorage.setItem('dog_count', userData.owner.dog_count)
 
         // userData.isOwner ? localStorage.setItem('Dog Count', userData.isOwner)
 
