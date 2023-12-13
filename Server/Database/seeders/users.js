@@ -18,7 +18,7 @@ const userData = [
   {
     name: "Julia",
     lastName: "Smith",
-    email: "janesmith@example.com",
+    email: "janesmith@woofer.com",
     password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
     username: "janesmith",
     address: "456 Oak St",
@@ -35,7 +35,7 @@ const userData = [
   {
     name: "Ana",
     lastName: "Muhall",
-    email: "ana.muhall@gmail.com",
+    email: "ana.muhall@woofer.com",
     password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
     username: "anamuhall",
     address: "Av. Corrientes 1234",
@@ -52,7 +52,7 @@ const userData = [
   {
     name: "Lucía",
     lastName: "González",
-    email: "lucia.gonzalez@gmail.com",
+    email: "lucia.gonzalez@woofer.com",
     password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
     username: "luciagonzalez",
     address: "Av. Callao 6789",
@@ -70,7 +70,7 @@ const userData = [
   {
     name: "Martín",
     lastName: "Manrique",
-    email: "martin.Manrique@gmail.com",
+    email: "martin.Manrique@woofer.com",
     password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
     username: "martinmanrique",
     address: "Av. Rivadavia 3456",
@@ -88,7 +88,7 @@ const userData = [
   {
     name: "Sofía",
     lastName: "Lugat",
-    email: "sofia.lugat@gmail.com",
+    email: "sofia.lugat@woofer.com",
     password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
     username: "sofialugat",
     address: "Av. Cabildo 9012",
@@ -106,7 +106,7 @@ const userData = [
   {
     name: "Juan",
     lastName: "Lopez",
-    email: "juan.lopez@gmail.com",
+    email: "juan.lopez@woofer.com",
     password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
     username: "juanlopez",
     address: "Av. Santa Fe 5678",
@@ -123,7 +123,7 @@ const userData = [
   {
     name: "Juan",
     lastName: "Perez",
-    email: "johndoe@example.com",
+    email: "johndoe@woofer.com",
     password: "password123",
     username: "johndoe",
     address: "Sarmiento 651",
@@ -140,7 +140,7 @@ const userData = [
   {
     name: "Carlos",
     lastName: "González",
-    email: "carlos.gonzalez@gmail.com",
+    email: "carlos.gonzalez@woofer.com",
     password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
     username: "carlosgonzalez",
     address: "Calle 9 de Julio 123",
@@ -157,7 +157,7 @@ const userData = [
   {
     name: "Ana",
     lastName: "Pérez",
-    email: "ana.perez@gmail.com",
+    email: "ana.perez@woofer.com",
     password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
     username: "anaperez",
     address: "Calle San Martín 456",
@@ -175,7 +175,7 @@ const userData = [
   {
     name: "Juan",
     lastName: "García",
-    email: "juan.garcia@gmail.com",
+    email: "juan.garcia@woofer.com",
     password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
     username: "juangarcia",
     address: "Calle Belgrano 789",
@@ -193,7 +193,7 @@ const userData = [
   {
     name: "Sofía",
     lastName: "Rodríguez",
-    email: "sofia.rodriguez@gmail.com",
+    email: "sofia.rodriguez@woofer.com",
     password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
     username: "sofiarodriguez",
     address: "Calle San Luis 1011",
@@ -211,7 +211,7 @@ const userData = [
   {
     name: "Martín",
     lastName: "Fernández",
-    email: "martin.fernandez@gmail.com",
+    email: "martin.fernandez@woofer.com",
     password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
     username: "martinfernandez",
     address: "Calle San Juan 1212",
@@ -229,7 +229,7 @@ const userData = [
   {
     name: "Emma",
     lastName: "Johnson",
-    email: "emma.johnson@gmail.com",
+    email: "emma.johnson@woofer.com",
     password: "$2b$10$jBChsBNbIOCSWQC9gbHx1.aFLIAwpSggtpbaO4CPg1nhG39EAz5Xm",
     username: "emmajohnson",
     address: "123 Main Street",
