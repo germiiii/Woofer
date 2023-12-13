@@ -1,3 +1,4 @@
+const { WalkType } = require("../../Database/db");
 const walkTypeData = [
   {
     id:1,
@@ -92,7 +93,7 @@ const walkTypeData = [
   },
 ];
 
-const seedWalkTypes = async (WalkType) => {
+const seedWalkTypes = async () => {
   try {
     await WalkType.bulkCreate(walkTypeData);
     console.log("- WalkTypes seeded successfully");

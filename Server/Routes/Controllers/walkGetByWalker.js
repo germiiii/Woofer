@@ -1,12 +1,12 @@
 const { Op } = require("sequelize");
-const { User, Walker, Review, Walk } = require("../../Database/db");
+const { User, Walker, Review, Walk, Owner } = require("../../Database/db");
 
 const walkGetByWalker = async (walkerId, date) => {
   const whereDate = date ? { date: { [Op.gte]: date } } : {};
 
   const walkerWalkData = await User.findAll({
     attributes: ["id", "name", "lastName"],
-    where : { id: walkerId, is_active: true },
+    where: { id: walkerId, is_active: true },
     include: {
       model: Walker,
       attributes: ["score", "reviews_count"],
@@ -20,14 +20,24 @@ const walkGetByWalker = async (walkerId, date) => {
           "dogNumber",
           "totalPrice",
           "paymentMethod",
+          "hasWalkerReview",
+          "hasOwnerReview",
           "state",
         ],
         // where: whereDate,
         include: {
           model: Review,
           attributes: ["score", "description"],
-          where: { type: "owner" },
+          where: { type: "walker" },
           required: false,
+        },
+      },
+      include: {
+        model: Owner,
+        attributes: ["score", "reviews_count"],
+        include: {
+          model: User,
+          attributes: ["id", "name", "lastName", "image"],
         },
       },
     },
@@ -40,7 +50,7 @@ const walkGetByWalker = async (walkerId, date) => {
   //   include: [
   //     {
   //       model: Walker,
-  //       // attributes: [], 
+  //       // attributes: [],
   //       include: [
   //         {
   //           model: User,
@@ -50,7 +60,7 @@ const walkGetByWalker = async (walkerId, date) => {
   //     },
   //     {
   //       model: Owner,
-  //       // attributes: [], 
+  //       // attributes: [],
   //       include: [
   //         {
   //           model: User,
