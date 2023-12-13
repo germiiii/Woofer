@@ -118,10 +118,17 @@ const CheckoutComponent = () => {
       localStorage.setItem('walkId', selectedType.id)
       localStorage.setItem('walkDuration', selectedType.walk_duration)
     } else {
-      // Handle the case where the selected walk type is not found
-      console.log("Walk type not found");
-    }
-  };
+        console.log("Walk type not found");
+        setSelectedWalkType(null); // Deselect the walk type
+        setTotalAmount("0.00"); // Reset total amount to zero
+        setWalkTypeQuantity(1); // Reset walk type quantity to 1 or any default value
+        setExtraQuantities({
+          Leash: "0",
+          GarbageBag: "0",
+          WaterBowl: "0",
+        }); 
+      }
+    };
   
   
   //!Quantity
@@ -166,30 +173,30 @@ const CheckoutComponent = () => {
   };
 
   const handleWalkTypeQuantityChange = (value) => {
-    if (!isWalkTypeSelected) {
-      alert("Please select a walk type first");
+    if (!isWalkTypeSelected || value === 0) {
+      alert("Please select a valid quantity for the walk type");
       return;
     }
     value = Math.min(Math.max(value, 0), 15);
     setWalkTypeQuantity(value);
   };
-
+  
   const incrementWalkTypeQuantity = () => {
-    if (!isWalkTypeSelected) {
+    if (!isWalkTypeSelected || walkTypeQuantity === 0) {
       alert("Please select a walk type first");
       return;
     }
     setWalkTypeQuantity((prevQuantity) => Math.min(prevQuantity + 1, 15));
   };
-
+  
   const decrementWalkTypeQuantity = () => {
-    if (!isWalkTypeSelected) {
+    if (!isWalkTypeSelected || walkTypeQuantity === 0) {
       alert("Please select a walk type first");
       return;
     }
-    setWalkTypeQuantity((prevQuantity) => Math.max(prevQuantity - 1, 0));
+    setWalkTypeQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1)); // Set a minimum of 1 instead of 0
   };
-
+  
   //!Total Amount Sum
   const calculateTotalAmount = () => {
     let walkTypePrice = 0;
@@ -233,7 +240,7 @@ const CheckoutComponent = () => {
     async function fetchAccessToken() {
       try {
         const { data } = await axios.post(
-          "https://api-m.paypal.com/v1/oauth2/token",
+          "https://api-m.sandbox.paypal.com/v1/oauth2/token",
           "grant_type=client_credentials",
           {
             headers: {
@@ -273,7 +280,7 @@ const CheckoutComponent = () => {
 
       console.log("Creating order....");
       const res = await fetch(
-        "https://api-m.paypal.com/v2/checkout/orders",
+        "https://api-m.sandbox.paypal.com/v2/checkout/orders",
         {
           method: "POST",
           headers: {
