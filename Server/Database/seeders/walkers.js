@@ -1,3 +1,5 @@
+const { User, WalkType } = require("../../Database/db");
+
 const walkerData = [
   {
     username: "janesmith",
@@ -94,7 +96,7 @@ const walkerData = [
   },
 ];
 
-const seedWalkers = async (User, WalkType) => {
+const seedWalkers = async () => {
   try {
     for (const walker of walkerData) {
       const { username, ...walkerAttributes } = walker;

@@ -1,8 +1,8 @@
 require("dotenv").config();
 const { PORT } = process.env;
 const server = require("./app.js");
-const { conn, User, WalkType, Walk, Review, Notification } = require("./Database/db.js");
 const bcrypt = require("bcrypt");
+const { conn } = require("./Database/db.js");
 const seed = require("./Database/seed.js");
 
 // Syncing all the models at once.
@@ -24,8 +24,7 @@ try {
     .then(() => {
       const shouldRunSeeder = syncOptions.force === true;
       if (shouldRunSeeder) {
- 
-        seed(User, WalkType, Walk, Review, Notification);
+        seed();
       }
     });
 } catch (error) {

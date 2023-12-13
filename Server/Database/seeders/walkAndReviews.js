@@ -1,11 +1,16 @@
+const { User, Walk, Review, Notification } = require("../../Database/db");
+const {
+  sendNotification,
+} = require("../../Routes/Controllers/notificationFunctions");
+
 const walkAndReviewsData = [
   {
     walkerUserName: "janesmith",
     ownerUserName: "anamuhall",
     date: new Date("2023-10-21"),
     startTime: new Date().toLocaleTimeString(),
-    state: "done",
-    duration: "15",
+    state: "Done",
+    duration: "30",
     dogNumber: 1,
     totalPrice: 30,
     paymentMethod: "mercadopago",
@@ -21,11 +26,11 @@ const walkAndReviewsData = [
     ownerUserName: "anamuhall",
     date: new Date("2023-11-21"),
     startTime: new Date().toLocaleTimeString(),
-    state: "inProgress",
-    duration: "30",
-    dogNumber: 1,
+    state: "In progress",
+    duration: "60",
+    dogNumber: 3,
     totalPrice: 30,
-    state: "done",
+    state: "Done",
     paymentMethod: "mercadopago",
   },
   {
@@ -33,7 +38,7 @@ const walkAndReviewsData = [
     ownerUserName: "anamuhall",
     date: new Date("2023-11-21"),
     startTime: new Date().toLocaleTimeString(),
-    state: "done",
+    state: "Done",
     duration: "15",
     dogNumber: 2,
     totalPrice: 30,
@@ -51,7 +56,7 @@ const walkAndReviewsData = [
     ownerUserName: "anamuhall",
     date: new Date(),
     startTime: new Date().toLocaleTimeString(),
-    state: "inProgress",
+    state: "In progress",
     duration: "15",
     dogNumber: 2,
     totalPrice: 30,
@@ -69,7 +74,7 @@ const walkAndReviewsData = [
     ownerUserName: "juanlopez",
     date: new Date("2023-10-20"),
     startTime: new Date().toLocaleTimeString(),
-    state: "done",
+    state: "Done",
     duration: "60",
     dogNumber: 2,
     totalPrice: 30,
@@ -87,7 +92,7 @@ const walkAndReviewsData = [
     ownerUserName: "juangarcia",
     date: new Date("2023-10-10"),
     startTime: new Date().toLocaleTimeString(),
-    state: "done",
+    state: "Done",
     duration: "15",
     dogNumber: 2,
     totalPrice: 30,
@@ -106,7 +111,7 @@ const walkAndReviewsData = [
     ownerUserName: "juangarcia",
     date: new Date("2023-10-16"),
     startTime: new Date().toLocaleTimeString(),
-    state: "done",
+    state: "Done",
     duration: "15",
     dogNumber: 2,
     totalPrice: 30,
@@ -123,7 +128,7 @@ const walkAndReviewsData = [
 //   username: "sofiarodriguez",
 //   username: "martinfernandez",
 
-const seedWalkAndReviews = async (User, Walk, Review, Notification) => {
+const seedWalkAndReviews = async () => {
   try {
     for (const walk of walkAndReviewsData) {
       const { walkerUserName, ownerUserName, walkTypes, ...walkAttributes } =
@@ -153,31 +158,28 @@ const seedWalkAndReviews = async (User, Walk, Review, Notification) => {
       const dogCapacity = walkerInstance.dog_capacity || 0;
       const dogsCount = walkAttributes.dogNumber || 0;
 
-      //notificaciones
-      //al owner
-      let mensaje = `Recibimos tu pago mediante ${walkAttributes.paymentMethod} de $ ${walkAttributes.totalPrice} por tu paseo!`;
-      let notification = await Notification.create({
-        message: mensaje,
-        type: "payment",
-      });
-      ownerUser.addNotification(notification);
-      ownerUser.hasNotifications = true;
-      await ownerUser.save();
+      await sendNotification(
+        ownerUser,
+        "payment",
+        "Payment received",
+        `We've received a payment via ${walkAttributes.paymentMethod} of $ ${walkAttributes.totalPrice} for your walk request!`,
+        false
+      );
 
-      //al walker
-      mensaje = `Tenes un nuevo paseo para realizar del usuario ${walkerUser.name} ${walkerUser.lastName}!`;
-      notification = await Notification.create({
-        message: mensaje,
-        type: "walk",
-      });
-      walkerUser.addNotification(notification);
-      walkerUser.hasNotifications = true;
+      await sendNotification(
+        walkerUser,
+        "walk",
+        "You've got a ride to do",
+        `You have a new walk request from ${ownerUser.name} ${ownerUser.lastName}!`,
+        false
+      );
+
       walkerUser.dog_capacity_actual = dogCapacity - dogsCount;
       await walkerUser.save();
 
       if (walkAttributes.review) {
         const { type, score, description, date } = walkAttributes.review;
-        newWalk.state = "done";
+        newWalk.state = "Done";
         if (type === "owner") {
           newWalk.hasOwnerReview = true;
           ownerInstance.reviews_count += 1;
@@ -194,9 +196,28 @@ const seedWalkAndReviews = async (User, Walk, Review, Notification) => {
           score,
           description,
           date,
+          email: type === "owner" ? ownerUser.email : walkerUser.email,
         });
         newWalk.addReview(newReview);
         newWalk.save();
+
+        if (type === "owner") {
+          await sendNotification(
+            ownerUser,
+            "review",
+            "You've received a rating",
+            `You've received a rating from your dog walker! ${walkerUser.name} ${walkerUser.lastName} rated you with ${score} points and left this comment: ${description}`,
+            false
+          );
+        } else {
+          await sendNotification(
+            walkerUser,
+            "review",
+            "You've received a rating",
+            `You've received a rating from your dog walker! ${walkerUser.name} ${walkerUser.lastName} rated you with ${score} points and left this comment: ${description}`,
+            false
+          );
+        }
       }
     }
     console.log("- Walks and reviews seeded successfully");
