@@ -7,6 +7,9 @@ const {
   WalkType,
   Notification,
 } = require("../../Database/db");
+const { sendEmailNotification } = require("../utils/sendEmailNotification");
+const { sendNotification } = require("./notificationFunctions");
+const { walkGet } = require("./walkGet");
 
 const walkPost = async (
   ownerId,
@@ -19,13 +22,14 @@ const walkPost = async (
 ) => {
   const userOwner = await User.findByPk(ownerId);
   const userWalker = await User.findByPk(walkerId);
+
   if (!userOwner) {
-    throw new Error(`Owner${ownerId} not found`);
+    throw new Error(`Owner ${ownerId} not found`);
   }
   if (!userWalker) {
     throw new Error(`Walker ${walkerId} not found`);
   }
-  
+
   const owner = await userOwner?.getOwner();
   const walker = await userWalker?.getWalker();
 
@@ -56,6 +60,7 @@ const walkPost = async (
   await walker?.addWalk(newWalk);
 
   if (Array.isArray(dogs)) {
+    //si hay detalle de perros los agrego
     const ownerDogs = await owner?.getDogs();
     await Promise.all(
       ownerDogs?.map(async (dog) => {
@@ -66,62 +71,35 @@ const walkPost = async (
     );
   }
 
-  const walkData = await Walk.findOne({
-    where: { id: newWalk?.id },
-    include: [
-      {
-        model: Owner,
-        attributes: ["score", "reviews_count"],
-        include: [
-          {
-            model: User,
-            attributes: ["name", "lastName", "email"],
-          },
-        ],
-      },
-      {
-        model: Walker,
-        attributes: ["score", "reviews_count"],
-        include: [
-          {
-            model: User,
-            attributes: ["name", "lastName", "email"],
-          },
-        ],
-      },
-      {
-        model: WalkType,
-        attributes: ["title"],
-        through: { attributes: [] },
-      },
-      {
-        model: Dog,
-        attributes: ["id", "name"],
-        through: { attributes: [] },
-        required: false,
-      },
-    ],
-  });
-  //notificaciones
-  //al owner
-  let mensaje = `Recibimos tu pago mediante ${paymentMethod} de $ ${totalPrice} por tu paseo!`;
-  let notification = await Notification.create({
-    message: mensaje,
-    type: "payment",
-  });
-  userOwner.addNotification(notification);
-  userOwner.hasNotifications = true;
-  await userOwner.save();
-  // enviarNotificacion(walkData?.owner?.email, mensaje);
-  //al walker
-  mensaje = `Tenes un nuevo paseo para realizar del usuario ${walkData?.owner.user.name} ${walkData?.owner.user.lastName}!`;
-  notification = await Notification.create({
-    message: mensaje,
-    type: "walk",
-  });
-  userWalker.addNotification(notification);
-  userWalker.hasNotifications = true;
-  await userWalker.save();
+  const walkData = await walkGet(null, newWalk?.id, null);
+
+  let message = `Hi ${userOwner.name} \n 
+  We've received a payment via ${paymentMethod} of $ ${totalPrice} for your walk request!`;
+  let type = "walk";
+  let subject = "Payment received";
+  let email = userOwner.email;
+
+  await sendNotification(userOwner, type, subject, message, true);
+
+  message = `WOOFER has received a payment from ${walkData[0]?.owner.name} for a walk request!\n
+  Walk id: ${walkData[0]?.id},\n
+  Walker: ${walkData[0]?.walker.name},\n
+  The total amount is $ ${totalPrice}\n
+  Payment method: ${paymentMethod}`;
+
+  sendEmailNotification(subject, "admin@woofer.com", message);
+
+  message = `You have a new walk request from ${walkData[0]?.owner.name}!\n
+  Date: ${walkData[0]?.date},\n
+  Time: ${walkData[0]?.startTime},\n
+  Duration: ${walkData[0]?.duration} minutes,\n
+  Dogs: ${walkData[0]?.dogNumber},\n
+ `;
+  type = "walk";
+  subject = "You've got a ride to do";
+  email = userWalker.email;
+
+  await sendNotification(userWalker, type, subject, message, true);
 
   return walkData;
 };

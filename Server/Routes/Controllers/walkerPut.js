@@ -80,6 +80,7 @@ const walkerPut = async (
         include: [
           {
             model: WalkType,
+            attributes: ["id", "title", "walk_duration", "price", "description"],
           },
         ],
       },

@@ -16,7 +16,8 @@ const {
 const { uploadImage } = require("../../Routes/utils/uploadImage");
 
 const userEdit = async (data, file) => {
-  const { userID, name, lastname, username, address, province } = data;
+  const { userID, name, lastName, username, address, province, selectedType } =
+    data;
 
   // validations
   if (!userID) {
@@ -38,6 +39,9 @@ const userEdit = async (data, file) => {
     if (await !validateAlphanumericNoSpaces(username)) {
       throw new Error("Username debe ser alfanumerico sin espacios");
     }
+    // if (await User.findOne({ where: { username } })) {
+    //   throw new Error("Username ya está en uso");
+    // }
     User.update(
       { username: username },
       {
@@ -53,9 +57,9 @@ const userEdit = async (data, file) => {
     if (name.length > 40) {
       throw new Error("Name debe ser menor a 40 caracteres");
     }
-    if (await !validateSpecialAndNumber(name)) {
-      throw new Error("Name no puede contener ni números ni símbolos");
-    }
+    // if (await !validateSpecialAndNumber(name)) {
+    //   throw new Error("Name no puede contener ni números ni símbolos");
+    // }
     await User.update(
       { name: name },
       {
@@ -64,18 +68,18 @@ const userEdit = async (data, file) => {
     );
   }
 
-  if (lastname) {
-    if (typeof lastname !== "string") {
+  if (lastName) {
+    if (typeof lastName !== "string") {
       throw new Error("Lastname debe ser un string");
     }
-    if (lastname.length > 40) {
+    if (lastName.length > 40) {
       throw new Error("Lastname debe ser menor a 40 caracteres");
     }
-    if (await !validateSpecialAndNumber(lastname)) {
-      throw new Error("Lastname no puede contener ni números ni símbolos");
-    }
+    // if (await !validateSpecialAndNumber(lastName)) {
+    //   throw new Error("Lastname no puede contener ni números ni símbolos");
+    // }
     await User.update(
-      { lastName: lastname },
+      { lastName: lastName },
       {
         where: { id: userID, is_active: true },
       }
@@ -106,6 +110,15 @@ const userEdit = async (data, file) => {
     );
   }
 
+  if (selectedType) {
+    await User.update(
+      { selectedType: selectedType },
+      {
+        where: { id: userID, is_active: true },
+      }
+    );
+  }
+
   if (file) {
     await uploadImage(file.path);
     await User.update(
@@ -124,7 +137,8 @@ const userEdit = async (data, file) => {
         "verificationToken",
         "resetPasswordToken",
         "resetPasswordExpires",
-      ]},
+      ],
+    },
     where: { id: userID, is_active: true },
   });
 

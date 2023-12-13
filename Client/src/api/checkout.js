@@ -1,96 +1,179 @@
+// import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+// import { useState, useEffect } from 'react';
+// import axios from 'axios';
 
-import paypal from '@paypal/checkout-server-sdk';
-import fetch from 'node-fetch';
+// const PayPal = () => {
+//   const [totalAmount, setTotalAmount] = useState('0.00');
+//   const [orderCount, setOrderCount] = useState(0);
+//   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+//   const clientSecret = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_SECRET;
+//   const api = process.env.NEXT_PUBLIC_APIURL;
+//   const [accessToken, setAccessToken] = useState("");
 
-const clientId = process.env.PAYPAL_CLIENT_ID;
-const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
-const tokenUrl = 'https://api-m.sandbox.paypal.com/v1/oauth2/token';
+//   useEffect(() => {
+//     const fetchAccessToken = async () => {
+//       try {
+//         const { data } = await axios.post(
+//           "https://api-m.sandbox.paypal.com/v1/oauth2/token",
+//           "grant_type=client_credentials",
+//           {
+//             headers: {
+//               "Content-Type": "application/x-www-form-urlencoded",
+//               Authorization: `Basic ${btoa(clientId + ":" + clientSecret)}`,
+//             },
+//           }
+//         );
+//         if (typeof window !== 'undefined') {
+//           localStorage.setItem("paypal_accessToken", data.access_token);
+//         }
+//         console.log("Paypal Access Token:", data.access_token);
+//       } catch (error) {
+//         console.error("Error fetching/accessing token:", error);
+//       }
+//     };
 
-export default async function CheckoutHandler(req, res) {
-  try {
-    const { serviceId } = req.body; // Get the serviceId from the request body
+//     fetchAccessToken();
 
-    // Fetch details of the selected service using the serviceId
-    let selectedService = null;
-    switch (serviceId) {
-      case 1:
-        selectedService = {
-          name: '15 minute Premium dog walk',
-          description: 'Woofers will devote their full attention to walk your furry companion privately for 15 minutes.',
-          quantity: '1',
-          price: '30.00',
-        };
-        break;
-      case 2:
-        selectedService = {
-          name: '30 minute Premium dog walk',
-          description: 'Woofers will devote their full attention to walk your furry companion privately for 30 minutes.',
-          quantity: '1',
-          price: '35.00',
-        };
-        break;
-      case 3:
-        selectedService = {
-          name: '60 minute Premium dog walk',
-          description: 'Woofers will devote their full attention to walk your furry companion privately for 60 minutes.',
-          quantity: '1',
-          price: '45.00',
-        };
-        break;
-      default:
-        res.status(400).json({ error: 'Invalid serviceId' });
-        return;
-    }
+//     if (!accessToken) {
+//       const token = typeof window !== 'undefined' ? localStorage.getItem("paypal_accessToken") : null;
+//       setAccessToken(token);
+//     }
+//   }, [accessToken, clientId, clientSecret]);
 
-    // Get the access token
-    const auth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
-    const tokenResponse = await fetch(tokenUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `Basic ${auth}`,
-      },
-      body: 'grant_type=client_credentials',
-    });
+//   useEffect(() => {
+//     const storedTotalAmount = typeof window !== 'undefined' ? localStorage.getItem('totalAmount') : null;
+//     if (storedTotalAmount && storedTotalAmount !== "0.00") {
+//       setTotalAmount(storedTotalAmount);
+//     }
+//   }, []);
 
-    const tokenData = await tokenResponse.json();
-    const accessToken = tokenData.access_token;
+//   const createOrder = async (data, actions) => {
+//     try {
+//       const storedTotalAmount = typeof window !== 'undefined' ? localStorage.getItem('totalAmount') : null;
 
-    // Use the obtained access token for PayPal API requests
-    const environment = new paypal.core.SandboxEnvironment(clientId, clientSecret, accessToken);
-    const client = new paypal.core.PayPalHttpClient(environment);
+//       if (!storedTotalAmount || storedTotalAmount === "0.00") {
+//         setTimeout(() => createOrder(data, actions), 1000);
+//         return;
+//       }
 
-    // Create a PayPal order for the selected service
-    const request = new paypal.orders.OrdersCreateRequest();
-    request.requestBody({
-      intent: 'CAPTURE',
-      purchase_units: [
-        {
-          amount: {
-            currency_code: 'USD',
-            value: selectedService.price, // Use the price from the selected service
-          },
-          items: [
-            {
-              name: selectedService.name,
-              description: selectedService.description,
-              quantity: selectedService.quantity,
-            },
-          ],
-        },
-      ],
-    });
+//       console.log("Creating order....");
+//       const res = await fetch(
+//         "https://api-m.sandbox.paypal.com/v2/checkout/orders",
+//         {
+//           method: "POST",
+//           headers: {
+//             "Content-Type": "application/json",
+//             Authorization: `Bearer ${accessToken}`,
+//           },
+//           body: JSON.stringify({
+//             intent: "CAPTURE",
+//             purchase_units: [
+//               {
+//                 amount: {
+//                   currency_code: "USD",
+//                   value: storedTotalAmount, 
+//                 },
+//                 description: "Woofer Dog Walk",
+//                 reference_id: `order-${orderCount}`,
+//               },
+//             ],
+//           }),
+//         }
+//       );
 
-    const response = await client.execute(request);
-    console.log(response);
+//       if (!res.ok) {
+//         const errorResponse = await res.json();
+//         console.error("Failed to create order:", errorResponse);
+//         throw new Error("Failed to create order");
+//       }
 
-    res.status(200).json({
-      id: response.result.id,
-      // Additional data if needed
-    });
-  } catch (error) {
-    console.error('PayPal API error:', error);
-    res.status(500).json({ error: 'Failed to create PayPal order' });
-  }
-}
+//       const order = await res.json();
 
+//       if (order.id) {
+//         console.log("Order ID:", order.id);
+//         //setOrderCount(orderCount + 1); // Increment order count for the next order
+//         return order.id; 
+//       } else {
+//         throw new Error("Order ID not received");
+//       }
+//     } catch (error) {
+//       console.error("Error creating PayPal order:", error);
+     
+//     }
+//   };
+
+//   //! Handle Approval and POST to /walk
+//   const handleApprove = async (data, actions) => {
+//     try {
+//       await actions.order.capture();
+//       alert("Payment successful");
+    
+   
+//     const userId = localStorage.getItem('userId')
+//     const walkerId = localStorage.getItem('walkerId')
+//     const walkDuration = localStorage.getItem('walkDuration')
+//     const totalAmount = localStorage.getItem("totalAmount");
+//     const dogCount = localStorage.getItem('dog_count');
+//     const walkType = localStorage.getItem('walkId')
+    
+
+
+//       const paymentDetails = {
+//         ownerId: userId,
+//         walkerId: walkerId,
+//         duration: walkDuration, 
+//         totalPrice: totalAmount,
+//         paymentMethod: "paypal",
+//         dogs: parseInt(dogCount),
+//         walkTypes: [walkType],
+//       };
+//       console.log('payment details', paymentDetails)
+
+//       const response = await axios.post(`${api}/walk`, paymentDetails, {
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//       });
+
+//       console.log("POST request response:", response.data);
+
+//       // setTimeout(() => {
+//       //   router.push("/ownerHome");
+//       // }, 3000);
+//     } catch (error) {
+//       console.error("Error capturing payment:", error);
+//     }
+//   };
+
+//   //! Handle Cancel
+//   const handleCancel = (data) => {
+//     console.log("Cancelled:", data);
+//   };
+
+//   return (
+//     <div className="border-t border-gray-300 pt-4 mt-8">
+//       <h1 className="text-3xl text-[#29235C] font-bold mb-2 mt-4" style={{ fontFamily: "LikeEat" }}>Summary</h1>
+//       {/* Other components and content */}
+//       <h2 className="font-bold text-2xl">Total: ${totalAmount}</h2>
+//       <PayPalScriptProvider
+//         options={{
+//           clientId: clientId,
+//         }}
+//       >
+//         <PayPalButtons
+//           style={{
+//             layout: "vertical",
+//             color: "white",
+//             label: "pay",
+//             shape: "pill",
+//           }}
+//           createOrder={createOrder}
+//           onCancel={handleCancel}
+//           onApprove={handleApprove}
+//         />
+//       </PayPalScriptProvider>
+//     </div>
+//   )
+// }
+
+// export default PayPal;

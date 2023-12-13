@@ -1,43 +1,63 @@
 const { Op } = require("sequelize");
-const { User, Review, Owner, Dog, Walk } = require("../../Database/db");
+const { User, Review, Owner, Dog, Walk, Walker } = require("../../Database/db");
 
 const walkGetByOwner = async (ownerId, date) => {
   const whereDate = date ? { date: { [Op.gte]: date } } : {};
 
-  const ownerWalkData = await User.findAll({
-    attributes: ["id", "name", "lastName"],
-    where : { id: ownerId, is_active: true },
-    include: {
-      model: Owner,
-      attributes: ["score", "reviews_count"],
-      include: {
-        model: Walk,
-        attributes: [
-          "id",
-          "date",
-          "startTime",
-          "duration",
-          "dogNumber",
-          "totalPrice",
-          "paymentMethod",
-          "state",
-        ],
-        where: whereDate,
-        // include:
-        //     {
-        //       model: Dog,
-        //       attributes: ["id", "name"],
-        //       through: { attributes: [] },
-        //       required: false,
-        //     },
+  const walksFromOwner = await Walk.findAll({
+    where: whereDate,
+    include: [
+      {
+        model: Owner,
+        where: {
+          userId: ownerId,
+        },
         include: {
-          model: Review,
-          attributes: ["score", "description"],
-          where: { type: "owner" },
-          required: false,
+          model: User,
+          attributes: ["id", "name", "lastName", "image"],
         },
       },
-    },
+      {
+        model: Walker,
+        include: {
+          model: User,
+          attributes: ["id", "name", "lastName", "image"],
+        },
+      },
+      {
+        model: Review,
+        attributes: ["id", "type", "score", "description"],
+      },
+    ],
+    order: [["date", "ASC"]],
+  });
+
+  if (!walksFromOwner) {
+    throw new Error("Walker not found");
+  }
+
+  const ownerWalkData = walksFromOwner.map((walk) => {
+    const { walker, reviews } = walk;
+
+    const walkInfo = {
+      id: walk.id,
+      date: walk.date,
+      startTime: walk.startTime,
+      duration: walk.duration,
+      dogNumber: walk.dogNumber,
+      totalPrice: walk.totalPrice,
+      paymentMethod: walk.paymentMethod,
+      state: walk.state,
+      hasOwnerReview: walk.hasOwnerReview,
+      hasWalkerReview: walk.hasWalkerReview,
+      walker: {
+        name: walker.user.name + " " + walker.user.lastName,
+        image: walker.image,
+        id: walker.userId,
+      },
+      reviews,
+    };
+    return walkInfo;
   });
 
   return ownerWalkData;

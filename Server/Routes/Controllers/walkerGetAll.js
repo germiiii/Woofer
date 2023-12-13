@@ -36,7 +36,7 @@ const walkerGetAll = async (province, is_available) => {
         include: [
           {
             model: WalkType,
-            attributes: ["id", "title", "price", "description"],
+            attributes: ["id", "title", "walk_duration", "price", "description"],
             through: { attributes: [] },
           },
         ],
