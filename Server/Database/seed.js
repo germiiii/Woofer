@@ -1,13 +1,13 @@
-const userSeeder = require("./seeders/users");
+const userSeeder = require("./seeders/usersSeed");
 const seedWalkTypes = require("./seeders/walkTypes");
-const seedWalkers = require("./seeders/walkers");
-const seedOwners = require("./seeders/owners");
-const seedWalkAndReviews = require("./seeders/walkAndReviews");
+const seedWalkers = require("./seeders/walkersSeed");
+const seedOwners = require("./seeders/ownersSeed");
+const seedWalkAndReviews = require("./seeders/walkAndReviewsSeed");
 const seed = async () => {
-  console.log("Seeding database...");
+  console.log("\nSeeding database...\n");
   try {
-    await userSeeder();
-    await seedWalkTypes();
+    // await userSeeder();
+    // await seedWalkTypes();
     await seedWalkers( );
     await seedOwners();
     await seedWalkAndReviews();

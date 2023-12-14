@@ -10,7 +10,7 @@ const seed = require("./Database/seed.js");
 // alter:true - ACTUALIZA LAS TABLAS DE BDD EN BASE A LOS MODELOS
 
 const syncOptions = {
-  force: true, //alter: true or force: true
+  alter: true, //alter: true or force: true
 };
 
 try {
@@ -22,10 +22,11 @@ try {
       });
     })
     .then(() => {
-      const shouldRunSeeder = syncOptions.force === true;
-      if (shouldRunSeeder) {
-        seed();
-      }
+      seed();
+      // const shouldRunSeeder = syncOptions.force === true;
+      // if (shouldRunSeeder) {
+      //   seed();
+      // }
     });
 } catch (error) {
   console.log("An error occurred during the server startup: " + error.message);
