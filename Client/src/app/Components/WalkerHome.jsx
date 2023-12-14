@@ -12,6 +12,7 @@ import Map from "../Components/Map";
 import jwt from "jsonwebtoken";
 import { useRouter } from "next/navigation";
 
+
 const WalkerHome = () => {
   const [comments, setComments] = useState([]);
   const [clientHiring, setClientHiring] = useState([]);
@@ -24,7 +25,7 @@ const WalkerHome = () => {
   const [userId, setUserId] = useState("");
   const router = useRouter();
   const isWalker = localStorage.getItem("isWalker");
-
+  const [isAvailable, setIsAvailable] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -121,19 +122,21 @@ const WalkerHome = () => {
   };
 
   const handleActiveClick = async () => {
-    if (isWalker === "false") {
-      router.push("/walkerHome/TestWalkerRegister");
-      window.alert("You must select a walk type");
-      return;
-    }
+    const toggleAvailability = !isAvailable;
+  
     try {
       if (user.id) {
         const API = process.env.NEXT_PUBLIC_APIURL;
         await axios.put(`${API}/walker/${user.id}`, {
-          is_available: true,
+          is_available: toggleAvailability,
         });
       }
-      alert("You are ready for a walk a dog! Enjoy!");
+      if (toggleAvailability) {
+        alert("You are ready for a walk a dog! Enjoy!");
+      } else {
+        alert("All needs a break, take your time!");
+      }
+      setIsAvailable(toggleAvailability);
     } catch (error) {
       console.error("Error updating status:", error);
     }
@@ -141,9 +144,9 @@ const WalkerHome = () => {
 
   return (
     <div className="text-center m-20">
-      <ToastContainer />
+      {/* <ToastContainer />
       <Map userProvince={userProvince} userAddress={userAddress} />
-      <br />
+      <br /> */}
       <WalkList userId={userId}/>
       <br />
       <div className="mb-8">
@@ -158,13 +161,13 @@ const WalkerHome = () => {
     </div>
       <button
         onClick={handleActiveClick}
-        className="bg-black text-white px-4 py-2"
+        className={`bg-black text-white px-4 py-2 ${isAvailable ? "bg-green-500" : "bg-red-500"}`}
       >
-        Active
+        {isAvailable ? "Active" : "Inactive"}
       </button>
       <br />
       <button
-        onClick={() => router.push("/walkerHome/TestWalkerRegister")}
+        onClick={() => router.push("/walkerHome/WalkerRegister")}
         className="bg-black text-white px-4 py-2"
       >
         Chage your sell details
