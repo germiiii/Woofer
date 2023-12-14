@@ -19,7 +19,7 @@ const ActivateAccount = () => {
 
   const activateAccount = async (token) => {
     try {
-      const response = await fetch(`${api}/${token}`, {
+      const response = await fetch(`${api}/activateAccount/${token}`, {
         method: "POST",
       });
 
