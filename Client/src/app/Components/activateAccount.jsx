@@ -8,6 +8,7 @@ import "../stylesLanding.css";
 const ActivateAccount = () => {
   const router = useRouter();
   const api = process.env.NEXT_PUBLIC_APIURL;
+  
   useEffect(() => {
     const pathArray = window.location.pathname.split("/");
     const token = pathArray[pathArray.length - 1];
@@ -19,7 +20,7 @@ const ActivateAccount = () => {
 
   const activateAccount = async (token) => {
     try {
-      const response = await fetch(`${api}/${token}`, {
+      const response = await fetch(`${api}/activateAccount/${token}`, {
         method: "POST",
       });
 
