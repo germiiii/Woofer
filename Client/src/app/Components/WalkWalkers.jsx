@@ -15,8 +15,6 @@ const WalkList = (props) => {
         const API = process.env.NEXT_PUBLIC_APIURL;
         const response = await axios.get(`${API}/walk/walker/b350ed72-e9a9-446a-9d92-0951e87b08c0`);
         const walkss = response.data.walksFromWalker;
-
-        // Ordenar la lista por fecha y hora de inicio de forma descendente
         const sortedWalks = walkss.sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
         setWalks(sortedWalks);
       } catch (error) {
@@ -29,12 +27,10 @@ const WalkList = (props) => {
 
   }, [props.userId, refresh]);
 
-
   const handleStatusChange = async (walkId, newStatus) => {
     try {
       const API = process.env.NEXT_PUBLIC_APIURL;
       await axios.put(`${API}/walk/${walkId}`, { state: newStatus });
-
       setWalks((prevWalks) =>
         prevWalks.map((walk) =>
           walk.id === walkId ? { ...walk, state: newStatus } : walk
@@ -99,21 +95,17 @@ const WalkList = (props) => {
                     </button>
                   </div>
                 )}
-  
                 {walk.state === 'In progress' && (
                   <button onClick={() => handleStatusChange(walk.id, 'Done')}>
                     Done
                   </button>
                 )}
-  
-                {/* Mostrar "Non Action" si walk.action está vacío */}
-                {!walk.action ? 'Non Action' : walk.action}
+                     {!walk.action ? 'Non Action' : walk.action}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-  
       <ul style={{ listStyleType: 'none', display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
         {Array.from({ length: Math.ceil(walks.length / walksPerPage) }, (_, i) => i + 1).map((number) => (
           <li key={number} style={{ margin: '0 5px', cursor: 'pointer' }}>

@@ -167,7 +167,7 @@ const WalkerHome = () => {
       </button>
       <br />
       <button
-        onClick={() => router.push("/walkerHome/TestWalkerRegister")}
+        onClick={() => router.push("/walkerHome/WalkerRegister")}
         className="bg-black text-white px-4 py-2"
       >
         Chage your sell details

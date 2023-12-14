@@ -1,5 +1,5 @@
 "use client";
-import WalkerRegister from "../../Components/WalkerRegister";
+import WalkerRegister from "../../Components/WalkerRegister.jsx";
 import Nav from "../../Components/NavBarWalker.jsx";
 import React from "react";
 import Link from "next/link.js";
