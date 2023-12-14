@@ -14,6 +14,26 @@ const WalkerRegister = () => {
   const [dogCapacityFilter, setDogCapacityFilter] = useState(null);
   const [typeFilter, setTypeFilter] = useState(null);
   const [formSubmissionError, setFormSubmissionError] = useState(null);
+  const [walkerData, setWalkerData] = useState({})
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const API = process.env.NEXT_PUBLIC_APIURL;
+        const token = localStorage.getItem("token");
+        const decodedToken = jwt.decode(token);
+        const response = await axios.get(`${API}/walker/${decodedToken.userId}`);
+        console.log(decodedToken.userId);
+        console.log(response.data.walkerData);
+        setWalkerData(response.data.walkerData);        
+      } catch (error) {
+        console.error("Error fetching data from the server:", error);
+      }
+    };
+
+    fetchData();
+  }, []); 
+  console.log("is_walker",walkerData.isWalker)
 
   useEffect(() => {
     const fetchWalkerTypes = async () => {
@@ -45,9 +65,60 @@ const WalkerRegister = () => {
 
   const isSelected = (option) => selectedOptions.includes(option);
 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    if(walkerData.isWalker){
+      try {
+        if (selectedOptions.length === 0) {
+          alert("Please select at least one option.");
+          return;
+        }
+  
+        const API = process.env.NEXT_PUBLIC_APIURL;
+        const token = localStorage.getItem("token");
+  
+        if (!token) {
+          return;
+        }
+  
+        const decodedToken = jwt.decode(token);
+        const walkerId = decodedToken.userId;
+        const dogCapacityOptions = selectedOptions.map(
+          (option) => option.dog_capacity
+        );
+  
+        let dogCapacity;
+  
+        if (dogCapacityOptions.includes("high")) {
+          dogCapacity = "5";
+        } else if (dogCapacityOptions.includes("medium")) {
+          dogCapacity = "3";
+        } else if (dogCapacityOptions.includes("low")) {
+          dogCapacity = "1";
+        } else {
+          dogCapacity = "1";
+        }
+  
+        const walkDurations = Array.from(
+          new Set(selectedOptions.flatMap((option) => option.walk_duration))
+        );
+  
+        const requestBody = {
+          dog_capacity: dogCapacity,
+          walk_duration: walkDurations,
+          sale_details: saleDetails,
+          walkTypes: selectedOptions.map((option) => option.id),
+        };
+  
+        const response = await axios.put(`${API}/walker/${walkerId}`, requestBody);
+        router.push("/walkerHome");
+        return;
+      } catch (error) {
+        setFormSubmissionError("Error submitting the form");
+        console.error("Error submitting form:", error);
+      }
+    }
     try {
       if (selectedOptions.length === 0) {
         alert("Please select at least one option.");

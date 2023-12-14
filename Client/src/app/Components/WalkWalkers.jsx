@@ -14,11 +14,11 @@ const WalkList = (props) => {
       try {
         const API = process.env.NEXT_PUBLIC_APIURL;
         const response = await axios.get(
-          `${API}/walk/walker/b350ed72-e9a9-446a-9d92-0951e87b08c0`
+          `${API}/walk/walker/${props.userId}`
         );
         const walkss = response.data.walksFromWalker;
         const sortedWalks = walkss.sort(
-          (a, b) => new Date(b.startTime) - new Date(a.startTime)
+          (a, b) => new Date(a.startTime) - new Date(b.startTime)
         );
         setWalks(sortedWalks);
       } catch (error) {
@@ -136,8 +136,7 @@ const WalkList = (props) => {
                     Done
                   </button>
                 )}
-                {!walk.action ? "Non Action" : walk.action}
-              </td>
+                </td>
             </tr>
           ))}
         </tbody>
