@@ -41,7 +41,7 @@ const UserDetailButton = () => {
         style={{ cursor: "pointer" }}
         onClick={handleClick}
       >
-        my woofer
+        My Woofer
       </button>
     </div>
   );

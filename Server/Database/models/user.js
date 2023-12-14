@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const path = require('path');
+const path = require("path");
 
 module.exports = (sequelize) => {
   // defino el modelo
@@ -47,7 +47,7 @@ module.exports = (sequelize) => {
       image: {
         type: DataTypes.STRING,
         allowNull: true,
-        defaultValue: path.join(__dirname, '..', 'images', 'perfilSinFoto.jpg')
+        defaultValue: path.join(__dirname, "..", "images", "perfilSinFoto.jpg"),
       },
       location: {
         type: DataTypes.STRING,
@@ -65,12 +65,12 @@ module.exports = (sequelize) => {
       },
       verificationToken: {
         type: DataTypes.STRING,
-        allowNull: true, 
+        allowNull: true,
       },
       is_active: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: true,
+        defaultValue: true
       },
       role: {
         type: DataTypes.ENUM("admin", "user"),
@@ -79,15 +79,15 @@ module.exports = (sequelize) => {
       },
       resetPasswordToken: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: true,
       },
       resetPasswordExpires: {
         type: DataTypes.DATE,
-        allowNull: true
+        allowNull: true,
       },
       selectedType: {
         type: DataTypes.ENUM("admin", "owner", "walker"),
-        allowNull: false        
+        allowNull: false,
       },
       hasNotifications: {
         type: DataTypes.BOOLEAN,

@@ -1,16 +1,43 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import jwt from "jsonwebtoken";
 
 const ReviewForm = ({ onReviewSubmit, id }) => {
-
   const [userReview, setUserReview] = useState({
     score: 1,
     description: ""
   });
+  const [walkData, setWalkData] = useState(null); 
   const walkId = id.id;
-  const userId = "aef5e923-cb7a-425e-9477-c02ea8038f8d";
-  const walkerId = "70176c93-9373-43c9-8394-5a1403c386c5";
+
+  useEffect(() => {
+    const fetchWalkData = async () => {
+      const token = localStorage.getItem('token');
+  
+      if (token) {
+        try {
+          const decodedToken = jwt.decode(token);
+          const API = process.env.NEXT_PUBLIC_APIURL;
+          const walkUrl = `${API}/walk`;
+          const response = await axios.get(walkUrl);
+  
+          // Filtrar el array para obtener solo el objeto con el ID correspondiente
+          const matchingWalk = response.data.allWalks.find(walk => walk.id === walkId);
+          console.log(matchingWalk)
+          if (matchingWalk) {
+            setWalkData(matchingWalk);
+          } else {
+            console.warn(`No se encontró ninguna caminata con el ID ${walkId}`);
+          }
+        } catch (error) {
+          console.error('Error fetching walk data:', error);
+        }
+      }
+    };
+  
+    fetchWalkData();
+  }, [walkId]);
 
   const handleScoreChange = (newScore) => {
     setUserReview({ ...userReview, score: newScore });
@@ -23,23 +50,19 @@ const ReviewForm = ({ onReviewSubmit, id }) => {
   const submitReview = async () => {
     try {
       const API = process.env.NEXT_PUBLIC_APIURL;
-        const reviewUrl = `${API}/review`;
-       const reviewData = {
+      const reviewUrl = `${API}/review`;
+      const reviewData = {
         idWalk: walkId,
-        type: 'walker', 
+        type: 'walker',
         score: userReview.score,
         description: userReview.description
       };
-      console.log(reviewData)
-      // Realiza la solicitud POST a la URL con la información del review
+      console.log(reviewData);
       const response = await axios.post(reviewUrl, reviewData);
-
-      // Restablece el estado de userReview después de enviar la revisión con éxito
       setUserReview({
         score: 1,
         description: ""
       });
-      
     } catch (error) {
       console.error('Error submitting review:', error);
     }
@@ -47,7 +70,7 @@ const ReviewForm = ({ onReviewSubmit, id }) => {
 
   return (
     <div style={{ maxWidth: '400px', margin: 'auto', padding: '20px', borderRadius: '10px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
-      <h2>Leave a Review</h2>
+      <h2>Leave a Review from {walkData?.walker.name}</h2>
       <div style={{ marginBottom: '10px' }}>
         <label>Score:</label>
         <div style={{ display: 'flex', gap: '5px' }}>

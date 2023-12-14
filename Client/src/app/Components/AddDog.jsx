@@ -22,6 +22,8 @@ export default function OwnerForm() {
     "select your dog picture (max 10MB)"
   );
 
+  const [loading, setLoading] = useState(false); // New state for loading
+
   useEffect(() => {
     // Check if the user is logged in
     const token = localStorage.getItem("token");
@@ -31,7 +33,7 @@ export default function OwnerForm() {
       setUser(decodedToken.userId);
     }
   }, []); // Run this effect only once on component mount
-  console.log("user", user);
+
   const router = useRouter();
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -140,6 +142,7 @@ export default function OwnerForm() {
     e.preventDefault();
 
     try {
+      setLoading(true);
       console.log("Form data before validation:", dogData);
 
       // Check if the form is completed
@@ -176,6 +179,8 @@ export default function OwnerForm() {
     } catch (error) {
       console.error("Error submitting form:", error);
       // Handle the error appropriately (e.g., display an error message to the user)
+    } finally {
+      setLoading(false); // Set loading to false when submission is done (regardless of success or failure)
     }
   };
   const handleFillFormAgain = (e) => {
@@ -204,6 +209,11 @@ export default function OwnerForm() {
 
   return (
     <div className="h-full w-full flex flex-col items-center justify-center">
+      {loading && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white opacity-75">
+          <p className="text-xl font-bold text-[#29235c]">Loading...</p>
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="mb-20">
           <h1
