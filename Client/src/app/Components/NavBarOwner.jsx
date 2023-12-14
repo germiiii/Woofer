@@ -39,8 +39,8 @@ const NavbarHomeOwner = () => {
     <div className="bg-[#F39200] py-6 flex items-center justify-center justify-around">
       <div className="flex items-center mr-20">
       <div style={{ width: '60px', height: '60px', borderRadius: '50%', overflow: 'hidden', backgroundColor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-  <Image src="/LOGOWoofer.png" alt='' width={40} height={40} />
-</div>
+        <Image src="/LOGOWoofer.png" alt='' width={40} height={40} />
+      </div>
 
       </div>
       <div className="flex items-center ml-40 mr-40">
