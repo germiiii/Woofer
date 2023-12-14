@@ -29,7 +29,6 @@ const CheckoutComponent = () => {
 
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
   const clientSecret = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_SECRET;
-
   const api = process.env.NEXT_PUBLIC_APIURL;
 
   //!Fetch Walker
@@ -39,7 +38,6 @@ const CheckoutComponent = () => {
     if (selectedWalker) {
       const parsedWalker = JSON.parse(selectedWalker);
       const id = parsedWalker?.walker?.walkerData?.id;
-      console.log("Walker ID", id);
       setWalkerId(id);
       const walkerID = localStorage.setItem("walkerId", id);
       setWalkerDetails(parsedWalker);
@@ -111,14 +109,18 @@ const CheckoutComponent = () => {
     );
 
     if (selectedType) {
-      setSelectedWalkType(selectedType); // Update the selected type
-      console.log("Selected Walk ID:", selectedType.id);
-      console.log("Walk Duration", selectedType.walk_duration);
+      setSelectedWalkType(selectedType);
       localStorage.setItem("walkId", selectedType.id);
       localStorage.setItem("walkDuration", selectedType.walk_duration);
     } else {
-      // Handle the case where the selected walk type is not found
-      console.log("Walk type not found");
+      setSelectedWalkType(null);
+      setTotalAmount("0.00");
+      setWalkTypeQuantity(1);
+      setExtraQuantities({
+        Leash: "0",
+        GarbageBag: "0",
+        WaterBowl: "0",
+      });
     }
   };
 
@@ -164,8 +166,8 @@ const CheckoutComponent = () => {
   };
 
   const handleWalkTypeQuantityChange = (value) => {
-    if (!isWalkTypeSelected) {
-      alert("Please select a walk type first");
+    if (!isWalkTypeSelected || value === 0) {
+      alert("Please select a valid quantity for the walk type");
       return;
     }
     value = Math.min(Math.max(value, 0), 15);
@@ -173,7 +175,7 @@ const CheckoutComponent = () => {
   };
 
   const incrementWalkTypeQuantity = () => {
-    if (!isWalkTypeSelected) {
+    if (!isWalkTypeSelected || walkTypeQuantity === 0) {
       alert("Please select a walk type first");
       return;
     }
@@ -181,11 +183,11 @@ const CheckoutComponent = () => {
   };
 
   const decrementWalkTypeQuantity = () => {
-    if (!isWalkTypeSelected) {
+    if (!isWalkTypeSelected || walkTypeQuantity === 0) {
       alert("Please select a walk type first");
       return;
     }
-    setWalkTypeQuantity((prevQuantity) => Math.max(prevQuantity - 1, 0));
+    setWalkTypeQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1)); // Set a minimum of 1 instead of 0
   };
 
   //!Total Amount Sum
@@ -213,7 +215,6 @@ const CheckoutComponent = () => {
 
     setTotalAmount(formattedTotalAmount);
     localStorage.setItem("totalAmount", formattedTotalAmount);
-    console.log("Total Amount:", `"${formattedTotalAmount}"`);
     return formattedTotalAmount;
   };
 
@@ -228,7 +229,7 @@ const CheckoutComponent = () => {
     async function fetchAccessToken() {
       try {
         const { data } = await axios.post(
-          "https://api-m.paypal.com/v1/oauth2/token",
+          "https://api-m.sandbox.paypal.com/v1/oauth2/token",
           "grant_type=client_credentials",
           {
             headers: {
@@ -260,33 +261,37 @@ const CheckoutComponent = () => {
   const createOrder = async (data, actions) => {
     try {
       const storedTotalAmount = localStorage.getItem("totalAmount");
-
+      const accessToken = localStorage.getItem("paypal_accessToken");
+      console.log("Access Token", accessToken);
       if (!storedTotalAmount || storedTotalAmount === "0.00") {
         setTimeout(() => createOrder(data, actions), 1000); // Retry after 1 second if totalAmount is 0 or not present
         return;
       }
 
       console.log("Creating order....");
-      const res = await fetch("https://api-m.paypal.com/v2/checkout/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          intent: "CAPTURE",
-          purchase_units: [
-            {
-              amount: {
-                currency_code: "USD",
-                value: storedTotalAmount, // Pass the retrieved total amount from localStorage here as a string
+      const res = await fetch(
+        "https://api-m.sandbox.paypal.com/v2/checkout/orders",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({
+            intent: "CAPTURE",
+            purchase_units: [
+              {
+                amount: {
+                  currency_code: "USD",
+                  value: storedTotalAmount, // Pass the retrieved total amount from localStorage here as a string
+                },
+                description: "Woofer Dog Walk",
+                reference_id: `order-${orderCount}`,
               },
-              description: "Woofer Dog Walk",
-              reference_id: `order-${orderCount}`,
-            },
-          ],
-        }),
-      });
+            ],
+          }),
+        }
+      );
 
       if (!res.ok) {
         const errorResponse = await res.json();
@@ -307,8 +312,6 @@ const CheckoutComponent = () => {
       console.error("Error creating PayPal order:", error);
     }
   };
-
-  console.log(walkerData);
 
   //! Handle Approval and POST to /walk
   const handleApprove = async (data, actions) => {
@@ -342,9 +345,9 @@ const CheckoutComponent = () => {
 
       console.log("POST request response:", response.data);
 
-      // setTimeout(() => {
-      //   router.push("/ownerHome");
-      // }, 3000);
+      setTimeout(() => {
+        router.push("/ownerHome");
+      }, 3000);
     } catch (error) {
       console.error("Error capturing payment:", error);
     }
@@ -370,12 +373,16 @@ const CheckoutComponent = () => {
                   {walkerData.name + " " + walkerData.lastName}
                 </h1>
               </div>
-              <div className="flex flex-col items-center h-[700px] w-[450px] rounded-lg bg-[#F39200]">
+              <div className="flex flex-col items-center h-[650px] w-[450px] rounded-lg bg-[#F39200]">
+                <div className="text-[#F39200] bg-white mt-3 ml-3 mr-3 border rounded-md text-center">
+                  <p>{walkerData.walker.sale_details}</p>
+                </div>
                 <Image
                   src={walkerData.image}
-                  width={400}
+                  width={300}
                   height={0}
                   className="mt-5 rounded-lg"
+                  alt=""
                 />
                 <div className="mt-2"> {starsForMedian} </div>
                 <div className="mt-2">
@@ -413,8 +420,10 @@ const CheckoutComponent = () => {
                   className="text-3xl text-[#29235C] font-bold mb-2 mt-4"
                   style={{ fontFamily: "LikeEat" }}
                 >
-                  Walk Services by {walkerData.name}:
+                  Walk Services by{" "}
+                  <span style={{ color: "#F39200" }}>{walkerData.name}</span>
                 </h2>
+
                 {walkerData.walker?.walkTypes &&
                 walkerData.walker.walkTypes.length > 0 ? (
                   <div>
@@ -465,8 +474,14 @@ const CheckoutComponent = () => {
 
                     {selectedWalkType && (
                       <div className="mt-4 relative">
-                        <div className="bg-[#F39200] rounded-lg p-4">
-                          <p className="text-sm text-bold text-white">
+                        <div
+                          className="bg-[#F39200] rounded-lg p-4"
+                          style={{ maxWidth: "400px", overflow: "hidden" }}
+                        >
+                          <p
+                            className="text-sm text-bold text-white"
+                            style={{ lineHeight: "1.2em" }}
+                          >
                             {selectedWalkType.description}
                           </p>
                         </div>
@@ -602,25 +617,24 @@ const CheckoutComponent = () => {
                   Total: ${totalAmount}
                 </h2>
               </div>
-              <div className="mt-10">
-                <PayPalScriptProvider
-                  options={{
-                    clientId: clientId,
+
+              <PayPalScriptProvider
+                options={{
+                  clientId: clientId,
+                }}
+              >
+                <PayPalButtons
+                  style={{
+                    layout: "vertical",
+                    color: "white",
+                    label: "pay",
+                    shape: "pill",
                   }}
-                >
-                  <PayPalButtons
-                    style={{
-                      layout: "vertical",
-                      color: "white",
-                      label: "pay",
-                      shape: "pill",
-                    }}
-                    createOrder={createOrder}
-                    onCancel={handleCancel}
-                    onApprove={handleApprove}
-                  />
-                </PayPalScriptProvider>
-              </div>
+                  createOrder={createOrder}
+                  onCancel={handleCancel}
+                  onApprove={handleApprove}
+                />
+              </PayPalScriptProvider>
             </div>
           </div>
         </div>

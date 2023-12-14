@@ -49,7 +49,7 @@ export default function UserPage({ params }) {
       return currentDogs.map((dog, index) => (
         <div
           key={index}
-          className="flex items-center h-[150px] w-[400px] mt-10 bg-[#29235c] rounded-md"
+          className="flex items-center h-[150px] w-[400px] mt-10 bg-[#29235c] rounded-md hover:shadow-lg"
         >
           <div className="rounded-full border border-[#F39200] border-2 overflow-hidden ml-5">
             <Image
@@ -86,11 +86,11 @@ export default function UserPage({ params }) {
     <div className="flex flex-col">
       {user ? (
         <div>
-          {user.isOwner ? <NavBarOwner /> : <NavBarWalker />}
+          {selectedType === "owner" ? <NavBarOwner /> : <NavBarWalker />}
           <div>
             <div className="flex flex-grow">
               <div className="bg-[#E4E2ED] w-1/2 flex flex-col items-center">
-                {user.isOwner ? (
+                {selectedType === "owner" ? (
                   <>
                     <h1
                       className="text-5xl text-[#29235c] mt-10"
@@ -107,7 +107,9 @@ export default function UserPage({ params }) {
                           key={number}
                           onClick={() => paginate(number)}
                           className={`mr-2 cursor-pointer font-bold ${
-                            number === currentPage ? "text-[#29235c]" : "text-white"
+                            number === currentPage
+                              ? "text-[#29235c]"
+                              : "text-white"
                           }`}
                         >
                           {number}
@@ -116,8 +118,15 @@ export default function UserPage({ params }) {
                     </div>
                   </>
                 ) : (
-                  // Render Reviews component for walker
-                  <Reviews userId={params.id} />
+                  <div className="flex flex-col items-center">
+                    <h1
+                      className="text-5xl text-[#29235c] mt-10"
+                      style={{ fontFamily: "LikeEat" }}
+                    >
+                      Your reviews
+                    </h1>
+                    <Reviews userId={params.id} />
+                  </div>
                 )}
               </div>
               <div className="w-1/2 bg-[#29235c] flex flex-col items-center h-screen">
