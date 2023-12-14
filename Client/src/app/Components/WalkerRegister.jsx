@@ -124,7 +124,6 @@ const WalkerRegister = () => {
     setTypeFilter(null);
   };
 
-
   return (
     <div className="h-full w-full flex flex-col items-center">
       <form onSubmit={handleSubmit}>
@@ -134,90 +133,117 @@ const WalkerRegister = () => {
         >
           Select walk types
         </h1>
-  
+
         {/* Filtros */}
         <div className="mb-3">
-        
-          <select value={walkDurationFilter} onChange={handleWalkDurationFilterChange} className="mx-2">
+          <select
+            value={walkDurationFilter}
+            onChange={handleWalkDurationFilterChange}
+            className="mx-2"
+          >
             <option value="">Walk Duration</option>
-            {[...new Set(priceList.map((option) => option.walk_duration))].map((walkDuration) => (
-              <option key={walkDuration} value={walkDuration}>
-                {walkDuration} minutes
-              </option>
-            ))}
+            {[...new Set(priceList.map((option) => option.walk_duration))].map(
+              (walkDuration) => (
+                <option key={walkDuration} value={walkDuration}>
+                  {walkDuration} minutes
+                </option>
+              )
+            )}
           </select>
-          <select value={priceFilter} onChange={handlePriceFilterChange} className="mx-2">
-  <option value="">Price</option>
-  {[...new Set(priceList.map((option) => option.price))]
-    .filter((price) => price !== "1.00")  // Excluye el valor "1.00"
-    .map((filteredPrice) => (
-      <option key={filteredPrice} value={filteredPrice}>
-        ${filteredPrice}
-      </option>
-    ))}
-</select>
-          <select value={dogCapacityFilter} onChange={handleDogCapacityFilterChange} className="mx-2">
+          <select
+            value={priceFilter}
+            onChange={handlePriceFilterChange}
+            className="mx-2"
+          >
+            <option value="">Price</option>
+            {[...new Set(priceList.map((option) => option.price))]
+              .filter((price) => price !== "1.00") // Excluye el valor "1.00"
+              .map((filteredPrice) => (
+                <option key={filteredPrice} value={filteredPrice}>
+                  ${filteredPrice}
+                </option>
+              ))}
+          </select>
+          <select
+            value={dogCapacityFilter}
+            onChange={handleDogCapacityFilterChange}
+            className="mx-2"
+          >
             <option value="">Dog Capacity</option>
-            {[...new Set(priceList.map((option) => option.dog_capacity))].map((dogCapacity) => (
-              <option key={dogCapacity} value={dogCapacity}>
-                {dogCapacity}
-              </option>
-            ))}
+            {[...new Set(priceList.map((option) => option.dog_capacity))].map(
+              (dogCapacity) => (
+                <option key={dogCapacity} value={dogCapacity}>
+                  {dogCapacity}
+                </option>
+              )
+            )}
           </select>
-          <select value={typeFilter} onChange={handleTypeFilterChange} className="mx-2">
+          <select
+            value={typeFilter}
+            onChange={handleTypeFilterChange}
+            className="mx-2"
+          >
             <option value="">Type</option>
-            {[...new Set(priceList.map((option) => option.walk_type))].map((walkType) => (
-              <option key={walkType} value={walkType}>
-                {walkType}
-              </option>
-            ))}
+            {[...new Set(priceList.map((option) => option.walk_type))].map(
+              (walkType) => (
+                <option key={walkType} value={walkType}>
+                  {walkType}
+                </option>
+              )
+            )}
           </select>
           <button type="button" onClick={handleRefreshFilters} className="mx-2">
             Refresh
           </button>
         </div>
-  
+
         <div>
           {priceList
-            .filter((option) => (
-              (!walkDurationFilter || option.walk_duration === walkDurationFilter) &&
-              (!priceFilter || option.price === priceFilter) &&
-              (!dogCapacityFilter || option.dog_capacity === dogCapacityFilter) &&
-              (!typeFilter || option.walk_type === typeFilter)
-            ))
-            .map((option) => (
-              // Agrega la condición para evitar renderizar la card con price="1.00"
-              option.price !== "1.00" && (
-                <div
-                  key={option.id}
-                  className={`card ${isSelected(option) ? "selected-card" : ""}`}
-                  onClick={() => handleCardClick(option)}
-                >
-                  <input
-                    type="checkbox"
-                    id={option.id}
-                    value={option.title}
-                    checked={isSelected(option)}
-                    onChange={() => handleCheckboxChange(option)}
-                    style={{ display: "none" }}
-                  />
-                  {option.title} - Price: {option.price}, Walk Duration:{" "}
-                  {option.walk_duration}, Walk Type: {option.walk_type}, Dog
-                  Capacity: {option.dog_capacity}
-                </div>
-              )
-            ))}
+            .filter(
+              (option) =>
+                (!walkDurationFilter ||
+                  option.walk_duration === walkDurationFilter) &&
+                (!priceFilter || option.price === priceFilter) &&
+                (!dogCapacityFilter ||
+                  option.dog_capacity === dogCapacityFilter) &&
+                (!typeFilter || option.walk_type === typeFilter)
+            )
+            .map(
+              (option) =>
+                // Agrega la condición para evitar renderizar la card con price="1.00"
+                option.price !== "1.00" && (
+                  <div
+                    key={option.id}
+                    className={`card ${
+                      isSelected(option) ? "selected-card" : ""
+                    }`}
+                    onClick={() => handleCardClick(option)}
+                  >
+                    <input
+                      type="checkbox"
+                      id={option.id}
+                      value={option.title}
+                      checked={isSelected(option)}
+                      onChange={() => handleCheckboxChange(option)}
+                      style={{ display: "none" }}
+                    />
+                    {option.title} - Price: {option.price}, Walk Duration:{" "}
+                    {option.walk_duration}, Walk Type: {option.walk_type}, Dog
+                    Capacity: {option.dog_capacity}
+                  </div>
+                )
+            )}
         </div>
-  
+
         <div className="mt-5 flex flex-col items-center justify-center">
           <input
-            placeholder="your sale details..."
+            placeholder="say something about yourself..."
             type="text"
             id="saleDetails"
             value={saleDetails}
             onChange={(e) => setSaleDetails(e.target.value)}
             maxLength={100}
-            className="border border-black border-5 p-9 mt-1 w-1/2 break-all"
+            className="border rounded-md border-black border-5 p-9 mt-1 w-1/2 break-all"
           />
           <p className="mb-3 mt-3">{saleDetails.length} / 100 characters</p>
           <button
@@ -228,11 +254,11 @@ const WalkerRegister = () => {
           </button>
         </div>
       </form>
-  
+
       {formSubmissionError && (
         <p style={{ color: "red" }}>{formSubmissionError}</p>
       )}
-  
+
       <style jsx>{`
         .card {
           border: 1px solid #ccc;
@@ -242,7 +268,7 @@ const WalkerRegister = () => {
           display: block;
           cursor: pointer;
         }
-  
+
         .selected-card {
           background-color: #29235c;
           color: #f39200;

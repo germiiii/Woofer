@@ -15,16 +15,16 @@ const Reviews = ({ userId }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (userId) {
-          const API = process.env.NEXT_PUBLIC_APIURL;
-          const response = await axios.get(`${API}/review/${userId}`);
-          setWalkerReviews(response.data.reviews);
+        const API = process.env.NEXT_PUBLIC_APIURL;
+        const response = await axios.get(`${API}/review/${userId}`);
+        setWalkerReviews(response.data.reviews);
 
-          // Actualiza reviewData con la información necesaria
-          const accumulatedData = response.data.reviews.reduce(
-            (accumulated, review) => {
-              const walkerReview = review.walkerReviews[0]?.walker?.walks;
+        // Actualiza reviewData con la información necesaria
+        const accumulatedData = response.data.reviews.reduce(
+          (accumulated, review) => {
+            const walkerReview = review.walkerReviews[0]?.walker?.walks;
 
+            if (walkerReview) {
               walkerReview.forEach((walk) => {
                 walk.reviews.forEach((walkReview) => {
                   accumulated.push({
@@ -34,13 +34,13 @@ const Reviews = ({ userId }) => {
                   });
                 });
               });
-              return accumulated;
-            },
-            []
-          );
-
-          setReviewData(accumulatedData);
-        }
+            }
+            return accumulated;
+          },
+          []
+        );
+        console.log(accumulatedData);
+        setReviewData(accumulatedData);
       } catch (error) {
         console.error("Error fetching reviews:", error);
       }
