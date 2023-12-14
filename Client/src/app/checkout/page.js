@@ -383,6 +383,9 @@ const CheckoutComponent = () => {
                 </h1>
               </div>
               <div className="flex flex-col items-center h-[700px] w-[450px] rounded-lg bg-[#F39200]">
+                <div className="">
+                  <p className="text-white">{walkerData.walker.sale_details}</p>
+                  </div>
                 <Image
                   src={walkerData.image}
                   width={400}
