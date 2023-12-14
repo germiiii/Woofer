@@ -86,11 +86,11 @@ export default function UserPage({ params }) {
     <div className="flex flex-col">
       {user ? (
         <div>
-          {user.isOwner ? <NavBarOwner /> : <NavBarWalker />}
+          {selectedType === "owner" ? <NavBarOwner /> : <NavBarWalker />}
           <div>
             <div className="flex flex-grow">
               <div className="bg-[#E4E2ED] w-1/2 flex flex-col items-center">
-                {user.isOwner ? (
+                {selectedType === "owner" ? (
                   <>
                     <h1
                       className="text-5xl text-[#29235c] mt-10"
@@ -118,7 +118,7 @@ export default function UserPage({ params }) {
                     </div>
                   </>
                 ) : (
-                  <div>
+                  <div className="flex flex-col items-center">
                     <h1
                       className="text-5xl text-[#29235c] mt-10"
                       style={{ fontFamily: "LikeEat" }}

@@ -190,7 +190,6 @@ const WalkerHome = () => {
           </div>
         ))}
       </div>
-      <Reviews />
     </div>
   );
 };

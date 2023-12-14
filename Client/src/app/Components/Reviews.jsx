@@ -10,7 +10,7 @@ const Reviews = ({ userId }) => {
   const [walkerReviews, setWalkerReviews] = useState([]);
   const [reviewData, setReviewData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const reviewsPerPage = 5;
+  const reviewsPerPage = 3;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,6 +20,7 @@ const Reviews = ({ userId }) => {
           const response = await axios.get(`${API}/review/${userId}`);
           setWalkerReviews(response.data.reviews);
 
+          // Actualiza reviewData con la información necesaria
           const accumulatedData = response.data.reviews.reduce(
             (accumulated, review) => {
               const walkerReview = review.walkerReviews[0]?.walker?.walks;
@@ -39,9 +40,6 @@ const Reviews = ({ userId }) => {
           );
 
           setReviewData(accumulatedData);
-          const intervalId = setInterval(fetchData, 30000);
-
-          return () => clearInterval(intervalId);
         }
       } catch (error) {
         console.error("Error fetching reviews:", error);
@@ -60,13 +58,19 @@ const Reviews = ({ userId }) => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center h-[550px]">
       <ReviewsCards reviewData={currentReviews} />
       <div style={{ marginTop: "20px" }}>
         {Array.from({
           length: Math.ceil(reviewData.length / reviewsPerPage),
         }).map((_, index) => (
-          <button key={index} onClick={() => paginate(index + 1)}>
+          <button
+            key={index}
+            onClick={() => paginate(index + 1)}
+            className={`mr-2 cursor-pointer font-bold ${
+              index + 1 === currentPage ? "text-[#29235c]" : "text-white"
+            }`}
+          >
             {index + 1}
           </button>
         ))}
