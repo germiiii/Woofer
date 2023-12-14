@@ -32,7 +32,7 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       paymentMethod: {
-        type: DataTypes.ENUM("paypal", "mercadopago"),
+        type: DataTypes.ENUM("paypal", "mercadopago", "alternative"),
         allowNull: false,
       },
       state: {

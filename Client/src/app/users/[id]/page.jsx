@@ -125,7 +125,9 @@ export default function UserPage({ params }) {
                     >
                       Your reviews
                     </h1>
-                    <Reviews userId={params.id} />
+                    <div className="mt-20">
+                      <Reviews userId={params.id} />
+                    </div>
                   </div>
                 )}
               </div>
