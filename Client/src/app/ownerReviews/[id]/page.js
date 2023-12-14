@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import jwt from "jsonwebtoken";
 import "tailwindcss/tailwind.css";
-import NavBarOwner from '../Components/NavBarOwner'
+import NavBarOwner from '../../Components/NavBarOwner'
 import Image from 'next/image'
 import {useRouter} from 'next/navigation';
 
