@@ -88,13 +88,6 @@ const SelectWalkers = (props) => {
       (walkDurationFilter === "60" &&
         walker.walker.walk_duration.includes("60"));
 
-    const dogSizeFilterCondition =
-      !dogSizeFilter ||
-      (dogSizeFilter === "small" && walker.walker.dog_size.includes("small")) ||
-      (dogSizeFilter === "medium" &&
-        walker.walker.dog_size.includes("medium")) ||
-      (dogSizeFilter === "large" && walker.walker.dog_size.includes("large"));
-
     const searchFilterCondition = !searchFilter
       ? true
       : searchFilter
@@ -109,11 +102,12 @@ const SelectWalkers = (props) => {
     return (
       dogCapacityFilterCondition &&
       walkDurationFilterCondition &&
-      dogSizeFilterCondition &&
       searchFilterCondition &&
       walker.province === userProvince
     );
   });
+
+  console.log(walkers);
 
   const renderList = filteredWalkers
     .slice(startIndex, endIndex)
@@ -177,21 +171,9 @@ const SelectWalkers = (props) => {
             <option value="30">30 minutes</option>
             <option value="60">60 minutes</option>
           </select>
-          <select
-            className="border p-2 mr-2"
-            value={dogSizeFilter}
-            onChange={handleDogSizeFilterChange}
-          >
-            <option value="">filter by dog size</option>
-            <option value="small">small dogs</option>
-            <option value="medium">medium dogs</option>
-            <option value="large">large dogs</option>
-          </select>
-        </div>
-        <div>
           <button
             onClick={handleRefresh}
-            className="w-30 px-6 py-1 rounded-full bg-[#F39200] text-white font-bold"
+            className="w-30 px-5 py-2 rounded-full bg-[#F39200] text-white font-bold"
           >
             refresh
           </button>

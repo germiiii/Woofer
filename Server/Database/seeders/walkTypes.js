@@ -1,9 +1,9 @@
 const { WalkType } = require("../../Database/db");
 const walkTypeData = [
   {
-    id:1,
+    id: 1,
     title: "15 minute Premium dog walk",
-    price: 30,
+    price: 1,
     description:
       "Woofers will devote their full atention to walk your furry companion privately for 15 minutes.",
     dog_capacity: "low",
@@ -12,7 +12,7 @@ const walkTypeData = [
   },
 
   {
-    id:2,
+    id: 2,
     title: "30 minute Premium dog walk",
     price: 35,
     description:
@@ -22,7 +22,7 @@ const walkTypeData = [
     walk_type: "premium",
   },
   {
-    id:3,
+    id: 3,
     title: "60 minute Premium dog walk",
     price: 45,
     description:
@@ -32,7 +32,7 @@ const walkTypeData = [
     walk_type: "premium",
   },
   {
-    id:4,
+    id: 4,
     title: "15 minute dog walk for small groups",
     price: 20,
     description:
@@ -42,7 +42,7 @@ const walkTypeData = [
     walk_type: "standart",
   },
   {
-    id:5,
+    id: 5,
     title: "30 minute dog walk for small groups",
     price: 25,
     description:
@@ -52,7 +52,7 @@ const walkTypeData = [
     walk_type: "standart",
   },
   {
-    id:6,
+    id: 6,
     title: "60 minute dog walk for small groups",
     price: 35,
     description:
@@ -62,7 +62,7 @@ const walkTypeData = [
     walk_type: "standart",
   },
   {
-    id:7,
+    id: 7,
     title: "15 minute dog walk for big groups",
     price: 15,
     description:
@@ -72,7 +72,7 @@ const walkTypeData = [
     walk_type: "standart",
   },
   {
-    id:8,
+    id: 8,
     title: "30 minute dog walk for big groups",
     price: 20,
     description:
@@ -82,7 +82,7 @@ const walkTypeData = [
     walk_type: "standart",
   },
   {
-    id:9,
+    id: 9,
     title: "60 minute dog walk for big groups",
     price: 30,
     description:

@@ -29,7 +29,7 @@ const userData = [
     isWalker: false,
     isOwner: false,
     is_active: true,
-    score: 0,  
+    score: 0,
     selectedType: "walker",
   },
   {
@@ -261,6 +261,7 @@ const seedUsers = async () => {
       role: "admin",
       image: uploadedImage.secure_url,
       selectedType: "walker",
+      is_active: true,
     });
 
     console.log("- ADMIN user (admin@woofer.com) successfully created");

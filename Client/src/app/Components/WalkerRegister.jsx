@@ -9,6 +9,10 @@ const WalkerRegister = () => {
   const [priceList, setPriceList] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [saleDetails, setSaleDetails] = useState("");
+  const [walkDurationFilter, setWalkDurationFilter] = useState(null);
+  const [priceFilter, setPriceFilter] = useState(null);
+  const [dogCapacityFilter, setDogCapacityFilter] = useState(null);
+  const [typeFilter, setTypeFilter] = useState(null);
   const [formSubmissionError, setFormSubmissionError] = useState(null);
 
   useEffect(() => {
@@ -88,9 +92,9 @@ const WalkerRegister = () => {
         is_available: "false",
         walkTypes: selectedOptions.map((option) => option.id),
       };
-      console.log(requestBody);
+
       const response = await axios.post(`${API}/walker`, requestBody);
-      console.log("Form submitted successfully:", response.data);
+
       localStorage.setItem("isWalker", "true");
       router.push("/walkerHome");
     } catch (error) {
@@ -98,6 +102,28 @@ const WalkerRegister = () => {
       console.error("Error submitting form:", error);
     }
   };
+  const handleWalkDurationFilterChange = (event) => {
+    setWalkDurationFilter(event.target.value);
+  };
+
+  const handlePriceFilterChange = (event) => {
+    setPriceFilter(event.target.value);
+  };
+
+  const handleDogCapacityFilterChange = (event) => {
+    setDogCapacityFilter(event.target.value);
+  };
+
+  const handleTypeFilterChange = (event) => {
+    setTypeFilter(event.target.value);
+  };
+  const handleRefreshFilters = () => {
+    setWalkDurationFilter(null);
+    setPriceFilter(null);
+    setDogCapacityFilter(null);
+    setTypeFilter(null);
+  };
+
 
   return (
     <div className="h-full w-full flex flex-col items-center">
@@ -108,27 +134,81 @@ const WalkerRegister = () => {
         >
           Select walk types
         </h1>
-        <div>
-          {priceList.map((option) => (
-            <div
-              key={option.id}
-              className={`card ${isSelected(option) ? "selected-card" : ""}`}
-              onClick={() => handleCardClick(option)}
-            >
-              <input
-                type="checkbox"
-                id={option.id}
-                value={option.title}
-                checked={isSelected(option)}
-                onChange={() => handleCheckboxChange(option)}
-                style={{ display: "none" }}
-              />
-              {option.title} - Price: {option.price}, Walk Duration:{" "}
-              {option.walk_duration}, Walk Type: {option.walk_type}, Dog
-              Capacity: {option.dog_capacity}
-            </div>
-          ))}
+  
+        {/* Filtros */}
+        <div className="mb-3">
+        
+          <select value={walkDurationFilter} onChange={handleWalkDurationFilterChange} className="mx-2">
+            <option value="">Walk Duration</option>
+            {[...new Set(priceList.map((option) => option.walk_duration))].map((walkDuration) => (
+              <option key={walkDuration} value={walkDuration}>
+                {walkDuration} minutes
+              </option>
+            ))}
+          </select>
+          <select value={priceFilter} onChange={handlePriceFilterChange} className="mx-2">
+  <option value="">Price</option>
+  {[...new Set(priceList.map((option) => option.price))]
+    .filter((price) => price !== "1.00")  // Excluye el valor "1.00"
+    .map((filteredPrice) => (
+      <option key={filteredPrice} value={filteredPrice}>
+        ${filteredPrice}
+      </option>
+    ))}
+</select>
+          <select value={dogCapacityFilter} onChange={handleDogCapacityFilterChange} className="mx-2">
+            <option value="">Dog Capacity</option>
+            {[...new Set(priceList.map((option) => option.dog_capacity))].map((dogCapacity) => (
+              <option key={dogCapacity} value={dogCapacity}>
+                {dogCapacity}
+              </option>
+            ))}
+          </select>
+          <select value={typeFilter} onChange={handleTypeFilterChange} className="mx-2">
+            <option value="">Type</option>
+            {[...new Set(priceList.map((option) => option.walk_type))].map((walkType) => (
+              <option key={walkType} value={walkType}>
+                {walkType}
+              </option>
+            ))}
+          </select>
+          <button type="button" onClick={handleRefreshFilters} className="mx-2">
+            Refresh
+          </button>
         </div>
+  
+        <div>
+          {priceList
+            .filter((option) => (
+              (!walkDurationFilter || option.walk_duration === walkDurationFilter) &&
+              (!priceFilter || option.price === priceFilter) &&
+              (!dogCapacityFilter || option.dog_capacity === dogCapacityFilter) &&
+              (!typeFilter || option.walk_type === typeFilter)
+            ))
+            .map((option) => (
+              // Agrega la condición para evitar renderizar la card con price="1.00"
+              option.price !== "1.00" && (
+                <div
+                  key={option.id}
+                  className={`card ${isSelected(option) ? "selected-card" : ""}`}
+                  onClick={() => handleCardClick(option)}
+                >
+                  <input
+                    type="checkbox"
+                    id={option.id}
+                    value={option.title}
+                    checked={isSelected(option)}
+                    onChange={() => handleCheckboxChange(option)}
+                    style={{ display: "none" }}
+                  />
+                  {option.title} - Price: {option.price}, Walk Duration:{" "}
+                  {option.walk_duration}, Walk Type: {option.walk_type}, Dog
+                  Capacity: {option.dog_capacity}
+                </div>
+              )
+            ))}
+        </div>
+  
         <div className="mt-5 flex flex-col items-center justify-center">
           <input
             placeholder="your sale details..."
@@ -148,9 +228,11 @@ const WalkerRegister = () => {
           </button>
         </div>
       </form>
+  
       {formSubmissionError && (
         <p style={{ color: "red" }}>{formSubmissionError}</p>
       )}
+  
       <style jsx>{`
         .card {
           border: 1px solid #ccc;
@@ -160,7 +242,7 @@ const WalkerRegister = () => {
           display: block;
           cursor: pointer;
         }
-
+  
         .selected-card {
           background-color: #29235c;
           color: #f39200;
