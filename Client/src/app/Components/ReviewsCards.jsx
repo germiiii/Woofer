@@ -12,7 +12,7 @@ const ReviewsCards = ({ reviewData }) => {
       {reviewData.map((review) => (
         <li
           key={review.id}
-          className="h-[150px] rounded-md mt-5 mb-5 flex flex-col items-center  bg-[#29235c] hover:shadow-lg"
+          className="h-[200px] w-[500px] rounded-md mt-5 mb-5 flex flex-col items-center  bg-[#29235c] hover:shadow-lg"
         >
           <h1 className="mt-5 mb-2 text-2xl text-[#F39200] font-bold">
             Rating: {review.score}/5

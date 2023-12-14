@@ -353,6 +353,45 @@ const CheckoutComponent = () => {
     }
   };
 
+  const paymentFake = async (data, actions) => {
+    const storedTotalAmount = localStorage.getItem("totalAmount");
+    if (!storedTotalAmount || storedTotalAmount === "0.00") {
+      window.alert("Please select a type of walk");
+      return;
+    }
+
+    try {
+      alert("Payment successful");
+
+      const userId = localStorage.getItem("userId");
+      const walkerId = localStorage.getItem("walkerId");
+      const walkDuration = localStorage.getItem("walkDuration");
+      const totalAmount = localStorage.getItem("totalAmount");
+      const dogCount = localStorage.getItem("dog_count");
+      const walkType = localStorage.getItem("walkId");
+
+      const paymentDetails = {
+        ownerId: userId,
+        walkerId: walkerId,
+        duration: walkDuration,
+        totalPrice: totalAmount,
+        paymentMethod: "alternative",
+        dogs: parseInt(dogCount),
+        walkTypes: [walkType],
+      };
+
+      const response = await axios.post(`${api}/walk`, paymentDetails, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      router.push("/ownerHome");
+    } catch (error) {
+      console.error("Error capturing payment:", error);
+    }
+  };
+
   //! Handle Cancel
   const handleCancel = (data) => {
     console.log("Cancelled:", data);
@@ -365,7 +404,7 @@ const CheckoutComponent = () => {
         <div className="bg-[#29235c] w-1/2 flex flex-col justify-center items-center">
           {walkerDetails && walkerData ? (
             <div className="flex flex-col h-full ">
-              <div className="mt-10 mb-5">
+              <div className="mt-5 mb-5">
                 <h1
                   className="text-4xl text-[#F39200] font-bold "
                   style={{ fontFamily: "LikeEat" }}
@@ -413,7 +452,7 @@ const CheckoutComponent = () => {
           ) : null}
         </div>
         <div className="w-1/2 bg-[#E4E2ED] flex flex-col items-center">
-          <div className="mt-8">
+          <div className="mt-2">
             {walkerDetails && walkerData ? (
               <div>
                 <h2
@@ -616,6 +655,16 @@ const CheckoutComponent = () => {
                 <h2 className="text-[#29235C] text-2xl">
                   Total: ${totalAmount}
                 </h2>
+              </div>
+              <div className="flex flex-col justify-center items-center mt-5 mb-5">
+                <button
+                  onClick={() => {
+                    paymentFake();
+                  }}
+                  className="w-30 px-6 py-1 rounded-full bg-[#F39200] text-white font-bold"
+                >
+                  alternative payment methods
+                </button>
               </div>
 
               <PayPalScriptProvider
