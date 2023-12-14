@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import "tailwindcss/tailwind.css";
 import "../stylesLanding.css";
+import UserDetailButton from "./UserDetailButton";
 
 const NavbarHomeWalker = () => {
   const currentPath = usePathname();
@@ -40,6 +41,8 @@ const NavbarHomeWalker = () => {
             home
           </button>
         </Link>
+        {/* Add UserDetailButton component here */}
+        <UserDetailButton />
         <Link href={"/walkerHome/TestWalkerRegister"}>
           <button
             className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
