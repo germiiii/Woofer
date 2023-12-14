@@ -150,6 +150,7 @@ export default function DataGridDemo() {
   const userId = decodedToken?.userId;
   const [users, setUsers] = React.useState([]);
   const [userRole, setUserRole] = React.useState(null);
+  const [selectedType, setSelectedType] = React.useState(null);
   const [loadingRole, setLoadingRole] = React.useState(true);
   const actionContainer = {
     display: "flex",
@@ -170,6 +171,7 @@ export default function DataGridDemo() {
     try {
       const response = await axios.get(`${api}/users/${userId}`);
       setUserRole(response.data.role);
+      setSelectedType(localStorage.getItem("selectedType"));
     } catch (error) {
       console.error("Error fetching user role:", error);
     } finally {
@@ -221,11 +223,13 @@ export default function DataGridDemo() {
 
   React.useEffect(() => {
     if (!loadingRole) {
-      if (userRole !== "admin") {
-        router.push("/login");
+      if (userRole !== "admin" && selectedType === "owner") {
+        router.push("/ownerHome");
+      } else if (userRole !== "admin" && selectedType === "walker") {
+        router.push("/walkerHome");
       }
     }
-  }, [userRole, loadingRole, router]);
+  }, [userRole, loadingRole, router, selectedType]);
 
   React.useEffect(() => {
     fetchAllUsers();
