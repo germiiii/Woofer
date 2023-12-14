@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -5,27 +7,28 @@ const WalkList = (props) => {
   const [walks, setWalks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [walksPerPage] = useState(5);
-  console.log(walks)
+  const [refresh, setRefresh] = useState(false);
+  console.log(walks);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const API = process.env.NEXT_PUBLIC_APIURL;
-        const response = await axios.get(`${API}/walk/walker/${props.userId}`);
+        const response = await axios.get(`${API}/walk/walker/b350ed72-e9a9-446a-9d92-0951e87b08c0`);
         const walkss = response.data.walksFromWalker;
-        console.log(walkss)
-        setWalks(walkss);
 
+        // Ordenar la lista por fecha y hora de inicio de forma descendente
+        const sortedWalks = walkss.sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
+        setWalks(sortedWalks);
       } catch (error) {
         console.error('Error al obtener los datos de la caminata:', error);
       }
     };
 
     fetchData();
+    setRefresh(false);
 
-    const intervalId = setInterval(fetchData, 30000);
+  }, [props.userId, refresh]);
 
-    return () => clearInterval(intervalId);
-  }, [props.userId]);
 
   const handleStatusChange = async (walkId, newStatus) => {
     try {
@@ -46,76 +49,71 @@ const WalkList = (props) => {
     (currentPage - 1) * walksPerPage,
     currentPage * walksPerPage
   ) : [];
+  const totalPricesSum = currentWalks.reduce(
+    (sum, walk) => sum + parseFloat(walk.totalPrice),
+    0
+  );
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber)
+  const handleRefresh = () => setRefresh(true);
+
+  const formatDate = (dateString) => {
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('es-ES', options);
+  };
 
   return (
     <div style={{ border: '1px solid #000', padding: '10px', borderRadius: '5px', overflowX: 'auto' }}>
-      <h2>Lista de Caminatas</h2>
+      <button onClick={handleRefresh} style={{ margin: '10px' }}>
+        Refresh
+      </button>
+      <h2>Walk List</h2>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
             <th style={{ padding: '10px', border: '1px solid #000' }}>Date</th>
-            <th style={{ padding: '10px', border: '1px solid #000' }}>StartTime</th>
-            <th style={{ padding: '10px', border: '1px solid #000' }}>DogNumber</th>
-            <th style={{ padding: '10px', border: '1px solid #000' }}>TotalPrice</th>
+            <th style={{ padding: '10px', border: '1px solid #000' }}>Name</th>
+            <th style={{ padding: '10px', border: '1px solid #000' }}>Dog Number</th>
+            <th style={{ padding: '10px', border: '1px solid #000' }}>Total Price</th>
             <th style={{ padding: '10px', border: '1px solid #000' }}>Status</th>
+            <th style={{ padding: '10px', border: '1px solid #000' }}>Action</th> 
           </tr>
         </thead>
         <tbody>
           {currentWalks.map((walk) => (
             <tr key={walk.id}>
-              <td style={{ padding: '10px', border: '1px solid #000' }}>{walk.date}</td>
-              <td style={{ padding: '10px', border: '1px solid #000' }}>{walk.startTime}</td>
+              <td style={{ padding: '10px', border: '1px solid #000' }}> {formatDate(walk.date)}</td>
+              <td style={{ padding: '10px', border: '1px solid #000' }}>{walk.owner.name}</td>
               <td style={{ padding: '10px', border: '1px solid #000' }}>{walk.dogNumber}</td>
-              <td style={{ padding: '10px', border: '1px solid #000' }}>{walk.totalPrice}</td>
+              <td style={{ padding: '10px', border: '1px solid #000' }}>$ {walk.totalPrice}</td>
+              <td style={{ padding: '10px', border: '1px solid #000' }}>{walk.state}</td>
               <td style={{ padding: '10px', border: '1px solid #000' }}>
-                <div
-                  style={{
-                    backgroundColor: walk.state === 'pending' ? 'lightgray' : '',
-                    borderRadius: '5px',
-                    padding: '5px',
-                  }}
-                  onClick={() => {
-                    if (walk.state === 'pending') {
-                      handleStatusChange(walk.id, 'in progress');
-                    }
-                  }}
-                >
-                  {walk.state}
-
-                  {walk.state === 'pending' && (
-                    <div>
-                      <button
-                        onClick={() => handleStatusChange(walk.id, 'in progress')}
-                        style={{ color: 'green', margin: '0 5px' }}
-                      >
-                        In Progress
-                      </button>
-                      <button
-                        onClick={() => handleStatusChange(walk.id, 'rejected')}
-                        style={{ color: 'red', margin: '0 5px' }}
-                      >
-                        Rejected
-                      </button>
-                    </div>
-                  )}
-                  {walk.state === 'in progress' && (
-                    <button
-                      onClick={() => handleStatusChange(walk.id, 'done')}
-                      style={{ color: 'skyblue', margin: '0 5px' }}
-                    >
-                      Done
+                {walk.state === 'Pending' && (
+                  <div>
+                    <button onClick={() => handleStatusChange(walk.id, 'In progress')}>
+                      In Progress
                     </button>
-                  )}
-                </div>
+                    <br/>
+                    <button onClick={() => handleStatusChange(walk.id, 'Rejected')}>
+                      Rejected
+                    </button>
+                  </div>
+                )}
+  
+                {walk.state === 'In progress' && (
+                  <button onClick={() => handleStatusChange(walk.id, 'Done')}>
+                    Done
+                  </button>
+                )}
+  
+                {/* Mostrar "Non Action" si walk.action está vacío */}
+                {!walk.action ? 'Non Action' : walk.action}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      {/* Paginación */}
+  
       <ul style={{ listStyleType: 'none', display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
         {Array.from({ length: Math.ceil(walks.length / walksPerPage) }, (_, i) => i + 1).map((number) => (
           <li key={number} style={{ margin: '0 5px', cursor: 'pointer' }}>
@@ -123,6 +121,12 @@ const WalkList = (props) => {
           </li>
         ))}
       </ul>
+      <div style={{ marginTop: '20px', textAlign: 'center' }}>
+        <h3>Total Price Sum: $ {totalPricesSum.toFixed(2)}</h3>
+      </div>
+      <div style={{ marginTop: '20px', textAlign: 'center' }}>
+        <h3>Total Walks: {walks.length}</h3>
+      </div>
     </div>
   );
 };
