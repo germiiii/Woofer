@@ -38,7 +38,7 @@ const NavbarHomeWalker = () => {
               currentPath === "/walkerHome" ? "text-[#F39200]" : "text-white"
             } mt-3 lg:mt-0 mr-7  transition transition-colors duration-300`}
           >
-            home
+            Home
           </button>
         </Link>
         {/* Add UserDetailButton component here */}
@@ -51,7 +51,7 @@ const NavbarHomeWalker = () => {
                 : "text-white"
             } mt-3 lg:mt-0 mr-7  transition transition-colors duration-300`}
           >
-            walker form
+            Walker form
           </button>
         </Link>
       </div>
@@ -61,7 +61,7 @@ const NavbarHomeWalker = () => {
             onClick={handleLogout}
             className={`w-30 px-5 py-2 rounded-full text-[#29235c] hover:bg-[#29235c] hover:text-[#F39200] bg-white font-bold mt-3 lg:mt-0 mr-7 transition transition-colors duration-300`}
           >
-            log out
+            Log out
           </button>
         </Link>
       </div>
