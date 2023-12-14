@@ -26,7 +26,6 @@ const OwnerHome = () => {
     setSelectedType(localStorage.getItem("selectedType") || "");
   }, []);
 
-
   useEffect(() => {
     setAddressInput(localStorage.getItem("userAddress") || "");
     setProvinceInput(localStorage.getItem("userProvince") || "");

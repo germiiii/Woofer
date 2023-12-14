@@ -141,54 +141,48 @@ const WalkerHome = () => {
   };
 
   return (
-    <div className="text-center m-20">
-      {/* <ToastContainer />
-      <Map userProvince={userProvince} userAddress={userAddress} />
-      <br /> */}
-      <WalkList userId={userId} />
-      <br />
-      <div className="mb-8">{renderList}</div>
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Sale Details</h2>
-        <p className="text-base">
-          {userWalker?.walkerData?.walker?.sale_details ||
-            "Woofer offers you dog walking services"}
-        </p>
+    <div className="flex flex-grow h-screen">
+      <div className="bg-[#29235c] w-1/2 flex flex-col items-center">
+        <div className="flex flex-col items-center mt-10">
+          <h1
+            className=" text-5xl text-[#F39200]"
+            style={{ fontFamily: "LikeEat" }}
+          >
+            My walks
+          </h1>
+        </div>
+        <WalkList userId={userId} />
       </div>
-      <button
-        onClick={handleActiveClick}
-        className={`bg-black text-white px-4 py-2 ${
-          !isAvailable ? "bg-green-500" : "bg-red-500"
-        }`}
-      >
-        {!isAvailable ? "Available" : "Unavailable"}
-      </button>
-      <br />
-      <button
-        onClick={() => router.push("/walkerHome/WalkerRegister")}
-        className="bg-black text-white px-4 py-2"
-      >
-        Chage your sell details
-      </button>
-      <div>
-        <h2>Client Comments</h2>
-        {comments.map((comment, index) => (
-          <div key={index} className="mb-4">
-            <p className="text-base">{comment.text}</p>
-            {comment.response && (
-              <p className="text-base">Response: {comment.response}</p>
-            )}
-            {!comment.response && (
-              <input
-                type="text"
-                placeholder="Respond..."
-                value={comment.response || ""}
-                onChange={(e) => handleRespondComment(index, e.target.value)}
-                className="border p-2 rounded"
-              />
-            )}
-          </div>
-        ))}
+      <div className="w-1/2 bg-[#E4E2ED]">
+        <div className="flex flex-col items-center mt-10">
+          <h1
+            className=" text-5xl text-[#29235c]"
+            style={{ fontFamily: "LikeEat" }}
+          >
+            About me
+          </h1>
+          <p className="text-[#29235c] text-center mb-5 mt-5 ml-10 mr-10">
+            {userWalker?.walkerData?.walker?.sale_details ||
+              "No description yet."}
+          </p>
+        </div>
+        <div className="flex items-center justify-between mb-5">
+          <button
+            onClick={handleActiveClick}
+            className={`bg-black text-white px-6 py-1 rounded-full font-bold ml-10 ${
+              !isAvailable ? "bg-green-500" : "bg-red-500"
+            }`}
+          >
+            {!isAvailable ? "set to available" : "set to unavailable"}
+          </button>
+          <button
+            onClick={() => router.push("/walkerHome/WalkerRegister")}
+            className="px-6 py-1 rounded-full bg-[#F39200] text-white font-bold mr-10"
+          >
+            edit this section
+          </button>
+        </div>
+        <div className="flex flex-col items-center">{renderList}</div>
       </div>
     </div>
   );

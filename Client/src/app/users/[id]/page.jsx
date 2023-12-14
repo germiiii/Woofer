@@ -49,7 +49,7 @@ export default function UserPage({ params }) {
       return currentDogs.map((dog, index) => (
         <div
           key={index}
-          className="flex items-center h-[150px] w-[400px] mt-10 bg-[#29235c] rounded-md"
+          className="flex items-center h-[150px] w-[400px] mt-10 bg-[#29235c] rounded-md hover:shadow-lg"
         >
           <div className="rounded-full border border-[#F39200] border-2 overflow-hidden ml-5">
             <Image
