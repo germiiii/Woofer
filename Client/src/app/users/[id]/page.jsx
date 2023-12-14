@@ -1,11 +1,13 @@
 "use client";
 import React from "react";
 import UserDetail from "../../Components/UserDetail";
+import NavBarOwner from "../../Components/NavBarOwner";
+import NavBarWalker from "../../Components/NavBarWalker";
 import "tailwindcss/tailwind.css";
 import Image from "next/image";
-import NavBarHome from "../../Components/NavBarOwner";
 import Link from "next/link.js";
 import axios from "axios";
+import Reviews from "../../Components/Reviews";
 
 export default function UserPage({ params }) {
   const [user, setUser] = React.useState(null);
@@ -84,32 +86,39 @@ export default function UserPage({ params }) {
     <div className="flex flex-col">
       {user ? (
         <div>
-          <NavBarHome />
+          {user.isOwner ? <NavBarOwner /> : <NavBarWalker />}
           <div>
             <div className="flex flex-grow">
               <div className="bg-[#E4E2ED] w-1/2 flex flex-col items-center">
-                <h1
-                  className="text-5xl text-[#29235c] mt-10"
-                  style={{ fontFamily: "LikeEat" }}
-                >
-                  Your dogs
-                </h1>
-                <div className="flex flex-col mt-10 items-center justify-center h-[550px]">
-                  {renderDogs()}
-                </div>
-                <div className="mt-4">
-                  {pageNumbers.map((number) => (
-                    <span
-                      key={number}
-                      onClick={() => paginate(number)}
-                      className={`mr-2 cursor-pointer font-bold ${
-                        number === currentPage ? "text-[#29235c]" : "text-white"
-                      }`}
+                {user.isOwner ? (
+                  <>
+                    <h1
+                      className="text-5xl text-[#29235c] mt-10"
+                      style={{ fontFamily: "LikeEat" }}
                     >
-                      {number}
-                    </span>
-                  ))}
-                </div>
+                      Your dogs
+                    </h1>
+                    <div className="flex flex-col mt-10 items-center justify-center h-[550px]">
+                      {renderDogs()}
+                    </div>
+                    <div className="mt-4">
+                      {pageNumbers.map((number) => (
+                        <span
+                          key={number}
+                          onClick={() => paginate(number)}
+                          className={`mr-2 cursor-pointer font-bold ${
+                            number === currentPage ? "text-[#29235c]" : "text-white"
+                          }`}
+                        >
+                          {number}
+                        </span>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  // Render Reviews component for walker
+                  <Reviews userId={params.id} />
+                )}
               </div>
               <div className="w-1/2 bg-[#29235c] flex flex-col items-center h-screen">
                 <UserDetail
