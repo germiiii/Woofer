@@ -18,7 +18,7 @@ const CheckoutComponent = () => {
   const [extras, setExtras] = useState([]);
   const [totalAmount, setTotalAmount] = useState("0.00");
   const [orderCount, setOrderCount] = useState(0);
-  // const [accessToken, setAccessToken] = useState("");
+  const [accessToken, setAccessToken] = useState("");
   const [isTotalAmountValid, setIsTotalAmountValid] = useState(false);
   const [walkTypeQuantity, setWalkTypeQuantity] = useState(1);
   const [extraQuantities, setExtraQuantities] = useState({
@@ -232,44 +232,46 @@ const CheckoutComponent = () => {
 
   // //! PayPal
   // //!Access Token Fetching
-  // useEffect(() => {
-  //   async function fetchAccessToken() {
-  //     try {
-  //       const { data } = await axios.post(
-  //         "https://api-m.sandbox.paypal.com/v1/oauth2/token",
-  //         "grant_type=client_credentials",
-  //         {
-  //           headers: {
-  //             "Content-Type": "application/x-www-form-urlencoded",
-  //             Authorization: `Basic ${btoa(clientId + ":" + clientSecret)}`,
-  //           },
-  //         }
-  //       );
-  //       localStorage.setItem("paypal_accessToken", data.access_token);
-  //       console.log("Paypal Access Token:", data.access_token);
-  //     } catch (error) {
-  //       console.error("Error fetching/accessing token:", error);
-  //     }
-  //   }
+  useEffect(() => {
+    async function fetchAccessToken() {
+      try {
+        const { data } = await axios.post(
+          "https://api-m.sandbox.paypal.com/v1/oauth2/token",
+          "grant_type=client_credentials",
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              Authorization: `Basic ${btoa(clientId + ":" + clientSecret)}`,
+            },
+          }
+        );
+        localStorage.setItem("paypal_accessToken", data.access_token);
+        console.log("Paypal Access Token:", data.access_token);
+      } catch (error) {
+        console.error("Error fetching/accessing token:", error);
+      }
+    }
 
-  //   fetchAccessToken();
+    fetchAccessToken();
 
-  //   if (!accessToken) {
-  //     const token = localStorage.getItem("paypal_accessToken");
-  //     setAccessToken(token);
-  //   }
-  // }, []);
+    if (!accessToken) {
+      const token = localStorage.getItem("paypal_accessToken");
+      setAccessToken(token);
+    }
+  }, []);
 
   useEffect(() => {
     setIsTotalAmountValid(totalAmount > 0);
   }, [totalAmount]);
+
+
 
   //!Create Order
   const createOrder = async (data, actions) => {
     try {
       const storedTotalAmount = localStorage.getItem("totalAmount");
       const accessToken = localStorage.getItem('paypal_accessToken')
-      console.log('Access Toke', accessToken)
+      console.log('Access Token', accessToken)
       if (!storedTotalAmount || storedTotalAmount === "0.00") {
         setTimeout(() => createOrder(data, actions), 1000); // Retry after 1 second if totalAmount is 0 or not present
         return;
@@ -354,9 +356,9 @@ const CheckoutComponent = () => {
 
       console.log("POST request response:", response.data);
 
-      // setTimeout(() => {
-      //   router.push("/ownerHome");
-      // }, 3000);
+      setTimeout(() => {
+        router.push("/ownerHome");
+      }, 3000);
     } catch (error) {
       console.error("Error capturing payment:", error);
     }
@@ -429,8 +431,9 @@ const CheckoutComponent = () => {
                   className="text-3xl text-[#29235C] font-bold mb-2 mt-4"
                   style={{ fontFamily: "LikeEat" }}
                 >
-                  Walk Services by {walkerData.name}:
+                  Walk Services by <span style={{ color: '#F39200'}}>{walkerData.name}</span>
                 </h2>
+                
                 {walkerData.walker?.walkTypes &&
                 walkerData.walker.walkTypes.length > 0 ? (
                   <div>
@@ -480,14 +483,15 @@ const CheckoutComponent = () => {
                     </table>
 
                     {selectedWalkType && (
-                      <div className="mt-4 relative">
-                        <div className="bg-[#F39200] rounded-lg p-4">
-                          <p className="text-sm text-bold text-white">
-                            {selectedWalkType.description}
-                          </p>
-                        </div>
+                    <div className="mt-4 relative">
+                      <div className="bg-[#F39200] rounded-lg p-4" style={{ maxWidth: "400px", overflow: "hidden" }}>
+                        <p className="text-sm text-bold text-white" style={{ lineHeight: "1.2em" }}>
+                          {selectedWalkType.description}
+                        </p>
                       </div>
-                    )}
+                    </div>
+                  )}
+
                   </div>
                 ) : (
                   <p>No walk types available</p>
@@ -618,7 +622,7 @@ const CheckoutComponent = () => {
                   Total: ${totalAmount}
                 </h2>
               </div>
-              <div className="mt-10">
+             
                 <PayPalScriptProvider
                   options={{
                     clientId: clientId,
@@ -636,7 +640,7 @@ const CheckoutComponent = () => {
                     onApprove={handleApprove}
                   />
                 </PayPalScriptProvider>
-              </div>
+             
             </div>
           </div>
         </div>
