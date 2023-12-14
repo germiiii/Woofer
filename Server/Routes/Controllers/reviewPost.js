@@ -80,7 +80,7 @@ const reviewPost = async (idWalk, type, score, description) => {
     await sendNotification(user, "review", subject, message, true);
   } else if (type === "walker") {
     message = `You've received a rating for your ride! ${reviewData.walk.walker.user.name} ${reviewData.walk.owner.user.lastName} rated you with ${score} points and left this comment: ${description}`;
-    await sendNotification(user, "review", subject, email, true);
+    await sendNotification(user, "review", subject, message, true);
   }
 
   return reviewData;
