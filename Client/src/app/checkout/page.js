@@ -29,7 +29,6 @@ const CheckoutComponent = () => {
 
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
   const clientSecret = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_SECRET;
-
   const api = process.env.NEXT_PUBLIC_APIURL;
 
   //!Fetch Walker
@@ -39,7 +38,6 @@ const CheckoutComponent = () => {
     if (selectedWalker) {
       const parsedWalker = JSON.parse(selectedWalker);
       const id = parsedWalker?.walker?.walkerData?.id;
-      console.log("Walker ID", id);
       setWalkerId(id);
       const walkerID = localStorage.setItem("walkerId", id);
       setWalkerDetails(parsedWalker);
@@ -111,25 +109,21 @@ const CheckoutComponent = () => {
     );
 
     if (selectedType) {
-      setSelectedWalkType(selectedType); 
-      console.log("Selected Walk ID:", selectedType.id);
-      console.log("Walk Duration", selectedType.walk_duration);
+      setSelectedWalkType(selectedType);
       localStorage.setItem("walkId", selectedType.id);
       localStorage.setItem("walkDuration", selectedType.walk_duration);
     } else {
-        console.log("Walk type not found");
-        setSelectedWalkType(null); 
-        setTotalAmount("0.00"); 
-        setWalkTypeQuantity(1); 
-        setExtraQuantities({
-          Leash: "0",
-          GarbageBag: "0",
-          WaterBowl: "0",
-        }); 
-      }
-    };
-  
-  
+      setSelectedWalkType(null);
+      setTotalAmount("0.00");
+      setWalkTypeQuantity(1);
+      setExtraQuantities({
+        Leash: "0",
+        GarbageBag: "0",
+        WaterBowl: "0",
+      });
+    }
+  };
+
   //!Quantity
 
   const isWalkTypeSelected = selectedWalkType !== null;
@@ -179,7 +173,7 @@ const CheckoutComponent = () => {
     value = Math.min(Math.max(value, 0), 15);
     setWalkTypeQuantity(value);
   };
-  
+
   const incrementWalkTypeQuantity = () => {
     if (!isWalkTypeSelected || walkTypeQuantity === 0) {
       alert("Please select a walk type first");
@@ -187,7 +181,7 @@ const CheckoutComponent = () => {
     }
     setWalkTypeQuantity((prevQuantity) => Math.min(prevQuantity + 1, 15));
   };
-  
+
   const decrementWalkTypeQuantity = () => {
     if (!isWalkTypeSelected || walkTypeQuantity === 0) {
       alert("Please select a walk type first");
@@ -195,7 +189,7 @@ const CheckoutComponent = () => {
     }
     setWalkTypeQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1)); // Set a minimum of 1 instead of 0
   };
-  
+
   //!Total Amount Sum
   const calculateTotalAmount = () => {
     let walkTypePrice = 0;
@@ -221,7 +215,6 @@ const CheckoutComponent = () => {
 
     setTotalAmount(formattedTotalAmount);
     localStorage.setItem("totalAmount", formattedTotalAmount);
-    console.log("Total Amount:", `"${formattedTotalAmount}"`);
     return formattedTotalAmount;
   };
 
@@ -264,14 +257,12 @@ const CheckoutComponent = () => {
     setIsTotalAmountValid(totalAmount > 0);
   }, [totalAmount]);
 
-
-
   //!Create Order
   const createOrder = async (data, actions) => {
     try {
       const storedTotalAmount = localStorage.getItem("totalAmount");
-      const accessToken = localStorage.getItem('paypal_accessToken')
-      console.log('Access Token', accessToken)
+      const accessToken = localStorage.getItem("paypal_accessToken");
+      console.log("Access Token", accessToken);
       if (!storedTotalAmount || storedTotalAmount === "0.00") {
         setTimeout(() => createOrder(data, actions), 1000); // Retry after 1 second if totalAmount is 0 or not present
         return;
@@ -321,8 +312,6 @@ const CheckoutComponent = () => {
       console.error("Error creating PayPal order:", error);
     }
   };
-
-  console.log(walkerData);
 
   //! Handle Approval and POST to /walk
   const handleApprove = async (data, actions) => {
@@ -386,13 +375,14 @@ const CheckoutComponent = () => {
               </div>
               <div className="flex flex-col items-center h-[650px] w-[450px] rounded-lg bg-[#F39200]">
                 <div className="text-[#F39200] bg-white mt-3 ml-3 mr-3 border rounded-md text-center">
-                  <p >{walkerData.walker.sale_details}</p>
-                  </div>
+                  <p>{walkerData.walker.sale_details}</p>
+                </div>
                 <Image
                   src={walkerData.image}
                   width={300}
                   height={0}
                   className="mt-5 rounded-lg"
+                  alt=""
                 />
                 <div className="mt-2"> {starsForMedian} </div>
                 <div className="mt-2">
@@ -410,7 +400,6 @@ const CheckoutComponent = () => {
                         <p>
                           <i>
                             {index === 0 ? `"${description}"` : description}
-                            <p>---by Sandra Lopez</p>
                           </i>
                         </p>
                       </div>
@@ -431,9 +420,10 @@ const CheckoutComponent = () => {
                   className="text-3xl text-[#29235C] font-bold mb-2 mt-4"
                   style={{ fontFamily: "LikeEat" }}
                 >
-                  Walk Services by <span style={{ color: '#F39200'}}>{walkerData.name}</span>
+                  Walk Services by{" "}
+                  <span style={{ color: "#F39200" }}>{walkerData.name}</span>
                 </h2>
-                
+
                 {walkerData.walker?.walkTypes &&
                 walkerData.walker.walkTypes.length > 0 ? (
                   <div>
@@ -483,15 +473,20 @@ const CheckoutComponent = () => {
                     </table>
 
                     {selectedWalkType && (
-                    <div className="mt-4 relative">
-                      <div className="bg-[#F39200] rounded-lg p-4" style={{ maxWidth: "400px", overflow: "hidden" }}>
-                        <p className="text-sm text-bold text-white" style={{ lineHeight: "1.2em" }}>
-                          {selectedWalkType.description}
-                        </p>
+                      <div className="mt-4 relative">
+                        <div
+                          className="bg-[#F39200] rounded-lg p-4"
+                          style={{ maxWidth: "400px", overflow: "hidden" }}
+                        >
+                          <p
+                            className="text-sm text-bold text-white"
+                            style={{ lineHeight: "1.2em" }}
+                          >
+                            {selectedWalkType.description}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  )}
-
+                    )}
                   </div>
                 ) : (
                   <p>No walk types available</p>
@@ -622,25 +617,24 @@ const CheckoutComponent = () => {
                   Total: ${totalAmount}
                 </h2>
               </div>
-             
-                <PayPalScriptProvider
-                  options={{
-                    clientId: clientId,
+
+              <PayPalScriptProvider
+                options={{
+                  clientId: clientId,
+                }}
+              >
+                <PayPalButtons
+                  style={{
+                    layout: "vertical",
+                    color: "white",
+                    label: "pay",
+                    shape: "pill",
                   }}
-                >
-                  <PayPalButtons
-                    style={{
-                      layout: "vertical",
-                      color: "white",
-                      label: "pay",
-                      shape: "pill",
-                    }}
-                    createOrder={createOrder}
-                    onCancel={handleCancel}
-                    onApprove={handleApprove}
-                  />
-                </PayPalScriptProvider>
-             
+                  createOrder={createOrder}
+                  onCancel={handleCancel}
+                  onApprove={handleApprove}
+                />
+              </PayPalScriptProvider>
             </div>
           </div>
         </div>

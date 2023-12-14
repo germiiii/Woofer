@@ -42,7 +42,7 @@ const NavbarHomeWalker = () => {
           </button>
         </Link>
         {/* Add UserDetailButton component here */}
-        <Link href={"/walkerHome/TestWalkerRegister"}>
+        <Link href={"/walkerHome/WalkerRegister"}>
           <button
             className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
               currentPath === "/walkerHome/TestWalkerRegister"

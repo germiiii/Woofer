@@ -66,7 +66,6 @@ const LoginForm = () => {
             `${api}/users/${decodedToken.userId}`
           );
           const userData = userResponse.data;
-         
 
           localStorage.setItem("userId", userData.id);
           localStorage.setItem("userProvince", userData.province);
@@ -84,7 +83,7 @@ const LoginForm = () => {
             }
           } else if (userData.selectedType === "walker") {
             if (userData.isWalker === false) {
-              router.push("/walkerHome/TestWalkerRegister");
+              router.push("/walkerHome/WalkerRegister");
             } else {
               router.push("/walkerHome");
             }
@@ -101,23 +100,23 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-  if (!email.trim() || !password.trim()) {
-    alert("Email and password are required.");
-    return;
-  }
+    if (!email.trim() || !password.trim()) {
+      alert("Email and password are required.");
+      return;
+    }
 
-  if (!validateForm()) {
-    return;
-  }
+    if (!validateForm()) {
+      return;
+    }
 
-  try {
-    const response = await axios.post(`${api}/login`, {
-      email,
-      password,
-    });
+    try {
+      const response = await axios.post(`${api}/login`, {
+        email,
+        password,
+      });
 
       const { token } = response.data;
-      console.log("At Login", response.data)
+      console.log("At Login", response.data);
       localStorage.setItem("token", token);
 
       if (token) {
@@ -127,8 +126,7 @@ const LoginForm = () => {
           `${api}/users/${decodedToken.userId}`
         );
         const userData = userResponse.data;
-        console.log('Userdata', userData)
-
+        console.log("Userdata", userData);
 
         localStorage.setItem("userId", userData.id);
         localStorage.setItem("userProvince", userData.province);
@@ -136,14 +134,12 @@ const LoginForm = () => {
         localStorage.setItem("selectedType", userData.selectedType);
         localStorage.setItem("isOwner", userData.isOwner);
         localStorage.setItem("isWalker", userData.isWalker);
-        
 
-        userData.isOwner ? localStorage.setItem('dog_count', userData.owner.dog_count) : null
+        userData.isOwner
+          ? localStorage.setItem("dog_count", userData.owner.dog_count)
+          : null;
 
         // userData.isOwner ? localStorage.setItem('Dog Count', userData.isOwner)
-
-      
-
 
         if (userData.role === "admin") {
           router.push("/admin");
@@ -166,9 +162,8 @@ const LoginForm = () => {
     } catch (error) {
       console.error("Error:", error.message);
       alert("Invalid credentials");
-      }
     }
-  
+  };
 
   if (isLoggedIn) {
     return (
