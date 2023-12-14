@@ -19,7 +19,6 @@ const Reviews = ({ userId }) => {
         const response = await axios.get(`${API}/review/${userId}`);
         setWalkerReviews(response.data.reviews);
 
-        // Actualiza reviewData con la información necesaria
         const accumulatedData = response.data.reviews.reduce(
           (accumulated, review) => {
             const walkerReview = review.walkerReviews[0]?.walker?.walks;
