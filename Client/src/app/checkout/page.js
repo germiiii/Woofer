@@ -382,13 +382,13 @@ const CheckoutComponent = () => {
                   {walkerData.name + " " + walkerData.lastName}
                 </h1>
               </div>
-              <div className="flex flex-col items-center h-[700px] w-[450px] rounded-lg bg-[#F39200]">
-                <div className="">
-                  <p className="text-white">{walkerData.walker.sale_details}</p>
+              <div className="flex flex-col items-center h-[650px] w-[450px] rounded-lg bg-[#F39200]">
+                <div className="text-[#F39200] bg-white mt-3 ml-3 mr-3 border rounded-md text-center">
+                  <p >{walkerData.walker.sale_details}</p>
                   </div>
                 <Image
                   src={walkerData.image}
-                  width={400}
+                  width={300}
                   height={0}
                   className="mt-5 rounded-lg"
                 />
