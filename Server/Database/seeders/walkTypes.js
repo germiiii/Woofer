@@ -3,7 +3,7 @@ const walkTypeData = [
   {
     id:1,
     title: "15 minute Premium dog walk",
-    price: 30,
+    price: 1,
     description:
       "Woofers will devote their full atention to walk your furry companion privately for 15 minutes.",
     dog_capacity: "low",
