@@ -19,7 +19,7 @@ const CheckoutComponent = () => {
   const [extras, setExtras] = useState([]);
   const [totalAmount, setTotalAmount] = useState("0.00");
   const [orderCount, setOrderCount] = useState(0);
-  const [accessToken, setAccessToken] = useState("");
+  // const [accessToken, setAccessToken] = useState("");
   const [isTotalAmountValid, setIsTotalAmountValid] = useState(false);
   const [walkTypeQuantity, setWalkTypeQuantity] = useState(1);
   const [extraQuantities, setExtraQuantities] = useState({
@@ -112,16 +112,16 @@ const CheckoutComponent = () => {
     );
   
     if (selectedType) {
-      setSelectedWalkType(selectedType); // Update the selected type
+      setSelectedWalkType(selectedType); 
       console.log("Selected Walk ID:", selectedType.id);
       console.log("Walk Duration", selectedType.walk_duration)
       localStorage.setItem('walkId', selectedType.id)
       localStorage.setItem('walkDuration', selectedType.walk_duration)
     } else {
         console.log("Walk type not found");
-        setSelectedWalkType(null); // Deselect the walk type
-        setTotalAmount("0.00"); // Reset total amount to zero
-        setWalkTypeQuantity(1); // Reset walk type quantity to 1 or any default value
+        setSelectedWalkType(null); 
+        setTotalAmount("0.00"); 
+        setWalkTypeQuantity(1); 
         setExtraQuantities({
           Leash: "0",
           GarbageBag: "0",
@@ -236,33 +236,33 @@ const CheckoutComponent = () => {
 
   // //! PayPal
   // //!Access Token Fetching
-  useEffect(() => {
-    async function fetchAccessToken() {
-      try {
-        const { data } = await axios.post(
-          "https://api-m.sandbox.paypal.com/v1/oauth2/token",
-          "grant_type=client_credentials",
-          {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              Authorization: `Basic ${btoa(clientId + ":" + clientSecret)}`,
-            },
-          }
-        );
-        localStorage.setItem("paypal_accessToken", data.access_token);
-        console.log("Paypal Access Token:", data.access_token);
-      } catch (error) {
-        console.error("Error fetching/accessing token:", error);
-      }
-    }
+  // useEffect(() => {
+  //   async function fetchAccessToken() {
+  //     try {
+  //       const { data } = await axios.post(
+  //         "https://api-m.sandbox.paypal.com/v1/oauth2/token",
+  //         "grant_type=client_credentials",
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/x-www-form-urlencoded",
+  //             Authorization: `Basic ${btoa(clientId + ":" + clientSecret)}`,
+  //           },
+  //         }
+  //       );
+  //       localStorage.setItem("paypal_accessToken", data.access_token);
+  //       console.log("Paypal Access Token:", data.access_token);
+  //     } catch (error) {
+  //       console.error("Error fetching/accessing token:", error);
+  //     }
+  //   }
 
-    fetchAccessToken();
+  //   fetchAccessToken();
 
-    if (!accessToken) {
-      const token = localStorage.getItem("paypal_accessToken");
-      setAccessToken(token);
-    }
-  }, []);
+  //   if (!accessToken) {
+  //     const token = localStorage.getItem("paypal_accessToken");
+  //     setAccessToken(token);
+  //   }
+  // }, []);
 
   useEffect(() => {
     setIsTotalAmountValid(totalAmount > 0);
@@ -272,7 +272,8 @@ const CheckoutComponent = () => {
   const createOrder = async (data, actions) => {
     try {
       const storedTotalAmount = localStorage.getItem("totalAmount");
-
+      const accessToken = localStorage.getItem('paypal_accessToken')
+      console.log('Access Toke', accessToken)
       if (!storedTotalAmount || storedTotalAmount === "0.00") {
         setTimeout(() => createOrder(data, actions), 1000); // Retry after 1 second if totalAmount is 0 or not present
         return;
@@ -419,6 +420,7 @@ const CheckoutComponent = () => {
                         <p>
                           <i>
                             {index === 0 ? `"${description}"` : description}
+                            <p>---by Sandra Lopez</p>
                           </i>
                         </p>
                       </div>
