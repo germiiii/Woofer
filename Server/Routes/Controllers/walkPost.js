@@ -81,6 +81,7 @@ const walkPost = async (
 
   await sendNotification(userOwner, type, subject, message, true);
 
+  subject = "WOOFER ADMIN: Payment received";
   message = `WOOFER has received a payment from ${walkData[0]?.owner.name} for a walk request!\n
   Walk id: ${walkData[0]?.id},\n
   Walker: ${walkData[0]?.walker.name},\n

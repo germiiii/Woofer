@@ -96,7 +96,7 @@ const walkTypeData = [
 const seedWalkTypes = async () => {
   try {
     await WalkType.bulkCreate(walkTypeData);
-    console.log("- WalkTypes seeded successfully");
+    console.log("- WalkTypes seeded successfully\n");
   } catch (error) {
     console.error("Error seeding WalkTypes:", error);
   }
