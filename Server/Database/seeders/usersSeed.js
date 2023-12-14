@@ -34,10 +34,11 @@ const seedUsers = async () => {
       is_active: true,
     });
 
-    console.log("- ADMIN user (admin@woofer.com) successfully created");
+    console.log("- ADMIN user (admin@woofer.com) successfully created\n");
   } catch (error) {
     console.log("Error creating ADMIN user:", error);
   }
+  console.log("Preparing to seed users...");
   try {
     await Promise.all(
       usersData.map(async (user) => {
@@ -45,7 +46,7 @@ const seedUsers = async () => {
         const uploadedImage = await cloudinary.uploader.upload(imagePath);
         user.image = uploadedImage.secure_url;
         await User.create(user);
-        console.log(user.email);
+        // console.log(user.email);
       })
     );
 
