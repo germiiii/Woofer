@@ -12,7 +12,6 @@ import Map from "../Components/Map";
 import jwt from "jsonwebtoken";
 import { useRouter } from "next/navigation";
 
-
 const WalkerHome = () => {
   const [comments, setComments] = useState([]);
   const [clientHiring, setClientHiring] = useState([]);
@@ -49,7 +48,7 @@ const WalkerHome = () => {
     };
     fetchData();
   }, []);
-  
+
   useEffect(() => {
     const fetchWalkerTypes = async () => {
       try {
@@ -123,7 +122,7 @@ const WalkerHome = () => {
 
   const handleActiveClick = async () => {
     const toggleAvailability = !isAvailable;
-  
+
     try {
       if (user.id) {
         const API = process.env.NEXT_PUBLIC_APIURL;
@@ -134,7 +133,7 @@ const WalkerHome = () => {
       if (toggleAvailability) {
         alert("You are ready for a walk a dog! Enjoy!");
       } else {
-        alert("All needs a break, take your time!");
+        alert("Everyone needs a break, take your time!");
       }
       setIsAvailable(toggleAvailability);
     } catch (error) {
@@ -147,21 +146,21 @@ const WalkerHome = () => {
       {/* <ToastContainer />
       <Map userProvince={userProvince} userAddress={userAddress} />
       <br /> */}
-      <WalkList userId={userId}/>
+      <WalkList userId={userId} />
       <br />
+      <div className="mb-8">{renderList}</div>
       <div className="mb-8">
-        {renderList}
+        <h2 className="text-2xl font-bold mb-4">Sale Details</h2>
+        <p className="text-base">
+          {userWalker?.walkerData?.walker?.sale_details ||
+            "Woofer offers you dog walking services"}
+        </p>
       </div>
-      <div className="mb-8">
-      <h2 className="text-2xl font-bold mb-4">Sale Details</h2>
-      <p className="text-base">
-        {userWalker?.walkerData?.walker?.sale_details ||
-          "Woofer offers you dog walking services"}
-      </p>
-    </div>
       <button
         onClick={handleActiveClick}
-        className={`bg-black text-white px-4 py-2 ${isAvailable ? "bg-green-500" : "bg-red-500"}`}
+        className={`bg-black text-white px-4 py-2 ${
+          isAvailable ? "bg-green-500" : "bg-red-500"
+        }`}
       >
         {isAvailable ? "Active" : "Inactive"}
       </button>
@@ -177,7 +176,9 @@ const WalkerHome = () => {
         {comments.map((comment, index) => (
           <div key={index} className="mb-4">
             <p className="text-base">{comment.text}</p>
-            {comment.response && <p className="text-base">Response: {comment.response}</p>}
+            {comment.response && (
+              <p className="text-base">Response: {comment.response}</p>
+            )}
             {!comment.response && (
               <input
                 type="text"
