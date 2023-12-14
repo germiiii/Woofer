@@ -107,7 +107,9 @@ export default function UserPage({ params }) {
                           key={number}
                           onClick={() => paginate(number)}
                           className={`mr-2 cursor-pointer font-bold ${
-                            number === currentPage ? "text-[#29235c]" : "text-white"
+                            number === currentPage
+                              ? "text-[#29235c]"
+                              : "text-white"
                           }`}
                         >
                           {number}
@@ -116,8 +118,15 @@ export default function UserPage({ params }) {
                     </div>
                   </>
                 ) : (
-                  // Render Reviews component for walker
-                  <Reviews userId={params.id} />
+                  <div>
+                    <h1
+                      className="text-5xl text-[#29235c] mt-10"
+                      style={{ fontFamily: "LikeEat" }}
+                    >
+                      Your reviews
+                    </h1>
+                    <Reviews userId={params.id} />
+                  </div>
                 )}
               </div>
               <div className="w-1/2 bg-[#29235c] flex flex-col items-center h-screen">
