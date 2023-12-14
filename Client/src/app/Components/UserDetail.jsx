@@ -1,9 +1,19 @@
-"use client"
-import { useEffect, useState } from 'react';
-import UserDetailButton from '../Components/UserDetailButton';
-import Image from 'next/image';
+"use client";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import "tailwindcss/tailwind.css";
+import "../stylesLanding.css";
 
-const UserDetail = ({ id, name, lastName, email, address, username, noButton = false, image }) => {
+const UserDetail = ({
+  id,
+  name,
+  lastName,
+  email,
+  address,
+  username,
+  noButton = false,
+  image,
+}) => {
   const [provinceInput, setProvinceInput] = useState("");
   const [userProvince, setUserProvince] = useState("");
   const [userAddress, setUserAddress] = useState("");
@@ -20,31 +30,47 @@ const UserDetail = ({ id, name, lastName, email, address, username, noButton = f
   }, []); // The empty dependency array ensures this effect runs once on mount
 
   return (
-    <div className="w-full h-full bg-[#29235c] flex items-center justify-center">
-      <div className="flex flex-col justify-center items-center">
-        <div className="relative w-20 h-20">
-          {image ? (
-            <Image src={image} alt="" layout="fill" objectFit="cover" className="rounded-full" />
-          ) : (
-            <Image src="/ProfileDetail.webp" alt="Default Profile" layout="fill" objectFit="cover" className="rounded-full" />
-          )}
+    <div className="w-full h-full flex items-start justify-center">
+      <div className="flex flex-col justify-center items-center mt-10">
+        <div className="">
+          <Image
+            src={image}
+            alt=""
+            objectFit="cover"
+            width={350}
+            height={0}
+            className="rounded-full border border-[#F39200] border-2"
+          />
         </div>
-        <h4 className="text-2xl font-bold text-white my-2">{name} {lastName}</h4>
-        <p className="text-gray-300">{email}</p>
-        <p className="text-gray-300">{address}</p>
-        <p className="text-gray-300">Username: {username}</p>
-
-        {/* Display information from state */}
-        <p className="text-gray-300">Province Input: {provinceInput}</p>
-        <p className="text-gray-300">User Province: {userProvince}</p>
-        <p className="text-gray-300">User Address: {userAddress}</p>
-        <p className="text-gray-300">Address Input: {addressInput}</p>
-        <p className="text-gray-300">Selected Type: {selectedType}</p>
-
-        {!noButton && <UserDetailButton id={id} />}
+        <h4
+          className="text-5xl mt-10 text-[#F39200]"
+          style={{ fontFamily: "LikeEat" }}
+        >
+          {name} {lastName}
+        </h4>
+        <h2
+          className="text-[#F39200] mt-2 text-2xl"
+          style={{ fontFamily: "LikeEat" }}
+        >
+          {selectedType}
+        </h2>
+        <div className="flex flex-col justify-center mt-10">
+          <h2 className="text-white bg-[#29235c] rounded-md p-2 border border-[#F39200] mb-1">
+            mail: {email}
+          </h2>
+          <h2 className="text-white bg-[#29235c] rounded-md p-2 border border-[#F39200] mb-1">
+            username: {username}
+          </h2>
+          <h2 className="text-white bg-[#29235c] rounded-md p-2 border border-[#F39200] mb-1">
+            province: {userProvince}
+          </h2>
+          <h2 className="text-white bg-[#29235c] rounded-md p-2 border border-[#F39200]">
+            address: {userAddress}
+          </h2>
+        </div>
       </div>
     </div>
   );
-}
+};
 
 export default UserDetail;

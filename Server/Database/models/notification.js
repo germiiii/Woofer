@@ -10,7 +10,7 @@ module.exports = (sequelize) => {
         primaryKey: true,
       },
       type: {
-        type: DataTypes.ENUM("payment", "walk", "review", "newUser"),
+        type: DataTypes.ENUM("payment", "walk", "review", "New user"),
         allowNull: false,
       },
       message: {

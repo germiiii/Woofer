@@ -21,11 +21,19 @@ const sendEmailNotification = (subject, email, message, data) => {
   //     message = "Notificacion";
   // }
 
+  if (email === "admin@woofer.com") {
+    //si es el admin lo reemplazo por un email que exista
+    email = "lucaszibaitis@gmail.com";
+    // email = "silvialilianagarcia@hotmail.com";
+  } else {
+    if (email.includes("@woofer.com"))
+      //si es un email de prueba lo reemplazo por uno que existe
+      email = "silvialilianagarcia.slg@gmail.com";
+  }
+
   const mailOptions = {
     from: "woofer@gmail.com",
-    to: "silvialilianagarcia.slg@gmail.com", //mail de prueba
-    // to: "teten08@hotmail.com",
-    // to: email,
+    to: email,
     subject: subject,
     text: message,
   };

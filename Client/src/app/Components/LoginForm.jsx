@@ -66,6 +66,7 @@ const LoginForm = () => {
             `${api}/users/${decodedToken.userId}`
           );
           const userData = userResponse.data;
+         
 
           localStorage.setItem("userId", userData.id);
           localStorage.setItem("userProvince", userData.province);
@@ -73,6 +74,7 @@ const LoginForm = () => {
           localStorage.setItem("selectedType", userData.selectedType);
           localStorage.setItem("isOwner", userData.isOwner);
           localStorage.setItem("isWalker", userData.isWalker);
+          // localStorage.setItem("dog_count", userData.owner.dog_count);
 
           if (userData.selectedType === "owner") {
             if (userData.isOwner === false) {
@@ -108,6 +110,7 @@ const LoginForm = () => {
       });
 
       const { token } = response.data;
+      console.log("At Login", response.data)
       localStorage.setItem("token", token);
 
       if (token) {
@@ -117,6 +120,8 @@ const LoginForm = () => {
           `${api}/users/${decodedToken.userId}`
         );
         const userData = userResponse.data;
+        console.log('Userdata', userData)
+
 
         localStorage.setItem("userId", userData.id);
         localStorage.setItem("userProvince", userData.province);
@@ -124,6 +129,14 @@ const LoginForm = () => {
         localStorage.setItem("selectedType", userData.selectedType);
         localStorage.setItem("isOwner", userData.isOwner);
         localStorage.setItem("isWalker", userData.isWalker);
+        
+
+        userData.isOwner ? localStorage.setItem('dog_count', userData.owner.dog_count) : null
+
+        // userData.isOwner ? localStorage.setItem('Dog Count', userData.isOwner)
+
+      
+
 
         if (userData.role === "admin") {
           router.push("/admin");
@@ -152,7 +165,7 @@ const LoginForm = () => {
   if (isLoggedIn) {
     return (
       <div className="w-full h-full bg-[#29235c] flex flex-col items-center justify-center ">
-        <p className="text-[#F39200]">redirecting...</p>
+        <p className="text-[#F39200]">Redirecting...</p>
       </div>
     );
   }

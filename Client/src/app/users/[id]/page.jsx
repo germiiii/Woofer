@@ -1,85 +1,135 @@
-import UserDetail from "../../Components/UserDetail"
+"use client";
+import React from "react";
+import UserDetail from "../../Components/UserDetail";
 import "tailwindcss/tailwind.css";
 import Image from "next/image";
+import NavBarHome from "../../Components/NavBarOwner";
+import Link from "next/link.js";
 import axios from "axios";
 
-async function generateStaticParams() {
+export default function UserPage({ params }) {
+  const [user, setUser] = React.useState(null);
+  const [selectedType, setSelectedType] = React.useState("");
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const dogsPerPage = 3;
 
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
-  try {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/users`);
-    const data = response.data;
+  React.useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_APIURL}/users/${params.id}`
+        );
+        const data = response.data;
+        setUser(data);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    }
 
-    return data.users.map((u) => ({
-      params: {
-        id: u.id.toString(), //the file [id] expects a string
-      },
-    }));
-  } catch (error) {
-    console.error('Error generating static params:', error);
-    throw error;
+    fetchData();
+  }, [params.id]);
+
+  React.useEffect(() => {
+    setSelectedType(localStorage.getItem("selectedType") || "");
+  }, []);
+
+  const renderDogs = () => {
+    if (user && user.owner && user.owner.dogs) {
+      const currentDogs = user.owner.dogs.slice(
+        (currentPage - 1) * dogsPerPage,
+        currentPage * dogsPerPage
+      );
+
+      return currentDogs.map((dog, index) => (
+        <div
+          key={index}
+          className="flex items-center h-[150px] w-[400px] mt-10 bg-[#29235c] rounded-md"
+        >
+          <div className="rounded-full border border-[#F39200] border-2 overflow-hidden ml-5">
+            <Image
+              src={dog.img}
+              alt={`Dog Preview ${index}`}
+              height={0}
+              width={100}
+              className="max-w-[100px] max-h-[100px]"
+            />
+          </div>
+          <div className="flex ml-10 flex-col">
+            <h2 className="text-2xl text-[#F39200]">{dog.name}</h2>
+            <p className="text-white">age: {dog.age}</p>
+            <p className="text-white">size: {dog.size}</p>
+            <p className="text-white">breed: {dog.breed}</p>
+          </div>
+        </div>
+      ));
+    } else {
+      return <h2 className="text-2xl text-[#29235c] mt-10">No dogs found.</h2>;
+    }
+  };
+
+  const pageNumbers = [];
+  for (
+    let i = 1;
+    i <= Math.ceil((user?.owner?.dogs?.length || 0) / dogsPerPage);
+    i++
+  ) {
+    pageNumbers.push(i);
   }
-}
-
-async function getUser(id) {
-  try {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/users/${id}`);
-    const data = response.data;
-    return data;
-  } catch (error) {
-    console.error('Error fetching user:', error);
-    throw error;
-  }
-}
-
-export default async function UserPage({params}) {
-  const user = await getUser(params.id)
-
-  console.log({params})
 
   return (
-    <div className="border border-indigo-300 m-4 p-4">
-      {user && (
-        <div className="p-4">
-          <h1 className="text-2xl mb-4 font-bold text-indigo-500">User Profile</h1>
-          <UserDetail
-            noButton
-            image={user.image ? <Image src={user.image} alt="ola" height="100px" width="100px" /> : "/ProfileDetail.webp"}
-            name={user.name}
-            lastName={user.lastName}
-            username={user.username}
-            address={user.address}
-            email={user.email}
-          />
-          {user.isWalker === true ? (
-            <div className="mt-4">
-              <h3 className="text-xl mb-2 font-semibold">Owner Details</h3>
-              <p className="mb-2">Dog Count: {user.dog_count}</p>
-              {user.dog_count >= 1 ? (
-                user.dogs &&
-                user.dogs.map((dog) => (
-                  <div key={dog.id} className="border border-indigo-300 rounded p-4 my-2">
-                    <p className="mb-1">Name: {dog.name}</p>
-                    <p className="mb-1">Breed: {dog.breed}</p>
-                    <p className="mb-1">Size: {dog.size}</p>
-                    <p className="mb-1">Age: {dog.age}</p>
-                    <p className="mb-1">Image: {dog.image}</p>
-                  </div>
-                ))
-              ) : (
-                <p className="mb-2">No dogs have been added to your profile.</p>
-              )}
+    <div className="flex flex-col">
+      {user ? (
+        <div>
+          <NavBarHome />
+          <div>
+            <div className="flex flex-grow">
+              <div className="bg-[#E4E2ED] w-1/2 flex flex-col items-center">
+                <h1
+                  className="text-5xl text-[#29235c] mt-10"
+                  style={{ fontFamily: "LikeEat" }}
+                >
+                  Your dogs
+                </h1>
+                <div className="flex flex-col mt-10 items-center justify-center h-[550px]">
+                  {renderDogs()}
+                </div>
+                <div className="mt-4">
+                  {pageNumbers.map((number) => (
+                    <span
+                      key={number}
+                      onClick={() => paginate(number)}
+                      className={`mr-2 cursor-pointer font-bold ${
+                        number === currentPage ? "text-[#29235c]" : "text-white"
+                      }`}
+                    >
+                      {number}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="w-1/2 bg-[#29235c] flex flex-col items-center h-screen">
+                <UserDetail
+                  noButton
+                  image={user.image}
+                  name={user.name}
+                  lastName={user.lastName}
+                  username={user.username}
+                  address={user.address}
+                  email={user.email}
+                />
+              </div>
             </div>
-          ) : (
-            <div className="mt-4">
-              <h3 className="text-xl mb-2 font-semibold text-indigo-700">Walker Details</h3>
-              <p className="mb-2">Dog Capacity: {user.dog_capacity || 'No information added'}</p>
-              <p className="mb-2">Is Available: {user.is_available ? 'Yes' : 'No'}</p>
-            </div>
-          )}
+          </div>
+        </div>
+      ) : (
+        <div className="flex h-screen items-center justify-center flex-col bg-[#F39200]">
+          <h1 className="text-[#29235c] text-3xl">loading...</h1>
         </div>
       )}
     </div>
   );
-  
 }

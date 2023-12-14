@@ -4,10 +4,15 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import "tailwindcss/tailwind.css";
 import "../stylesLanding.css";
-import UserDetailButton from "./UserDetailButton";
+import Image from "next/image";
 
 const NavbarHomeOwner = () => {
   const currentPath = usePathname();
+  const [userId, setUserId] = React.useState("");
+
+  React.useEffect(() => {
+    setUserId(localStorage.getItem("userId"));
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("paypal_accessToken");
@@ -23,11 +28,19 @@ const NavbarHomeOwner = () => {
     localStorage.removeItem("isOwner");
     localStorage.removeItem("isWalker");
     localStorage.removeItem("token");
+    localStorage.removeItem("ownerId");
+    localStorage.removeItem("walkId");
+    localStorage.removeItem("walkerId");
+    // localStorage.removeItem("dog_count");
+    localStorage.removeItem('walkDuration')
   };
 
   return (
-    <div className="bg-[#F39200] py-6 flex items-center justify-center px-2">
-      <div className="flex  items-center justify-center">
+    <div className="bg-[#F39200] py-6 flex items-center justify-center justify-around">
+      <div className="flex items-center mr-20">
+        <Image src="/ISOWoofer2.png" alt='' width={200} height={200} />
+      </div>
+      <div className="flex items-center ml-40 mr-40">
         <Link href={"/ownerHome"}>
           <button
             className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
@@ -46,8 +59,16 @@ const NavbarHomeOwner = () => {
             add dogs
           </button>
         </Link>
-        {/* Replace the My Woof button with the UserDetailButton */}
-        <UserDetailButton />
+        <Link href={`/users/${userId}`}>
+          <button
+            className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
+              currentPath.startsWith("/users") ? "text-[#F39200]" : "text-white"
+            } mt-3 lg:mt-0 mr-7  transition transition-colors duration-300`}
+          >
+            my woofer
+          </button>
+        </Link>
+
         <Link href={"/safety"}>
           <button
             className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
@@ -57,10 +78,12 @@ const NavbarHomeOwner = () => {
             safety
           </button>
         </Link>
+      </div>
+      <div className="ml-20">
         <Link href={"/"}>
           <button
             onClick={handleLogout}
-            className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] text-white mt-3 lg:mt-0 mr-7 transition transition-colors duration-300`}
+            className={`w-30 px-5 py-2 rounded-full text-[#29235c] hover:bg-[#29235c] hover:text-[#F39200] bg-white font-bold mt-3 lg:mt-0 mr-7 transition transition-colors duration-300`}
           >
             log out
           </button>

@@ -5,6 +5,7 @@ import Nav from "../Components/NavBarOwner.jsx";
 import OwnerForm from "../Components/OwnerForm.jsx";
 import Map from "../Components/Map.jsx";
 import SelectWalkers from "../Components/SelectWalkers.jsx";
+import YouAreNotAnOwner from "../Components/YouAreNotAnOwner.jsx";
 import provinces from "../register/provinces.js";
 import jwt from "jsonwebtoken";
 import Link from "next/link";
@@ -13,15 +14,18 @@ import "../stylesLanding.css";
 
 const OwnerHome = () => {
   const api = process.env.NEXT_PUBLIC_APIURL;
+
   const [addressInput, setAddressInput] = useState("");
   const [provinceInput, setProvinceInput] = useState("");
   const [userProvince, setUserProvince] = useState("");
   const [userAddress, setUserAddress] = useState("");
+
   const [selectedType, setSelectedType] = useState("");
 
   useEffect(() => {
     setSelectedType(localStorage.getItem("selectedType") || "");
   }, []);
+
 
   useEffect(() => {
     setAddressInput(localStorage.getItem("userAddress") || "");
@@ -106,12 +110,7 @@ const OwnerHome = () => {
           </div>
         </div>
       ) : (
-        <div>
-          <h1>You are not an owner.</h1>
-          <Link href={"/walkerHome"}>
-            <button>back to walker home</button>
-          </Link>
-        </div>
+        <YouAreNotAnOwner />
       )}
     </div>
   );

@@ -1,8 +1,10 @@
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import jwt from "jsonwebtoken";
 
 const UserDetailButton = () => {
   const router = useRouter();
+  const currentPath = usePathname();
 
   function handleClick() {
     // Retrieve the login token from localStorage
@@ -33,11 +35,13 @@ const UserDetailButton = () => {
   return (
     <div>
       <button
-        className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] text-white mt-3 lg:mt-0 mr-7 transition transition-colors duration-300`}
+        className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
+          currentPath.startsWith("/users/") ? "text-[#F39200]" : "text-white"
+        } mt-3 lg:mt-0 mr-7 transition transition-colors duration-300`}
         style={{ cursor: "pointer" }}
         onClick={handleClick}
       >
-        My Woofer
+        my woofer
       </button>
     </div>
   );

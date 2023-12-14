@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-
 const WalkList = (props) => {
   const [walks, setWalks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [walksPerPage] = useState(5);
-
+  console.log(walks)
   useEffect(() => {
     const fetchData = async () => {
       try {
         const API = process.env.NEXT_PUBLIC_APIURL;
         const response = await axios.get(`${API}/walk/walker/${props.userId}`);
-        setWalks(response.data.walksFromWalker[0].walker.walks);
+        const walkss = response.data.walksFromWalker;
+        console.log(walkss)
+        setWalks(walkss);
 
       } catch (error) {
         console.error('Error al obtener los datos de la caminata:', error);
       }
     };
 
-    // Llamar a fetchData inmediatamente
     fetchData();
 
-   const intervalId = setInterval(fetchData, 30000);
+    const intervalId = setInterval(fetchData, 30000);
 
     return () => clearInterval(intervalId);
   }, [props.userId]);
@@ -42,11 +42,12 @@ const WalkList = (props) => {
     }
   };
 
-  const indexOfLastWalk = currentPage * walksPerPage;
-  const indexOfFirstWalk = indexOfLastWalk - walksPerPage;
-  const currentWalks = walks.slice(indexOfFirstWalk, indexOfLastWalk);
+  const currentWalks = walks && walks.length > 0 ? walks.slice(
+    (currentPage - 1) * walksPerPage,
+    currentPage * walksPerPage
+  ) : [];
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
   return (
     <div style={{ border: '1px solid #000', padding: '10px', borderRadius: '5px', overflowX: 'auto' }}>

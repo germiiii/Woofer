@@ -1,11 +1,11 @@
 // notificationController.js
 const { sendEmailNotification } = require("../utils/sendEmailNotification");
 const { User, Notification } = require("../../Database/db");
-require 
+require;
 const sendNotification = async (user, type, subject, message, sendEmail) => {
   try {
     const notification = await Notification.create({
-      message,
+      message: subject,
       type,
       email: user.email,
     });
@@ -14,8 +14,8 @@ const sendNotification = async (user, type, subject, message, sendEmail) => {
     await user.save();
     //enviar Mail
     if (sendEmail) {
-        sendEmailNotification(user.email, subject, message);
-    //   console.log(user.email, subject, message);
+      sendEmailNotification(subject, user.email, message);
+      //   console.log(user.email, subject, message);
     }
   } catch (error) {
     console.error("Error creating notification:", error.message);
