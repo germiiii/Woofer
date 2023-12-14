@@ -29,7 +29,7 @@ const userData = [
     isWalker: false,
     isOwner: false,
     is_active: true,
-    score: 0,  
+    score: 0,
     selectedType: "walker",
   },
   {
@@ -259,6 +259,7 @@ const seedUsers = async () => {
       address: "",
       province: "",
       role: "admin",
+      is_active: true,
       image: uploadedImage.secure_url,
       selectedType: "walker",
     });
