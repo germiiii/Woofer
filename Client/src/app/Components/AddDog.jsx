@@ -18,29 +18,22 @@ export default function OwnerForm() {
   const [listOfDogs, setListOfDogs] = useState([]);
   const [user, setUser] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [loading, setLoading] = useState(false); 
   const [buttonText, setButtonText] = useState(
     "select your dog picture (max 10MB)"
   );
 
+  const [loading, setLoading] = useState(false); // New state for loading
+
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      const hasUnfinishedSubmission = dogData.name || dogData.age || dogData.breed || dogData.size || dogData.image;
-      if (hasUnfinishedSubmission) {
-        const message = "Are you sure you want to leave? Your dog information is not submitted yet.";
-        event.returnValue = message;
-        return message;
-      }
-    };
+    // Check if the user is logged in
+    const token = localStorage.getItem("token");
+    if (token) {
+      // Decode the token to get user information
+      const decodedToken = jwt.decode(token);
+      setUser(decodedToken.userId);
+    }
+  }, []); // Run this effect only once on component mount
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [dogData]);
-
-  console.log("user", user);
   const router = useRouter();
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -149,11 +142,11 @@ export default function OwnerForm() {
     e.preventDefault();
 
     try {
-      // Set loading to true when the form is submitting
       setLoading(true);
-  
+      console.log("Form data before validation:", dogData);
+
       // Check if the form is completed
-      if (dogData.name && dogData.age && dogData.breed && dogData.size && dogData.image) {
+      if (dogData.name && dogData.age && dogData.breed && dogData.size) {
         // Create FormData and append dog data
         const formData = new FormData();
         formData.append("userID", user);
@@ -162,21 +155,24 @@ export default function OwnerForm() {
         formData.append("breed", dogData.breed);
         formData.append("size", dogData.size);
         formData.append("image", dogData.image);
-  
+
         // Send the data to the server using Axios
         console.log("current dog", dogData);
-  
+
         const response = await axios.post(`${api}/owner`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-  
+
         localStorage.setItem("isOwner", response.data.UserWithNewOwner.isOwner);
-        localStorage.setItem('dog_count', response.data.UserWithNewOwner.owner.dog_count);
+        // localStorage.setItem("ownerId", response.data.UserWithNewOwner.id);
+        localStorage.setItem('dog_count', response.data.UserWithNewOwner.owner.dog_count)
         console.log("Server response:", response.data);
         alert("Dog added successfully!");
         router.push("/ownerHome");
+
+        // Additional logic for handling the form submission, if needed
       } else {
         console.error("Please complete the form before submitting.");
       }
@@ -184,8 +180,7 @@ export default function OwnerForm() {
       console.error("Error submitting form:", error);
       // Handle the error appropriately (e.g., display an error message to the user)
     } finally {
-      // Set loading back to false after the form submission is complete
-      setLoading(false);
+      setLoading(false); // Set loading to false when submission is done (regardless of success or failure)
     }
   };
   const handleFillFormAgain = (e) => {
@@ -211,13 +206,14 @@ export default function OwnerForm() {
       )}
     </div>
   ));
-  const LoadingIndicator = () => (
-    <div className="text-[#F39200] ml-2" role="status">
-      Loading...
-    </div>
-  );
+
   return (
     <div className="h-full w-full flex flex-col items-center justify-center">
+      {loading && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white opacity-75">
+          <p className="text-xl font-bold text-[#29235c]">Loading...</p>
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="mb-20">
           <h1
@@ -306,34 +302,26 @@ export default function OwnerForm() {
           </div>
         )}
 
-<div className="flex items-center justify-center">
+        <div className="flex items-center justify-center">
           <button
             onClick={handleFillFormAgain}
-            className="px-5 mr-2 py-2 rounded-full bg-white text-[#29235c] font-extrabold transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
-            disabled={loading} // Disable the button when loading
+            className="px-5 mr-2  py-2 rounded-full bg-white text-[#29235c] font-extrabold transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
           >
             clean
           </button>
-          {loading ? (
-            // Display a loading indicator when the form is submitting
-            <LoadingIndicator />
-          ) : (
-            dogData.name &&
-            dogData.age &&
-            dogData.breed &&
-            dogData.size &&
-            dogData.image ? (
-              <button
-                type="submit"
-                className="px-5 ml-2 py-2 rounded-full bg-white text-[#29235c] font-extrabold transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
-                disabled={loading} // Disable the button when loading
-              >
-                submit
-              </button>
-            ) : null
-          )}
+          {dogData.name &&
+          dogData.age &&
+          dogData.breed &&
+          dogData.size ||
+          dogData.image ? (
+            <button
+              type="submit"
+              className="px-5 ml-2 py-2 rounded-full bg-white text-[#29235c] font-extrabold transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
+            >
+              submit
+            </button>
+          ) : null}
         </div>
-
         {renderDogs}
       </form>
     </div>
