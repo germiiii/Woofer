@@ -100,14 +100,21 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) {
-      return;
-    }
-    try {
-      const response = await axios.post(`${api}/login`, {
-        email,
-        password,
-      });
+
+  if (!email.trim() || !password.trim()) {
+    alert("Email and password are required.");
+    return;
+  }
+
+  if (!validateForm()) {
+    return;
+  }
+
+  try {
+    const response = await axios.post(`${api}/login`, {
+      email,
+      password,
+    });
 
       const { token } = response.data;
       console.log("At Login", response.data)
@@ -158,9 +165,10 @@ const LoginForm = () => {
       }
     } catch (error) {
       console.error("Error:", error.message);
-      alert("Authentication error. Please try again.");
+      alert("Invalid credentials");
+      }
     }
-  };
+  
 
   if (isLoggedIn) {
     return (
