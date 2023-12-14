@@ -1,31 +1,21 @@
-const { Op } = require("sequelize");
+const { Op, literal  } = require("sequelize");
 const { User, Walker, Owner, Review, Walk } = require("../../Database/db");
 
-const walkGet = async (id, idWalk, date) => {
-  const whereDate = date ? { [Op.gte]: date } : {};
-  let whereId = {};
-  let whereIdWalk = {};
-
-
-  if (id) {
-    whereId = {
-      [Op.or]: [
-        { "$walker.user.id$": id },
-        { "$owner.user.id$": id }
-      ]
-    };
-  }
-
-  if (idWalk) {
-    whereIdWalk = { id: idWalk };
-  }
+const walkGet = async (id, idWalk, minDate) => {
+  const whereId = id
+    ? {
+        [Op.or]: [{ "$walker.user.id$": id }, { "$owner.user.id$": id }],
+      }
+    : {};
+  const whereIdWalk = idWalk ? { id: idWalk } : {};
+  const whereDate = minDate ? { date: { [Op.gte]: minDate } } : {};
 
   const allWalks = await Walk.findAll({
-    where: JSON.parse(JSON.stringify({
-      ...whereDate,
+    where: {
       ...whereId,
-      ...whereIdWalk
-    })),
+      ...whereIdWalk,
+      ...whereDate,
+    },
     include: [
       {
         model: Owner,
@@ -47,7 +37,6 @@ const walkGet = async (id, idWalk, date) => {
       },
     ],
     order: [["date", "ASC"]],
-
   });
 
   const allWalkData = allWalks.map((walk) => {
@@ -81,46 +70,4 @@ const walkGet = async (id, idWalk, date) => {
   return allWalkData;
 };
 
-module.exports = { walkGet }
-
-// const walkData = await Walk.findAll({
-//   attributes: [
-//     "id",
-//     "date",
-//     "startTime",
-//     "duration",
-//     "dogNumber",
-//     "totalPrice",
-//     "paymentMethod",
-//     "hasWalkerReview",
-//     "hasOwnerReview",
-//     "state",
-//   ],
-//   where,
-//   include: [
-//     {
-//       model: Walker,
-//       attributes: ["score", "reviews_count"],
-//       include: {
-//         model: User,
-//         attributes: ["id", "name", "lastName", "image"],
-//       },
-//     },
-//     {
-//       model: Owner,
-//       attributes: ["score", "reviews_count"],
-//       include: {
-//         model: User,
-//         attributes: ["id", "name", "lastName", "image"],
-//       },
-//     },
-//     {
-//       model: Review,
-//       attributes: ["type", "score", "description"],
-//       required: false,
-//     },
-//   ],
-// });
-
-// return walkData;
-// };
+module.exports = { walkGet };
