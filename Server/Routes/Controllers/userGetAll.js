@@ -1,12 +1,16 @@
 const { User, Walker, Owner, Dog } = require("../../Database/db");
 
-const userGetAll = async (role) => {
+const userGetAll = async (role, email) => {
   let whereConditionUser = { is_active: true, role: "user" };
   let whereCondition = { is_active: true };
 
   if (role && role === "admin") {
     whereCondition = {};
     whereConditionUser = {};
+  }
+  
+  if (email) {
+    whereConditionUser.email = email;
   }
 
   const users = await User.findAll({
@@ -26,7 +30,14 @@ const userGetAll = async (role) => {
         include: [
           {
             model: Dog,
-            attributes: ["id", "name", "breed", "size", "age", "img"],
+            attributes: [
+              "id",
+              "name",
+              "breed",
+              "size",
+              "age",
+              "img"
+            ],
           },
         ],
         required: false,

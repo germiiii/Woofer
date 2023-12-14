@@ -2,9 +2,9 @@ const { userGetAll } = require("../Controllers/userGetAll");
 
 const userGetAllHandler = async (req, res) => {
   try {
-    const { role } = req.query; //role is not required
+    const { role, email } = req.query; //role is not required
     // Call the userGetAll controller to fetch all users
-    const users = await userGetAll(role);
+    const users = await userGetAll(role, email);
     
     res.json(users);
 
