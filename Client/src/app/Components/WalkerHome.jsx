@@ -23,13 +23,13 @@ const WalkerHome = () => {
   const [userAddress, setUserAddress] = useState("");
   const [userId, setUserId] = useState("");
   const router = useRouter();
-  const isWalker = localStorage.getItem("isWalker");
+  const [isWalker, setIsWalker] = useState(false);
   const [isAvailable, setIsAvailable] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
-
+      setIsWalker(localStorage.getItem("isWalker"));
       if (token) {
         const decodedToken = jwt.decode(token);
         try {
@@ -41,13 +41,14 @@ const WalkerHome = () => {
           setUserProvince(response.data.province);
           setUserAddress(response.data.address);
           setUserId(decodedToken.userId);
+          setIsAvailable(response.data.walker.is_available);
         } catch (error) {
           console.error("Error fetching data from the server", error);
         }
       }
     };
     fetchData();
-  }, []);
+  }, [isAvailable]);
 
   useEffect(() => {
     const fetchWalkerTypes = async () => {
@@ -121,21 +122,19 @@ const WalkerHome = () => {
   };
 
   const handleActiveClick = async () => {
-    const toggleAvailability = !isAvailable;
-
     try {
       if (user.id) {
         const API = process.env.NEXT_PUBLIC_APIURL;
         await axios.put(`${API}/walker/${user.id}`, {
-          is_available: toggleAvailability,
+          is_available: !isAvailable,
         });
       }
-      if (toggleAvailability) {
+      setIsAvailable(!isAvailable);
+      if (!isAvailable) {
         alert("You are ready for a walk a dog! Enjoy!");
       } else {
         alert("Everyone needs a break, take your time!");
       }
-      setIsAvailable(toggleAvailability);
     } catch (error) {
       console.error("Error updating status:", error);
     }
@@ -159,10 +158,10 @@ const WalkerHome = () => {
       <button
         onClick={handleActiveClick}
         className={`bg-black text-white px-4 py-2 ${
-          isAvailable ? "bg-green-500" : "bg-red-500"
+          !isAvailable ? "bg-green-500" : "bg-red-500"
         }`}
       >
-        {isAvailable ? "Active" : "Inactive"}
+        {!isAvailable ? "Available" : "Unavailable"}
       </button>
       <br />
       <button
