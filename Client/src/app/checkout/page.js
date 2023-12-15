@@ -492,7 +492,7 @@ const CheckoutComponent = () => {
                       className="w-30 px-5 py-2 rounded-full font-bold text-[#29235c] bg-white hover:text-[#F39200] mt-4 transition transition-colors duration-300"
                       style={{ marginLeft: "100px" }}
                     >
-                      back to {walkerData.name}'s details
+                      back to {walkerData.name}&apos;s details
                     </button>
                   </div>
                 </div>
@@ -521,7 +521,7 @@ const CheckoutComponent = () => {
                     onClick={toggleReviews}
                     className="w-30 px-5 py-2 rounded-full font-bold text-[#29235c] bg-white hover:text-[#F39200] hover:bg-[#29235c] mt-10 transition transition-colors duration-300"
                   >
-                    view {walkerData.name}'s reviews
+                    view {walkerData.name}&apos;s reviews
                   </button>
                 </div>
               )}
