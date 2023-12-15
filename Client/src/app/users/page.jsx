@@ -8,7 +8,7 @@ async function getUsers() {
   try {
     const response = await axios.get(`${api}/users`);
     const data = response.data;
-    console.log('page at users:', data);
+    // console.log('page at users:', data);
     return data;
   } catch (error) {
     console.error('Error fetching users:', error);

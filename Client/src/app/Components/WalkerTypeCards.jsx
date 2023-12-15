@@ -7,7 +7,7 @@ const WalkerTypeCards = () => {
     const [selectedWalkerTypes, setSelectedWalkerTypes] = useState([]);
   
     useEffect(() => {
-      console.log("Renderizando el componente");
+      // console.log("Renderizando el componente");
       const fetchData = async () => {
         try {
           const API = process.env.NEXT_PUBLIC_APIURL;

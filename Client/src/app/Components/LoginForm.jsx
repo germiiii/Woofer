@@ -116,7 +116,6 @@ const LoginForm = () => {
       });
 
       const { token } = response.data;
-      console.log("At Login", response.data);
       localStorage.setItem("token", token);
 
       if (token) {
@@ -126,7 +125,7 @@ const LoginForm = () => {
           `${api}/users/${decodedToken.userId}`
         );
         const userData = userResponse.data;
-        console.log("Userdata", userData);
+        // console.log("Userdata", userData);
 
         localStorage.setItem("userId", userData.id);
         localStorage.setItem("userProvince", userData.province);

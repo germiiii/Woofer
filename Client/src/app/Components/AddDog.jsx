@@ -143,7 +143,7 @@ export default function OwnerForm() {
 
     try {
       setLoading(true);
-      console.log("Form data before validation:", dogData);
+      // console.log("Form data before validation:", dogData);
 
       // Check if the form is completed
       if (dogData.name && dogData.age && dogData.breed && dogData.size) {
@@ -157,7 +157,7 @@ export default function OwnerForm() {
         formData.append("image", dogData.image);
 
         // Send the data to the server using Axios
-        console.log("current dog", dogData);
+        // console.log("current dog", dogData);
 
         const response = await axios.post(`${api}/owner`, formData, {
           headers: {
@@ -168,7 +168,7 @@ export default function OwnerForm() {
         localStorage.setItem("isOwner", response.data.UserWithNewOwner.isOwner);
         // localStorage.setItem("ownerId", response.data.UserWithNewOwner.id);
         localStorage.setItem('dog_count', response.data.UserWithNewOwner.owner.dog_count)
-        console.log("Server response:", response.data);
+        // console.log("Server response:", response.data);
         alert("Dog added successfully!");
         router.push("/ownerHome");
 
