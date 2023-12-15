@@ -1,4 +1,4 @@
-const { Op, literal  } = require("sequelize");
+const { Op, literal } = require("sequelize");
 const { User, Walker, Owner, Review, Walk } = require("../../Database/db");
 
 const walkGet = async (id, idWalk, minDate) => {
@@ -22,7 +22,7 @@ const walkGet = async (id, idWalk, minDate) => {
         include: [
           {
             model: User,
-            attributes: ["id", "name", "lastName", "image"],
+            attributes: ["id", "name", "lastName", "image", "address", "city"],
           },
         ],
       },
@@ -31,7 +31,7 @@ const walkGet = async (id, idWalk, minDate) => {
         include: [
           {
             model: User,
-            attributes: ["id", "name", "lastName", "image"],
+            attributes: ["id", "name", "lastName", "image", "address", "city"],
           },
         ],
       },
@@ -60,11 +60,15 @@ const walkGet = async (id, idWalk, minDate) => {
       owner: {
         name: `${owner.user.name} ${owner.user.lastName}`,
         image: owner.user.image, // Modify this line
+        address: owner.user.address, 
+        city: owner.user.city,
         id: owner.userId,
       },
       walker: {
         name: `${walker.user.name} ${walker.user.lastName}`,
         image: walker.user.image, // Modify this line
+        address: walker.user.address, 
+        city: walker.user.city,
         id: walker.userId,
       },
       reviews,
