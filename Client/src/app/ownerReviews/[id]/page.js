@@ -1,13 +1,13 @@
-import OwnerReviews from '../../Components/OwnerReviews'
+"use client";
+import ReviewForm from "../../Components/OwnerReviews"
+import { useParams } from "next/navigation";
 
-const OwnerReviewsPage = () => {
-
-
+export default function OwnerReviews() {
+const params = useParams()
+console.log(params)
   return (
     <div>
-        <OwnerReviews/>
+      <ReviewForm id={params} />
     </div>
   );
-};
-
-export default OwnerReviewsPage;
+}
