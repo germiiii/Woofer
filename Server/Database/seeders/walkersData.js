@@ -7,6 +7,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1],
     sale_details:
       "Having prior experience in dog care and a deep respect for their well-being, I can guarantee fun and safe walks for your four-legged friends. I am available to adapt to your specific schedules and needs. Let me take care of your furry friends while you fulfill your daily commitments!",
   },
@@ -18,6 +19,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -29,6 +31,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -40,6 +43,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [8, 9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -51,6 +55,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [3, 5],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -62,6 +67,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 2, 3, 4, 5, 6, 7, 8, 9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -72,7 +78,9 @@ const walkersData = [
     dog_size: ["small"],
     is_available: true,
     schedule_availability: "",
+    walk_types: [1, 5, 9],
     is_active: true,
+    walk_types: [1, 2, 3, 4, 5, 9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -84,6 +92,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 6, 7, 8, 9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -95,6 +104,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 2, 3, 9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -106,6 +116,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 2, 3, 4, 5, 6, 7, 8, 9],    
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -117,6 +128,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 2, 3, 4, 5, 6, 7, 8, 9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -128,6 +140,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [ 4, 5, 6, 7, 8, 9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -139,6 +152,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 2, 3, 4, 5, 6, 7, 8, 9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -150,6 +164,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 2, 3, 4, 5],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -161,6 +176,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [ 5, 6, 7, 8, 9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -172,6 +188,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 2, 3, 4, 5, 6, 7, 8, 9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Contact me today to schedule a walk!",
   },
@@ -183,6 +200,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 2, 3, 4 ],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -194,6 +212,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 2, 3],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -205,6 +224,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 2, 3, 4, 5, 6, 7, 8, 9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -227,6 +247,7 @@ const walkersData = [
     is_available: false,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 2, 3],
     sale_details:
       "Hello furry community! 👋 I am an animal enthusiast with a special love for dogs. I am excited to offer my dog walking services to those who need an extra hand to ensure that their adorable furry companions are happy and healthy.",
   },
@@ -238,6 +259,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1],
     sale_details:
       "Are you tired of worrying about your dog’s exercise? Don’t worry anymore! As a dog walker, I can help keep your dog active and healthy. Contact me today to schedule a walk!",
   },
@@ -249,6 +271,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: false,
+    walk_types: [1],
     sale_details:
       "Are you looking for a dog walker who can take care of your dog? Look no further! As a dog walker, I can help keep your dog healthy and happy. Contact me today to schedule a walk!",
   },
@@ -260,6 +283,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: false,
+    walk_types: [1, 2, 3],
     sale_details:
       "Does your dog need more exercise? Look no further! As a dog walker, I can help keep your dog active and healthy. Call me today to schedule a walk!",
   },
@@ -271,6 +295,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -282,6 +307,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [7, 8, 9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -293,6 +319,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 2, 3],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -304,6 +331,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 2, 3, 4, 5, 6, 7, 8, 9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -315,6 +343,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -326,6 +355,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -337,6 +367,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -348,6 +379,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -359,6 +391,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -370,6 +403,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [ 9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -381,6 +415,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1 ],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -392,6 +427,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 2, 3, 4, 5, 6, 7, 8, 9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -403,6 +439,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 2, 3, 4, 5, 6, 7, 8, 9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -414,6 +451,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 2, 3, 4, 5],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
@@ -425,6 +463,7 @@ const walkersData = [
     is_available: true,
     schedule_availability: "",
     is_active: true,
+    walk_types: [1, 2, 3, 4, 5, 6, 7, 8, 9],
     sale_details:
       "Are you looking for a reliable and friendly dog walker? Look no further! With years of experience caring for dogs, I can assure you that your dog will be in good hands. Call me today to schedule a walk!",
   },
