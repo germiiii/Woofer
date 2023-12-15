@@ -73,10 +73,17 @@ const walkPost = async (
 
   const walkData = await walkGet(null, newWalk?.id, null);
 
-  let message = `Hi ${userOwner.name} \n 
-  We've received a payment via ${paymentMethod} of $ ${totalPrice} for your walk request!`;
+ 
   let type = "walk";
   let subject = "Payment received";
+  let message = `Hi ${userOwner.name} \n 
+  Payment received successfully! 
+  WOOFER has received your payment for a walk request!  
+  Walk id: ${walkData[0]?.id},
+  Walker: ${walkData[0]?.walker.name},
+  Total amount is ${totalPrice}
+  Payment method: ${paymentMethod}
+  Enjoy!`;
   let email = userOwner.email;
 
   await sendNotification(userOwner, type, subject, message, true);
@@ -89,15 +96,16 @@ const walkPost = async (
   Payment method: ${paymentMethod}`;
 
   sendEmailNotification(subject, "admin@woofer.com", message);
-
-  message = `You have a new walk request from ${walkData[0]?.owner.name}!\n
-  Date: ${walkData[0]?.date},\n
-  Time: ${walkData[0]?.startTime},\n
-  Duration: ${walkData[0]?.duration} minutes,\n
-  Dogs: ${walkData[0]?.dogNumber},\n
- `;
+  
   type = "walk";
-  subject = "You've got a ride to do";
+  subject = "You've got a Woofer walk || Services requested";
+  message = `Hi ${walkData[0]?.walker.name} \n 
+  Congrats!  
+  You have a new walk request from ${walkData[0]?.owner.name}!\n
+  Date: ${walkData[0]?.date},
+  Time: ${walkData[0]?.startTime},
+  Duration: ${walkData[0]?.duration} minutes,
+  Dogs: ${walkData[0]?.dogNumber}`;
   email = userWalker.email;
 
   await sendNotification(userWalker, type, subject, message, true);
