@@ -56,9 +56,9 @@ const CheckoutComponent = () => {
       ? walkerDetails.walker.reviewsData.sort((a, b) => b.score - a.score)
       : [];
 
-  const topTwoReviews = sortedReviews
-    .slice(0, 2)
-    .map((review) => review.description);
+  // const topThreeReviews = sortedReviews
+  //   .slice(0, 2)
+  //   .map((review) => review.description);
 
   const toggleReviews = () => {
     setShowReviews(!showReviews);
@@ -313,8 +313,7 @@ const CheckoutComponent = () => {
       const accessToken = localStorage.getItem("paypal_accessToken");
       console.log("Access Token", accessToken);
       if (!storedTotalAmount || storedTotalAmount === "0.00") {
-        setTimeout(() => createOrder(data, actions), 1000); // Retry after 1 second if totalAmount is 0 or not present
-        return;
+       window.alert('Please, select a walk type before proceeding with payment')
       }
 
       console.log("Creating order....");
@@ -477,7 +476,7 @@ const CheckoutComponent = () => {
                           className="bg-[#F39200] text-white rounded-lg p-3 my-3"
                         >
                           <p>
-                            <i>{review.description}</i>
+                            <i>"{review.description}"</i>
                           </p>
                         </div>
                       ))
