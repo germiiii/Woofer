@@ -4,23 +4,43 @@ const getAvailableWalkers = async () => {
   try {
     const availableWalkers = await User.findAll({
       attributes: {
-        exclude: ["password", "verificationToken", "resetPasswordToken", "resetPasswordExpires"]
+        exclude: [
+          "password",
+          "verificationToken",
+          "resetPasswordToken",
+          "resetPasswordExpires",
+        ],
       },
       where: { is_active: true },
       include: [
         {
           model: Walker,
           where: { is_available: true, is_active: true },
-          attributes: ["dog_capacity", "dog_size", "walk_duration", "score", "reviews_count", "sale_details", "is_available"],
+          attributes: [
+            "dog_capacity",
+            "dog_size",
+            "walk_duration",
+            "score",
+            "reviews_count",
+            "sale_details",
+            "is_available",
+          ],
           include: [
             {
               model: WalkType,
-              attributes: ["id", "title", "walk_duration", "price", "description"],
-              through: { attributes: [] }
-            }
-          ]
-        }
-      ]
+              attributes: [
+                "id",
+                "title",
+                "walk_duration",
+                "price",
+                "description",
+                "dog_capacity",
+              ],
+              through: { attributes: [] },
+            },
+          ],
+        },
+      ],
     });
     return availableWalkers;
   } catch (error) {
