@@ -9,6 +9,9 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import "tailwindcss/tailwind.css";
 import local from "next/font/local";
 import { browserLocalPersistence } from "firebase/auth";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
+
 
 const CheckoutComponent = () => {
   const router = useRouter();
@@ -21,6 +24,7 @@ const CheckoutComponent = () => {
   const [accessToken, setAccessToken] = useState("");
   const [isTotalAmountValid, setIsTotalAmountValid] = useState(false);
   const [walkTypeQuantity, setWalkTypeQuantity] = useState(1);
+  const [showReviews, setShowReviews] = useState(false);
   const [extraQuantities, setExtraQuantities] = useState({
     Leash: "0",
     GarbageBag: "0",
@@ -56,6 +60,14 @@ const CheckoutComponent = () => {
   const topTwoReviews = sortedReviews
     .slice(0, 2)
     .map((review) => review.description);
+
+    const toggleReviews = () => {
+      setShowReviews(!showReviews);
+    };
+
+    const toggleWalkerDetails = () => {
+      setShowReviews(false);
+    };
 
   //!Stars
 
@@ -97,10 +109,34 @@ const CheckoutComponent = () => {
     );
   };
 
+  // Assuming you have the scores and median score calculation logic in place
   const scores =
     walkerDetails?.walker?.reviewsData.map((review) => review.score) || [];
   const medianScore = calculateMedian(scores);
   const starsForMedian = renderStarsFromMedian(medianScore);
+
+  //!Stars for individual reviews
+  const renderStars = (score) => {
+    const totalStars = 5;
+    const fullStars = Math.floor(score);
+    const halfStars = Math.ceil(score - fullStars);
+
+    const starArray = [];
+    for (let i = 0; i < fullStars; i++) {
+      starArray.push(<FontAwesomeIcon key={i} icon={faStar} style={{ color: '#FFF' }} />);
+    }
+    if (halfStars === 1) {
+      starArray.push(
+        <FontAwesomeIcon key={starArray.length} icon={faStar} half style={{ color: '#FFF' }} />
+      );
+    }
+    const emptyStars = totalStars - (fullStars + halfStars);
+    for (let i = 0; i < emptyStars; i++) {
+      starArray.push(<FontAwesomeIcon key={starArray.length} icon={faStar} regular style={{ color: '#FFF' }} />);
+    }
+
+    return starArray;
+  };
 
   //!WalkType Selection
   const handleWalkTypeSelection = (walkTypeTitle) => {
@@ -403,7 +439,7 @@ const CheckoutComponent = () => {
       <div className="flex flex-grow h-screen">
         <div className="bg-[#29235c] w-1/2 flex flex-col justify-center items-center">
           {walkerDetails && walkerData ? (
-            <div className="flex flex-col h-full ">
+            <div className="flex flex-col h-full items-center">
               <div className="mt-5 mb-5">
                 <h1
                   className="text-4xl text-[#F39200] font-bold "
@@ -412,10 +448,35 @@ const CheckoutComponent = () => {
                   {walkerData.name + " " + walkerData.lastName}
                 </h1>
               </div>
-              <div className="flex flex-col items-center h-[650px] w-[450px] rounded-lg bg-[#F39200]">
-                <div className="text-[#F39200] bg-white mt-3 ml-3 mr-3 border rounded-md text-center">
-                  <p>{walkerData.walker.sale_details}</p>
+              {showReviews ? (
+                <div className="flex flex-col items-center">
+                  <h2 className="text-white text-bold text-3xl" style={{ fontFamily: "LikeEat" }}>Reviews</h2>
+                  <div className="rounded-lg bg-[#29235c] p-4 mt-4 w-[450px]">
+                  {sortedReviews.length > 0 ? (
+                    
+                    sortedReviews.slice(0, 3).map((review, index) => (
+                      <div key={index} className="bg-[#F39200] text-white rounded-lg p-3 my-3">
+                        <p><i>{review.description}</i></p>
+                        <p>{renderStarsFromMedian(review.score)}</p>
+                      </div>
+                    ))
+                  ) : (
+                    
+                    <p className="bg-[#F39200] text-white rounded-lg p-3 my-3">
+                      {walkerData.name} has not received any reviews yet. Be the first one to comment on her services!
+                    </p>
+                  )}
+                  <button onClick={toggleWalkerDetails} className="w-30 px-5 py-2 rounded-full bg-white hover:text-[#F39200] mt-4" style={{marginLeft: '100px'}}>
+                    Back to {walkerData.name}'s details
+                  </button>
                 </div>
+                </div>
+              ) : (
+                          
+                      
+                          
+              <div className="flex flex-col items-center h-[650px] w-[450px] rounded-lg bg-[#F39200]">
+               
                 <Image
                   src={walkerData.image}
                   width={300}
@@ -426,31 +487,22 @@ const CheckoutComponent = () => {
                 <div className="mt-2"> {starsForMedian} </div>
                 <div className="mt-2">
                   <h3
-                    className="text-[#29235c] text-3xl"
+                    className="text-[#29235c] text-3xl text-center"
                     style={{ fontFamily: "LikeEat" }}
                   >
-                    Reviews
+                    About {walkerData.name}
                   </h3>
+                  <p className="text-[#29235c] text-center ml-3 mr-3 mt-2">{walkerData.walker.sale_details}</p>
                 </div>
-                {topTwoReviews.length > 0 ? (
-                  <div className="text-[#29235c] text-center ml-3 mr-3 mt-2">
-                    {topTwoReviews.map((description, index) => (
-                      <div key={index}>
-                        <p>
-                          <i>
-                            {index === 0 ? `"${description}"` : description}
-                          </i>
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p>No reviews available</p>
-                )}
+                <button onClick={toggleReviews} className="w-30 px-5 py-2 rounded-full bg-white hover:text-[#F39200] mt-10">
+                  View {walkerData.name}'s reviews
+                </button>
               </div>
-            </div>
-          ) : null}
-        </div>
+            )}
+          </div>
+        ) : null}
+      </div>
+             
         <div className="w-1/2 bg-[#E4E2ED] flex flex-col items-center">
           <div className="mt-2">
             {walkerDetails && walkerData ? (
