@@ -113,7 +113,7 @@ const WalkList = (props) => {
               style={{
                 padding: "10px",
                 border: "2px solid #F39200",
-                width: "150px",
+                width: "120px",
               }}
               className="text-[#F39200]"
             >
@@ -178,24 +178,31 @@ const WalkList = (props) => {
               </td>
               <td style={{ padding: "10px", border: "2px solid #F39200" }}>
                 {walk.state === "Pending" && (
-                  <div>
+                  <div className="flex flex-col justify-center">
                     <button
                       onClick={() => handleStatusChange(walk.id, "In progress")}
+                      className="px-6 py-1 rounded-full bg-[#4CAF50] text-white font-bold"
                     >
-                      In Progress
+                      {" "}
+                      start
                     </button>
-                    <br />
                     <button
                       onClick={() => handleStatusChange(walk.id, "Rejected")}
+                      className="px-6 py-1 mt-2 rounded-full bg-red-500 text-white font-bold"
                     >
-                      Rejected
+                      reject
                     </button>
                   </div>
                 )}
                 {walk.state === "In progress" && (
-                  <button onClick={() => handleStatusChange(walk.id, "Done")}>
-                    Finish
-                  </button>
+                  <div className="flex flex-col justify-center">
+                    <button
+                      onClick={() => handleStatusChange(walk.id, "Done")}
+                      className="px-6 py-1 rounded-full bg-[#E4E2ED] text-[#29235c] font-bold"
+                    >
+                      finish
+                    </button>
+                  </div>
                 )}
               </td>
             </tr>
@@ -229,11 +236,11 @@ const WalkList = (props) => {
         ))}
       </ul>
       <div className="flex justify-around items-center mt-10">
-        <div>
+        <div className="flex flex-col text-center">
           <h3 className="text-white">Total Walks: </h3>
           <h3 className="font-bold text-[#F39200]">{walks.length}</h3>
         </div>
-        <div>
+        <div className="flex flex-col text-center">
           <h3 className="text-white">Total Price: </h3>
           <h3 className="font-bold text-[#F39200]">
             $ {totalPricesSum.toFixed(2)}
