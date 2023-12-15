@@ -46,20 +46,6 @@ const RegisterForm = () => {
     setShowPassword(!showPassword);
   };
 
-  const checkEmailExists = async (email) => {
-    try {
-      const response = await axios.get(`http://localhost:3001/users`, {
-        params: { email: email },
-      });
-  
-      return response.data.length > 0; // Returns true if the email exists in your database
-    } catch (error) {
-      console.error("Error checking email:", error);
-      return false; // Return false in case of an error or no response
-    }
-  };
-  
-
   const validateForm = () => {
     const errors = {};
 
@@ -89,20 +75,13 @@ const RegisterForm = () => {
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!userData.email.trim()) {
-    errors.email = "Email cannot be empty";
-  } else if (userData.email.length > 40) {
-    errors.email = "Email cannot exceed 40 characters";
-  } else if (!emailRegex.test(userData.email)) {
-    errors.email = "Invalid email format";
-  } else {
-    // Check if the email already exists
-    const emailExists = checkEmailExists(userData.email);
-
-    if (emailExists) {
-      errors.email = "Email already exists";
+    if (!userData.email.trim()) {
+      errors.email = "Email cannot be empty";
+    } else if (userData.email.length > 40) {
+      errors.email = "Email cannot exceed 40 characters";
+    } else if (!emailRegex.test(userData.email)) {
+      errors.email = "Invalid email format";
     }
-  }
 
     if (!userData.selectedType) {
       errors.selectedType = "select your woofer type";
@@ -135,7 +114,6 @@ const RegisterForm = () => {
     try {
       const result = await signInWithPopup(auth, googleAuth);
       const { user } = result;
-      console.log(user);
 
       const [name, lastName] = user.displayName.split(" ");
 
@@ -193,7 +171,7 @@ const RegisterForm = () => {
         ...prevUserData,
         [name]: value,
       }));
-  
+
       setValidationErrors((prevErrors) => ({
         ...prevErrors,
         [name]: "",
@@ -222,11 +200,9 @@ const RegisterForm = () => {
 
     try {
       const response = await axios.post(`${api}/register`, userFormData);
-      console.log(axios.defaults.baseURL);
       setFormSent(true);
     } catch (e) {
       window.alert("Registration failed. Please try again.");
-      console.log("register sin exito");
     }
   };
 
