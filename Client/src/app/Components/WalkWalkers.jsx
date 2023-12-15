@@ -83,7 +83,7 @@ const WalkList = (props) => {
               style={{
                 padding: "10px",
                 border: "2px solid #F39200",
-                width: "200px",
+                width: "150px",
               }}
               className="text-[#F39200]"
             >
@@ -93,11 +93,21 @@ const WalkList = (props) => {
               style={{
                 padding: "10px",
                 border: "2px solid #F39200",
-                width: "100px",
+                width: "200px",
               }}
               className="text-[#F39200]"
             >
-              Total Dogs
+              Address
+            </th>
+            <th
+              style={{
+                padding: "10px",
+                border: "2px solid #F39200",
+                width: "70px",
+              }}
+              className="text-[#F39200]"
+            >
+              Dogs
             </th>
             <th
               style={{
@@ -134,7 +144,7 @@ const WalkList = (props) => {
                 style={{
                   padding: "10px",
                   border: "2px solid #F39200",
-                  height: "70px",
+                  height: "80px",
                 }}
                 className="text-white"
               >
@@ -146,6 +156,12 @@ const WalkList = (props) => {
                 className="text-white"
               >
                 {walk.owner.name}
+              </td>
+              <td
+                style={{ padding: "10px", border: "2px solid #F39200" }}
+                className="text-white text-center"
+              >
+                {walk.owner.address}
               </td>
               <td
                 style={{ padding: "10px", border: "2px solid #F39200" }}
