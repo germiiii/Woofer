@@ -73,30 +73,38 @@ const walkPost = async (
 
   const walkData = await walkGet(null, newWalk?.id, null);
 
-  let message = `Hi ${userOwner.name} \n 
-  We've received a payment via ${paymentMethod} of $ ${totalPrice} for your walk request!`;
   let type = "walk";
   let subject = "Payment received";
+  let message = `<p>Hi ${userOwner.name} <\p>
+  <p>Payment received successfully! <\p>
+  <p>WOOFER has received your payment for a walk request!  <\p>
+  <p>Walk id: ${walkData[0]?.id}<\p>
+  <p>Walker: ${walkData[0]?.walker.name}<\p>
+  <p>Total amount is $ ${totalPrice}<\p>
+  <p>Payment method: ${paymentMethod}<\p>
+  <p>Enjoy!<\p>`;
   let email = userOwner.email;
 
   await sendNotification(userOwner, type, subject, message, true);
 
-  message = `WOOFER has received a payment from ${walkData[0]?.owner.name} for a walk request!\n
-  Walk id: ${walkData[0]?.id},\n
-  Walker: ${walkData[0]?.walker.name},\n
-  The total amount is $ ${totalPrice}\n
-  Payment method: ${paymentMethod}`;
+  subject = "WOOFER ADMIN: Payment received ";
+  message = `<p>WOOFER has received a payment from ${walkData[0]?.owner.name} for a walk request!</p>
+  <p>Walk id: ${walkData[0]?.id}</p>
+  <p>Walker: ${walkData[0]?.walker.name}</p>
+  <p>The total amount is $ ${totalPrice}</p>
+  <p>Payment method: ${paymentMethod}<\p> `;
 
   sendEmailNotification(subject, "admin@woofer.com", message);
 
-  message = `You have a new walk request from ${walkData[0]?.owner.name}!\n
-  Date: ${walkData[0]?.date},\n
-  Time: ${walkData[0]?.startTime},\n
-  Duration: ${walkData[0]?.duration} minutes,\n
-  Dogs: ${walkData[0]?.dogNumber},\n
- `;
   type = "walk";
-  subject = "You've got a ride to do";
+  subject = "You've got a Woofer walk || Services requested 🐕";
+  message = `<p>Hi ${walkData[0]?.walker.name} </p>
+  <p>Congrats!<\p>
+  <p>You have a new walk request from ${walkData[0]?.owner.name}!<\p>
+  <p>Date: ${walkData[0]?.date}<\p>
+  <p>Time: ${walkData[0]?.startTime}<\p>
+  <p>Duration: ${walkData[0]?.duration} minutes<\p>
+  <p>Dogs: ${walkData[0]?.dogNumber}<\p>`;
   email = userWalker.email;
 
   await sendNotification(userWalker, type, subject, message, true);

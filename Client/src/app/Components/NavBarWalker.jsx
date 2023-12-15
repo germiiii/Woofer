@@ -29,7 +29,10 @@ const NavbarHomeWalker = () => {
   return (
     <div className="bg-[#F39200] py-6 flex items-center justify-center justify-around">
       <div className="flex items-center mr-20">
-        <Image src="/ISOWoofer2.png" width={200} height={200} />
+      <div style={{ width: '60px', height: '60px', borderRadius: '50%', overflow: 'hidden', backgroundColor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Image src="/LOGOWoofer.png" alt='' width={40} height={40} />
+      </div>
+
       </div>
       <div className="flex items-center ml-40 mr-40">
         <Link href={"/walkerHome"}>
@@ -42,8 +45,7 @@ const NavbarHomeWalker = () => {
           </button>
         </Link>
         {/* Add UserDetailButton component here */}
-        <UserDetailButton />
-        <Link href={"/walkerHome/TestWalkerRegister"}>
+        <Link href={"/walkerHome/WalkerRegister"}>
           <button
             className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
               currentPath === "/walkerHome/TestWalkerRegister"
@@ -54,6 +56,7 @@ const NavbarHomeWalker = () => {
             Walker form
           </button>
         </Link>
+        <UserDetailButton />
       </div>
       <div className="ml-20">
         <Link href={"/"}>

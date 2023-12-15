@@ -173,7 +173,7 @@ const SelectWalkers = (props) => {
           </select>
           <button
             onClick={handleRefresh}
-            className="w-30 px-5 py-2 rounded-full bg-[#F39200] text-white font-bold"
+            className="w-30 px-5 py-2 rounded-full bg-[#F39200] text-white font-bold hover:text-[#29235c] transition transition-colors duration-300"
           >
             refresh
           </button>

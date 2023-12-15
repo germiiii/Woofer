@@ -19,17 +19,21 @@ const walkGet = async (id, idWalk, minDate) => {
     include: [
       {
         model: Owner,
-        include: {
-          model: User,
-          attributes: ["id", "name", "lastName", "image"],
-        },
+        include: [
+          {
+            model: User,
+            attributes: ["id", "name", "lastName", "image"],
+          },
+        ],
       },
       {
         model: Walker,
-        include: {
-          model: User,
-          attributes: ["id", "name", "lastName", "image"],
-        },
+        include: [
+          {
+            model: User,
+            attributes: ["id", "name", "lastName", "image"],
+          },
+        ],
       },
       {
         model: Review,
@@ -55,12 +59,12 @@ const walkGet = async (id, idWalk, minDate) => {
       hasWalkerReview: walk.hasWalkerReview,
       owner: {
         name: `${owner.user.name} ${owner.user.lastName}`,
-        image: owner.image,
+        image: owner.user.image, // Modify this line
         id: owner.userId,
       },
       walker: {
         name: `${walker.user.name} ${walker.user.lastName}`,
-        image: walker.image,
+        image: walker.user.image, // Modify this line
         id: walker.userId,
       },
       reviews,

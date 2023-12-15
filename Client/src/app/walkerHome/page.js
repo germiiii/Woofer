@@ -15,16 +15,18 @@ const HomeWalker = () => {
   }, []);
 
   return (
-    <>
-      {selectedType === "walker" ? (
-        <>
-          <Nav />
-          <WalkerHome />
-        </>
-      ) : (
-        <YouAreNotAWalker />
-      )}
-    </>
+    <div className="flex flex-col">
+      <>
+        {selectedType === "walker" ? (
+          <div>
+            <Nav />
+            <WalkerHome />
+          </div>
+        ) : (
+          <YouAreNotAWalker />
+        )}
+      </>
+    </div>
   );
 };
 
