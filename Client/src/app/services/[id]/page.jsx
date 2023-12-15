@@ -77,16 +77,16 @@ const Detail = () => {
 
   const createOrder = async (data, actions) => {
     try {
-      console.log("Creating order...");
-      console.log(accessToken);
+      // console.log("Creating order...");
+      // console.log(accessToken);
 
       if (!accessToken) {
-        console.log("Missing token");
+        // console.log("Missing token");
         return;
       }
 
       if (!service.walkTypeData) {
-        console.log("Service data not available");
+        // console.log("Service data not available");
         return;
       }
 
@@ -121,7 +121,7 @@ const Detail = () => {
       const order = await res.json();
 
       if (order.id) {
-        console.log("Order ID:", order.id);
+        // console.log("Order ID:", order.id);
         setOrderCount(orderCount + 1); // Increment order count for the next order
         return order.id;
       } else {
@@ -134,7 +134,7 @@ const Detail = () => {
   };
 
   const handleApprove = (data, actions) => {
-    console.log("Approved:", data);
+    // console.log("Approved:", data);
     actions.order.capture();
     alert("Payment successful");
     setTimeout(() => {
@@ -143,7 +143,7 @@ const Detail = () => {
   };
 
   const handleCancel = (data) => {
-    console.log("Cancelled:", data);
+    // console.log("Cancelled:", data);
   };
 
   return (

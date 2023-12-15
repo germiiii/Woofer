@@ -288,7 +288,7 @@ const CheckoutComponent = () => {
           }
         );
         localStorage.setItem("paypal_accessToken", data.access_token);
-        console.log("Paypal Access Token:", data.access_token);
+        // console.log("Paypal Access Token:", data.access_token);
       } catch (error) {
         console.error("Error fetching/accessing token:", error);
       }
@@ -311,13 +311,13 @@ const CheckoutComponent = () => {
     try {
       const storedTotalAmount = localStorage.getItem("totalAmount");
       const accessToken = localStorage.getItem("paypal_accessToken");
-      console.log("Access Token", accessToken);
+      // console.log("Access Token", accessToken);
       if (!storedTotalAmount || storedTotalAmount === "0.00") {
         setTimeout(() => createOrder(data, actions), 1000); // Retry after 1 second if totalAmount is 0 or not present
         return;
       }
 
-      console.log("Creating order....");
+      // console.log("Creating order....");
       const res = await fetch(
         "https://api-m.sandbox.paypal.com/v2/checkout/orders",
         {
@@ -351,7 +351,7 @@ const CheckoutComponent = () => {
       const order = await res.json();
 
       if (order.id) {
-        console.log("Order ID:", order.id);
+        // console.log("Order ID:", order.id);
         setOrderCount(orderCount + 1); // Increment order count for the next order
         return order.id;
       } else {
@@ -392,7 +392,7 @@ const CheckoutComponent = () => {
         },
       });
 
-      console.log("POST request response:", response.data);
+      // console.log("POST request response:", response.data);
 
       setTimeout(() => {
         router.push("/ownerHome");
@@ -443,7 +443,7 @@ const CheckoutComponent = () => {
 
   //! Handle Cancel
   const handleCancel = (data) => {
-    console.log("Cancelled:", data);
+    // console.log("Cancelled:", data);
   };
 
   return (

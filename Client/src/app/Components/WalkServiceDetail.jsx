@@ -4,7 +4,7 @@ import React from 'react';
 const WalkServiceDetail = ({ id, title, price, description }) => {
   // Check if the data exists before rendering
   if (!id || !title || !price || !description) {
-    console.log('Missing props:', { id, title, price, description });
+    // console.log('Missing props:', { id, title, price, description });
     return null; // If any of the props are missing, don't render anything
   }
 

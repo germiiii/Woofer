@@ -8,7 +8,7 @@ const WalkList = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [walksPerPage] = useState(6);
   const [refresh, setRefresh] = useState(false);
-  console.log(walks);
+  // console.log(walks);
   useEffect(() => {
     const fetchData = async () => {
       try {

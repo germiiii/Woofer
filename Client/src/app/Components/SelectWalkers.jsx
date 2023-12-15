@@ -107,7 +107,7 @@ const SelectWalkers = (props) => {
     );
   });
 
-  console.log(walkers);
+  // console.log(walkers);
 
   const renderList = filteredWalkers
     .slice(startIndex, endIndex)

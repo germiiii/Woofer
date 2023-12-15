@@ -161,7 +161,7 @@ export default function DataGridDemo() {
     try {
       const response = await axios.get(`${api}/users?role=admin`);
       setUsers(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -286,7 +286,7 @@ export default function DataGridDemo() {
               .put(`${api}/editUser`, updatedRow)
               .then((response) => {
                 // You can handle the server response if needed
-                console.log(response.data);
+                // console.log(response.data);
                 return updatedRow; // Update the Data Grid internal state
               })
               .catch((error) => {

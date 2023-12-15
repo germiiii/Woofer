@@ -62,7 +62,7 @@ const PayPal = ({totalAmount}) => {
           }
         );
         localStorage.setItem("paypal_accessToken", data.access_token);
-        console.log('Paypal Access Token:', data.access_token)
+        // console.log('Paypal Access Token:', data.access_token)
       } catch (error) {
         console.error("Error fetching/accessing token:", error);
       }
@@ -86,7 +86,7 @@ const PayPal = ({totalAmount}) => {
         setTimeout(() => createOrder(data, actions), 1000); // Retry after 1 second if totalAmount is 0
         return;
       }
-      console.log('Creating order....')
+      // console.log('Creating order....')
       const res = await fetch('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
         method: 'POST',
         headers: {
@@ -115,7 +115,7 @@ const PayPal = ({totalAmount}) => {
       const order = await res.json();
   
       if (order.id) {
-        console.log('Order ID:', order.id);
+        // console.log('Order ID:', order.id);
         setOrderCount(orderCount + 1); // Increment order count for the next order
         return order.id; // Return the order ID
       } else {
@@ -145,7 +145,7 @@ const PayPal = ({totalAmount}) => {
   };
 
   const handleCancel = (data) => {
-    console.log("Cancelled:", data);
+    // console.log("Cancelled:", data);
   };
 
   return (
