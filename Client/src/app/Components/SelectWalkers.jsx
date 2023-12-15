@@ -82,19 +82,15 @@ const SelectWalkers = (props) => {
   const filteredWalkers = walkers.filter((walker) => {
     const dogCapacityFilterCondition =
       !dogCapacityFilter ||
-      (dogCapacityFilter === "1" && walker.walker.dog_capacity === 1) ||
-      (dogCapacityFilter === "<3" && walker.walker.dog_capacity < 3) ||
-      (dogCapacityFilter === "<5" && walker.walker.dog_capacity < 5) ||
-      (dogCapacityFilter === ">5" && walker.walker.dog_capacity > 5);
+      walker.walker.walkTypes.some(
+        (walkType) => walkType.dog_capacity === dogCapacityFilter
+      );
 
     const walkDurationFilterCondition =
       !walkDurationFilter ||
-      (walkDurationFilter === "15" &&
-        walker.walker.walk_duration.includes("15")) ||
-      (walkDurationFilter === "30" &&
-        walker.walker.walk_duration.includes("30")) ||
-      (walkDurationFilter === "60" &&
-        walker.walker.walk_duration.includes("60"));
+      walker.walker.walkTypes.some(
+        (walkType) => walkType.walk_duration === walkDurationFilter
+      );
 
     const searchFilterCondition = !searchFilter
       ? true
@@ -114,8 +110,6 @@ const SelectWalkers = (props) => {
       walker.province === userProvince
     );
   });
-
-  // console.log(walkers);
 
   const renderList = filteredWalkers
     .slice(startIndex, endIndex)
@@ -164,10 +158,10 @@ const SelectWalkers = (props) => {
             onChange={handleDogCapacityFilterChange}
           >
             <option value="">filter by dog capacity</option>
-            <option value="1">one dog</option>
-            <option value="<3">less than three dogs</option>
-            <option value="<5">less than five dogs</option>
-            <option value=">5">more than five dogs</option>
+            <option value="low">one dog</option>
+            <option value="medium">less than three dogs</option>
+            <option value="medium">less than five dogs</option>
+            <option value="high">more than five dogs</option>
           </select>
           <select
             className="border p-2 mr-2"
