@@ -278,7 +278,7 @@ const CheckoutComponent = () => {
     async function fetchAccessToken() {
       try {
         const { data } = await axios.post(
-          "https://api-m.sandbox.paypal.com/v1/oauth2/token",
+          "https://api-m.paypal.com/v1/oauth2/token",
           "grant_type=client_credentials",
           {
             headers: {
@@ -319,7 +319,7 @@ const CheckoutComponent = () => {
 
       // console.log("Creating order....");
       const res = await fetch(
-        "https://api-m.sandbox.paypal.com/v2/checkout/orders",
+        "https://api-m.paypal.com/v2/checkout/orders",
         {
           method: "POST",
           headers: {
