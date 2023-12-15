@@ -17,7 +17,7 @@ const ReviewsCards = ({ reviewData }) => {
           <h1 className="mt-5 mb-2 text-2xl text-[#F39200] font-bold">
             Rating: {review.score}/5
           </h1>
-          <h2 className="ml-10 mr-10 text-white">"{review.description}"</h2>
+         <h2 className="ml-10 mr-10 text-white">&quot;{review.description}&quot;</h2>
         </li>
       ))}
     </ul>
