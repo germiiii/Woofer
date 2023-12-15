@@ -210,66 +210,74 @@ const WalkerRegister = () => {
         </h1>
 
         {/* Filtros */}
-        <div className="mb-3">
-          <select
-            value={walkDurationFilter}
-            onChange={handleWalkDurationFilterChange}
-            className="mx-2"
-          >
-            <option value="">Walk Duration</option>
-            {[...new Set(priceList.map((option) => option.walk_duration))].map(
-              (walkDuration) => (
+        <div className="flex justify-between mb-5">
+          <div>
+            <select
+              value={walkDurationFilter}
+              onChange={handleWalkDurationFilterChange}
+              className="border p-2 mr-2"
+            >
+              <option value="">Walk Duration</option>
+              {[
+                ...new Set(priceList.map((option) => option.walk_duration)),
+              ].map((walkDuration) => (
                 <option key={walkDuration} value={walkDuration}>
                   {walkDuration} minutes
                 </option>
-              )
-            )}
-          </select>
-          <select
-            value={priceFilter}
-            onChange={handlePriceFilterChange}
-            className="mx-2"
-          >
-            <option value="">Price</option>
-            {[...new Set(priceList.map((option) => option.price))]
-              .filter((price) => price !== "1.00") // Excluye el valor "1.00"
-              .map((filteredPrice) => (
-                <option key={filteredPrice} value={filteredPrice}>
-                  ${filteredPrice}
-                </option>
               ))}
-          </select>
-          <select
-            value={dogCapacityFilter}
-            onChange={handleDogCapacityFilterChange}
-            className="mx-2"
-          >
-            <option value="">Dog Capacity</option>
-            {[...new Set(priceList.map((option) => option.dog_capacity))].map(
-              (dogCapacity) => (
-                <option key={dogCapacity} value={dogCapacity}>
-                  {dogCapacity}
-                </option>
-              )
-            )}
-          </select>
-          <select
-            value={typeFilter}
-            onChange={handleTypeFilterChange}
-            className="mx-2"
-          >
-            <option value="">Type</option>
-            {[...new Set(priceList.map((option) => option.walk_type))].map(
-              (walkType) => (
-                <option key={walkType} value={walkType}>
-                  {walkType}
-                </option>
-              )
-            )}
-          </select>
-          <button type="button" onClick={handleRefreshFilters} className="mx-2">
-            Refresh
-          </button>
+            </select>
+            <select
+              value={priceFilter}
+              onChange={handlePriceFilterChange}
+              className="border p-2 mr-2"
+            >
+              <option value="">Price</option>
+              {[...new Set(priceList.map((option) => option.price))]
+                .filter((price) => price !== "1.00") // Excluye el valor "1.00"
+                .map((filteredPrice) => (
+                  <option key={filteredPrice} value={filteredPrice}>
+                    ${filteredPrice}
+                  </option>
+                ))}
+            </select>
+            <select
+              value={dogCapacityFilter}
+              onChange={handleDogCapacityFilterChange}
+              className="border p-2 mr-2"
+            >
+              <option value="">Dog Capacity</option>
+              {[...new Set(priceList.map((option) => option.dog_capacity))].map(
+                (dogCapacity) => (
+                  <option key={dogCapacity} value={dogCapacity}>
+                    {dogCapacity}
+                  </option>
+                )
+              )}
+            </select>
+            <select
+              value={typeFilter}
+              onChange={handleTypeFilterChange}
+              className="border p-2 mr-2"
+            >
+              <option value="">Type</option>
+              {[...new Set(priceList.map((option) => option.walk_type))].map(
+                (walkType) => (
+                  <option key={walkType} value={walkType}>
+                    {walkType}
+                  </option>
+                )
+              )}
+            </select>
+          </div>
+          <div>
+            <button
+              type="button"
+              onClick={handleRefreshFilters}
+              className="w-30 px-5 py-2 rounded-full bg-[#F39200] text-white font-bold"
+            >
+              refresh
+            </button>
+          </div>
         </div>
 
         <div>

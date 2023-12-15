@@ -32,7 +32,7 @@ const walkUpdateState = async (id, state) => {
   let message = "";
   switch (state) {
     case "Done":
-      message = `Hi ${ownerUser.name}! I'm ${walkerUser.name} ${walkerUser.lastName}, I would love to hear your opinion about the ride.\nPlease click on the link to leave a review: ${process.env.NEXT_PUBLIC_APIURL}/walkerHome/WalkerRegister/${walk.id}.\nThank you for your time!`;
+      message = `Hi ${ownerUser.name}! I'm ${walkerUser.name} ${walkerUser.lastName}, I would love to hear your opinion about the ride.\nPlease click on the link to leave a review: ${process.env.NEXT_PUBLIC_APIURL}/ownerReviews/${walk.id}.\nThank you for your time!`;
       sendNotification(ownerUser, "walk", "Walk finished", message, true);
       break;
     case "In progress":
