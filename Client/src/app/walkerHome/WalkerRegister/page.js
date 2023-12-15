@@ -91,7 +91,7 @@ export default function HomeWalker() {
                 <div className="flex justify-start">
                   <button
                     onClick={handleInputSubmit}
-                    className="w-30 px-6 py-1 rounded-full bg-[#F39200] text-white font-bold"
+                    className="w-30 px-6 py-1 rounded-full bg-[#F39200] text-white font-bold hover:text-[#29235c] transition transition-colors duration-300"
                   >
                     set your location
                   </button>
@@ -99,7 +99,7 @@ export default function HomeWalker() {
               </div>
               <Map userProvince={userProvince} userAddress={userAddress} />
             </div>
-            <div className="w-1/2 bg-[#E4E2ED] h-screen">
+            <div className="w-1/2 bg-[#E4E2ED] h-full">
               <WalkerRegister />
             </div>
           </div>

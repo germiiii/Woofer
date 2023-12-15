@@ -249,7 +249,7 @@ const WalkList = (props) => {
         <div>
           <button
             onClick={handleRefresh}
-            className="px-6 py-1 rounded-full bg-[#F39200] text-white font-bold mr-10"
+            className="px-6 py-1 rounded-full bg-[#F39200] text-white font-bold mr-10 hover:text-[#29235c] transition transition-colors duration-300"
           >
             refresh
           </button>
