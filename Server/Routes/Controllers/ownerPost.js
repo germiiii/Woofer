@@ -10,6 +10,7 @@ cloudinary.config({
 });
 const { uploadImage } = require("../../Routes/utils/uploadImage");
 const { validateSpecialAndNumber } = require("../../Routes/utils/validations");
+const { sendEmailNotification } = require("../utils/sendEmailNotification");
 
 const ownerPost = async (data, file) => {
   const { userID, name, size, age, breed } = data;
@@ -137,6 +138,24 @@ const ownerPost = async (data, file) => {
     ],
   });
 
+  //este mensaje se va a enviar cada vez que se agregue un perro 🙄
+  const message = `<p>New Woofer dog owner has been registered!<\p>
+  <img src=${userData.image} alt="User Image style="style=" width: 5cm; height: auto;">
+  <p>Name: ${userData.name} ${userData.lastName}<\p>
+  <p>Email: ${userData.email}<\p>
+  <p>Address: ${userData.address}<\p>
+  <p>City: ${userData.city}<\p>
+  <p>Province: ${userData.province}<\p>
+  <p><\p>
+  <p>Dogs (${userData.owner.dogs.length}): ${userData.owner.dogs.map(
+    (dogs) => "<p>🐶 Name: " + dogs.name + " Breed: " + dogs.breed +"<\p> "
+  )}`;
+
+  sendEmailNotification(
+    "ADMIN New dog owner 🐶",
+    "admin@woofer.com",
+    message
+  );
   return userData;
 };
 
