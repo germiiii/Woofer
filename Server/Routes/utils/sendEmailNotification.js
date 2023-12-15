@@ -25,22 +25,22 @@ const sendEmailNotification = (subject, email, message, data) => {
     //si es el admin lo reemplazo por un email que exista
     // email = "lucaszibaitis@gmail.com";
     // email = "Correasmv@gmail.com";
-    // email = "germi560@gmail.com";
-    email = "silvialilianagarcia@hotmail.com";
+    email = "germi560@gmail.com";
+    // email = "silvialilianagarcia.slg@gmail.com";
   } else {
     if (email.includes("@woofer.com"))
       //si es un email de prueba lo reemplazo por uno que existe
-      email = "silvialilianagarcia.slg@gmail.com";
+      // email = "silvialilianagarcia.slg@gmail.com";
       // email = "Correasmv@gmail.com";
       // email = "teten08@hotmail.com";
-      // email = "lucaszibaitis@gmail.com";
+      email = "lucaszibaitis@gmail.com";
   }
 
   const mailOptions = {
     from: "woofer@gmail.com",
     to: email,
     subject: subject,
-    text: message,
+    html: message,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

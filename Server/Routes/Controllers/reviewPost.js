@@ -87,23 +87,20 @@ const reviewPost = async (idWalk, type, score, description) => {
   let subject = "";
   if (type === "owner") {
     subject = "You have been rated ⭐";
-    message = `You've received a rating from your dog walker! ${reviewData.walk.walker.user.name} ${reviewData.walk.walker.user.lastName} rated you with ${score} points and left this comment: 
-    ${description}
-        
-    Walk Date: ${formattedDate} Time: ${formattedTime} Duration: ${reviewData.walk.duration} minutes.
-    Id walk: ${reviewData.walk.id}`;
+    message = `<p>You've received a rating from your dog walker! <p>
+    <p>${reviewData.walk.walker.user.name} ${reviewData.walk.walker.user.lastName} rated you with ${score} points and left this comment:<\p> 
+    <p>${description}<\p>        
+    <p>Walk Date: ${formattedDate} Time: ${formattedTime} Duration: ${reviewData.walk.duration} minutes.<\p>
+    <p>Id walk: ${reviewData.walk.id}<\p>`;
   } else if (type === "walker") {
     subject = "Your services have been rated ⭐";
-    message = `Hi ${reviewData.walk.walker.user.name}!
-    You've received a rating for your service! 
-     ${reviewData.walk.owner.user.name} ${reviewData.walk.owner.user.lastName} rated you with ${score} Woofer stars and left you a comment:
-     ${description}
-     
-     You have a total of ${reviewData.walk.walker.reviews_count} reviews and a total of ${reviewData.walk.walker.score} Woofer stars
-     
-     Walk Date: ${formattedDate} Time: ${formattedTime} Duration: ${reviewData.walk.duration} minutes.
-     Id walk: ${reviewData.walk.id}`;
-     
+    message = `<p>Hi ${reviewData.walk.walker.user.name}!<\p>
+    <p>You've received a rating for your service! <\p>
+    <p>${reviewData.walk.owner.user.name} ${reviewData.walk.owner.user.lastName} rated you with ${score} Woofer stars and left you a comment:<\p>
+    <p>${description}<\p>     
+    <p>You have a total of ${reviewData.walk.walker.reviews_count} reviews and a total of ${reviewData.walk.walker.score} Woofer stars<\p>
+    <p>Walk Date: ${formattedDate} Time: ${formattedTime} Duration: ${reviewData.walk.duration} minutes.<\p>
+    <p>Id walk: ${reviewData.walk.id}<\p>`;     
   }
 
   const user = await User.findByPk(instancedUser.userId);
