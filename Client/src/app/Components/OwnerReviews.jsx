@@ -11,12 +11,13 @@ const OwnerReviewForm = ({ onReviewSubmit, id }) => {
 
   const router = useRouter()
   const [userReview, setUserReview] = useState({
-    score: 1,
+    score: 0,
     description: ""
   });
-  const [walkData, setWalkData] = useState(null); 
+  const [walkData, setWalkData] = useState(); 
+  const [walkerData, setWalkerData] = useState();
+  const [error, setError] = useState("");
   const walkId = id.id;
-
   useEffect(() => {
     const fetchWalkData = async () => {
       const token = localStorage.getItem('token');
@@ -27,10 +28,8 @@ const OwnerReviewForm = ({ onReviewSubmit, id }) => {
           const API = process.env.NEXT_PUBLIC_APIURL;
           const walkUrl = `${API}/walk`;
           const response = await axios.get(walkUrl);
-  
-          // Filtrar el array para obtener solo el objeto con el ID correspondiente
           const matchingWalk = response.data.allWalks.find(walk => walk.id === walkId);
-          console.log(matchingWalk)
+
           if (matchingWalk) {
             setWalkData(matchingWalk);
           } else {
@@ -45,12 +44,44 @@ const OwnerReviewForm = ({ onReviewSubmit, id }) => {
     fetchWalkData();
   }, [walkId]);
 
+
+  useEffect(() => {
+    const fetchWalkerData = async () => {
+      const API = process.env.NEXT_PUBLIC_APIURL;
+      const walkerUrl = `${API}/walker/${walkData?.walker.id}`;
+
+      try {
+        const response = await axios.get(walkerUrl);
+        setWalkerData(response.data);
+      } catch (error) {
+        console.error('Error fetching walker data:', error);
+      }
+    };
+
+    // Verifica si walkData existe antes de hacer la solicitud
+    if (walkData?.walker?.id) {
+      fetchWalkerData();
+    }
+  }, [walkData]);
+
+const walkerImage = walkerData?.walkerData.image;
+  
+ 
   const handleScoreChange = (newScore) => {
     setUserReview({ ...userReview, score: newScore });
   };
 
   const handleDescriptionChange = (event) => {
-    setUserReview({ ...userReview, description: event.target.value });
+    const inputValue = event.target.value;
+    const sanitizedInput = inputValue.replace(/[^a-zA-Z0-9\s]/g, '');
+    const truncatedInput = sanitizedInput.slice(0, 100);
+    if (inputValue !== sanitizedInput) {
+      setError("Only letters and numbers are allowed.");
+    } else {
+      setError("");
+    }
+
+    setUserReview({ ...userReview, description: truncatedInput });
   };
 
   const submitReview = async () => {
@@ -63,7 +94,7 @@ const OwnerReviewForm = ({ onReviewSubmit, id }) => {
         score: userReview.score,
         description: userReview.description
       };
-      console.log(reviewData);
+
       const response = await axios.post(reviewUrl, reviewData);
       setUserReview({
         score: 1,
@@ -108,8 +139,10 @@ const OwnerReviewForm = ({ onReviewSubmit, id }) => {
           <textarea
             value={userReview.description}
             onChange={handleDescriptionChange}
-            className=' p-4 rounded border border-gray-300 resize-none' style={{height: '100px', width: '500px'}} // Adjusted width and height
+            className={`p-4 rounded border border-gray-300 resize-none ${error ? 'border-red-500' : ''}`}
+            style={{ height: '100px', width: '500px' }}
           />
+          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         </div>
         <button onClick={submitReview} className='w-30 px-5 py-2 rounded-full bg-[#F39200] hover:text-[#29235c] text-white'>
           Submit Review
@@ -118,7 +151,7 @@ const OwnerReviewForm = ({ onReviewSubmit, id }) => {
       <div className="w-1/2 bg-[#E4E2ED] flex flex-col items-center">
         <div className="mt-12">
         <Image
-                  src='/PersonAvatar.jpeg'
+                  src={walkerImage}
                   width={500}
                   height={0}
                   className="mt-5 rounded-lg"
