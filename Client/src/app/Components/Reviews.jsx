@@ -38,7 +38,7 @@ const Reviews = ({ userId }) => {
           },
           []
         );
-        console.log(accumulatedData);
+
         setReviewData(accumulatedData);
       } catch (error) {
         console.error("Error fetching reviews:", error);

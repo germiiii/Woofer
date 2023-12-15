@@ -181,14 +181,14 @@ const WalkList = (props) => {
                   <div className="flex flex-col justify-center">
                     <button
                       onClick={() => handleStatusChange(walk.id, "In progress")}
-                      className="px-6 py-1 rounded-full bg-[#4CAF50] text-white font-bold"
+                      className="px-6 py-1 rounded-full bg-[#4CAF50] text-white font-bold hover:bg-green-700 transition-all duration-300 ease-in-out"
                     >
                       {" "}
                       start
                     </button>
                     <button
                       onClick={() => handleStatusChange(walk.id, "Rejected")}
-                      className="px-6 py-1 mt-2 rounded-full bg-red-500 text-white font-bold"
+                      className="px-6 py-1 mt-2 rounded-full bg-red-500 text-white font-bold hover:bg-red-700 transform transition-all duration-300 ease-in-out"
                     >
                       reject
                     </button>
@@ -198,7 +198,7 @@ const WalkList = (props) => {
                   <div className="flex flex-col justify-center">
                     <button
                       onClick={() => handleStatusChange(walk.id, "Done")}
-                      className="px-6 py-1 rounded-full bg-[#E4E2ED] text-[#29235c] font-bold"
+                      className="px-6 py-1 rounded-full bg-[#E4E2ED] text-[#29235c] font-bold hover:bg-gray-300 transition-all duration-300 ease-in-out"
                     >
                       finish
                     </button>

@@ -25,8 +25,6 @@ const WalkerRegister = () => {
         const response = await axios.get(
           `${API}/walker/${decodedToken.userId}`
         );
-        console.log(decodedToken.userId);
-        console.log(response.data.walkerData);
         setWalkerData(response.data.walkerData);
       } catch (error) {
         console.error("Error fetching data from the server:", error);
@@ -35,7 +33,6 @@ const WalkerRegister = () => {
 
     fetchData();
   }, []);
-  console.log("is_walker", walkerData.isWalker);
 
   useEffect(() => {
     const fetchWalkerTypes = async () => {
@@ -69,7 +66,7 @@ const WalkerRegister = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (walkerData.isWalker) {
+    if (walkerData && walkerData.isWalker) {
       try {
         if (selectedOptions.length === 0) {
           alert("Please select at least one option.");
@@ -171,7 +168,7 @@ const WalkerRegister = () => {
       const response = await axios.post(`${API}/walker`, requestBody);
 
       localStorage.setItem("isWalker", "true");
-      router.push("/walkerHome");
+      window.alert("Information submitted successfully");
     } catch (error) {
       setFormSubmissionError("Error submitting the form");
       console.error("Error submitting form:", error);
