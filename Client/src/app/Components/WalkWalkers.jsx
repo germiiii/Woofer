@@ -6,16 +6,14 @@ import axios from "axios";
 const WalkList = (props) => {
   const [walks, setWalks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [walksPerPage] = useState(5);
+  const [walksPerPage] = useState(6);
   const [refresh, setRefresh] = useState(false);
   console.log(walks);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const API = process.env.NEXT_PUBLIC_APIURL;
-        const response = await axios.get(
-          `${API}/walk/walker/${props.userId}`
-        );
+        const response = await axios.get(`${API}/walk/walker/${props.userId}`);
         const walkss = response.data.walksFromWalker;
         const sortedWalks = walkss.sort(
           (a, b) => new Date(a.startTime) - new Date(b.startTime)
@@ -51,10 +49,12 @@ const WalkList = (props) => {
           currentPage * walksPerPage
         )
       : [];
-  const totalPricesSum = currentWalks.reduce(
+
+  const totalPricesSum = walks.reduce(
     (sum, walk) => sum + parseFloat(walk.totalPrice),
     0
   );
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleRefresh = () => setRefresh(true);
@@ -65,33 +65,64 @@ const WalkList = (props) => {
   };
 
   return (
-    <div
-      className=" mt-10"
-      style={{
-        border: "2px solid #000",
-        padding: "10px",
-        overflowX: "auto",
-      }}
-    >
-      <button onClick={handleRefresh} style={{ margin: "10px" }}>
-        Refresh
-      </button>
-      <h2>Walk List</h2>
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+    <div className="w-[900px] mt-6">
+      <table style={{ width: "100%" }}>
         <thead>
           <tr>
-            <th style={{ padding: "10px", border: "1px solid #000" }}>Date</th>
-            <th style={{ padding: "10px", border: "1px solid #000" }}>Name</th>
-            <th style={{ padding: "10px", border: "1px solid #000" }}>
-              Dog Number
+            <th
+              style={{
+                padding: "10px",
+                border: "2px solid #F39200",
+                width: "100px",
+              }}
+              className="text-[#F39200]"
+            >
+              Date
             </th>
-            <th style={{ padding: "10px", border: "1px solid #000" }}>
-              Total Price
+            <th
+              style={{
+                padding: "10px",
+                border: "2px solid #F39200",
+                width: "200px",
+              }}
+              className="text-[#F39200]"
+            >
+              Name
             </th>
-            <th style={{ padding: "10px", border: "1px solid #000" }}>
+            <th
+              style={{
+                padding: "10px",
+                border: "2px solid #F39200",
+                width: "100px",
+              }}
+              className="text-[#F39200]"
+            >
+              Total Dogs
+            </th>
+            <th
+              style={{
+                padding: "10px",
+                border: "2px solid #F39200",
+                width: "100px",
+              }}
+              className="text-[#F39200]"
+            >
+              Price
+            </th>
+            <th
+              style={{
+                padding: "10px",
+                border: "2px solid #F39200",
+                width: "120px",
+              }}
+              className="text-[#F39200]"
+            >
               Status
             </th>
-            <th style={{ padding: "10px", border: "1px solid #000" }}>
+            <th
+              style={{ padding: "10px", border: "2px solid #F39200" }}
+              className="text-[#F39200]"
+            >
               Action
             </th>
           </tr>
@@ -99,44 +130,81 @@ const WalkList = (props) => {
         <tbody>
           {currentWalks.map((walk) => (
             <tr key={walk.id}>
-              <td style={{ padding: "10px", border: "1px solid #000" }}>
+              <td
+                style={{
+                  padding: "10px",
+                  border: "2px solid #F39200",
+                  height: "70px",
+                }}
+                className="text-white"
+              >
                 {" "}
                 {formatDate(walk.date)}
               </td>
-              <td style={{ padding: "10px", border: "1px solid #000" }}>
+              <td
+                style={{ padding: "10px", border: "2px solid #F39200" }}
+                className="text-white"
+              >
                 {walk.owner.name}
               </td>
-              <td style={{ padding: "10px", border: "1px solid #000" }}>
+              <td
+                style={{ padding: "10px", border: "2px solid #F39200" }}
+                className="text-white text-center"
+              >
                 {walk.dogNumber}
               </td>
-              <td style={{ padding: "10px", border: "1px solid #000" }}>
+              <td
+                style={{ padding: "10px", border: "2px solid #F39200" }}
+                className="text-white text-end"
+              >
                 $ {walk.totalPrice}
               </td>
-              <td style={{ padding: "10px", border: "1px solid #000" }}>
+              <td
+                style={{
+                  padding: "10px",
+                  border: "2px solid #F39200",
+                  color:
+                    walk.state === "In progress"
+                      ? "yellow"
+                      : walk.state === "Rejected"
+                      ? "red"
+                      : walk.state === "Done"
+                      ? "#8AFF8A"
+                      : "", // Puedes establecer un color predeterminado o dejarlo vacío según tus necesidades
+                }}
+                className="text-white text-center"
+              >
                 {walk.state}
               </td>
-              <td style={{ padding: "10px", border: "1px solid #000" }}>
+              <td style={{ padding: "10px", border: "2px solid #F39200" }}>
                 {walk.state === "Pending" && (
-                  <div>
+                  <div className="flex flex-col justify-center">
                     <button
                       onClick={() => handleStatusChange(walk.id, "In progress")}
+                      className="px-6 py-1 rounded-full bg-[#4CAF50] text-white font-bold"
                     >
-                      In Progress
+                      {" "}
+                      start
                     </button>
-                    <br />
                     <button
                       onClick={() => handleStatusChange(walk.id, "Rejected")}
+                      className="px-6 py-1 mt-2 rounded-full bg-red-500 text-white font-bold"
                     >
-                      Rejected
+                      reject
                     </button>
                   </div>
                 )}
                 {walk.state === "In progress" && (
-                  <button onClick={() => handleStatusChange(walk.id, "Done")}>
-                    Done
-                  </button>
+                  <div className="flex flex-col justify-center">
+                    <button
+                      onClick={() => handleStatusChange(walk.id, "Done")}
+                      className="px-6 py-1 rounded-full bg-[#E4E2ED] text-[#29235c] font-bold"
+                    >
+                      finish
+                    </button>
+                  </div>
                 )}
-                </td>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -154,15 +222,38 @@ const WalkList = (props) => {
           (_, i) => i + 1
         ).map((number) => (
           <li key={number} style={{ margin: "0 5px", cursor: "pointer" }}>
-            <a onClick={() => paginate(number)}>{number}</a>
+            <a
+              onClick={() => paginate(number)}
+              className="font-bold"
+              style={{
+                color: number === currentPage ? "#F39200" : "white",
+                textDecoration: "none",
+              }}
+            >
+              {number}
+            </a>
           </li>
         ))}
       </ul>
-      <div style={{ marginTop: "20px", textAlign: "center" }}>
-        <h3>Total Price Sum: $ {totalPricesSum.toFixed(2)}</h3>
-      </div>
-      <div style={{ marginTop: "20px", textAlign: "center" }}>
-        <h3>Total Walks: {walks.length}</h3>
+      <div className="flex justify-around items-center mt-10">
+        <div className="flex flex-col text-center">
+          <h3 className="text-white">Total Walks: </h3>
+          <h3 className="font-bold text-[#F39200]">{walks.length}</h3>
+        </div>
+        <div className="flex flex-col text-center">
+          <h3 className="text-white">Total Price: </h3>
+          <h3 className="font-bold text-[#F39200]">
+            $ {totalPricesSum.toFixed(2)}
+          </h3>
+        </div>
+        <div>
+          <button
+            onClick={handleRefresh}
+            className="px-6 py-1 rounded-full bg-[#F39200] text-white font-bold mr-10"
+          >
+            refresh
+          </button>
+        </div>
       </div>
     </div>
   );
