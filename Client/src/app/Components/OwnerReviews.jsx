@@ -2,8 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import jwt from "jsonwebtoken";
+import "tailwindcss/tailwind.css";
+import NavBarOwner from '../Components/NavBarOwner'
+import Image from 'next/image'
+import {useRouter} from 'next/navigation';
 
-const ReviewForm = ({ onReviewSubmit, id }) => {
+const OwnerReviewForm = ({ onReviewSubmit, id }) => {
+
+  const router = useRouter()
   const [userReview, setUserReview] = useState({
     score: 1,
     description: ""
@@ -63,51 +69,68 @@ const ReviewForm = ({ onReviewSubmit, id }) => {
         score: 1,
         description: ""
       });
+      router.push('/ownerHome')
     } catch (error) {
       console.error('Error submitting review:', error);
     }
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: 'auto', padding: '20px', borderRadius: '10px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
-      <h2>Leave a Review from {walkData?.walker.name}</h2>
-      <div style={{ marginBottom: '10px' }}>
-        <label>Score:</label>
-        <div style={{ display: 'flex', gap: '5px' }}>
-          {[1, 2, 3, 4, 5].map((value) => (
-            <span
-              key={value}
-              style={{
-                cursor: 'pointer',
-                fontSize: '24px',
-                color: value <= userReview.score ? 'gold' : 'gray'
-              }}
-              onClick={() => handleScoreChange(value)}
-            >
-              ★
-            </span>
-          ))}
+    <div className="flex flex-col h-screen">
+    <NavBarOwner />
+    <div className="flex flex-grow h-screen">
+      <div className="bg-[#29235c] w-1/2 flex-col flex justify-center items-center">
+        <h3 className="text-5xl text-white" style={{ fontFamily: "LikeEat" }}>
+          Leave a Review to{" "} 
+         
+        </h3>
+        <div>
+        <h3 className='text-[#F39200] text-4xl'  style={{ fontFamily: "LikeEat" }}>{walkData?.walker.name}</h3>
+        </div>
+       
+        
+        <div className='mb-4'>
+         
+          <div className='flex gap-2'>
+            {[1, 2, 3, 4, 5].map((value) => (
+              <span
+                key={value}
+                className={`cursor-pointer text-3xl ${value <= userReview.score ? 'text-yellow-500' : 'text-gray-500'}`}
+                onClick={() => handleScoreChange(value)}
+              >
+                ★
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className='mb-4'>
+          <label className='block text-white text-2xl' style={{ fontFamily: "LikeEat" }}>Comment:</label>
+          <textarea
+            value={userReview.description}
+            onChange={handleDescriptionChange}
+            className=' p-4 rounded border border-gray-300 resize-none' style={{height: '100px', width: '500px'}} // Adjusted width and height
+          />
+        </div>
+        <button onClick={submitReview} className='w-30 px-5 py-2 rounded-full bg-[#F39200] hover:text-[#29235c] text-white'>
+          Submit Review
+        </button>
+      </div>
+      <div className="w-1/2 bg-[#E4E2ED] flex flex-col items-center">
+        <div className="mt-12">
+        <Image
+                  src='/PersonAvatar.jpeg'
+                  width={500}
+                  height={0}
+                  className="mt-5 rounded-lg"
+                  alt=""
+                />
         </div>
       </div>
-      <div style={{ marginBottom: '10px' }}>
-        <label>Comment:</label>
-        <textarea
-          value={userReview.description}
-          onChange={handleDescriptionChange}
-          style={{
-            width: '100%',
-            padding: '8px',
-            borderRadius: '5px',
-            border: '1px solid #ccc',
-            resize: 'none'
-          }}
-        />
-      </div>
-      <button onClick={submitReview} style={{ background: 'blue', color: 'white', padding: '10px', borderRadius: '5px', cursor: 'pointer' }}>
-        Submit Review
-      </button>
     </div>
+  </div>
+  
   );
+  
 };
 
-export default ReviewForm;
+export default OwnerReviewForm;
