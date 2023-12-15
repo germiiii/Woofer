@@ -93,7 +93,7 @@ export default function HomeWalker() {
                     onClick={handleInputSubmit}
                     className="w-30 px-6 py-1 rounded-full bg-[#F39200] text-white font-bold hover:text-[#29235c] transition transition-colors duration-300"
                   >
-                    set your location
+                    set my location
                   </button>
                 </div>
               </div>
