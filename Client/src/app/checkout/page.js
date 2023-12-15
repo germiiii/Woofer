@@ -313,10 +313,9 @@ const CheckoutComponent = () => {
       const accessToken = localStorage.getItem("paypal_accessToken");
       // console.log("Access Token", accessToken);
       if (!storedTotalAmount || storedTotalAmount === "0.00") {
-        setTimeout(() => createOrder(data, actions), 1000); // Retry after 1 second if totalAmount is 0 or not present
-        return;
+        window.alert('Please, select a walk type before proceeding with payment')
+        
       }
-
       // console.log("Creating order....");
       const res = await fetch(
         "https://api-m.paypal.com/v2/checkout/orders",
