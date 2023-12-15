@@ -46,7 +46,7 @@ const walkAndReviewsData = [
       review: {
         type: "walker",
         score: 5,
-        description: "I&apos;ve been using this dog walking service for a few months now and I couldn&apos;t be happier! 🐕‍🦺The walkers are always on time and my dog loves them.🐾",
+        description: "I&apos;ve been using this dog walking service for a few months now and I couldn&apos;t be happier! The walkers are always on time and my dog loves them.",
         date: "2023-10-28",
       },
     },
@@ -112,7 +112,7 @@ const walkAndReviewsData = [
         type: "walker",
         score: 4,
         description:
-          "I highly recommend this dog walking service! The walker is friendly, professional, and always goes above and beyond to make sure my dog is happy. 🐶",
+          "I highly recommend this dog walking service! The walker is friendly, professional, and always goes above and beyond to make sure my dog is happy.",
         date: "2023-10-22",
       },
     },
@@ -148,7 +148,7 @@ const walkAndReviewsData = [
         type: "walker",
         score: 5,
         description:
-          "The dog walker was very professional and made sure my dog was comfortable at all times.🐕",
+          "The dog walker was very professional and made sure my dog was comfortable at all times.",
         date: "2023-10-22",
       },
     },
@@ -185,7 +185,7 @@ const walkAndReviewsData = [
         type: "walker",
         score: 5,
         description:
-          "The dog walker didn&apos;t seem to have much experience and didn&apos;t know how to handle my dog.🐩",
+          "The dog walker didn&apos;t seem to have much experience and didn&apos;t know how to handle my dog.",
         date: "2023-10-17",
       },
     },
