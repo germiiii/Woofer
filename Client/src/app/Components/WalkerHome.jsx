@@ -115,12 +115,6 @@ const WalkerHome = () => {
     }
   );
 
-  const handleRespondComment = (index, response) => {
-    const updatedComments = [...comments];
-    updatedComments[index].response = response;
-    setComments(updatedComments);
-  };
-
   const handleActiveClick = async () => {
     try {
       if (user.id) {

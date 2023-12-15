@@ -31,7 +31,6 @@ const LoginForm = () => {
     if (!password.trim()) {
       errors.password = "password cannot be empty";
     }
-    console.log("Validation Errors:", errors);
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };

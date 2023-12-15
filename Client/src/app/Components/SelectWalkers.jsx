@@ -64,11 +64,19 @@ const SelectWalkers = (props) => {
     setCurrentPage(1);
   };
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     setDogCapacityFilter("");
     setWalkDurationFilter("");
     setDogSizeFilter("");
     setCurrentPage(1);
+    setSearchFilter("");
+
+    try {
+      const response = await axios.get(`${api}/walker/available`);
+      setWalkers(response.data.walkers);
+    } catch (error) {
+      console.error("Error fetching walkers:", error);
+    }
   };
 
   const filteredWalkers = walkers.filter((walker) => {
