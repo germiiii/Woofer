@@ -24,6 +24,7 @@ const { userEdit } = require("./userEdit");
 const { reviewPost } = require("./reviewPost");
 const { reviewGet } = require("./reviewGet");
 const { walkUpdateState } = require("./walkUpdateState");
+const { wooferAnalytics } = require("./wooferAnalytics");
 
 module.exports = {
   userLogin,
@@ -51,5 +52,6 @@ module.exports = {
   userEdit,
   reviewGet,
   reviewPost,
-  walkUpdateState
+  walkUpdateState,
+  wooferAnalytics
 };

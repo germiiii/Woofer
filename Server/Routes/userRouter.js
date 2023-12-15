@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { userHandlerLogin, userGetByIdHandler } = require("../Routes/Handlers/");
+const { userHandlerLogin, userGetByIdHandler, wooferGetAnalytics } = require("../Routes/Handlers/");
 const { validateUser, validateUserLogin } = require("./Middlewares");
 const { userHandlerRegister }= require('./Handlers/userHandlerRegister')
 const { userHandlerChangePassword } = require ('./Handlers/userHandlerChangePassword')
@@ -43,7 +43,9 @@ userRouter.post('/changePassword/:token', changePassword)
 userRouter.post('/changePassword', userHandlerChangePassword)
 userRouter.get("/users/:id", userGetByIdHandler);
 userRouter.get("/users", userGetAllHandler);
-
 userRouter.put("/editUser", upload.single("image"), userHandlerEdit);
+
+userRouter.get("/analytics", wooferGetAnalytics );
+
 
 module.exports = userRouter;
