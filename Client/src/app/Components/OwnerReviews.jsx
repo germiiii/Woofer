@@ -78,6 +78,12 @@ const OwnerReviewForm = ({ onReviewSubmit, id }) => {
   };
 
   const submitReview = async () => {
+    if (walkData.hasWalkerReview) {
+      window.alert("You have already written a review for this walk");
+      router.push("/ownerHome");
+      return;
+    }
+
     try {
       const API = process.env.NEXT_PUBLIC_APIURL;
       const reviewUrl = `${API}/review`;
