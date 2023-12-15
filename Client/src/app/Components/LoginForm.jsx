@@ -151,7 +151,7 @@ const LoginForm = () => {
           }
         } else if (userData.selectedType === "walker") {
           if (userData.isWalker === false) {
-            router.push("/walkerHome/TestWalkerRegister");
+            router.push("/walkerHome/WalkerRegister");
           } else {
             router.push("/walkerHome");
           }

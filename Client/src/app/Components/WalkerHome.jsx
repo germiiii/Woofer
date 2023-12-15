@@ -169,7 +169,7 @@ const WalkerHome = () => {
         <div className="flex items-center justify-between mb-5">
           <button
             onClick={handleActiveClick}
-            className={`bg-black text-white px-6 py-1 rounded-full font-bold ml-10 ${
+            className={`bg-black text-white px-6 py-1 rounded-full font-bold ml-10 hover:text-[#29235c] transition transition-colors duration-300 ${
               !isAvailable ? "bg-green-500" : "bg-red-500"
             }`}
           >
@@ -183,7 +183,7 @@ const WalkerHome = () => {
           </div>
           <button
             onClick={() => router.push("/walkerHome/WalkerRegister")}
-            className="px-6 py-1 rounded-full bg-[#F39200] text-white font-bold mr-10"
+            className="px-6 py-1 rounded-full bg-[#F39200] text-white font-bold mr-10 hover:text-[#29235c] transition transition-colors duration-300"
           >
             edit this section
           </button>

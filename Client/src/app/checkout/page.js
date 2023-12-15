@@ -9,9 +9,8 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import "tailwindcss/tailwind.css";
 import local from "next/font/local";
 import { browserLocalPersistence } from "firebase/auth";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 const CheckoutComponent = () => {
   const router = useRouter();
@@ -61,13 +60,13 @@ const CheckoutComponent = () => {
     .slice(0, 2)
     .map((review) => review.description);
 
-    const toggleReviews = () => {
-      setShowReviews(!showReviews);
-    };
+  const toggleReviews = () => {
+    setShowReviews(!showReviews);
+  };
 
-    const toggleWalkerDetails = () => {
-      setShowReviews(false);
-    };
+  const toggleWalkerDetails = () => {
+    setShowReviews(false);
+  };
 
   //!Stars
 
@@ -123,16 +122,30 @@ const CheckoutComponent = () => {
 
     const starArray = [];
     for (let i = 0; i < fullStars; i++) {
-      starArray.push(<FontAwesomeIcon key={i} icon={faStar} style={{ color: '#FFF' }} />);
+      starArray.push(
+        <FontAwesomeIcon key={i} icon={faStar} style={{ color: "#FFF" }} />
+      );
     }
     if (halfStars === 1) {
       starArray.push(
-        <FontAwesomeIcon key={starArray.length} icon={faStar} half style={{ color: '#FFF' }} />
+        <FontAwesomeIcon
+          key={starArray.length}
+          icon={faStar}
+          half
+          style={{ color: "#FFF" }}
+        />
       );
     }
     const emptyStars = totalStars - (fullStars + halfStars);
     for (let i = 0; i < emptyStars; i++) {
-      starArray.push(<FontAwesomeIcon key={starArray.length} icon={faStar} regular style={{ color: '#FFF' }} />);
+      starArray.push(
+        <FontAwesomeIcon
+          key={starArray.length}
+          icon={faStar}
+          regular
+          style={{ color: "#FFF" }}
+        />
+      );
     }
 
     return starArray;
@@ -450,71 +463,90 @@ const CheckoutComponent = () => {
               </div>
               {showReviews ? (
                 <div className="flex flex-col items-center">
-                  <h2 className="text-white text-bold text-3xl" style={{ fontFamily: "LikeEat" }}>Reviews</h2>
-                  <div className="rounded-lg bg-[#29235c] p-4 mt-4 w-[450px]">
-                  {sortedReviews.length > 0 ? (
-                    
-                    sortedReviews.slice(0, 3).map((review, index) => (
-                      <div key={index} className="bg-[#F39200] text-white rounded-lg p-3 my-3">
-                        <p><i>{review.description}</i></p>
-                        <p>{renderStarsFromMedian(review.score)}</p>
-                      </div>
-                    ))
-                  ) : (
-                    
-                    <p className="bg-[#F39200] text-white rounded-lg p-3 my-3">
-                      {walkerData.name} has not received any reviews yet. Be the first one to comment on her services!
-                    </p>
-                  )}
-                  <button onClick={toggleWalkerDetails} className="w-30 px-5 py-2 rounded-full bg-white hover:text-[#F39200] mt-4" style={{marginLeft: '100px'}}>
-                    Back to {walkerData.name}'s details
-                  </button>
-                </div>
-                </div>
-              ) : (
-                          
-                      
-                          
-              <div className="flex flex-col items-center h-[650px] w-[450px] rounded-lg bg-[#F39200]">
-               
-                <Image
-                  src={walkerData.image}
-                  width={300}
-                  height={0}
-                  className="mt-5 rounded-lg"
-                  alt=""
-                />
-                <div className="mt-2"> {starsForMedian} </div>
-                <div className="mt-2">
-                  <h3
-                    className="text-[#29235c] text-3xl text-center"
+                  <h2
+                    className="text-white text-bold text-4xl"
                     style={{ fontFamily: "LikeEat" }}
                   >
-                    About {walkerData.name}
-                  </h3>
-                  <p className="text-[#29235c] text-center ml-3 mr-3 mt-2">{walkerData.walker.sale_details}</p>
+                    Reviews
+                  </h2>
+                  <div className="rounded-lg bg-[#29235c] p-4 mt-4 w-[450px]">
+                    {sortedReviews.length > 0 ? (
+                      sortedReviews.slice(0, 3).map((review, index) => (
+                        <div
+                          key={index}
+                          className="bg-[#F39200] text-white rounded-lg p-3 my-3"
+                        >
+                          <p>
+                            <i>{review.description}</i>
+                          </p>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="bg-[#F39200] text-white rounded-lg p-3 my-3">
+                        {walkerData.name} has not received any reviews yet. Be
+                        the first one to comment on her services!
+                      </p>
+                    )}
+                    <button
+                      onClick={toggleWalkerDetails}
+                      className="w-30 px-5 py-2 rounded-full font-bold text-[#29235c] bg-white hover:text-[#F39200] mt-4 transition transition-colors duration-300"
+                      style={{ marginLeft: "100px" }}
+                    >
+                      back to {walkerData.name}'s details
+                    </button>
+                  </div>
                 </div>
-                <button onClick={toggleReviews} className="w-30 px-5 py-2 rounded-full bg-white hover:text-[#F39200] mt-10">
-                  View {walkerData.name}'s reviews
-                </button>
-              </div>
-            )}
-          </div>
-        ) : null}
-      </div>
-             
+              ) : (
+                <div className="flex flex-col items-center h-[700px] w-[450px] rounded-lg bg-[#F39200]">
+                  <Image
+                    src={walkerData.image}
+                    width={300}
+                    height={0}
+                    className="mt-5 rounded-lg"
+                    alt=""
+                  />
+                  <div className="mt-2"> {starsForMedian} </div>
+                  <div className="mt-2">
+                    <h3
+                      className="text-[#29235c] text-4xl text-center"
+                      style={{ fontFamily: "LikeEat" }}
+                    >
+                      About walker
+                    </h3>
+                    <p className="text-[#29235c] text-center ml-3 mr-3 mt-5">
+                      {walkerData.walker.sale_details}
+                    </p>
+                  </div>
+                  <button
+                    onClick={toggleReviews}
+                    className="w-30 px-5 py-2 rounded-full font-bold text-[#29235c] bg-white hover:text-[#F39200] hover:bg-[#29235c] mt-10 transition transition-colors duration-300"
+                  >
+                    view {walkerData.name}'s reviews
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : null}
+        </div>
+
         <div className="w-1/2 bg-[#E4E2ED] flex flex-col items-center">
           <div className="mt-2">
             {walkerDetails && walkerData ? (
               <div>
                 <h2
-                  className="text-3xl text-[#29235C] font-bold mb-2 mt-4"
-                  style={{ fontFamily: "LikeEat" }}
+                  className="text-3xl text-[#29235C] font-bold mb-2 mt-4 "
+                  style={{
+                    fontFamily: "LikeEat",
+                  }}
                 >
                   Walk Services by{" "}
                   <span style={{ color: "#F39200" }}>{walkerData.name}</span>
                 </h2>
-
+                <hr
+                  style={{
+                    borderBottom: "2px solid #29235C",
+                  }}
+                ></hr>
                 {walkerData.walker?.walkTypes &&
                 walkerData.walker.walkTypes.length > 0 ? (
                   <div>
@@ -563,8 +595,8 @@ const CheckoutComponent = () => {
                       </tbody>
                     </table>
 
-                    {selectedWalkType && (
-                      <div className="mt-4 relative">
+                    {selectedWalkType ? (
+                      <div className="mt-4 relative mb-3">
                         <div
                           className="bg-[#F39200] rounded-lg p-4"
                           style={{ maxWidth: "400px", overflow: "hidden" }}
@@ -577,23 +609,44 @@ const CheckoutComponent = () => {
                           </p>
                         </div>
                       </div>
+                    ) : (
+                      <div
+                        className="bg-[#F39200] rounded-lg mb-3 p-4 mt-4"
+                        style={{ maxWidth: "400px", overflow: "hidden" }}
+                      >
+                        <p
+                          className="text-sm text-bold text-white"
+                          style={{ lineHeight: "2.4em" }}
+                        >
+                          Select a walk type for more information.
+                        </p>
+                      </div>
                     )}
                   </div>
                 ) : (
                   <p>No walk types available</p>
                 )}
-
+                <hr
+                  style={{
+                    borderBottom: "2px solid #29235C",
+                  }}
+                ></hr>
                 <div className="mt-8">
                   <h3
-                    className="mb-4 font-bold text-3xl text-[#29235C]"
+                    className="mb-2 font-bold text-3xl text-[#29235C]"
                     style={{ fontFamily: "LikeEat" }}
                   >
-                    Add Extras:
+                    Add Extras
                   </h3>
+                  <hr
+                    style={{
+                      borderBottom: "2px solid #29235C",
+                    }}
+                  ></hr>
                   <table>
                     <tbody>
                       <tr>
-                        <td className="py-4 text-end">
+                        <td className="py-1 text-end">
                           <label
                             htmlFor="leash"
                             className="block text-[#29235C] font-bold"
@@ -604,7 +657,7 @@ const CheckoutComponent = () => {
                             $5
                           </span>
                         </td>
-                        <td className="py-4">
+                        <td className="py-1">
                           <div className="ml-10 flex items-center">
                             <button
                               onClick={() => decrementQuantity("Leash")}
@@ -625,7 +678,7 @@ const CheckoutComponent = () => {
                         </td>
                       </tr>
                       <tr>
-                        <td className="py-4 text-end">
+                        <td className="py-1 text-end">
                           <label
                             htmlFor="garbagebag"
                             className="block text-[#29235C] font-bold"
@@ -636,7 +689,7 @@ const CheckoutComponent = () => {
                             $2
                           </span>
                         </td>
-                        <td className="py-4">
+                        <td className="p1-4">
                           <div className="ml-10 flex items-center">
                             <button
                               onClick={() => decrementQuantity("GarbageBag")}
@@ -657,7 +710,7 @@ const CheckoutComponent = () => {
                         </td>
                       </tr>
                       <tr>
-                        <td className="py-4 text-end">
+                        <td className="py-1 text-end">
                           <label
                             htmlFor="waterBowl"
                             className="block text-[#29235C] font-bold"
@@ -668,7 +721,7 @@ const CheckoutComponent = () => {
                             $3
                           </span>
                         </td>
-                        <td className="py-4">
+                        <td className="py-1">
                           <div className="ml-10 flex items-center">
                             <button
                               onClick={() => decrementQuantity("WaterBowl")}
@@ -690,14 +743,19 @@ const CheckoutComponent = () => {
                       </tr>
                     </tbody>
                   </table>
+                  <hr
+                    style={{
+                      borderBottom: "2px solid #29235C",
+                    }}
+                  ></hr>
                 </div>
               </div>
             ) : (
               <p>Loading walker details...</p>
             )}
 
-            <div className="">
-              <div className="flex justify-between">
+            <div className="mt-10">
+              <div className="flex justify-between mb-1">
                 <h1
                   className="text-3xl text-[#29235C] font-bold "
                   style={{ fontFamily: "LikeEat" }}
@@ -708,12 +766,17 @@ const CheckoutComponent = () => {
                   Total: ${totalAmount}
                 </h2>
               </div>
+              <hr
+                style={{
+                  borderBottom: "2px solid #29235C",
+                }}
+              ></hr>
               <div className="flex flex-col justify-center items-center mt-5 mb-5">
                 <button
                   onClick={() => {
                     paymentFake();
                   }}
-                  className="w-30 px-6 py-1 rounded-full bg-[#F39200] text-white font-bold"
+                  className="w-30 px-6 py-1 rounded-full bg-[#F39200] text-white font-bold hover:text-[#29235C] transition transition-colors duration-300"
                 >
                   alternative payment methods
                 </button>

@@ -96,7 +96,7 @@ export default function UserPage({ params }) {
                       className="text-5xl text-[#29235c] mt-10"
                       style={{ fontFamily: "LikeEat" }}
                     >
-                      Your dogs
+                      My dogs
                     </h1>
                     <div className="flex flex-col mt-10 items-center justify-center h-[550px]">
                       {renderDogs()}
@@ -123,7 +123,7 @@ export default function UserPage({ params }) {
                       className="text-5xl text-[#29235c] mt-10"
                       style={{ fontFamily: "LikeEat" }}
                     >
-                      Your reviews
+                      Reviews about me
                     </h1>
                     <div className="mt-20">
                       <Reviews userId={params.id} />
