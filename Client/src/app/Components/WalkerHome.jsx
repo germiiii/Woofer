@@ -177,7 +177,7 @@ const WalkerHome = () => {
           </button>
           <div className="flex">
             <h1 className=" text-2xl text-[#29235c] font-bold">Walking in </h1>
-            <h1 className="ml-1 text-2xl text-[#F39200] font-bold">
+            <h1 className="ml-2 text-2xl text-[#F39200] font-bold">
               {userProvince}
             </h1>
           </div>
