@@ -1,5 +1,7 @@
 const { User, Walk, Walker, Owner } = require("../../Database/db");
 const { sendNotification } = require("./notificationFunctions");
+const { sendEmailNotification } = require("../utils/sendEmailNotification");
+const moment = require("moment");
 
 const walkUpdateState = async (id, state) => {
   const walk = await Walk.findByPk(id);
@@ -29,23 +31,77 @@ const walkUpdateState = async (id, state) => {
       attributes: [],
     },
   });
+
+  const formattedDate = new Date(walk.date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+
+  const formattedTime = moment(walk.startTime, "HH:mm:ss").format("hh:mm A");
+
   let message = "";
   switch (state) {
     case "Done":
-      message = `Hi ${ownerUser.name}! I'm ${walkerUser.name} ${walkerUser.lastName}, I would love to hear your opinion about the ride.\nPlease click on the link to leave a review: ${process.env.NEXT_PUBLIC_APIURL}/ownerReviews/${walk.id}.\nThank you for your time!`;
-      sendNotification(ownerUser, "walk", "Walk finished", message, true);
+      message = `<p>Hi ${ownerUser.name}!<\p> 
+      <p>I'm ${walkerUser.name} ${walkerUser.lastName}, I would love to hear your opinion on the dog walk.<\p>
+      <p> Please click on the link to give the walk a review:<\p>
+      <p> ${process.env.NEXT_PUBLIC_APIURL}/ownerReviews/${walk.id}.
+      <p><\p>
+      <p>🐾 Thank you for your time!<\p>
+      <p>Walk Date: ${formattedDate} Time: ${formattedTime} Duration: ${walk.duration} minutes.<\p>
+      <p>Id walk: ${walk.id}<\p>`;
+      sendNotification(
+        ownerUser,
+        "walk",
+        "Woofer Walk Finished 🐶",
+        message,
+        true
+      );
       break;
     case "In progress":
-      message = `Hi ${ownerUser.name}! Your walk No. ${walk.id} has been started!`;
-      sendNotification(ownerUser, "walk", "Walk in progress", message, true);
+      message = `<p>Hi ${ownerUser.name}!<\p> 
+      <p>Your walk No. ${walk.id} has started!<\p>`;
+      sendNotification(
+        ownerUser,
+        "walk",
+        "Woofer Walk in progress 🐾",
+        message,
+        true
+      );
       break;
     case "Rejected":
-      message = `Hi ${ownerUser.name}! Your walk No. ${walk.id} was rejected! We'll contact you soon to solve the issue.`;
-      sendNotification(ownerUser, "walk", "Walk rejected", message, true);
+      message = `<p>Hi ${ownerUser.name}! <\p>
+      <p>Your walk No. ${walk.id} was rejected! <\p>
+      <p>We'll contact you with further information to receive a refund..<\p>`;
+      sendNotification(
+        ownerUser,
+        "walk",
+        "Woofer Walk Rejected 🛑",
+        message,
+        true
+      );
+      message = `<p>The walk No. ${walk.id} was rejected! <\p>
+      <p>Walker: ${walkerUser.name} ${walkerUser.lastName}<\p>
+      <p>Owner: ${ownerUser.name} ${ownerUser.lastName}<\p>
+      <p>Walk Date: ${formattedDate} Time: ${formattedTime} Duration: ${walk.duration} minutes.<\p>
+      <p>Id walk: ${walk.id}<\p>`;
+      sendEmailNotification(
+        "ADMIN Woofer Walk Rejected 🛑",
+        "admin@woofer.com",
+        message
+      );
       break;
     case "Pending":
-      message = `Hi ${ownerUser.name}! Your walk No. ${walk.id} is pending again. We'll contact you soon.`;
-      sendNotification(ownerUser, "walk", "Walk pending", message, true);
+      message = `<p>Hi ${ownerUser.name}!<\p>
+      <p> Your walk No. ${walk.id} is pending. Woofer will get in touch soon with further information.<\p>`;
+      sendNotification(
+        ownerUser,
+        "walk",
+        "Woofer Pending Walk ⌛",
+        message,
+        true
+      );
       break;
     default:
       break;
