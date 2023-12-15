@@ -21,7 +21,7 @@ const WalkerCard = (props) => {
       const response = await axios.get(`${api}/walker/${props.id}`);
       if (response.status === 200) {
         const walkerData = response.data;
-        console.log("Walker details:", response.data);
+        // console.log("Walker details:", response.data);
 
         // Store only necessary walker details in localStorage
         const selectedWalker = {

@@ -109,12 +109,11 @@ const userRegister = async (req, res) => {
     throw new Error("Address debe ser menor a 40 caracteres");
   }
 
-
   // image with google
   if (googleImage) {
-    image = googleImage;
+    upcaledGoogleImage = googleImage.replace("s96-c", "s500-c");
+    image = upcaledGoogleImage;
   }
-
 
   const hashedPassword = await bcrypt.hash(password, 10);
 

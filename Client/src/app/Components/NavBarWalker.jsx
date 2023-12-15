@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import "tailwindcss/tailwind.css";
 import "../stylesLanding.css";
+import UserDetailButton from "./UserDetailButton";
 
 const NavbarHomeWalker = () => {
   const currentPath = usePathname();
@@ -28,7 +29,20 @@ const NavbarHomeWalker = () => {
   return (
     <div className="bg-[#F39200] py-6 flex items-center justify-center justify-around">
       <div className="flex items-center mr-20">
-        <Image src="/ISOWoofer2.png" width={200} height={200} />
+        <div
+          style={{
+            width: "60px",
+            height: "60px",
+            borderRadius: "50%",
+            overflow: "hidden",
+            backgroundColor: "white",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Image src="/LOGOWoofer.png" alt="" width={40} height={40} />
+        </div>
       </div>
       <div className="flex items-center ml-40 mr-40">
         <Link href={"/walkerHome"}>
@@ -37,10 +51,11 @@ const NavbarHomeWalker = () => {
               currentPath === "/walkerHome" ? "text-[#F39200]" : "text-white"
             } mt-3 lg:mt-0 mr-7  transition transition-colors duration-300`}
           >
-            home
+            Home
           </button>
         </Link>
-        <Link href={"/walkerHome/TestWalkerRegister"}>
+        {/* Add UserDetailButton component here */}
+        <Link href={"/walkerHome/WalkerRegister"}>
           <button
             className={`w-30 px-5 py-2 rounded-full bg-[#29235c] hover:text-[#F39200] ${
               currentPath === "/walkerHome/TestWalkerRegister"
@@ -48,9 +63,10 @@ const NavbarHomeWalker = () => {
                 : "text-white"
             } mt-3 lg:mt-0 mr-7  transition transition-colors duration-300`}
           >
-            walker form
+            Walk types
           </button>
         </Link>
+        <UserDetailButton />
       </div>
       <div className="ml-20">
         <Link href={"/"}>
@@ -58,7 +74,7 @@ const NavbarHomeWalker = () => {
             onClick={handleLogout}
             className={`w-30 px-5 py-2 rounded-full text-[#29235c] hover:bg-[#29235c] hover:text-[#F39200] bg-white font-bold mt-3 lg:mt-0 mr-7 transition transition-colors duration-300`}
           >
-            log out
+            Log out
           </button>
         </Link>
       </div>

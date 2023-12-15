@@ -4,17 +4,18 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
 import Nav from "../Components/NavBarOwner";
-import PayPal from '../../api/checkout'
+import PayPal from "../../api/checkout";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import "tailwindcss/tailwind.css";
 import local from "next/font/local";
 import { browserLocalPersistence } from "firebase/auth";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 const CheckoutComponent = () => {
-  const router = useRouter()
+  const router = useRouter();
   const [walkerDetails, setWalkerDetails] = useState(null);
-  const [walkerId, setWalkerId] = useState('')
+  const [walkerId, setWalkerId] = useState("");
   const [selectedWalkType, setSelectedWalkType] = useState(null);
   const [extras, setExtras] = useState([]);
   const [totalAmount, setTotalAmount] = useState("0.00");
@@ -22,6 +23,7 @@ const CheckoutComponent = () => {
   const [accessToken, setAccessToken] = useState("");
   const [isTotalAmountValid, setIsTotalAmountValid] = useState(false);
   const [walkTypeQuantity, setWalkTypeQuantity] = useState(1);
+  const [showReviews, setShowReviews] = useState(false);
   const [extraQuantities, setExtraQuantities] = useState({
     Leash: "0",
     GarbageBag: "0",
@@ -30,7 +32,6 @@ const CheckoutComponent = () => {
 
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
   const clientSecret = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_SECRET;
-
   const api = process.env.NEXT_PUBLIC_APIURL;
 
   //!Fetch Walker
@@ -40,14 +41,13 @@ const CheckoutComponent = () => {
     if (selectedWalker) {
       const parsedWalker = JSON.parse(selectedWalker);
       const id = parsedWalker?.walker?.walkerData?.id;
-      console.log('Walker ID', id);
       setWalkerId(id);
-      const walkerID = localStorage.setItem('walkerId', id)
+      const walkerID = localStorage.setItem("walkerId", id);
       setWalkerDetails(parsedWalker);
     }
   }, []);
 
-  const walkerData = walkerDetails?.walker?.walkerData || {};  
+  const walkerData = walkerDetails?.walker?.walkerData || {};
 
   //!Reviews
 
@@ -59,6 +59,14 @@ const CheckoutComponent = () => {
   const topTwoReviews = sortedReviews
     .slice(0, 2)
     .map((review) => review.description);
+
+  const toggleReviews = () => {
+    setShowReviews(!showReviews);
+  };
+
+  const toggleWalkerDetails = () => {
+    setShowReviews(false);
+  };
 
   //!Stars
 
@@ -78,17 +86,17 @@ const CheckoutComponent = () => {
     const yellowStars = Array.from(
       { length: Math.round(median) },
       (_, index) => (
-        <span key={index} className="text-yellow-500 text-2xl rounded-full">
+        <span key={index} className="text-white text-3xl rounded-full">
           &#9733;
-        </span> 
+        </span>
       )
     );
     const emptyStars = Array.from(
       { length: 5 - Math.round(median) },
       (_, index) => (
-        <span key={index} className="text-gray-300 text-2xl rounded-full">
+        <span key={index} className="text-white text-3xl rounded-full">
           &#9734;
-        </span> 
+        </span>
       )
     );
 
@@ -100,32 +108,73 @@ const CheckoutComponent = () => {
     );
   };
 
+  // Assuming you have the scores and median score calculation logic in place
   const scores =
     walkerDetails?.walker?.reviewsData.map((review) => review.score) || [];
   const medianScore = calculateMedian(scores);
   const starsForMedian = renderStarsFromMedian(medianScore);
+
+  //!Stars for individual reviews
+  const renderStars = (score) => {
+    const totalStars = 5;
+    const fullStars = Math.floor(score);
+    const halfStars = Math.ceil(score - fullStars);
+
+    const starArray = [];
+    for (let i = 0; i < fullStars; i++) {
+      starArray.push(
+        <FontAwesomeIcon key={i} icon={faStar} style={{ color: "#FFF" }} />
+      );
+    }
+    if (halfStars === 1) {
+      starArray.push(
+        <FontAwesomeIcon
+          key={starArray.length}
+          icon={faStar}
+          half
+          style={{ color: "#FFF" }}
+        />
+      );
+    }
+    const emptyStars = totalStars - (fullStars + halfStars);
+    for (let i = 0; i < emptyStars; i++) {
+      starArray.push(
+        <FontAwesomeIcon
+          key={starArray.length}
+          icon={faStar}
+          regular
+          style={{ color: "#FFF" }}
+        />
+      );
+    }
+
+    return starArray;
+  };
 
   //!WalkType Selection
   const handleWalkTypeSelection = (walkTypeTitle) => {
     const selectedType = walkerData.walker.walkTypes.find(
       (walkType) => walkType.title === walkTypeTitle
     );
-  
+
     if (selectedType) {
-      setSelectedWalkType(selectedType); // Update the selected type
-      console.log("Selected Walk ID:", selectedType.id);
-      console.log("Walk Duration", selectedType.walk_duration)
-      localStorage.setItem('walkId', selectedType.id)
-      localStorage.setItem('walkDuration', selectedType.walk_duration)
+      setSelectedWalkType(selectedType);
+      localStorage.setItem("walkId", selectedType.id);
+      localStorage.setItem("walkDuration", selectedType.walk_duration);
     } else {
-      // Handle the case where the selected walk type is not found
-      console.log("Walk type not found");
+      setSelectedWalkType(null);
+      setTotalAmount("0.00");
+      setWalkTypeQuantity(1);
+      setExtraQuantities({
+        Leash: "0",
+        GarbageBag: "0",
+        WaterBowl: "0",
+      });
     }
   };
-  
-  
+
   //!Quantity
-  
+
   const isWalkTypeSelected = selectedWalkType !== null;
 
   const handleQuantityChange = (e, item) => {
@@ -166,8 +215,8 @@ const CheckoutComponent = () => {
   };
 
   const handleWalkTypeQuantityChange = (value) => {
-    if (!isWalkTypeSelected) {
-      alert("Please select a walk type first");
+    if (!isWalkTypeSelected || value === 0) {
+      alert("Please select a valid quantity for the walk type");
       return;
     }
     value = Math.min(Math.max(value, 0), 15);
@@ -175,7 +224,7 @@ const CheckoutComponent = () => {
   };
 
   const incrementWalkTypeQuantity = () => {
-    if (!isWalkTypeSelected) {
+    if (!isWalkTypeSelected || walkTypeQuantity === 0) {
       alert("Please select a walk type first");
       return;
     }
@@ -183,11 +232,11 @@ const CheckoutComponent = () => {
   };
 
   const decrementWalkTypeQuantity = () => {
-    if (!isWalkTypeSelected) {
+    if (!isWalkTypeSelected || walkTypeQuantity === 0) {
       alert("Please select a walk type first");
       return;
     }
-    setWalkTypeQuantity((prevQuantity) => Math.max(prevQuantity - 1, 0));
+    setWalkTypeQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1)); // Set a minimum of 1 instead of 0
   };
 
   //!Total Amount Sum
@@ -203,7 +252,6 @@ const CheckoutComponent = () => {
         Leash: 5,
         GarbageBag: 2,
         WaterBowl: 3,
-        
       }[extra];
       if (extraPrice) {
         extrasTotal += extraPrice * parseInt(extraQuantities[extra]);
@@ -214,9 +262,8 @@ const CheckoutComponent = () => {
 
     const formattedTotalAmount = String(totalAmountInCents.toFixed(2));
 
-    setTotalAmount(formattedTotalAmount); 
+    setTotalAmount(formattedTotalAmount);
     localStorage.setItem("totalAmount", formattedTotalAmount);
-    console.log("Total Amount:", `"${formattedTotalAmount}"`);
     return formattedTotalAmount;
   };
 
@@ -225,15 +272,13 @@ const CheckoutComponent = () => {
     setTotalAmount(calculatedTotalAmount);
   }, [selectedWalkType, extraQuantities, walkTypeQuantity]);
 
-
-
   // //! PayPal
   // //!Access Token Fetching
   useEffect(() => {
     async function fetchAccessToken() {
       try {
         const { data } = await axios.post(
-          "https://api-m.paypal.com/v1/oauth2/token",
+          "https://api-m.sandbox.paypal.com/v1/oauth2/token",
           "grant_type=client_credentials",
           {
             headers: {
@@ -243,7 +288,7 @@ const CheckoutComponent = () => {
           }
         );
         localStorage.setItem("paypal_accessToken", data.access_token);
-        console.log("Paypal Access Token:", data.access_token);
+        // console.log("Paypal Access Token:", data.access_token);
       } catch (error) {
         console.error("Error fetching/accessing token:", error);
       }
@@ -265,15 +310,16 @@ const CheckoutComponent = () => {
   const createOrder = async (data, actions) => {
     try {
       const storedTotalAmount = localStorage.getItem("totalAmount");
-
+      const accessToken = localStorage.getItem("paypal_accessToken");
+      // console.log("Access Token", accessToken);
       if (!storedTotalAmount || storedTotalAmount === "0.00") {
         setTimeout(() => createOrder(data, actions), 1000); // Retry after 1 second if totalAmount is 0 or not present
         return;
       }
 
-      console.log("Creating order....");
+      // console.log("Creating order....");
       const res = await fetch(
-        "https://api-m.paypal.com/v2/checkout/orders",
+        "https://api-m.sandbox.paypal.com/v2/checkout/orders",
         {
           method: "POST",
           headers: {
@@ -305,15 +351,14 @@ const CheckoutComponent = () => {
       const order = await res.json();
 
       if (order.id) {
-        console.log("Order ID:", order.id);
+        // console.log("Order ID:", order.id);
         setOrderCount(orderCount + 1); // Increment order count for the next order
-        return order.id; 
+        return order.id;
       } else {
         throw new Error("Order ID not received");
       }
     } catch (error) {
       console.error("Error creating PayPal order:", error);
-     
     }
   };
 
@@ -322,27 +367,24 @@ const CheckoutComponent = () => {
     try {
       await actions.order.capture();
       alert("Payment successful");
-    
-   
-    const userId = localStorage.getItem('userId')
-    const walkerId = localStorage.getItem('walkerId')
-    const walkDuration = localStorage.getItem('walkDuration')
-    const totalAmount = localStorage.getItem("totalAmount");
-    const dogCount = localStorage.getItem('dog_count');
-    const walkType = localStorage.getItem('walkId')
-    
 
+      const userId = localStorage.getItem("userId");
+      const walkerId = localStorage.getItem("walkerId");
+      const walkDuration = localStorage.getItem("walkDuration");
+      const totalAmount = localStorage.getItem("totalAmount");
+      const dogCount = localStorage.getItem("dog_count");
+      const walkType = localStorage.getItem("walkId");
 
       const paymentDetails = {
         ownerId: userId,
         walkerId: walkerId,
-        duration: walkDuration, 
+        duration: walkDuration,
         totalPrice: totalAmount,
         paymentMethod: "paypal",
         dogs: parseInt(dogCount),
         walkTypes: [walkType],
       };
-      console.log('payment details', paymentDetails)
+      console.log("payment details", paymentDetails);
 
       const response = await axios.post(`${api}/walk`, paymentDetails, {
         headers: {
@@ -350,11 +392,50 @@ const CheckoutComponent = () => {
         },
       });
 
-      console.log("POST request response:", response.data);
+      // console.log("POST request response:", response.data);
 
-      // setTimeout(() => {
-      //   router.push("/ownerHome");
-      // }, 3000);
+      setTimeout(() => {
+        router.push("/ownerHome");
+      }, 3000);
+    } catch (error) {
+      console.error("Error capturing payment:", error);
+    }
+  };
+
+  const paymentFake = async (data, actions) => {
+    const storedTotalAmount = localStorage.getItem("totalAmount");
+    if (!storedTotalAmount || storedTotalAmount === "0.00") {
+      window.alert("Please select a type of walk");
+      return;
+    }
+
+    try {
+      alert("Payment successful");
+
+      const userId = localStorage.getItem("userId");
+      const walkerId = localStorage.getItem("walkerId");
+      const walkDuration = localStorage.getItem("walkDuration");
+      const totalAmount = localStorage.getItem("totalAmount");
+      const dogCount = localStorage.getItem("dog_count");
+      const walkType = localStorage.getItem("walkId");
+
+      const paymentDetails = {
+        ownerId: userId,
+        walkerId: walkerId,
+        duration: walkDuration,
+        totalPrice: totalAmount,
+        paymentMethod: "alternative",
+        dogs: parseInt(dogCount),
+        walkTypes: [walkType],
+      };
+
+      const response = await axios.post(`${api}/walk`, paymentDetails, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      router.push("/ownerHome");
     } catch (error) {
       console.error("Error capturing payment:", error);
     }
@@ -362,211 +443,149 @@ const CheckoutComponent = () => {
 
   //! Handle Cancel
   const handleCancel = (data) => {
-    console.log("Cancelled:", data);
+    // console.log("Cancelled:", data);
   };
 
   return (
-<div className="">
-  <>
-    <Nav />
-  </>
-  <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center relative">
-    <h1 className="text-4xl text-[#29235C] font-bold mb-2 mt-11" style={{ fontFamily: "LikeEat" }}>
-      Payment Summary
-    </h1>
-    <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg flex flex-col items-center relative">
-      <div className="flex w-full">
-        <div className="w-1/2 p-4 border-r border-gray-300 bg-[#29235C] rounded-lg">
-          <div className="w-1/2 py-9 relative ">
-                {walkerDetails && walkerData ? (
-                  <div className="relative ">
-                    <p
-                      className="text-4xl text-[#F39200] font-bold absolute top-2 right-4 left-8"
+    <div className="flex flex-col">
+      <Nav />
+      <div className="flex flex-grow h-screen">
+        <div className="bg-[#29235c] w-1/2 flex flex-col justify-center items-center">
+          {walkerDetails && walkerData ? (
+            <div className="flex flex-col h-full items-center">
+              <div className="mt-5 mb-5">
+                <h1
+                  className="text-4xl text-[#F39200] font-bold "
+                  style={{ fontFamily: "LikeEat" }}
+                >
+                  {walkerData.name + " " + walkerData.lastName}
+                </h1>
+              </div>
+              {showReviews ? (
+                <div className="flex flex-col items-center">
+                  <h2
+                    className="text-white text-bold text-4xl"
+                    style={{ fontFamily: "LikeEat" }}
+                  >
+                    Reviews
+                  </h2>
+                  <div className="rounded-lg bg-[#29235c] p-4 mt-4 w-[450px]">
+                    {sortedReviews.length > 0 ? (
+                      sortedReviews.slice(0, 3).map((review, index) => (
+                        <div
+                          key={index}
+                          className="bg-[#F39200] text-white rounded-lg p-3 my-3"
+                        >
+                          <p>
+                            <i>{review.description}</i>
+                          </p>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="bg-[#F39200] text-white rounded-lg p-3 my-3">
+                        {walkerData.name} has not received any reviews yet. Be
+                        the first one to comment on her services!
+                      </p>
+                    )}
+                    <button
+                      onClick={toggleWalkerDetails}
+                      className="w-30 px-5 py-2 rounded-full font-bold text-[#29235c] bg-white hover:text-[#F39200] mt-4 transition transition-colors duration-300"
+                      style={{ marginLeft: "100px" }}
+                    >
+                      back to {walkerData.name}'s details
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center h-[700px] w-[450px] rounded-lg bg-[#F39200]">
+                  <Image
+                    src={walkerData.image}
+                    width={300}
+                    height={0}
+                    className="mt-5 rounded-lg"
+                    alt=""
+                  />
+                  <div className="mt-2"> {starsForMedian} </div>
+                  <div className="mt-2">
+                    <h3
+                      className="text-[#29235c] text-4xl text-center"
                       style={{ fontFamily: "LikeEat" }}
                     >
-                      {walkerData.name + " " + walkerData.lastName}
+                      About walker
+                    </h3>
+                    <p className="text-[#29235c] text-center ml-3 mr-3 mt-5">
+                      {walkerData.walker.sale_details}
                     </p>
-
-                    <div
-                      className="rounded-lg overflow-hidden"
-                      alt=''
-                      style={{
-                        backgroundImage: `url(${walkerData.image})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        paddingBottom: "100%",
-                        width: "500px",
-                        height: "550px",
-                      }}
-                    ></div>
                   </div>
-                ) : null}
-
-                <p>{starsForMedian}</p>
-
-                <h3 className="text-white text-2xl" style={{ fontFamily: "LikeEat" }}>Reviews</h3>
-                {topTwoReviews.length > 0 ? (
-                  <div className="text-white">
-                    {topTwoReviews.map((description, index) => (
-                      <div key={index}>
-                        <p>
-                          <i>
-                            {index === 0 ? `"${description}"` : description}
-                          </i>
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p>No reviews available</p>
-                )}
-              </div>
+                  <button
+                    onClick={toggleReviews}
+                    className="w-30 px-5 py-2 rounded-full font-bold text-[#29235c] bg-white hover:text-[#F39200] hover:bg-[#29235c] mt-10 transition transition-colors duration-300"
+                  >
+                    view {walkerData.name}'s reviews
+                  </button>
+                </div>
+              )}
             </div>
-           
-            <div className="w-1/2 p-4">
-          {walkerDetails && walkerData ? (
-            <div>
-              <h2 className="text-3xl text-[#29235C] font-bold mb-2 mt-4" style={{ fontFamily: "LikeEat" }}>
-                Walk Services by {walkerData.name}:
-              </h2>
-              {walkerData.walker?.walkTypes && walkerData.walker.walkTypes.length > 0 ? (
-                <div>
-                  <table>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <select id="walkTypeSelect" onChange={(e) => handleWalkTypeSelection(e.target.value)} className="border border-[#F39200] p-1 rounded ">
-                            <option value="">Select a Walk Type</option>
-                            {walkerData.walker.walkTypes.map((walkType) => (
-                              <option key={walkType.id} value={walkType.title}>
-                                {walkType.title} - ${walkType.price}
-                              </option>
-                            ))}
-                          </select>
-                        </td>
-                      <td className="py-4">
-                        <div className="flex items-center">
-                          <button
-                            onClick={() => decrementWalkTypeQuantity()}
-                            className="border rounded-md py-2 px-4 mr-2"
-                          >
-                            -
-                          </button>
-                          <span className="text-center w-8">
-                            {walkTypeQuantity}
-                          </span>
-                          <button
-                            onClick={() => incrementWalkTypeQuantity()}
-                            className="border rounded-md py-2 px-4 ml-2"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </td>
-                      </tr>
-                      </tbody>
-                      </table>
-                  
-                      {selectedWalkType && (
-                        <div className="mt-4 relative">
-                          <div className="bg-[#F39200] rounded-lg p-4">
-                            <p className="text-sm text-bold text-white">
-                              {selectedWalkType.description}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <p>No walk types available</p>
-                  )}
+          ) : null}
+        </div>
 
-                
-                  <div className="mt-8">
-                    <h3 className="mb-4 font-bold text-2xl text-[#29235C]" style={{ fontFamily: "LikeEat" }}>Add Extras:</h3>
+        <div className="w-1/2 bg-[#E4E2ED] flex flex-col items-center">
+          <div className="mt-2">
+            {walkerDetails && walkerData ? (
+              <div>
+                <h2
+                  className="text-3xl text-[#29235C] font-bold mb-2 mt-4 "
+                  style={{
+                    fontFamily: "LikeEat",
+                  }}
+                >
+                  Walk Services by{" "}
+                  <span style={{ color: "#F39200" }}>{walkerData.name}</span>
+                </h2>
+                <hr
+                  style={{
+                    borderBottom: "2px solid #29235C",
+                  }}
+                ></hr>
+                {walkerData.walker?.walkTypes &&
+                walkerData.walker.walkTypes.length > 0 ? (
+                  <div>
                     <table>
                       <tbody>
                         <tr>
-                          <td className="py-4">
-                            <label htmlFor="leash" className="block">
-                              Leash
-                            </label>
-                            <span className="text-sm text-gray-500 ml-2">
-                              $5
-                            </span>
+                          <td>
+                            <select
+                              id="walkTypeSelect"
+                              onChange={(e) =>
+                                handleWalkTypeSelection(e.target.value)
+                              }
+                              className="p-1 "
+                            >
+                              <option value="">select a Walk Type</option>
+                              {walkerData.walker.walkTypes.map((walkType) => (
+                                <option
+                                  key={walkType.id}
+                                  value={walkType.title}
+                                >
+                                  {walkType.title} - ${walkType.price}
+                                </option>
+                              ))}
+                            </select>
                           </td>
                           <td className="py-4">
                             <div className="flex items-center">
                               <button
-                                onClick={() => decrementQuantity("Leash")}
-                                className="border rounded-md py-2 px-4 mr-2"
+                                onClick={() => decrementWalkTypeQuantity()}
+                                className=" text-[#29235C] border rounded-md py-2 px-4 font-bold"
                               >
                                 -
                               </button>
-                              <span className="text-center w-8">
-                                {extraQuantities["Leash"]}
+                              <span className="text-center font-bold text-[#29235C] w-8">
+                                {walkTypeQuantity}
                               </span>
                               <button
-                                onClick={() => incrementQuantity("Leash")}
-                                className="border rounded-md py-2 px-4 ml-2"
-                              >
-                                +
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="py-4">
-                            <label htmlFor="garbagebag" className="block">
-                              Garbage Bag
-                            </label>
-                            <span className="text-sm text-gray-500 ml-2">
-                              $2
-                            </span>
-                          </td>
-                          <td className="py-4">
-                            <div className="flex items-center">
-                              <button
-                                onClick={() => decrementQuantity("GarbageBag")}
-                                className="border rounded-md py-2 px-4 mr-2"
-                              >
-                                -
-                              </button>
-                              <span className="text-center w-8">
-                                {extraQuantities["GarbageBag"]}
-                              </span>
-                              <button
-                                onClick={() => incrementQuantity("GarbageBag")}
-                                className="border rounded-md py-2 px-4 ml-2"
-                              >
-                                +
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="py-4">
-                            <label htmlFor="waterBowl" className="block">
-                              Water Bowl
-                            </label>
-                            <span className="text-sm text-gray-500 ml-2">
-                              $3
-                            </span>
-                          </td>
-                          <td className="py-4">
-                            <div className="flex items-center">
-                              <button
-                                onClick={() => decrementQuantity("WaterBowl")}
-                                className="border rounded-md py-2 px-4 mr-2"
-                              >
-                                -
-                              </button>
-                              <span className="text-center w-8">
-                                {extraQuantities["WaterBowl"]}
-                              </span>
-                              <button
-                                onClick={() => incrementQuantity("WaterBowl")}
-                                className="border rounded-md py-2 px-4 ml-2"
+                                onClick={() => incrementWalkTypeQuantity()}
+                                className="text-[#29235C] border rounded-md py-2 px-4 font-bold"
                               >
                                 +
                               </button>
@@ -575,48 +594,216 @@ const CheckoutComponent = () => {
                         </tr>
                       </tbody>
                     </table>
-                  </div>
-                </div>
-              ) : (
-                <p>Loading walker details...</p>
-              )}
 
-             
-              <div className="border-t border-gray-300 pt-4 mt-8">
-                <h1 className="text-3xl text-[#29235C] font-bold mb-2 mt-4"
-                    style={{ fontFamily: "LikeEat" }}>Summary</h1>
-                <h2 className="font-bold text-2xl">Total: ${totalAmount}</h2>
-                <PayPalScriptProvider
-                  options={{
-                    clientId: clientId,
+                    {selectedWalkType ? (
+                      <div className="mt-4 relative mb-3">
+                        <div
+                          className="bg-[#F39200] rounded-lg p-4"
+                          style={{ maxWidth: "400px", overflow: "hidden" }}
+                        >
+                          <p
+                            className="text-sm text-bold text-white"
+                            style={{ lineHeight: "1.2em" }}
+                          >
+                            {selectedWalkType.description}
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div
+                        className="bg-[#F39200] rounded-lg mb-3 p-4 mt-4"
+                        style={{ maxWidth: "400px", overflow: "hidden" }}
+                      >
+                        <p
+                          className="text-sm text-bold text-white"
+                          style={{ lineHeight: "2.4em" }}
+                        >
+                          Select a walk type for more information.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <p>No walk types available</p>
+                )}
+                <hr
+                  style={{
+                    borderBottom: "2px solid #29235C",
                   }}
-                >
-                  <PayPalButtons
+                ></hr>
+                <div className="mt-8">
+                  <h3
+                    className="mb-2 font-bold text-3xl text-[#29235C]"
+                    style={{ fontFamily: "LikeEat" }}
+                  >
+                    Add Extras
+                  </h3>
+                  <hr
                     style={{
-                      layout: "vertical",
-                      color: "white",
-                      label: "pay",
-                      shape: "pill",
+                      borderBottom: "2px solid #29235C",
                     }}
-                    createOrder={createOrder}
-                    onCancel={handleCancel}
-                    onApprove={handleApprove}
-                  />
-                </PayPalScriptProvider>
-{/* 
-              <PayPal
-                createOrder={createOrder}
-                onCancel={handleCancel}
-                onApprove={handleApprove}
-                clientId={clientId}
-                
-              /> */}
+                  ></hr>
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td className="py-1 text-end">
+                          <label
+                            htmlFor="leash"
+                            className="block text-[#29235C] font-bold"
+                          >
+                            Leash
+                          </label>
+                          <span className="text-md text-[#29235C] ml-2 font-bold">
+                            $5
+                          </span>
+                        </td>
+                        <td className="py-1">
+                          <div className="ml-10 flex items-center">
+                            <button
+                              onClick={() => decrementQuantity("Leash")}
+                              className="border rounded-md py-2 px-4 mr-2 text-[#29235C] font-bold"
+                            >
+                              -
+                            </button>
+                            <span className="text-center w-8 text-[#29235C] font-bold">
+                              {extraQuantities["Leash"]}
+                            </span>
+                            <button
+                              onClick={() => incrementQuantity("Leash")}
+                              className="border rounded-md py-2 px-4 ml-2 text-[#29235C] font-bold"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="py-1 text-end">
+                          <label
+                            htmlFor="garbagebag"
+                            className="block text-[#29235C] font-bold"
+                          >
+                            Garbage bag
+                          </label>
+                          <span className="text-md text-[#29235C] ml-2 font-bold">
+                            $2
+                          </span>
+                        </td>
+                        <td className="p1-4">
+                          <div className="ml-10 flex items-center">
+                            <button
+                              onClick={() => decrementQuantity("GarbageBag")}
+                              className="border rounded-md py-2 px-4 mr-2 text-[#29235C] font-bold"
+                            >
+                              -
+                            </button>
+                            <span className="text-center w-8 text-[#29235C] font-bold">
+                              {extraQuantities["GarbageBag"]}
+                            </span>
+                            <button
+                              onClick={() => incrementQuantity("GarbageBag")}
+                              className="border rounded-md py-2 px-4 ml-2 text-[#29235C] font-bold"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="py-1 text-end">
+                          <label
+                            htmlFor="waterBowl"
+                            className="block text-[#29235C] font-bold"
+                          >
+                            Water bowl
+                          </label>
+                          <span className="text-md text-[#29235C] ml-2 font-bold">
+                            $3
+                          </span>
+                        </td>
+                        <td className="py-1">
+                          <div className="ml-10 flex items-center">
+                            <button
+                              onClick={() => decrementQuantity("WaterBowl")}
+                              className="border rounded-md py-2 px-4 mr-2 text-[#29235C] font-bold"
+                            >
+                              -
+                            </button>
+                            <span className="text-center w-8 text-[#29235C] font-bold">
+                              {extraQuantities["WaterBowl"]}
+                            </span>
+                            <button
+                              onClick={() => incrementQuantity("WaterBowl")}
+                              className="border rounded-md py-2 px-4 ml-2 text-[#29235C] font-bold"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <hr
+                    style={{
+                      borderBottom: "2px solid #29235C",
+                    }}
+                  ></hr>
+                </div>
               </div>
+            ) : (
+              <p>Loading walker details...</p>
+            )}
+
+            <div className="mt-10">
+              <div className="flex justify-between mb-1">
+                <h1
+                  className="text-3xl text-[#29235C] font-bold "
+                  style={{ fontFamily: "LikeEat" }}
+                >
+                  Summary
+                </h1>
+                <h2 className="text-[#29235C] text-2xl">
+                  Total: ${totalAmount}
+                </h2>
+              </div>
+              <hr
+                style={{
+                  borderBottom: "2px solid #29235C",
+                }}
+              ></hr>
+              <div className="flex flex-col justify-center items-center mt-5 mb-5">
+                <button
+                  onClick={() => {
+                    paymentFake();
+                  }}
+                  className="w-30 px-6 py-1 rounded-full bg-[#F39200] text-white font-bold hover:text-[#29235C] transition transition-colors duration-300"
+                >
+                  alternative payment methods
+                </button>
+              </div>
+
+              <PayPalScriptProvider
+                options={{
+                  clientId: clientId,
+                }}
+              >
+                <PayPalButtons
+                  style={{
+                    layout: "vertical",
+                    color: "white",
+                    label: "pay",
+                    shape: "pill",
+                  }}
+                  createOrder={createOrder}
+                  onCancel={handleCancel}
+                  onApprove={handleApprove}
+                />
+              </PayPalScriptProvider>
             </div>
           </div>
         </div>
       </div>
-     </div>
+    </div>
   );
 };
 

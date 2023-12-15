@@ -25,6 +25,7 @@ const { userHandlerEdit } = require("./userHandlerEdit");
 const { reviewHandlerPost } = require("./reviewHandlerPost");
 const { reviewHandlerGet } = require("./reviewHandlerGet");
 const { walkerHandlerPut } = require("./walkerHandlerPut");
+const { wooferGetAnalytics } = require("./wooferGetAnalytics");
 
 module.exports = {
   userHandlerLogin,
@@ -54,4 +55,5 @@ module.exports = {
   userHandlerEdit,
   reviewHandlerPost,
   reviewHandlerGet,
+  wooferGetAnalytics
 };

@@ -76,11 +76,11 @@ const RegisterForm = () => {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!userData.email.trim()) {
-      errors.email = "email cannot be empty";
+      errors.email = "Email cannot be empty";
     } else if (userData.email.length > 40) {
-      errors.email = "email cannot exceed 40 characters";
+      errors.email = "Email cannot exceed 40 characters";
     } else if (!emailRegex.test(userData.email)) {
-      errors.email = "invalid email format";
+      errors.email = "Invalid email format";
     }
 
     if (!userData.selectedType) {
@@ -114,7 +114,6 @@ const RegisterForm = () => {
     try {
       const result = await signInWithPopup(auth, googleAuth);
       const { user } = result;
-      console.log(user);
 
       const [name, lastName] = user.displayName.split(" ");
 
@@ -168,10 +167,15 @@ const RegisterForm = () => {
         : "select your profile picture";
       setButtonText(fileName);
     } else {
-      setUserData((prevUserData) => {
-        const updatedUserData = { ...prevUserData, [name]: value };
-        return updatedUserData;
-      });
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        [name]: value,
+      }));
+
+      setValidationErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: "",
+      }));
     }
   };
 
@@ -196,11 +200,9 @@ const RegisterForm = () => {
 
     try {
       const response = await axios.post(`${api}/register`, userFormData);
-      console.log(axios.defaults.baseURL);
       setFormSent(true);
     } catch (e) {
       window.alert("Registration failed. Please try again.");
-      console.log("register sin exito");
     }
   };
 

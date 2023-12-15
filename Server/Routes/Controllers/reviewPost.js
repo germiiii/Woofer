@@ -6,6 +6,7 @@ const {
   Review,
   Notification,
 } = require("../../Database/db");
+const moment = require("moment");
 const { sendNotification } = require("./notificationFunctions");
 
 const reviewPost = async (idWalk, type, score, description) => {
@@ -71,17 +72,39 @@ const reviewPost = async (idWalk, type, score, description) => {
     ],
   });
 
-  // enviar notificacion
-  const user = await User.findByPk(instancedUser.userId);
+  const formattedDate = new Date(reviewData.walk.date).toLocaleDateString(
+    "en-US",
+    {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }
+  );
+
+  const formattedTime = moment(reviewData.walk.startTime, "HH:mm:ss").format("hh:mm A");
+
   let message = "";
-  let subject = "You've received a rating";
+  let subject = "";
   if (type === "owner") {
-    message = `You've received a rating from your dog walker! ${reviewData.walk.walker.user.name} ${reviewData.walk.walker.user.lastName} rated you with ${score} points and left this comment: ${description}`;
-    await sendNotification(user, "review", subject, message, true);
+    subject = "You have been rated ⭐";
+    message = `<p>You've received a rating from your dog walker! <p>
+    <p>${reviewData.walk.walker.user.name} ${reviewData.walk.walker.user.lastName} rated you with ${score} points and left this comment:<\p> 
+    <p>${description}<\p>        
+    <p>Walk Date: ${formattedDate} Time: ${formattedTime} Duration: ${reviewData.walk.duration} minutes.<\p>
+    <p>Id walk: ${reviewData.walk.id}<\p>`;
   } else if (type === "walker") {
-    message = `You've received a rating for your ride! ${reviewData.walk.walker.user.name} ${reviewData.walk.owner.user.lastName} rated you with ${score} points and left this comment: ${description}`;
-    await sendNotification(user, "review", subject, email, true);
+    subject = "Your services have been rated ⭐";
+    message = `<p>Hi ${reviewData.walk.walker.user.name}!<\p>
+    <p>You've received a rating for your service! <\p>
+    <p>${reviewData.walk.owner.user.name} ${reviewData.walk.owner.user.lastName} rated you with ${score} Woofer stars and left you a comment:<\p>
+    <p>${description}<\p>     
+    <p>You have a total of ${reviewData.walk.walker.reviews_count} reviews and a total of ${reviewData.walk.walker.score} Woofer stars<\p>
+    <p>Walk Date: ${formattedDate} Time: ${formattedTime} Duration: ${reviewData.walk.duration} minutes.<\p>
+    <p>Id walk: ${reviewData.walk.id}<\p>`;     
   }
+
+  const user = await User.findByPk(instancedUser.userId);
+  await sendNotification(user, "review", subject, message, true);
 
   return reviewData;
 };
