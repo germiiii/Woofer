@@ -73,39 +73,38 @@ const walkPost = async (
 
   const walkData = await walkGet(null, newWalk?.id, null);
 
- 
   let type = "walk";
   let subject = "Payment received";
-  let message = `Hi ${userOwner.name} \n 
-  Payment received successfully! 
-  WOOFER has received your payment for a walk request!  
-  Walk id: ${walkData[0]?.id},
-  Walker: ${walkData[0]?.walker.name},
-  Total amount is ${totalPrice}
-  Payment method: ${paymentMethod}
-  Enjoy!`;
+  let message = `<p>Hi ${userOwner.name} <\p>
+  <p>Payment received successfully! <\p>
+  <p>WOOFER has received your payment for a walk request!  <\p>
+  <p>Walk id: ${walkData[0]?.id}<\p>
+  <p>Walker: ${walkData[0]?.walker.name}<\p>
+  <p>Total amount is $ ${totalPrice}<\p>
+  <p>Payment method: ${paymentMethod}<\p>
+  <p>Enjoy!<\p>`;
   let email = userOwner.email;
 
   await sendNotification(userOwner, type, subject, message, true);
 
-  subject = "WOOFER ADMIN: Payment received";
-  message = `WOOFER has received a payment from ${walkData[0]?.owner.name} for a walk request!\n
-  Walk id: ${walkData[0]?.id},\n
-  Walker: ${walkData[0]?.walker.name},\n
-  The total amount is $ ${totalPrice}\n
-  Payment method: ${paymentMethod}`;
+  subject = "WOOFER ADMIN: Payment received ";
+  message = `<p>WOOFER has received a payment from ${walkData[0]?.owner.name} for a walk request!</p>
+  <p>Walk id: ${walkData[0]?.id}</p>
+  <p>Walker: ${walkData[0]?.walker.name}</p>
+  <p>The total amount is $ ${totalPrice}</p>
+  <p>Payment method: ${paymentMethod}<\p> `;
 
   sendEmailNotification(subject, "admin@woofer.com", message);
-  
+
   type = "walk";
-  subject = "You've got a Woofer walk || Services requested";
-  message = `Hi ${walkData[0]?.walker.name} \n 
-  Congrats!  
-  You have a new walk request from ${walkData[0]?.owner.name}!\n
-  Date: ${walkData[0]?.date},
-  Time: ${walkData[0]?.startTime},
-  Duration: ${walkData[0]?.duration} minutes,
-  Dogs: ${walkData[0]?.dogNumber}`;
+  subject = "You've got a Woofer walk || Services requested 🐕";
+  message = `<p>Hi ${walkData[0]?.walker.name} </p>
+  <p>Congrats!<\p>
+  <p>You have a new walk request from ${walkData[0]?.owner.name}!<\p>
+  <p>Date: ${walkData[0]?.date}<\p>
+  <p>Time: ${walkData[0]?.startTime}<\p>
+  <p>Duration: ${walkData[0]?.duration} minutes<\p>
+  <p>Dogs: ${walkData[0]?.dogNumber}<\p>`;
   email = userWalker.email;
 
   await sendNotification(userWalker, type, subject, message, true);
