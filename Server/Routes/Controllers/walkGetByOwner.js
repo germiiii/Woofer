@@ -14,14 +14,14 @@ const walkGetByOwner = async (ownerId, date) => {
         },
         include: {
           model: User,
-          attributes: ["id", "name", "lastName", "image"],
+          attributes: ["id", "name", "lastName", "image", "address", "city"],
         },
       },
       {
         model: Walker,
         include: {
           model: User,
-          attributes: ["id", "name", "lastName", "image"],
+          attributes: ["id", "name", "lastName", "image", "address", "city"],
         },
       },
       {
@@ -33,7 +33,7 @@ const walkGetByOwner = async (ownerId, date) => {
   });
 
   if (!walksFromOwner) {
-    throw new Error("Walker not found");
+    throw new Error("Owner walks not found");
   }
 
   const ownerWalkData = walksFromOwner.map((walk) => {
@@ -53,6 +53,8 @@ const walkGetByOwner = async (ownerId, date) => {
       walker: {
         name: walker.user.name + " " + walker.user.lastName,
         image: walker.image,
+        address: walker.user.address, 
+        city: walker.user.city,
         id: walker.userId,
       },
       reviews,
