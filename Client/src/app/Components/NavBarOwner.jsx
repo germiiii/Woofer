@@ -31,7 +31,7 @@ const NavbarHomeOwner = () => {
     localStorage.removeItem("ownerId");
     localStorage.removeItem("walkId");
     localStorage.removeItem("walkerId");
-    // localStorage.removeItem("dog_count");
+    localStorage.removeItem("dog_count");
     localStorage.removeItem('walkDuration')
   };
 
