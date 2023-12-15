@@ -46,7 +46,7 @@ const walkAndReviewsData = [
       review: {
         type: "walker",
         score: 5,
-        description: "I&apos;ve been using this dog walking service for a few months now and I couldn&apos;t be happier! The walkers are always on time and my dog loves them.",
+        description: "I've been using this dog walking service for a few months now and I couldn&apos;t be happier! The walkers are always on time and my dog loves them.",
         date: "2023-10-28",
       },
     },
@@ -63,7 +63,7 @@ const walkAndReviewsData = [
       review: {
         type: "walker",
         score: 5,
-        description: "I&apos;ve tried a few different dog walking services, but this one is by far the best. The walker is reliable and trustworthy, and my dog always comes back happy.",
+        description: "I've tried a few different dog walking services, but this one is by far the best. The walker is reliable and trustworthy, and my dog always comes back happy.",
         date: "2023-10-28",
       },
     },
@@ -94,7 +94,7 @@ const walkAndReviewsData = [
         type: "walker",
         score: 2,
         description:
-          "The dog walker was late and didn&apos;t seem very interested in their job.",
+          "The dog walker was late and didn't seem very interested in their job.",
         date: "2023-10-22",
       },
     },
@@ -130,7 +130,7 @@ const walkAndReviewsData = [
         type: "walker",
         score: 2,
         description:
-          "The dog walker was late and didn&apos;t seem very interested in their job.",
+          "The dog walker was late and didn't seem very interested in their job.",
         date: "2023-10-22",
       },
     },
@@ -166,7 +166,7 @@ const walkAndReviewsData = [
         type: "walker",
         score: 1,
         description:
-          "The dog walker didn&apos;t seem to have much experience and didn&apos;t know how to handle my dog.",
+          "The dog walker didn't seem to have much experience and didn't know how to handle my dog.",
         date: "2023-10-11",
       },
     },
@@ -185,7 +185,7 @@ const walkAndReviewsData = [
         type: "walker",
         score: 5,
         description:
-          "The dog walker didn&apos;t seem to have much experience and didn&apos;t know how to handle my dog.",
+          "The dog walker didn't seem to have much experience and didn't know how to handle my dog.",
         date: "2023-10-17",
       },
     },
