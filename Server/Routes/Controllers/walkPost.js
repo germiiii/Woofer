@@ -78,10 +78,13 @@ const walkPost = async (
   let message = `<p>Hi ${userOwner.name} <\p>
   <p>Payment received successfully! <\p>
   <p>WOOFER has received your payment for a walk request!  <\p>
-  <p>Walk id: ${walkData[0]?.id}<\p>
+  <p> <\p>
   <p>Walker: ${walkData[0]?.walker.name}<\p>
+  <img src=${walkData[0]?.walker.image} alt="User Image style="style="width: 5cm; height: auto;">
   <p>Total amount is $ ${totalPrice}<\p>
   <p>Payment method: ${paymentMethod}<\p>
+  <p>Walk id: ${walkData[0]?.id}<\p>
+  <p> <\p>
   <p>Enjoy!<\p>`;
   let email = userOwner.email;
 
@@ -97,10 +100,11 @@ const walkPost = async (
   sendEmailNotification(subject, "admin@woofer.com", message);
 
   type = "walk";
-  subject = "You've got a Woofer walk || Services requested 🐕";
+  subject = "You've got a Woofer walk 🐕";
   message = `<p>Hi ${walkData[0]?.walker.name} </p>
   <p>Congrats!<\p>
   <p>You have a new walk request from ${walkData[0]?.owner.name}!<\p>
+  <img src=${walkData[0]?.owner.image} alt="User Image style="style="width: 5cm; height: auto;">
   <p>Date: ${walkData[0]?.date}<\p>
   <p>Time: ${walkData[0]?.startTime}<\p>
   <p>Duration: ${walkData[0]?.duration} minutes<\p>
@@ -113,3 +117,4 @@ const walkPost = async (
 };
 
 module.exports = { walkPost };
+

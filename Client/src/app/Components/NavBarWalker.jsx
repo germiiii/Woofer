@@ -24,15 +24,26 @@ const NavbarHomeWalker = () => {
     localStorage.removeItem("isOwner");
     localStorage.removeItem("isWalker");
     localStorage.removeItem("token");
+        localStorage.removeItem("dog_count");
   };
 
   return (
     <div className="bg-[#F39200] py-6 flex items-center justify-center justify-around">
       <div className="flex items-center mr-20">
-      <div style={{ width: '60px', height: '60px', borderRadius: '50%', overflow: 'hidden', backgroundColor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <Image src="/LOGOWoofer.png" alt='' width={40} height={40} />
-      </div>
-
+        <div
+          style={{
+            width: "60px",
+            height: "60px",
+            borderRadius: "50%",
+            overflow: "hidden",
+            backgroundColor: "white",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Image src="/LOGOWoofer.png" alt="" width={40} height={40} />
+        </div>
       </div>
       <div className="flex items-center ml-40 mr-40">
         <Link href={"/walkerHome"}>
@@ -53,7 +64,7 @@ const NavbarHomeWalker = () => {
                 : "text-white"
             } mt-3 lg:mt-0 mr-7  transition transition-colors duration-300`}
           >
-            Walker form
+            Walk types
           </button>
         </Link>
         <UserDetailButton />

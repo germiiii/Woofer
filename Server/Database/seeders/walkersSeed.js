@@ -1,6 +1,5 @@
 const { User, WalkType } = require("../db");
-const walkersData = require('./walkersData.js');
-
+const walkersData = require("./walkersData.js");
 
 const seedWalkers = async () => {
   try {
@@ -14,35 +13,43 @@ const seedWalkers = async () => {
         user.isWalker = true;
         user.selectedType = "walker";
         await user.save();
-
-        for (const duration of walkerAttributes.walk_duration) {
-          const walkType = await WalkType.findAll({
-            where: { walk_duration: duration },
-          });
-          await createdWalker.addWalkType(walkType);
+        if (walkerAttributes.walk_types) {
+          await createdWalker.setWalkTypes(walkerAttributes.walk_types);
         }
+        // for (const duration of walkerAttributes.walk_duration) {
+        //   const walkType = await WalkType.findAll({
+        //     where: { walk_duration: duration },
+        //   });
+        //   await createdWalker.addWalkType(walkType);
+        // }
 
         let capacityType = "";
-        if (walkerAttributes.dog_capacity > 0 && walkerAttributes.dog_capacity <= 3) {
+        if (
+          walkerAttributes.dog_capacity > 0 &&
+          walkerAttributes.dog_capacity <= 3
+        ) {
           capacityType = "low";
-        } else if (walkerAttributes.dog_capacity > 3 && walkerAttributes.dog_capacity <= 6) {
+        } else if (
+          walkerAttributes.dog_capacity > 3 &&
+          walkerAttributes.dog_capacity <= 6
+        ) {
           capacityType = "medium";
         } else if (walkerAttributes.dog_capacity > 6) {
           capacityType = "high";
         }
 
-        const capacityWalkType = await WalkType.findAll({
-          where: { dog_capacity: capacityType },
-        });
+        // const capacityWalkType = await WalkType.findAll({
+        //   where: { dog_capacity: capacityType },
+        // });
 
-        if (createdWalker.WalkTypes) {
-          const newWalkTypes = capacityWalkType.filter(
-            (type) => !createdWalker.WalkTypes.includes(type)
-          );
-          await createdWalker.addWalkType(newWalkTypes);
-        } else {
-          await createdWalker.setWalkTypes(capacityWalkType);
-        }
+        // if (createdWalker.WalkTypes) {
+        //   const newWalkTypes = capacityWalkType.filter(
+        //     (type) => !createdWalker.WalkTypes.includes(type)
+        //   );
+        //   await createdWalker.addWalkType(newWalkTypes);
+        // } else {
+        //   await createdWalker.setWalkTypes(capacityWalkType);
+        // }
         console.log(`${index}) ${user.email}`);
       } else {
         console.error(`User with username ${username} not found`);
@@ -56,3 +63,4 @@ const seedWalkers = async () => {
 };
 
 module.exports = seedWalkers;
+

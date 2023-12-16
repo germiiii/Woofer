@@ -278,7 +278,7 @@ const CheckoutComponent = () => {
     async function fetchAccessToken() {
       try {
         const { data } = await axios.post(
-          "https://api-m.sandbox.paypal.com/v1/oauth2/token",
+          "https://api-m.paypal.com/v1/oauth2/token",
           "grant_type=client_credentials",
           {
             headers: {
@@ -288,7 +288,7 @@ const CheckoutComponent = () => {
           }
         );
         localStorage.setItem("paypal_accessToken", data.access_token);
-        console.log("Paypal Access Token:", data.access_token);
+        // console.log("Paypal Access Token:", data.access_token);
       } catch (error) {
         console.error("Error fetching/accessing token:", error);
       }
@@ -311,15 +311,14 @@ const CheckoutComponent = () => {
     try {
       const storedTotalAmount = localStorage.getItem("totalAmount");
       const accessToken = localStorage.getItem("paypal_accessToken");
-      console.log("Access Token", accessToken);
+      // console.log("Access Token", accessToken);
       if (!storedTotalAmount || storedTotalAmount === "0.00") {
-        setTimeout(() => createOrder(data, actions), 1000); // Retry after 1 second if totalAmount is 0 or not present
-        return;
+        window.alert('Please, select a walk type before proceeding with payment')
+        
       }
-
-      console.log("Creating order....");
+      // console.log("Creating order....");
       const res = await fetch(
-        "https://api-m.sandbox.paypal.com/v2/checkout/orders",
+        "https://api-m.paypal.com/v2/checkout/orders",
         {
           method: "POST",
           headers: {
@@ -351,7 +350,7 @@ const CheckoutComponent = () => {
       const order = await res.json();
 
       if (order.id) {
-        console.log("Order ID:", order.id);
+        // console.log("Order ID:", order.id);
         setOrderCount(orderCount + 1); // Increment order count for the next order
         return order.id;
       } else {
@@ -392,7 +391,7 @@ const CheckoutComponent = () => {
         },
       });
 
-      console.log("POST request response:", response.data);
+      // console.log("POST request response:", response.data);
 
       setTimeout(() => {
         router.push("/ownerHome");
@@ -443,7 +442,7 @@ const CheckoutComponent = () => {
 
   //! Handle Cancel
   const handleCancel = (data) => {
-    console.log("Cancelled:", data);
+    // console.log("Cancelled:", data);
   };
 
   return (
@@ -492,7 +491,7 @@ const CheckoutComponent = () => {
                       className="w-30 px-5 py-2 rounded-full font-bold text-[#29235c] bg-white hover:text-[#F39200] mt-4 transition transition-colors duration-300"
                       style={{ marginLeft: "100px" }}
                     >
-                      back to {walkerData.name}'s details
+                      back to {walkerData.name}&apos;s details
                     </button>
                   </div>
                 </div>
@@ -521,7 +520,7 @@ const CheckoutComponent = () => {
                     onClick={toggleReviews}
                     className="w-30 px-5 py-2 rounded-full font-bold text-[#29235c] bg-white hover:text-[#F39200] hover:bg-[#29235c] mt-10 transition transition-colors duration-300"
                   >
-                    view {walkerData.name}'s reviews
+                    view {walkerData.name}&apos;s reviews
                   </button>
                 </div>
               )}

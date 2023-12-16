@@ -21,7 +21,7 @@ const WalkerCard = (props) => {
       const response = await axios.get(`${api}/walker/${props.id}`);
       if (response.status === 200) {
         const walkerData = response.data;
-        console.log("Walker details:", response.data);
+        // console.log("Walker details:", response.data);
 
         // Store only necessary walker details in localStorage
         const selectedWalker = {
@@ -48,7 +48,7 @@ const WalkerCard = (props) => {
           width={100}
           height={100}
           alt="profile"
-          className="border-r-2  border-solid border-[#29235c]"
+          className="border-r-2  border-solid border-[#29235c] h-[100px] w-[100px] object-cover"
         />
       </div>
       <div className="flex flex-col justify-center items-start w-[450px]">
