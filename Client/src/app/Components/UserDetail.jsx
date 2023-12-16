@@ -39,7 +39,7 @@ const UserDetail = ({
             objectFit="cover"
             width={350}
             height={0}
-            className="rounded-full border border-[#F39200] border-2"
+            className="object-cover rounded-full border border-[#F39200] border-2 h-[350px]"
           />
         </div>
         <h4
