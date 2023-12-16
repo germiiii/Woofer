@@ -6,12 +6,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 const ReviewsCards = ({ reviewData }) => {
+  
+  const [walkerDetails, setWalkerDetails] = useState(null);
+  const [walkerId, setWalkerId] = useState("");
   if (reviewData.length === 0) {
     return <p className="text-[#29235c] text-2xl">No reviews yet</p>;
   }
 
-  const [walkerDetails, setWalkerDetails] = useState(null);
-  const [walkerId, setWalkerId] = useState("");
 //!Stars
 
 const calculateMedian = (arr) => {
