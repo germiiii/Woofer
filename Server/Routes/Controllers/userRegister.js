@@ -139,8 +139,8 @@ const userRegister = async (req, res) => {
     const mailOptions = {
       from: "woofer@gmail.com",
       to: email,
-      subject: "Confirmación de Registro",
-      text: `¡Gracias por registrarte en Woofer! Haz clic en el siguiente enlace para activar tu cuenta: http://localhost:3000/activate/${verificationToken}`,
+      subject: "Registration confirmation",
+      text: `Thank you for registering! Click on the following link to activate your account: https://woofer-taupe.vercel.app/activate/${verificationToken}`,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -169,8 +169,8 @@ const userRegister = async (req, res) => {
     const mailOptions = {
       from: "woofer@gmail.com",
       to: email,
-      subject: "Confirmación de Registro",
-      text: `¡Gracias por registrarte en Woofer! Haz clic en el siguiente enlace para activar tu cuenta: http://localhost:3000/activate/${verificationToken}`,
+      subject: "Registration confirmation",
+      text: `Thank you for registering! Click on the following link to activate your account: https://woofer-taupe.vercel.app/activate/${verificationToken}`,
     };
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
