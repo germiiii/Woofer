@@ -8,6 +8,7 @@ import "../stylesLanding.css";
 const ActivateAccount = () => {
   const router = useRouter();
   const api = process.env.NEXT_PUBLIC_APIURL;
+  
   useEffect(() => {
     const pathArray = window.location.pathname.split("/");
     const token = pathArray[pathArray.length - 1];

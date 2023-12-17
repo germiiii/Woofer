@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import ActivateAccount from "../../Components/ActivateAccount.jsx";
+import ActivateAccount from "../../Components/activateAccount";
 import Navbar from "../../Components/NavBar.jsx";
 import Link from "next/link.js";
 import Image from "next/image";
