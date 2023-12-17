@@ -201,8 +201,7 @@ export default function OwnerForm() {
           src={dog.image}
           alt={`Dog Preview ${index}`}
           height={100}
-          width={100}
-        />
+          width={100}/>
       )}
     </div>
   ));
@@ -218,8 +217,7 @@ export default function OwnerForm() {
         <div className="mb-20">
           <h1
             className="text-5xl text-[#F39200]"
-            style={{ fontFamily: "LikeEat" }}
-          >
+            style={{ fontFamily: "LikeEat" }}>
             Add dogs for walking
           </h1>
         </div>
@@ -232,8 +230,7 @@ export default function OwnerForm() {
             name="name"
             onChange={handleChange}
             value={dogData.name}
-            className="w-full p-3  border border-gray-300 focus:border-black"
-          />
+            className="w-full p-3  border border-gray-300 focus:border-black"/>
         </div>
         <div className="mb-10">
           <input
@@ -243,8 +240,7 @@ export default function OwnerForm() {
             name="age"
             onChange={handleChange}
             value={dogData.age}
-            className="w-full p-3  border border-gray-300 focus:border-black"
-          />
+            className="w-full p-3  border border-gray-300 focus:border-black"/>
         </div>
         <div className="mb-10">
           <input
@@ -254,8 +250,7 @@ export default function OwnerForm() {
             name="breed"
             onChange={handleChange}
             value={dogData.breed}
-            className="w-full p-3 border border-gray-300 focus:border-black"
-          />
+            className="w-full p-3 border border-gray-300 focus:border-black"/>
         </div>
         <div className="mb-10">
           <select
@@ -264,8 +259,7 @@ export default function OwnerForm() {
             name="size"
             onChange={handleChange}
             value={dogData.size}
-            className="w-full p-3 border border-gray-300 focus:border-black"
-          >
+            className="w-full p-3 border border-gray-300 focus:border-black">
             <option value=""> size of your dog</option>
             <option value="small">Small</option>
             <option value="medium">Medium</option>
@@ -280,13 +274,11 @@ export default function OwnerForm() {
             accept="image/*"
             onChange={handleChange}
             ref={fileInputRef}
-            className="hidden"
-          />
+            className="hidden"/>
           <button
             type="button"
             onClick={() => fileInputRef.current.click()}
-            className={`rounded-full px-3 py-2 bg-white w-full hover:text-[#F39200] text-[#29235c] transition-all duration-300 ease-in-out`}
-          >
+            className={`rounded-full px-3 py-2 bg-white w-full hover:text-[#F39200] text-[#29235c] transition-all duration-300 ease-in-out`}>
             {buttonText}
           </button>
         </div>
@@ -297,16 +289,14 @@ export default function OwnerForm() {
               src={imagePreview}
               alt="Image Preview"
               height={100}
-              width={100}
-            />
+              width={100}/>
           </div>
         )}
 
         <div className="flex items-center justify-center">
           <button
             onClick={handleFillFormAgain}
-            className="px-5 mr-2  py-2 rounded-full bg-white text-[#29235c] font-extrabold transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
-          >
+            className="px-5 mr-2  py-2 rounded-full bg-white text-[#29235c] font-extrabold transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white">
             clean
           </button>
           {dogData.name &&
@@ -316,8 +306,7 @@ export default function OwnerForm() {
           dogData.image ? (
             <button
               type="submit"
-              className="px-5 ml-2 py-2 rounded-full bg-white text-[#29235c] font-extrabold transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white"
-            >
+              className="px-5 ml-2 py-2 rounded-full bg-white text-[#29235c] font-extrabold transition-all duration-300 ease-in-out hover:bg-[#F39200] hover:text-white">
               submit
             </button>
           ) : null}
