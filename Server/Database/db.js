@@ -5,7 +5,7 @@ const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
 
 const sequelize = new Sequelize(
-  `postgresql://wooferdb_owner:jK1leiEa5BYH@ep-divine-credit-a5g19q0p.us-east-2.aws.neon.tech/wooferdb?sslmode=require`,
+  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
   { logging: false, native: false }
 );
 
