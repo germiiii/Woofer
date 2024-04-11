@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 const OwnerReviewForm = ({ onReviewSubmit, id }) => {
   const router = useRouter();
   const [userReview, setUserReview] = useState({
-    score: 1,
+    score: 0,
     description: "",
   });
   const [walkData, setWalkData] = useState();

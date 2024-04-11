@@ -37,7 +37,8 @@ export default function AddDogsPage() {
                     width={700}
                     alt=""
                     height={0}
-                    className="rounded-full border border-[#F39200] border-2"/>
+                    className="rounded-full border border-[#F39200] border-2"
+                  />
                 </div>
               </div>
             </div>

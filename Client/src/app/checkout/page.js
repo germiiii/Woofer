@@ -313,31 +313,33 @@ const CheckoutComponent = () => {
       const accessToken = localStorage.getItem("paypal_accessToken");
       // console.log("Access Token", accessToken);
       if (!storedTotalAmount || storedTotalAmount === "0.00") {
-        window.alert(
-          "Please, select a walk type before proceeding with payment"
-        );
+        window.alert('Please, select a walk type before proceeding with payment')
+        
       }
       // console.log("Creating order....");
-      const res = await fetch("https://api-m.paypal.com/v2/checkout/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          intent: "CAPTURE",
-          purchase_units: [
-            {
-              amount: {
-                currency_code: "USD",
-                value: storedTotalAmount, // Pass the retrieved total amount from localStorage here as a string
+      const res = await fetch(
+        "https://api-m.paypal.com/v2/checkout/orders",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({
+            intent: "CAPTURE",
+            purchase_units: [
+              {
+                amount: {
+                  currency_code: "USD",
+                  value: storedTotalAmount, // Pass the retrieved total amount from localStorage here as a string
+                },
+                description: "Woofer Dog Walk",
+                reference_id: `order-${orderCount}`,
               },
-              description: "Woofer Dog Walk",
-              reference_id: `order-${orderCount}`,
-            },
-          ],
-        }),
-      });
+            ],
+          }),
+        }
+      );
 
       if (!res.ok) {
         const errorResponse = await res.json();
@@ -499,7 +501,7 @@ const CheckoutComponent = () => {
                     src={walkerData.image}
                     width={300}
                     height={0}
-                    className="mt-5 rounded-lg w-[300px] h-[300px] object-cover"
+                    className="mt-5 rounded-lg"
                     alt=""
                   />
                   <div className="mt-2"> {starsForMedian} </div>

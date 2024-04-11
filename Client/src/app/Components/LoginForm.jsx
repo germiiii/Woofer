@@ -255,6 +255,14 @@ const LoginForm = () => {
           </a>
         </p>
       </div>
+      <div className="mt-2">
+        <p className="text-sm text-white">
+          Don&rsquo;t remember your password? Recover your password {""}
+          <a href="/forget-password" className="text-[#F39200]">
+            here.
+          </a>
+        </p>
+      </div>
     </div>
   );
 };
